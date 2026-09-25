@@ -161,7 +161,7 @@ export default function HeroSection() {
           as="h1"
           id="hero-heading"
           waitForPreload
-          className="hero-heading font-heading text-[clamp(40px,5.2vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
+          className="hero-heading font-heading text-[clamp(40px,3.5vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
         >
           Engineering What Moves Industry Forward.
         </MaskRevealHeading>
@@ -170,7 +170,7 @@ export default function HeroSection() {
       <div className="hero-lede">
         <p
           data-hero-item
-          className="hero-body font-heading text-[16px] leading-none font-medium uppercase"
+          className="hero-body font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase"
         >
           From precision-engineered motorcycle components to custom industrial
           machinery, Thimark combines engineering expertise, advanced

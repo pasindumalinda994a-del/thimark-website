@@ -427,7 +427,7 @@ export default function AboutSection() {
           </p>
           <MaskRevealHeading
             id="about-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             From Steel Fabrication
             <span className="block">to Advanced Engineering.</span>
@@ -435,7 +435,7 @@ export default function AboutSection() {
         </div>
         <p
           data-about-header
-          className="about-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="about-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
         >
           What began as a modest steel fabrication business has evolved into a
           Sri Lankan engineering company delivering precision manufacturing, OEM
@@ -482,7 +482,7 @@ export default function AboutSection() {
                 <span>{item.label}</span>
                 <span aria-hidden>[{padIndex(i)}]</span>
               </p>
-              <p className="font-heading text-[16px] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
+              <p className="font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
                 {item.body}
               </p>
             </div>
@@ -531,7 +531,7 @@ export default function AboutSection() {
             {padIndex(STORY.length - 1)}
           </span>
         </div>
-        <p className="font-heading text-[12px] leading-[1.3] font-normal uppercase">
+        <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.3] font-normal uppercase">
           We continue to invest in people, technology and innovation with one
           goal:{" "}
           <strong className="font-medium">

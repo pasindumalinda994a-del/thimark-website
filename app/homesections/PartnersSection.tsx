@@ -129,13 +129,13 @@ export default function PartnersSection() {
         </p>
         <MaskRevealHeading
           id="partners-heading"
-          className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium uppercase"
+          className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
           Engineering That Earns Trust.
         </MaskRevealHeading>
         <p
           data-p-header
-          className="max-w-[720px] font-heading text-[16px] leading-none font-normal uppercase"
+          className="max-w-[720px] font-heading text-[clamp(12px,1vw,16px)] leading-none font-normal uppercase"
         >
           <span className="font-medium">
             Strong engineering partnerships are built over time.
@@ -177,7 +177,7 @@ export default function PartnersSection() {
                 <span aria-hidden>{partner.brand}</span>
               )}
             </div>
-            <p className="font-heading text-[12px] leading-none font-normal uppercase">
+            <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase">
               {partner.legalName}
             </p>
             <GridLine
@@ -189,7 +189,7 @@ export default function PartnersSection() {
           </li>
         ))}
         <li data-p-cell className="partner-statement dot-field-soft">
-          <p className="font-heading text-[16px] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
+          <p className="font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
             From local manufacturing partnerships to international engineering
             projects, our work speaks through the relationships we build.
           </p>

@@ -226,7 +226,7 @@ export default function Footer() {
             </p>
             <p
               data-footer-item
-              className="footer-statement font-heading text-[24px] leading-[1.05] font-medium uppercase text-steel"
+              className="footer-statement font-heading text-[clamp(16px,1.25vw,24px)] leading-[1.05] font-medium uppercase text-steel"
             >
               {COMPANY.statement}
             </p>

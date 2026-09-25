@@ -236,7 +236,7 @@ export default function FeturedProducts() {
           </p>
           <MaskRevealHeading
             id="featured-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             When the Challenge Is Complex,
             <span className="block">Engineering Has to Be Smarter.</span>
@@ -244,7 +244,7 @@ export default function FeturedProducts() {
         </div>
         <p
           data-featured-copy
-          className="featured-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="featured-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
         >
           Our solutions are developed around the application, the environment
           and the challenge — combining practical engineering with precision

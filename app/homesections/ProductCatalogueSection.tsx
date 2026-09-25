@@ -261,7 +261,7 @@ export default function ProductCatalogueSection() {
           </p>
           <MaskRevealHeading
             id="catalogue-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Precision Components.
             <span className="block">Built to Perform.</span>
@@ -269,7 +269,7 @@ export default function ProductCatalogueSection() {
         </div>
         <p
           data-cat-header
-          className="catalogue-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="catalogue-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
         >
           Explore a selection of motorcycle components manufactured by Thimark
           for leading local assembly programs.
@@ -374,7 +374,7 @@ export default function ProductCatalogueSection() {
               </span>
             </div>
             <div className="catalogue-card-copy">
-              <h3 className="font-heading text-[24px] leading-none font-medium uppercase">
+              <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
                 {item.name}
               </h3>
               <p className="index-tag flex items-center justify-between gap-4 font-normal">
@@ -404,7 +404,7 @@ export default function ProductCatalogueSection() {
                   <span>All components</span>
                   <span aria-hidden>[{pad2(PRODUCT_TOTALS.components)}]</span>
                 </p>
-                <p className="font-heading text-[24px] leading-none font-medium uppercase">
+                <p className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
                   View All
                   <span className="block">Products →</span>
                 </p>

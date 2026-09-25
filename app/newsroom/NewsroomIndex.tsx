@@ -360,7 +360,7 @@ export default function NewsroomIndex() {
                 </span>
               </div>
               <div className="catalogue-card-copy">
-                <h3 className="font-heading text-[24px] leading-none font-medium uppercase">
+                <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
                   {record.title}
                 </h3>
                 <p className="line-clamp-2 text-[13px] leading-[1.4] text-steel/75">

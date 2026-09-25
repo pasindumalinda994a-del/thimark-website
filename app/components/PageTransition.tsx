@@ -14,6 +14,7 @@ const STEEL = "#575757";
 const MARK_W = 78;
 const MARK_H = 100;
 const NAV_TIMEOUT_MS = 2500;
+const CLOSE_WATCHDOG_MS = 1800;
 
 function xTo(from: number, target: number) {
   return target - from;
@@ -75,8 +76,24 @@ export default function PageTransition() {
   const lenis = useLenis();
   const lenisRef = useRef(lenis);
   lenisRef.current = lenis;
+  const routerRef = useRef(router);
+  routerRef.current = router;
 
   const [busy, setBusy] = useState(false);
+
+  const beginNav = useRef((nextPath: string, href: string) => {
+    if (phase.current !== "closing") return;
+    phase.current = "waiting";
+    pendingPath.current = nextPath;
+    routerRef.current.push(href);
+    window.clearTimeout(navTimer.current);
+    navTimer.current = setTimeout(() => {
+      if (phase.current !== "waiting") return;
+      pendingPath.current = null;
+      phase.current = "revealing";
+      playReveal.current();
+    }, NAV_TIMEOUT_MS);
+  });
 
   useGSAP(
     (_context, contextSafe) => {
@@ -342,27 +359,22 @@ export default function PageTransition() {
       setBusy(true);
       phase.current = "closing";
 
+      const href = `${url.pathname}${url.search}${url.hash}`;
+      const closeWatchdog = window.setTimeout(
+        () => beginNav.current(nextPath, href),
+        CLOSE_WATCHDOG_MS,
+      );
       playClose.current(() => {
-        phase.current = "waiting";
-        pendingPath.current = nextPath;
-        const href = `${url.pathname}${url.search}${url.hash}`;
-        router.push(href);
-        window.clearTimeout(navTimer.current);
-        navTimer.current = setTimeout(() => {
-          if (phase.current !== "waiting") return;
-          pendingPath.current = null;
-          phase.current = "revealing";
-          playReveal.current();
-        }, NAV_TIMEOUT_MS);
+        window.clearTimeout(closeWatchdog);
+        beginNav.current(nextPath, href);
       });
     };
 
     document.addEventListener("click", onClick, true);
     return () => {
       document.removeEventListener("click", onClick, true);
-      window.clearTimeout(navTimer.current);
     };
-  }, [router]);
+  }, []);
 
   return (
     <div

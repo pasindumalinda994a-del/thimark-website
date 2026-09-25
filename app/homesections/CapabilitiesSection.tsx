@@ -397,13 +397,13 @@ export default function CapabilitiesSection() {
           <p className="eyebrow">The Thimark Advantage</p>
           <MaskRevealHeading
             id="caps-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Capability You
             <span className="block">Can Build On.</span>
           </MaskRevealHeading>
         </div>
-        <div className="caps-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]">
+        <div className="caps-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]">
           <p>
             Great engineering starts with good ideas — but reliable products
             require the capability to turn those ideas into reality.
@@ -458,13 +458,13 @@ export default function CapabilitiesSection() {
                 <div className="caps-card-base">
                   <h3
                     data-caps-title
-                    className="font-heading text-[24px] leading-none font-medium uppercase"
+                    className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase"
                   >
                     {item.title}
                   </h3>
                   <p
                     data-caps-body
-                    className="font-heading text-[12px] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
+                    className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
                   >
                     {item.body}
                   </p>

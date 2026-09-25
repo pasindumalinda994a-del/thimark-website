@@ -75,10 +75,23 @@ function alreadyPreloaded() {
   );
 }
 
+const PRELOAD_WATCHDOG_MS = 8000;
+
 export default function PreLoading() {
   const root = useRef<HTMLDivElement>(null);
   const [done, setDone] = useState(alreadyPreloaded);
   const lenis = useLenis();
+
+  const finishRef = useRef(() => {});
+  finishRef.current = () => {
+    if (alreadyPreloaded()) {
+      setDone(true);
+      return;
+    }
+    document.documentElement.dataset.preloaded = "true";
+    window.dispatchEvent(new CustomEvent("thimark:preload-done"));
+    setDone(true);
+  };
 
   useLayoutEffect(() => {
     if (alreadyPreloaded()) setDone(true);
@@ -92,20 +105,25 @@ export default function PreLoading() {
     };
   }, [lenis, done]);
 
+  useEffect(() => {
+    if (done) return;
+    const watchdog = window.setTimeout(
+      () => finishRef.current(),
+      PRELOAD_WATCHDOG_MS,
+    );
+    return () => window.clearTimeout(watchdog);
+  }, [done]);
+
   useGSAP(
-    (_context, contextSafe) => {
+    () => {
       const el = root.current;
-      if (!el || !contextSafe) return;
+      if (!el) return;
       if (alreadyPreloaded()) {
         setDone(true);
         return;
       }
 
-      const finish = contextSafe(() => {
-        document.documentElement.dataset.preloaded = "true";
-        window.dispatchEvent(new CustomEvent("thimark:preload-done"));
-        setDone(true);
-      });
+      const finish = () => finishRef.current();
 
       const q = gsap.utils.selector(el);
       const vw = window.innerWidth;

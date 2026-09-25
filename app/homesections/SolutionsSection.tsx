@@ -231,13 +231,13 @@ export default function SolutionsSection() {
             <div className="solutions-card-copy">
               <h3
                 data-card-title={i}
-                className="font-heading text-[24px] leading-none font-medium text-left uppercase"
+                className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium text-left uppercase"
               >
                 {card.title}
               </h3>
               <p
                 data-card-body={i}
-                className="font-heading text-[12px] leading-none font-normal text-left uppercase md:text-justify md:[text-align-last:left]"
+                className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal text-left uppercase md:text-justify md:[text-align-last:left]"
               >
                 {card.body}
               </p>

@@ -272,7 +272,7 @@ export default function OurTwoCoreSection() {
           </p>
           <MaskRevealHeading
             id="two-core-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Two Capabilities.
             <span className="block">One Engineering Mindset.</span>
@@ -280,7 +280,7 @@ export default function OurTwoCoreSection() {
         </div>
         <p
           data-core-header
-          className="two-core-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="two-core-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
         >
           Thimark operates across two complementary areas of engineering and
           manufacturing — helping customers source precision components while
@@ -328,13 +328,13 @@ export default function OurTwoCoreSection() {
             <div className="two-core-card-base">
               <h3
                 data-core-title={i}
-                className="font-heading text-[24px] leading-none font-medium text-left uppercase"
+                className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium text-left uppercase"
               >
                 {col.title}
               </h3>
               <p
                 data-core-body={i}
-                className="font-heading text-[12px] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
+                className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
               >
                 {col.body}
               </p>

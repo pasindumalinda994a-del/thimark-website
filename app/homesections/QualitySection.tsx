@@ -263,7 +263,7 @@ export default function QualitySection() {
           </p>
           <MaskRevealHeading
             id="quality-heading"
-            className="max-w-[640px] font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium uppercase"
+            className="max-w-[640px] font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
           >
             Precision Is Not
             <span className="block">a Promise.</span>
@@ -271,7 +271,7 @@ export default function QualitySection() {
           </MaskRevealHeading>
           <div
             data-q-header
-            className="quality-copy font-heading text-[16px] leading-none font-normal uppercase"
+            className="quality-copy font-heading text-[clamp(12px,1vw,16px)] leading-none font-normal uppercase"
           >
             <p className="font-medium">
               At Thimark, quality is embedded into the way we engineer and
@@ -363,10 +363,10 @@ export default function QualitySection() {
               {padIndex(i)}
             </span>
             <div className="quality-pillar-copy">
-              <h3 className="font-heading text-[24px] leading-none font-medium uppercase">
+              <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
                 {pillar.title}
               </h3>
-              <p className="font-heading text-[12px] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]">
+              <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]">
                 {pillar.body}
               </p>
             </div>

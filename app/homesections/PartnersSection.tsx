@@ -6,11 +6,15 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import { PARTNERS } from "@/app/homesections/partners";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
 
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -88,10 +92,6 @@ export default function PartnersSection() {
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-4 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-br5 hidden md:block" />
@@ -108,22 +108,24 @@ export default function PartnersSection() {
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-4 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-4 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-8 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
       {/* Row 9 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-5 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-5 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-5 hidden md:block" />
       <PlusMark tone="page" className="v-g1-4 at-br-5 hidden md:block" />
       <PlusMark tone="page" className="v-g1-8 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-5 hidden md:block" />
 
       {/* Header */}
       <header className="relative z-10 flex min-h-rows-4 flex-col items-center justify-center gap-4 px-[calc(var(--g1-offset)+16px)] py-4 text-center md:h-rows-4 md:py-0">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <p data-p-header className="eyebrow">
           Trusted by Industry
         </p>
@@ -145,12 +147,15 @@ export default function PartnersSection() {
           quality.
         </p>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </header>
 
       {/* Logo cells */}
-      <ul className="partners-grid h-rows-10 m-0 min-h-0 list-none p-0">
+      <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
+        <ul className="partners-grid h-rows-10 m-0 min-h-0 list-none p-0">
         {PARTNERS.map((partner, i) => (
           <li
             key={partner.id}
@@ -184,7 +189,7 @@ export default function PartnersSection() {
               axis="h"
               unstyled
               tone="page"
-              className="at-bottom left-0 w-full md:hidden"
+              className="partner-cell-rule at-bottom md:hidden"
             />
           </li>
         ))}
@@ -194,7 +199,8 @@ export default function PartnersSection() {
             projects, our work speaks through the relationships we build.
           </p>
         </li>
-      </ul>
+        </ul>
+      </div>
     </SectionGrid>
   );
 }

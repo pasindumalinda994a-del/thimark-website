@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
 import BrandButton from "@/app/components/BrandButton";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionBreak from "@/app/components/SectionBreak";
 import { GridLine } from "@/app/components/SectionGrid";
 import { RAQ_LINK } from "@/app/components/nav";
@@ -24,6 +24,12 @@ import {
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const COLUMN_RAILS = ["v-g1-3", "v-g1-6", "v-g1-9"] as const;
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
+const joinFootLeft: PlusArms = { up: true, down: false, left: false, right: true };
+const joinFootRight: PlusArms = { up: true, down: false, left: true, right: false };
 
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -202,25 +208,27 @@ export default function Footer() {
       <h2 id="footer-heading" className="sr-only">
         Site footer
       </h2>
-      <SectionBreak tone="dark" split="quarters" />
+      <SectionBreak tone="dark" />
 
       {/* Band 1 — directory */}
       <div className="footer-directory min-h-rows-5">
-        <GridLine axis="v" unstyled tone="dark" className="v-g1-0 footer-rail" />
-        <GridLine axis="v" unstyled tone="dark" className="v-g1-12 footer-rail" />
+        <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-above-plus hidden md:block" />
+        <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-above-plus hidden md:block" />
         {COLUMN_RAILS.map((rail) => (
           <GridLine
             key={rail}
             axis="v"
             unstyled
             tone="dark"
-            className={`${rail} footer-rail hidden md:block`}
+            className={`${rail} hero-v-above-plus hidden md:block`}
           />
         ))}
 
         <div className="footer-columns">
           {/* Identity */}
           <div data-footer-column className="footer-column footer-column-identity">
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-above-plus md:hidden" />
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-above-plus md:hidden" />
             <p data-footer-item className="eyebrow text-steel">
               {COMPANY.name}
             </p>
@@ -234,8 +242,8 @@ export default function Footer() {
               {COMPANY.description}
             </p>
             <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-0 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-12 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
           </div>
 
           {/* Navigate */}
@@ -244,6 +252,8 @@ export default function Footer() {
             aria-label="Footer navigation"
             className="footer-column"
           >
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-between-pluses md:hidden" />
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-between-pluses md:hidden" />
             <GroupHead label="Navigate" index={0} />
             <ul className="footer-list">
               {FOOTER_NAV.map((link) => (
@@ -253,21 +263,25 @@ export default function Footer() {
               ))}
             </ul>
             <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-0 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-12 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
           </nav>
 
           {/* Resources */}
           <div data-footer-column className="footer-column">
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-between-pluses md:hidden" />
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-between-pluses md:hidden" />
             <GroupHead label="Resources & Downloads" index={1} />
             <LinkList links={RESOURCE_LINKS} />
             <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-0 at-bottom md:hidden" />
-            <PlusMark tone="dark" className="v-g1-12 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+            <PlusMark tone="dark" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
           </div>
 
           {/* Connect */}
           <div data-footer-column className="footer-column footer-column-connect">
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-between-pluses md:hidden" />
+            <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-between-pluses md:hidden" />
             <GroupHead label="Connect" index={2} />
             <LinkList links={SOCIAL_LINKS} />
             <div data-footer-item className="footer-raq">
@@ -288,17 +302,17 @@ export default function Footer() {
         <GridLine axis="h" unstyled tone="dark" className="h-seg-3-6 at-bottom hidden md:block" />
         <GridLine axis="h" unstyled tone="dark" className="h-seg-6-9 at-bottom hidden md:block" />
         <GridLine axis="h" unstyled tone="dark" className="h-seg-9g-12 at-bottom hidden md:block" />
-        <PlusMark tone="dark" className="v-g1-0 at-bottom" />
+        <PlusMark tone="dark" arms={joinLeftEdge} className="v-g1-0 at-bottom" />
         {COLUMN_RAILS.map((rail) => (
-          <PlusMark key={rail} tone="dark" className={`${rail} at-bottom hidden md:block`} />
+          <PlusMark key={rail} tone="dark" arms={joinTeeUp} className={`${rail} at-bottom hidden md:block`} />
         ))}
-        <PlusMark tone="dark" className="v-g1-12 at-bottom" />
+        <PlusMark tone="dark" arms={joinRightEdge} className="v-g1-12 at-bottom" />
       </div>
 
       {/* Band 2 — legal strip */}
       <div className="footer-legal min-h-rows-1">
-        <GridLine axis="v" unstyled tone="dark" className="v-g1-0 footer-rail" />
-        <GridLine axis="v" unstyled tone="dark" className="v-g1-12 footer-rail" />
+        <GridLine axis="v" unstyled tone="dark" className="v-g1-0 hero-v-between-pluses" />
+        <GridLine axis="v" unstyled tone="dark" className="v-g1-12 hero-v-between-pluses" />
 
         <p className="footer-legal-copy index-tag text-steel/70">
           © {year} {COMPANY.name} · All rights reserved
@@ -329,8 +343,8 @@ export default function Footer() {
         </div>
 
         <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom" />
-        <PlusMark tone="dark" className="v-g1-0 at-bottom" />
-        <PlusMark tone="dark" className="v-g1-12 at-bottom" />
+        <PlusMark tone="dark" arms={joinFootLeft} className="v-g1-0 at-bottom" />
+        <PlusMark tone="dark" arms={joinFootRight} className="v-g1-12 at-bottom" />
       </div>
     </footer>
   );

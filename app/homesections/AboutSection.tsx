@@ -8,13 +8,14 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/components/BrandButton";
-import ScrollHint, { setScrollHintHidden } from "@/app/components/ScrollHint";
+import ScrollHint from "@/app/components/ScrollHint";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
 import CapabilityGlyph from "@/app/components/CapabilityGlyph";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import StoryProgress, {
   STORY,
+  StationDash,
   StationPlus,
   padIndex,
 } from "@/app/homesections/StoryProgress";
@@ -22,7 +23,6 @@ import StoryProgress, {
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
 type Parts = {
-  fills: HTMLElement[];
   washes: HTMLElement[];
   stations: HTMLElement[];
   slides: HTMLElement[];
@@ -120,7 +120,7 @@ function drawChapterGlyph(root: HTMLElement) {
 }
 
 function applyChapter(parts: Parts, progress: number) {
-  const { fills, washes, stations, slides } = parts;
+  const { washes, stations, slides } = parts;
   // One wipe segment per station so the last tab fills gradually too.
   const count = Math.max(1, stations.length);
   const scaled = progress * count;
@@ -128,11 +128,8 @@ function applyChapter(parts: Parts, progress: number) {
   const local = gsap.utils.clamp(0, 1, scaled - index);
   const atEnd = progress >= 1;
 
-  fills.forEach((fill, i) => {
-    const scale = chapterScale(i, index, local, atEnd);
-    gsap.set(fill, { scaleX: scale, transformOrigin: "left center" });
-    const wash = washes[i];
-    if (wash) setStoryWash(wash, scale);
+  washes.forEach((wash, i) => {
+    setStoryWash(wash, chapterScale(i, index, local, atEnd));
   });
 
   stations.forEach((station, i) => {
@@ -151,6 +148,11 @@ function applyChapter(parts: Parts, progress: number) {
   return index;
 }
 
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
+
 export default function AboutSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const lenis = useLenis();
@@ -167,7 +169,6 @@ export default function AboutSection() {
 
       const parts: Parts = {
         slides: gsap.utils.toArray<HTMLElement>("[data-story-slide]", root),
-        fills: gsap.utils.toArray<HTMLElement>("[data-story-fill]", root),
         washes: gsap.utils.toArray<HTMLElement>("[data-story-wash]", root),
         stations: gsap.utils.toArray<HTMLElement>("[data-story-station]", root),
         glyphs: gsap.utils.toArray<HTMLElement>("[data-chapter-glyph]", root),
@@ -194,12 +195,6 @@ export default function AboutSection() {
       // Without the scrub the tabs are the only way through the story.
       mm.add("(prefers-reduced-motion: reduce)", () => {
         const select = (index: number) => {
-          parts.fills.forEach((fill, i) => {
-            gsap.set(fill, {
-              scaleX: i === index ? 1 : 0,
-              transformOrigin: "left center",
-            });
-          });
           parts.washes.forEach((wash, i) => {
             setStoryWash(wash, i === index ? 1 : 0);
           });
@@ -240,7 +235,6 @@ export default function AboutSection() {
         end: string;
         id: string;
       }) => {
-        gsap.set(parts.fills, { scaleX: 0, transformOrigin: "left center" });
         parts.washes.forEach((wash) => setStoryWash(wash, 0));
         parts.slides.forEach((slide, i) => setStorySlide(slide, i === 0 ? 1 : 0));
         gsap.set(parts.glyphs, { autoAlpha: 0 });
@@ -271,7 +265,6 @@ export default function AboutSection() {
           onEnter: () => playGlyph(Math.max(current, 0)),
           onUpdate: (self) => {
             sync(self.progress);
-            setScrollHintHidden(root, self.progress);
           },
         });
 
@@ -373,10 +366,6 @@ export default function AboutSection() {
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
@@ -395,29 +384,30 @@ export default function AboutSection() {
       {/* Row 3 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 top-rows-3 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-8 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
       {/* Row 4 */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-mid-12 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
       {/* Row 8 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid top-rows-8 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-8 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 top-rows-8 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-8 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-6 top-rows-8 hidden md:block" />
 
       {/* Row 12 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-9 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Intro */}
       <div className="about-intro min-h-rows-3">
@@ -441,22 +431,32 @@ export default function AboutSection() {
           Sri Lankan engineering company delivering precision manufacturing, OEM
           components and custom-built industrial machinery.
         </p>
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Chapter tabs */}
-      <div className="relative md:contents">
+      <div className="relative min-w-0 md:contents">
         <StoryProgress />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Active chapter */}
       <div className="about-chapter">
-        <div className="about-chapter-glyph dot-field-soft">
+        <div className="relative flex flex-col">
+          <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
+          <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+          <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+          <div className="about-chapter-glyph dot-field-soft">
           <PlusMark tone="page" className="top-4 left-4 z-10" />
           <PlusMark tone="page" className="top-4 left-[calc(100%-16px)] z-10" />
           <PlusMark tone="page" className="top-[calc(100%-16px)] left-4 z-10" />
@@ -473,9 +473,11 @@ export default function AboutSection() {
           <span aria-hidden data-chapter-numeral className="about-chapter-numeral">
             01
           </span>
+          </div>
         </div>
         <div className="about-chapter-copy">
-          <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 top-0 md:hidden" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
           {STORY.map((item, i) => (
             <div key={item.id} data-chapter-text={i} className="about-chapter-text">
               <p className="index-tag flex items-center justify-between gap-4">
@@ -492,6 +494,8 @@ export default function AboutSection() {
 
       {/* Story reel */}
       <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="about-reel">
           {STORY.map((item, index) => (
             <Image
@@ -513,16 +517,19 @@ export default function AboutSection() {
           <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Readout */}
+      <div className="relative flex flex-col md:contents">
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
       <div className="about-readout">
         <div className="index-tag flex items-center justify-between gap-4">
           <span className="flex items-center gap-1">
             <StationPlus />
-            <span aria-hidden className="inline-block h-[1.5px] w-2 bg-current" />
+            <StationDash />
             <span>Our Story</span>
           </span>
           <span className="tabular-nums">
@@ -532,11 +539,9 @@ export default function AboutSection() {
           </span>
         </div>
         <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.3] font-normal uppercase">
-          We continue to invest in people, technology and innovation with one
-          goal:{" "}
+          We invest in people and technology{" "}
           <strong className="font-medium">
-            to turn engineering challenges into dependable, purpose-built
-            solutions
+            to turn challenges into dependable solutions
           </strong>
           .
         </p>
@@ -545,6 +550,7 @@ export default function AboutSection() {
       <BrandButton tone="steel" href="/#manufacturing" className="about-cta">
         Discover Our Story
       </BrandButton>
+      </div>
       <ScrollHint seat="col-9" />
     </SectionGrid>
   );

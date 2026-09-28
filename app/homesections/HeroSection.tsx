@@ -7,10 +7,14 @@ import BrandButton from "@/app/components/BrandButton";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
 import HeroProvenance from "@/app/components/HeroProvenance";
 import HeroReel from "@/app/components/HeroReel";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 
 gsap.registerPlugin(useGSAP);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -83,9 +87,7 @@ export default function HeroSection() {
       <HeroReel />
       <div className="hero-copy-scrim" aria-hidden />
 
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="light" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="light" className="v-g1-12 md:hidden" />
+      {/* Mobile rails are split per band so each plus keeps a 4px gap. */}
 
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="light" className="v-g1-0 v-seg-top-br5 hidden md:block" />
@@ -94,7 +96,6 @@ export default function HeroSection() {
       <GridLine axis="v" unstyled tone="light" className="v-g1-12 v-seg-top-br5 hidden md:block" />
       <GridLine axis="v" unstyled tone="light" className="v-g1-12 v-seg-br5-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="light" className="v-g1-12 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="light" className="v-g1-9 v-seg-top-br5 hidden md:block" />
       <GridLine axis="v" unstyled tone="light" className="v-g1-9 v-seg-br5-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="light" className="v-g1-9 v-seg-br2-end hidden md:block" />
       <GridLine axis="v" unstyled tone="light" className="v-g1-6 v-seg-br2-end hidden md:block" />
@@ -114,9 +115,9 @@ export default function HeroSection() {
         data-hero-rule
         className="h-seg-9g-12 at-br-5 hidden md:block"
       />
-      <PlusMark tone="light" className="v-g1-0 at-br-5 hidden md:block" />
-      <PlusMark tone="light" className="v-g1-9 at-br-5 hidden md:block" />
-      <PlusMark tone="light" className="v-g1-12 at-br-5 hidden md:block" />
+      <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-br-5 hidden md:block" />
+      <PlusMark tone="light" arms={joinTeeDown} className="v-g1-9 at-br-5 hidden md:block" />
+      <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-br-5 hidden md:block" />
 
       {/* Action band top (row 12) */}
       <GridLine
@@ -140,19 +141,23 @@ export default function HeroSection() {
         data-hero-rule
         className="h-seg-9g-12 at-br-2 hidden md:block"
       />
-      <PlusMark tone="light" className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="light" className="v-g1-6 at-br-2 hidden md:block" />
+      <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="light" arms={joinTeeDown} className="v-g1-6 at-br-2 hidden md:block" />
       <PlusMark tone="light" className="v-g1-9 at-br-2 hidden md:block" />
-      <PlusMark tone="light" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Mobile reel band */}
       <div className="relative h-rows-7 shrink-0 md:hidden" aria-hidden>
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus" />
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom" />
-        <PlusMark tone="light" className="v-g1-0 at-bottom" />
-        <PlusMark tone="light" className="v-g1-12 at-bottom" />
+        <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom" />
+        <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom" />
       </div>
 
       <div className="hero-title">
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
         <p data-hero-item className="eyebrow">
           Engineering <span aria-hidden>·</span> Manufacturing{" "}
           <span aria-hidden>·</span> Innovation
@@ -168,9 +173,11 @@ export default function HeroSection() {
       </div>
 
       <div className="hero-lede">
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
         <p
           data-hero-item
-          className="hero-body font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase"
+          className="hero-body font-heading text-justify text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase"
         >
           From precision-engineered motorcycle components to custom industrial
           machinery, Thimark combines engineering expertise, advanced
@@ -178,20 +185,24 @@ export default function HeroSection() {
           real world.
         </p>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="light" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="light" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       <div className="hero-stamp">
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div data-hero-item>
           <HeroProvenance />
         </div>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="light" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="light" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       <div className="hero-ctas">
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
         <BrandButton
           href="/#contact"
           font="sans"

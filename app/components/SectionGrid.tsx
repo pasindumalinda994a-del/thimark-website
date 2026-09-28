@@ -39,28 +39,18 @@ export function GridLine({
   return (
     <span
       aria-hidden
-      className={`pointer-events-none absolute z-10 w-px -translate-x-1/2 overflow-visible ${unstyled ? "" : "top-0 h-full "} ${className}`}
+      className={`pointer-events-none absolute z-10 w-px -translate-x-1/2 ${unstyled ? "" : "top-0 h-full "} ${className}`}
       {...rest}
-    >
-      <svg width="1" height="100%" className="h-full w-px">
-        <line
-          x1="0.5"
-          x2="0.5"
-          y1="0"
-          y2="100%"
-          stroke={stroke}
-          strokeWidth="1"
-          strokeLinecap="butt"
-          strokeDasharray="8 8"
-        />
-      </svg>
-    </span>
+      style={{
+        backgroundImage: `repeating-linear-gradient(to bottom, ${stroke} 0 8px, transparent 8px 16px)`,
+      }}
+    />
   );
 }
 
 type SectionGridProps = {
   tone?: GridTone;
-  rows?: 14 | 16 | 18;
+  rows?: 14 | 16 | 18 | 20;
   className?: string;
   children: ReactNode;
   id?: string;
@@ -80,7 +70,13 @@ export default function SectionGrid({
   ref,
 }: SectionGridProps) {
   const plate =
-    rows === 14 ? "h-rows-14" : rows === 18 ? "h-rows-18" : "h-rows-16";
+    rows === 14
+      ? "h-rows-14"
+      : rows === 18
+        ? "h-rows-18"
+        : rows === 20
+          ? "h-rows-20"
+          : "h-rows-16";
 
   return (
     <section

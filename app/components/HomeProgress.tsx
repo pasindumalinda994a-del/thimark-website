@@ -92,36 +92,42 @@ export function useHomeSection(enabled: boolean) {
   return enabled ? active : -1;
 }
 
+const MARK = 7;
+const WEIGHT = 1.5;
+
 function Tick({ filled }: { filled: boolean }) {
+  const mid = MARK / 2;
+  const inset = WEIGHT / 2;
+
   return (
     <svg
       aria-hidden
-      width={7}
-      height={7}
-      viewBox="0 0 7 7"
+      width={MARK}
+      height={MARK}
+      viewBox={`0 0 ${MARK} ${MARK}`}
       fill="none"
-      className="sb-tick"
+      className="sb-tick size-[7px]"
     >
       {filled ? (
-        <rect x="1.5" y="1.5" width="4" height="4" fill="currentColor" />
+        <rect x={inset} y={inset} width={MARK - WEIGHT * 2} height={MARK - WEIGHT * 2} fill="currentColor" />
       ) : (
         <>
           <line
-            x1="0"
-            y1="3.5"
-            x2="7"
-            y2="3.5"
+            x1={inset}
+            y1={mid}
+            x2={MARK - inset}
+            y2={mid}
             stroke="currentColor"
-            strokeWidth="1"
+            strokeWidth={WEIGHT}
             strokeLinecap="square"
           />
           <line
-            x1="3.5"
-            y1="0"
-            x2="3.5"
-            y2="7"
+            x1={mid}
+            y1={inset}
+            x2={mid}
+            y2={MARK - inset}
             stroke="currentColor"
-            strokeWidth="1"
+            strokeWidth={WEIGHT}
             strokeLinecap="square"
           />
         </>

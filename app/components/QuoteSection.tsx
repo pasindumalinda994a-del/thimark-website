@@ -9,10 +9,17 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/components/BrandButton";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
 import MarkDrawing from "@/app/components/MarkDrawing";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
+const joinFootLeft: PlusArms = { up: true, down: false, left: false, right: true };
+const joinFootRight: PlusArms = { up: true, down: false, left: true, right: false };
 
 const CONTACT = [
   {
@@ -184,43 +191,39 @@ export default function QuoteSection() {
       outerV={false}
       className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-br5 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-head-br5 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-br5 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-foot hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-head-br5 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-top-br5 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-foot hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-head-br5 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br2-foot hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br2-foot hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-br2-foot hidden md:block" />
 
       {/* Row 9 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-5 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-5 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-5 hidden md:block" />
       <PlusMark tone="page" className="v-g1-6 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-9 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-5 hidden md:block" />
 
       {/* Row 12 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-3 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-3 at-br-2 hidden md:block" />
       <PlusMark tone="page" className="v-g1-6 at-br-2 hidden md:block" />
       <PlusMark tone="page" className="v-g1-9 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Bottom edge */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -228,14 +231,16 @@ export default function QuoteSection() {
       <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-bottom hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-bottom hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-bottom hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-bottom" />
-      <PlusMark tone="page" className="v-g1-3 at-bottom hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 at-bottom hidden md:block" />
-      <PlusMark tone="page" className="v-g1-9 at-bottom hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-bottom" />
+      <PlusMark tone="page" arms={joinFootLeft} className="v-g1-0 at-bottom" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-3 at-bottom hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-bottom hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-9 at-bottom hidden md:block" />
+      <PlusMark tone="page" arms={joinFootRight} className="v-g1-12 at-bottom" />
 
       {/* Copy */}
       <div className="quote-copy">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 top-0 h-full md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 top-0 h-full md:hidden" />
         <div className="quote-title">
           <p data-quote-copy className="eyebrow">
             Have an Engineering Challenge?
@@ -262,13 +267,19 @@ export default function QuoteSection() {
         <div data-quote-drawing className="quote-drawing">
           <MarkDrawing />
         </div>
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
-      {/* Closing line */}
-      <div className="quote-close">
+      <div className="relative flex flex-1 flex-col md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
+
+        {/* Closing line */}
+        <div className="quote-close">
         <p
           data-quote-copy
           className="font-heading text-[clamp(20px,1.8vw,24px)] leading-none font-medium uppercase"
@@ -276,10 +287,10 @@ export default function QuoteSection() {
           Tell us what you need.
           <span className="block">We&rsquo;ll help engineer what comes next.</span>
         </p>
-      </div>
+        </div>
 
-      {/* CTAs */}
-      <div className="quote-ctas">
+        {/* CTAs */}
+        <div className="quote-ctas">
         <BrandButton
           href="mailto:info@thimark.com?subject=Request%20a%20Quote"
           font="sans"
@@ -294,10 +305,10 @@ export default function QuoteSection() {
         >
           Talk to Our Team
         </BrandButton>
-      </div>
+        </div>
 
-      {/* Contact strip */}
-      <address className="quote-contact min-h-rows-2 not-italic">
+        {/* Contact strip */}
+        <address className="quote-contact min-h-rows-2 not-italic">
         {CONTACT.map((cell, i) => (
           <div key={cell.id} data-quote-cell className="quote-contact-cell">
             {i > 0 ? (
@@ -347,6 +358,7 @@ export default function QuoteSection() {
           </div>
         ))}
       </address>
+      </div>
     </SectionGrid>
   );
 }

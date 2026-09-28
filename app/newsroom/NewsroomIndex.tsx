@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import {
   NEWS_CATEGORIES,
@@ -20,7 +20,12 @@ import {
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const SLOTS = 6;
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
+
+const SLOTS = 8;
 
 const TABS: { id: "all" | NewsCategoryId; label: string; full: string }[] = [
   { id: "all", label: "All", full: "All records" },
@@ -46,13 +51,10 @@ function recordSrc(path: string) {
 function CornerPluses() {
   return (
     <>
-      <PlusMark tone="page" className="top-4 left-4" />
-      <PlusMark tone="page" className="top-4 left-[calc(100%-16px)]" />
-      <PlusMark tone="page" className="top-[calc(100%-16px)] left-4" />
-      <PlusMark
-        tone="page"
-        className="top-[calc(100%-16px)] left-[calc(100%-16px)]"
-      />
+      <PlusMark tone="page" className="plus-at-tl" />
+      <PlusMark tone="page" className="plus-at-tr" />
+      <PlusMark tone="page" className="plus-at-bl" />
+      <PlusMark tone="page" className="plus-at-br" />
     </>
   );
 }
@@ -220,57 +222,65 @@ export default function NewsroomIndex() {
       ref={sectionRef}
       id="newsroom-index"
       aria-labelledby="newsroom-heading"
-      rows={18}
+      rows={20}
       tone="page"
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-10 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-10-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-11-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-4 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-10 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-10-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-11-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-4-10 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-10-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-4-10 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-10-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-11-br2 hidden md:block" />
 
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-4 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-4 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 top-rows-4 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-3 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-10 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-10 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-10 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-10 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-10 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-10 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-10 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 top-rows-11 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 top-rows-11 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 top-rows-11 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-3 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-6 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-9 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-11 hidden md:block" />
 
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 at-br-2 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-3 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-9 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       <div className="catalogue-intro min-h-rows-3">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="catalogue-title">
           <p data-cat-header className="eyebrow">
             Newsroom
@@ -289,11 +299,13 @@ export default function NewsroomIndex() {
           Company news, project dispatches, awards, and work that leaves Sri Lanka.
         </p>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div role="tablist" aria-label="News categories" className="catalogue-tabs">
           {TABS.map((tabItem, i) => {
             const selected = i === active;
@@ -328,10 +340,13 @@ export default function NewsroomIndex() {
           })}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
+      <div className="relative flex flex-col md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
       <ul
         ref={gridRef}
         id="newsroom-panel"
@@ -340,7 +355,7 @@ export default function NewsroomIndex() {
         className="catalogue-grid m-0 list-none p-0"
       >
         {items.map((record, i) => (
-          <li key={record.slug} data-cat-card className="catalogue-card">
+          <li key={record.slug} data-cat-card className="catalogue-card news-card">
             <Link
               href={`/newsroom/${record.slug}`}
               className="flex min-h-0 flex-1 flex-col text-inherit no-underline"
@@ -350,26 +365,26 @@ export default function NewsroomIndex() {
                   src={recordSrc(record.image)}
                   alt={record.alt}
                   fill
-                  sizes="(min-width: 768px) 28vw, 100vw"
+                  sizes="(min-width: 768px) 22vw, 100vw"
                   className="catalogue-card-photo news-card-photo"
                 />
                 <CornerPluses />
-                <span className="index-tag absolute top-[9px] left-7 z-10 flex items-center gap-2 bg-cream px-2 py-1.5">
+                <span className="index-tag absolute top-[9px] left-7 z-10 flex items-center gap-2 bg-cream px-2 py-1.5 text-steel">
                   <span aria-hidden>[{padIndex(i)}]</span>
                   <span>{categoryById(record.category).label}</span>
                 </span>
               </div>
               <div className="catalogue-card-copy">
+                <p className="index-tag flex items-center justify-between gap-4 font-normal">
+                  <span>
+                    {categoryById(record.category).full} · {formatRecordDate(record.date)}
+                  </span>
+                </p>
                 <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
                   {record.title}
                 </h3>
                 <p className="line-clamp-2 text-[13px] leading-[1.4] text-steel/75">
                   {record.excerpt}
-                </p>
-                <p className="index-tag flex items-center justify-between gap-4 font-normal">
-                  <span>
-                    {categoryById(record.category).full} · {formatRecordDate(record.date)}
-                  </span>
                 </p>
               </div>
             </Link>
@@ -377,7 +392,7 @@ export default function NewsroomIndex() {
               axis="h"
               unstyled
               tone="page"
-              className="at-bottom left-0 w-full md:hidden"
+              className="at-bottom left-(--line-stop) w-[calc(100%-2*var(--line-stop))] md:hidden"
             />
           </li>
         ))}
@@ -406,6 +421,7 @@ export default function NewsroomIndex() {
             Showing {tab.full} — {pad2(categoryRecords.length)} records
           </p>
         </div>
+      </div>
       </div>
     </SectionGrid>
   );

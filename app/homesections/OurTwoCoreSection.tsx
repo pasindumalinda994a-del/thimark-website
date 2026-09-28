@@ -8,10 +8,15 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/components/BrandButton";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
 const COLUMNS = [
   {
@@ -202,10 +207,6 @@ export default function OurTwoCoreSection() {
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
@@ -224,12 +225,13 @@ export default function OurTwoCoreSection() {
       <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-top-3 hidden md:block" />
 
       {/* Row 3 — intro base / card heads */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 top-rows-3 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid top-rows-3 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-6-8 top-rows-3 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-8 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
       {/* Row 4 — head base (drawn per column) */}
       <GridLine
@@ -246,23 +248,23 @@ export default function OurTwoCoreSection() {
         data-core-rule="1"
         className="h-seg-mid-12 top-rows-4 hidden md:block"
       />
-      <PlusMark tone="page" className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
       <PlusMark tone="page" className="v-g1-6 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
       {/* Row 11 — media base */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-5 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-mid-12 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-5 hidden md:block" />
       <PlusMark tone="page" className="v-g1-6 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-5 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-5 hidden md:block" />
 
       {/* Row 14 — CTA band */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-mid-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
       <PlusMark tone="page" className="v-g1-6 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Intro */}
       <div className="two-core-intro min-h-rows-3">
@@ -286,9 +288,11 @@ export default function OurTwoCoreSection() {
           manufacturing — helping customers source precision components while
           also developing complete, custom-engineered machinery and systems.
         </p>
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Cards */}
@@ -350,12 +354,11 @@ export default function OurTwoCoreSection() {
                 {col.cta}
               </BrandButton>
             </div>
-            <GridLine
-              axis="h"
-              unstyled
-              tone="page"
-              className="at-bottom left-0 w-full md:hidden"
-            />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
+            <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
+            <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+            <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
           </article>
         ))}
       </div>

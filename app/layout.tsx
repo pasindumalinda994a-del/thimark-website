@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
 import { Onest, Space_Grotesk } from "next/font/google";
 import CustomCursor from "@/app/components/CustomCursor";
-import Footer from "@/app/components/Footer";
-import QuoteSection from "@/app/components/QuoteSection";
 import PageTransition from "@/app/components/PageTransition";
-import SectionBreak from "@/app/components/SectionBreak";
 import Sidebar from "@/app/components/Sidebar";
+import SiteClose from "@/app/components/SiteClose";
 import SmoothScroll from "@/app/components/SmoothScroll";
 import "./globals.css";
 
@@ -39,11 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <PageTransition />
         <CustomCursor />
         {children}
-        <div className="content-plate relative z-10 bg-steel md:ml-sidebar [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
-          <SectionBreak tone="page" split="8" />
-          <QuoteSection />
-        </div>
-        <Footer />
+        <SiteClose />
       </body>
     </html>
   );

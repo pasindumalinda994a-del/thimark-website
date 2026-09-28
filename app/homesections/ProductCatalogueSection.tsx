@@ -8,7 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/components/BrandButton";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import {
   PRODUCT_CATEGORIES,
@@ -17,6 +17,11 @@ import {
 } from "@/app/homesections/products";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -37,10 +42,10 @@ function productSrc(path: string) {
 function CornerPluses() {
   return (
     <>
-      <PlusMark tone="page" className="top-4 left-4" />
-      <PlusMark tone="page" className="top-4 left-[calc(100%-16px)]" />
-      <PlusMark tone="page" className="top-[calc(100%-16px)] left-4" />
-      <PlusMark tone="page" className="top-[calc(100%-16px)] left-[calc(100%-16px)]" />
+      <PlusMark tone="page" className="plus-at-tl" />
+      <PlusMark tone="page" className="plus-at-tr" />
+      <PlusMark tone="page" className="plus-at-bl" />
+      <PlusMark tone="page" className="plus-at-br" />
     </>
   );
 }
@@ -202,10 +207,6 @@ export default function ProductCatalogueSection() {
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
@@ -225,36 +226,40 @@ export default function ProductCatalogueSection() {
 
       {/* Row 3 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
       {/* Row 4 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-4 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-4 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-8 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
       {/* Row 9 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-9 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-9 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-9 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-9 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-9 hidden md:block" />
       <PlusMark tone="page" className="v-g1-4 top-rows-9 hidden md:block" />
       <PlusMark tone="page" className="v-g1-8 top-rows-9 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-9 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-9 hidden md:block" />
 
       {/* Row 14 */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-4 at-br-2 hidden md:block" />
       <PlusMark tone="page" className="v-g1-8 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Intro */}
       <div className="catalogue-intro min-h-rows-3">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="catalogue-title">
           <p data-cat-header className="eyebrow">
             Explore Our Products
@@ -275,12 +280,14 @@ export default function ProductCatalogueSection() {
           for leading local assembly programs.
         </p>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Tabs */}
       <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div
           role="tablist"
           aria-label="Product categories"
@@ -317,10 +324,14 @@ export default function ProductCatalogueSection() {
           })}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
+      {/* Product grid through foot */}
+      <div className="relative flex flex-col md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
       {/* Product grid */}
       <ul
         ref={gridRef}
@@ -387,7 +398,7 @@ export default function ProductCatalogueSection() {
               axis="h"
               unstyled
               tone="page"
-              className="at-bottom left-0 w-full md:hidden"
+              className="at-bottom left-(--line-stop) w-[calc(100%-2*var(--line-stop))] md:hidden"
             />
           </li>
         ))}
@@ -443,6 +454,7 @@ export default function ProductCatalogueSection() {
         <BrandButton tone="steel" href="/#contact" className="catalogue-cta">
           View All Products
         </BrandButton>
+      </div>
       </div>
     </SectionGrid>
   );

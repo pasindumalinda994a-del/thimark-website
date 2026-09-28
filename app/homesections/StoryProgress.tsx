@@ -69,35 +69,52 @@ function StationCopy({ label, index }: { label: string; index: number }) {
   );
 }
 
+/** Same length and thickness as the leader dash. Mirrors --plus-size and --stroke. */
+const MARK = 7;
+const WEIGHT = 1.5;
+
 export function StationPlus() {
+  const mid = MARK / 2;
+  const inset = WEIGHT / 2;
+
   return (
     <svg
       aria-hidden
-      width={7}
-      height={7}
-      viewBox="0 0 7 7"
+      width={MARK}
+      height={MARK}
+      viewBox={`0 0 ${MARK} ${MARK}`}
       fill="none"
       className="size-[7px] shrink-0"
     >
       <line
-        x1="0"
-        y1="3.5"
-        x2="7"
-        y2="3.5"
+        x1={inset}
+        y1={mid}
+        x2={MARK - inset}
+        y2={mid}
         stroke="currentColor"
-        strokeWidth="1"
+        strokeWidth={WEIGHT}
         strokeLinecap="square"
       />
       <line
-        x1="3.5"
-        y1="0"
-        x2="3.5"
-        y2="7"
+        x1={mid}
+        y1={inset}
+        x2={mid}
+        y2={MARK - inset}
         stroke="currentColor"
-        strokeWidth="1"
+        strokeWidth={WEIGHT}
         strokeLinecap="square"
       />
     </svg>
+  );
+}
+
+export function StationDash() {
+  return (
+    <span
+      aria-hidden
+      className="inline-block shrink-0 bg-current"
+      style={{ width: MARK, height: WEIGHT }}
+    />
   );
 }
 
@@ -124,7 +141,6 @@ export default function StoryProgress() {
           <span aria-hidden data-story-wash="" className="about-station-wash">
             <StationCopy label={item.label} index={i} />
           </span>
-          <span aria-hidden data-story-fill="" className="catalogue-tab-draw" />
         </button>
       ))}
     </div>

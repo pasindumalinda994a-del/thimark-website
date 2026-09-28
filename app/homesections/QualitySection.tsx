@@ -7,10 +7,17 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/components/BrandButton";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
+const joinStubDown: PlusArms = { up: false, down: true, left: false, right: false };
+const joinStubUp: PlusArms = { up: true, down: false, left: false, right: false };
 
 const PRINCIPLES = [
   "Reduce waste.",
@@ -207,10 +214,6 @@ export default function QualitySection() {
       outerV={false}
       className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-6 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-6-8 hidden md:block" />
@@ -228,28 +231,34 @@ export default function QualitySection() {
 
       {/* Row 6 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 top-rows-6 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-3-9 top-rows-6 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-3-4 top-rows-6 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-6 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-9 top-rows-6 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 top-rows-6 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-6 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-3 top-rows-6 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-9 top-rows-6 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-3 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-8 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-9 top-rows-6 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-6 hidden md:block" />
 
       {/* Row 8 */}
       <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-8 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-8 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-8 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 top-rows-8 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-8 hidden md:block" />
       <PlusMark tone="page" className="v-g1-4 top-rows-8 hidden md:block" />
       <PlusMark tone="page" className="v-g1-8 top-rows-8 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 top-rows-8 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-8 hidden md:block" />
 
       {/* Row 14 */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-2 hidden md:block" />
       <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-4 at-br-2 hidden md:block" />
       <PlusMark tone="page" className="v-g1-8 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Flank textures */}
       <div className="quality-flank quality-flank-l dot-field" aria-hidden />
@@ -257,6 +266,8 @@ export default function QualitySection() {
 
       {/* Header */}
       <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="quality-center min-h-rows-6">
           <p data-q-header className="eyebrow">
             Quality by Design
@@ -288,12 +299,14 @@ export default function QualitySection() {
           </div>
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Principle bar */}
       <div className="relative md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div data-q-bar className="quality-bar min-h-rows-2">
           {PRINCIPLES.map((phrase, i) => (
             <div key={phrase} className="quality-bar-cell">
@@ -329,10 +342,14 @@ export default function QualitySection() {
           ))}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
+      {/* Pillars through CTA — one rail from the bar plus to the section foot */}
+      <div className="relative flex flex-col md:contents">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
       {/* Pillars */}
       <div className="quality-pillars min-h-rows-6">
         {PILLARS.map((pillar, i) => (
@@ -384,6 +401,7 @@ export default function QualitySection() {
             <span className="quality-cred-bracket" aria-hidden>
               <PlusMark
                 tone="page"
+                arms={joinStubDown}
                 data-q-cred-join=""
                 className="top-0 left-0"
               />
@@ -403,6 +421,7 @@ export default function QualitySection() {
               </span>
               <PlusMark
                 tone="page"
+                arms={joinStubUp}
                 data-q-cred-join=""
                 className="top-full left-0"
               />
@@ -421,6 +440,7 @@ export default function QualitySection() {
       <BrandButton href="/#contact" className="quality-cta">
         Our Approach to Quality
       </BrandButton>
+      </div>
     </SectionGrid>
   );
 }

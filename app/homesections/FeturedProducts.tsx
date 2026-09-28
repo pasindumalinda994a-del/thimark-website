@@ -5,13 +5,15 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/components/BrandButton";
-import { setScrollHintHidden } from "@/app/components/ScrollHint";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import SolutionsSection from "@/app/homesections/SolutionsSection";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 
 const PIN_VIEWPORTS = 4;
 const CARD_COUNT = 3;
@@ -87,7 +89,6 @@ function scrubSolutions(root: HTMLElement) {
       scrub: 1,
       anticipatePin: 1,
       invalidateOnRefresh: true,
-      onUpdate: (self) => setScrollHintHidden(root, self.progress),
     },
   });
 
@@ -224,10 +225,6 @@ export default function FeturedProducts() {
       outerV={false}
       className="relative z-10 flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
-      {/* Mobile rails */}
-      <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-      <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
       {/* Intro */}
       <div className="featured-intro min-h-rows-3">
         <div className="featured-title">
@@ -250,15 +247,19 @@ export default function FeturedProducts() {
           and the challenge — combining practical engineering with precision
           manufacturing and automation.
         </p>
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       <SolutionsSection />
 
       {/* Foot */}
       <div className="solutions-foot min-h-rows-2">
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
         <div className="solutions-readout index-tag">
           <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
             <span>03 Solutions</span>

@@ -21,25 +21,25 @@ export default function Home() {
           <HeroSection />
           <SectionBreak tone="dark" />
           <AboutSection />
-          <SectionBreak tone="dark" split="6" />
+          <SectionBreak tone="dark" />
           <OurTwoCoreSection />
         </div>
         <div className="relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
-          <SectionBreak tone="dark" split="6" />
+          <SectionBreak tone="dark" />
           <FeturedProducts />
         </div>
         <div className="relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
-          <SectionBreak tone="dark" split="thirds" />
+          <SectionBreak tone="dark" />
           <CapabilitiesSection />
         </div>
         <div className="relative z-10 bg-steel [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
-          <SectionBreak tone="page" split="9g" />
+          <SectionBreak tone="page" />
           <QualitySection />
         </div>
         <div className="relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
-          <SectionBreak tone="dark" split="8" />
+          <SectionBreak tone="dark" />
           <PartnersSection />
-          <SectionBreak tone="dark" split="thirds" />
+          <SectionBreak tone="dark" />
           <ProductCatalogueSection />
         </div>
       </main>

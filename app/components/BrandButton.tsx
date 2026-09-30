@@ -39,7 +39,7 @@ type BrandButtonProps = BrandButtonShared &
     | ({ type: "button" | "submit" } & Omit<
         ButtonHTMLAttributes<HTMLButtonElement>,
         "children" | "className" | "onClick" | "type"
-      >)
+      > & { href?: never })
   );
 
 function gridFor(width: number, height: number) {
@@ -261,7 +261,7 @@ export default function BrandButton({
       href={href}
       onClick={onClick}
       aria-label={ariaLabel}
-      {...rest}
+      {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)}
       className={classNames}
     >
       {face}

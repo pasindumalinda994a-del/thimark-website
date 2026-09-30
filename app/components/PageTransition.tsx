@@ -15,10 +15,9 @@ const MARK_W = 78;
 const MARK_H = 100;
 const NAV_TIMEOUT_MS = 2500;
 const CLOSE_WATCHDOG_MS = 1800;
+const SEAL_S = 0.12;
 
-function xTo(from: number, target: number) {
-  return target - from;
-}
+type Edges = { l: number; r: number; t: number; b: number };
 
 function MaskLine({
   axis,
@@ -111,153 +110,120 @@ export default function PageTransition() {
       const panelBottom = q("[data-panel='bottom']");
       const panelLeft = q("[data-panel='left']");
 
+      const setLineL = gsap.quickSetter(vInnerL, "x", "px");
+      const setLineR = gsap.quickSetter(vInnerR, "x", "px");
+      const setLineT = gsap.quickSetter(hInnerT, "y", "px");
+      const setLineB = gsap.quickSetter(hInnerB, "y", "px");
+      const setPanelL = gsap.quickSetter(panelLeft, "x", "px");
+      const setPanelR = gsap.quickSetter(panelRight, "x", "px");
+      const setPanelT = gsap.quickSetter(panelTop, "y", "px");
+      const setPanelB = gsap.quickSetter(panelBottom, "y", "px");
+
       const layout = () => {
-        const w = el.offsetWidth;
-        const h = el.offsetHeight;
+        const { width: w, height: h } = el.getBoundingClientRect();
         const mx = Math.round((w - MARK_W) / 2);
         const my = Math.round((h - MARK_H) / 2);
-        const halfW = w / 2;
-        const halfH = h / 2;
-        const pos = {
-          vOuterL: mx - 1,
-          vInnerL: mx + 36,
-          vInnerR: mx + 41,
-          vOuterR: mx + 78,
-          hOuterT: my - 1,
-          hInnerT: my + 47,
-          hInnerB: my + 52,
-          hOuterB: my + 100,
+        const inner: Edges = {
+          l: mx + 36,
+          r: mx + 41,
+          t: my + 47,
+          b: my + 52,
         };
-        const hole = {
-          x: mx / halfW,
-          y: my / halfH,
-          r: (w - (mx + MARK_W)) / halfW,
-          b: (h - (my + MARK_H)) / halfH,
+        const outer: Edges = {
+          l: mx - 1,
+          r: mx + MARK_W,
+          t: my - 1,
+          b: my + MARK_H,
         };
+        const open: Edges = { l: 0, r: Math.round(w), t: 0, b: Math.round(h) };
 
-        gsap.set(vInnerL, { left: pos.vInnerL });
-        gsap.set(vInnerR, { left: pos.vInnerR });
-        gsap.set(hInnerT, { top: pos.hInnerT });
-        gsap.set(hInnerB, { top: pos.hInnerB });
+        gsap.set(vInnerL, { left: inner.l });
+        gsap.set(vInnerR, { left: inner.r });
+        gsap.set(hInnerT, { top: inner.t });
+        gsap.set(hInnerB, { top: inner.b });
 
-        return { w, h, pos, hole };
+        return { w, h, inner, outer, open };
+      };
+
+      let geo = layout();
+
+      // Each line occupies [edge, edge + 1]; panels butt against the line's
+      // outer side so the cream never crosses into the hole. `seal` closes the
+      // gap left between the inner line pairs once they meet.
+      const edges = { l: 0, r: 0, t: 0, b: 0, seal: 0 };
+
+      const apply = () => {
+        const { w, h, inner } = geo;
+        const l = Math.round(edges.l);
+        const r = Math.round(edges.r);
+        const t = Math.round(edges.t);
+        const b = Math.round(edges.b);
+        const sealX = (edges.seal * (r + 1 - l)) / 2;
+        const sealY = (edges.seal * (b + 1 - t)) / 2;
+
+        setLineL(l - inner.l);
+        setLineR(r - inner.r);
+        setLineT(t - inner.t);
+        setLineB(b - inner.b);
+        setPanelL(Math.round(l + sealX) - w);
+        setPanelR(Math.round(r + 1 - sealX));
+        setPanelT(Math.round(t + sealY) - h);
+        setPanelB(Math.round(b + 1 - sealY));
+      };
+
+      const place = (target: Edges, seal: number) => {
+        Object.assign(edges, target, { seal });
+        apply();
       };
 
       const resetIdle = () => {
-        layout();
+        geo = layout();
+        place(geo.open, 0);
+        gsap.set(innerLines, { autoAlpha: 1 });
         gsap.set(el, { autoAlpha: 0, pointerEvents: "none" });
-        gsap.set(panelTop, { scaleY: 0 });
-        gsap.set(panelBottom, { scaleY: 0 });
-        gsap.set(panelLeft, { scaleX: 0 });
-        gsap.set(panelRight, { scaleX: 0 });
-        gsap.set(vInnerL, { x: 0, scaleY: 1, autoAlpha: 1, transformOrigin: "center bottom" });
-        gsap.set(vInnerR, { x: 0, scaleY: 1, autoAlpha: 1, transformOrigin: "center bottom" });
-        gsap.set(hInnerT, { y: 0, scaleX: 1, autoAlpha: 1, transformOrigin: "left center" });
-        gsap.set(hInnerB, { y: 0, scaleX: 1, autoAlpha: 1, transformOrigin: "left center" });
         phase.current = "idle";
         setBusy(false);
       };
 
-      layout();
+      place(geo.open, 0);
+      gsap.set(innerLines, { autoAlpha: 1 });
       gsap.set(el, { autoAlpha: 0, pointerEvents: "none" });
-      gsap.set(panelTop, { scaleY: 0 });
-      gsap.set(panelBottom, { scaleY: 0 });
-      gsap.set(panelLeft, { scaleX: 0 });
-      gsap.set(panelRight, { scaleX: 0 });
-      gsap.set(vInnerL, { x: 0, scaleY: 1, autoAlpha: 1, transformOrigin: "center bottom" });
-      gsap.set(vInnerR, { x: 0, scaleY: 1, autoAlpha: 1, transformOrigin: "center bottom" });
-      gsap.set(hInnerT, { y: 0, scaleX: 1, autoAlpha: 1, transformOrigin: "left center" });
-      gsap.set(hInnerB, { y: 0, scaleX: 1, autoAlpha: 1, transformOrigin: "left center" });
       phase.current = "idle";
 
       playClose.current = contextSafe((onClosed: () => void) => {
-        gsap.killTweensOf([
-          el,
-          innerLines,
-          panelTop,
-          panelBottom,
-          panelLeft,
-          panelRight,
-        ]);
+        gsap.killTweensOf([el, innerLines, edges]);
 
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const { w, h, pos, hole } = layout();
+        geo = layout();
         gsap.set(el, { autoAlpha: 1, pointerEvents: "auto" });
         lenisRef.current?.stop();
 
         if (reduce) {
-          gsap.set(panelTop, { scaleY: 1 });
-          gsap.set(panelBottom, { scaleY: 1 });
-          gsap.set(panelLeft, { scaleX: 1 });
-          gsap.set(panelRight, { scaleX: 1 });
+          place(geo.inner, 1);
           gsap.set(innerLines, { autoAlpha: 0 });
           gsap.delayedCall(0.2, onClosed);
           return;
         }
 
-        gsap.set(vInnerL, {
-          x: xTo(pos.vInnerL, 0),
-          scaleY: 1,
-          autoAlpha: 1,
-        });
-        gsap.set(vInnerR, {
-          x: xTo(pos.vInnerR, w),
-          scaleY: 1,
-          autoAlpha: 1,
-        });
-        gsap.set(hInnerT, {
-          y: xTo(pos.hInnerT, 0),
-          scaleX: 1,
-          autoAlpha: 1,
-        });
-        gsap.set(hInnerB, {
-          y: xTo(pos.hInnerB, h),
-          scaleX: 1,
-          autoAlpha: 1,
-        });
-        gsap.set(panelTop, { scaleY: 0 });
-        gsap.set(panelBottom, { scaleY: 0 });
-        gsap.set(panelLeft, { scaleX: 0 });
-        gsap.set(panelRight, { scaleX: 0 });
+        place(geo.open, 0);
+        gsap.set(innerLines, { autoAlpha: 1 });
 
-        const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
-          onComplete: onClosed,
-        });
-
-        tl.addLabel("expand")
-          .to(vInnerL, { x: xTo(pos.vInnerL, pos.vOuterL), duration: 0.9 }, "expand")
-          .to(vInnerR, { x: xTo(pos.vInnerR, pos.vOuterR), duration: 0.9 }, "expand")
-          .to(hInnerT, { y: xTo(pos.hInnerT, pos.hOuterT), duration: 0.9 }, "expand")
-          .to(hInnerB, { y: xTo(pos.hInnerB, pos.hOuterB), duration: 0.9 }, "expand")
-          .to(panelTop, { scaleY: hole.y, duration: 0.9 }, "expand")
-          .to(panelBottom, { scaleY: hole.b, duration: 0.9 }, "expand")
-          .to(panelLeft, { scaleX: hole.x, duration: 0.9 }, "expand")
-          .to(panelRight, { scaleX: hole.r, duration: 0.9 }, "expand");
-
-        tl.addLabel("reveal")
-          .to(vInnerL, { x: 0, duration: 0.5 }, "reveal")
-          .to(vInnerR, { x: 0, duration: 0.5 }, "reveal")
-          .to(hInnerT, { y: 0, duration: 0.5 }, "reveal")
-          .to(hInnerB, { y: 0, duration: 0.5 }, "reveal")
-          .to(panelTop, { scaleY: 1, duration: 0.5 }, "reveal")
-          .to(panelBottom, { scaleY: 1, duration: 0.5 }, "reveal")
-          .to(panelLeft, { scaleX: 1, duration: 0.5 }, "reveal")
-          .to(panelRight, { scaleX: 1, duration: 0.5 }, "reveal");
+        gsap
+          .timeline({
+            defaults: { ease: "power2.inOut" },
+            onUpdate: apply,
+            onComplete: onClosed,
+          })
+          .to(edges, { ...geo.outer, duration: 0.9 })
+          .to(edges, { ...geo.inner, duration: 0.5 })
+          .to(edges, { seal: 1, duration: SEAL_S, ease: "power1.in" }, `-=${SEAL_S}`);
       });
 
       playReveal.current = contextSafe(() => {
-        gsap.killTweensOf([
-          el,
-          innerLines,
-          panelTop,
-          panelBottom,
-          panelLeft,
-          panelRight,
-        ]);
+        gsap.killTweensOf([el, innerLines, edges]);
 
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const { w, h, pos, hole } = layout();
+        geo = layout();
         lenisRef.current?.scrollTo(0, { immediate: true });
         window.scrollTo(0, 0);
 
@@ -268,50 +234,25 @@ export default function PageTransition() {
         };
 
         if (reduce) {
-          gsap.set(panelTop, { scaleY: 0 });
-          gsap.set(panelBottom, { scaleY: 0 });
-          gsap.set(panelLeft, { scaleX: 0 });
-          gsap.set(panelRight, { scaleX: 0 });
+          place(geo.open, 0);
           gsap.set(innerLines, { autoAlpha: 0 });
           gsap.delayedCall(0.15, finish);
           return;
         }
 
-        gsap.set(vInnerL, { x: 0, scaleY: 1, autoAlpha: 1 });
-        gsap.set(vInnerR, { x: 0, scaleY: 1, autoAlpha: 1 });
-        gsap.set(hInnerT, { y: 0, scaleX: 1, autoAlpha: 1 });
-        gsap.set(hInnerB, { y: 0, scaleX: 1, autoAlpha: 1 });
-        gsap.set(panelTop, { scaleY: 1 });
-        gsap.set(panelBottom, { scaleY: 1 });
-        gsap.set(panelLeft, { scaleX: 1 });
-        gsap.set(panelRight, { scaleX: 1 });
+        place(geo.inner, 1);
+        gsap.set(innerLines, { autoAlpha: 1 });
 
-        const tl = gsap.timeline({
-          defaults: { ease: "power2.inOut" },
-          onComplete: finish,
-        });
-
-        tl.addLabel("reveal")
-          .set(innerLines, { autoAlpha: 1 })
-          .to(vInnerL, { x: xTo(pos.vInnerL, pos.vOuterL), duration: 0.5 }, "reveal")
-          .to(vInnerR, { x: xTo(pos.vInnerR, pos.vOuterR), duration: 0.5 }, "reveal")
-          .to(hInnerT, { y: xTo(pos.hInnerT, pos.hOuterT), duration: 0.5 }, "reveal")
-          .to(hInnerB, { y: xTo(pos.hInnerB, pos.hOuterB), duration: 0.5 }, "reveal")
-          .to(panelTop, { scaleY: hole.y, duration: 0.5 }, "reveal")
-          .to(panelBottom, { scaleY: hole.b, duration: 0.5 }, "reveal")
-          .to(panelLeft, { scaleX: hole.x, duration: 0.5 }, "reveal")
-          .to(panelRight, { scaleX: hole.r, duration: 0.5 }, "reveal");
-
-        tl.addLabel("expand")
-          .to(vInnerL, { x: xTo(pos.vInnerL, 0), duration: 0.9 }, "expand")
-          .to(vInnerR, { x: xTo(pos.vInnerR, w), duration: 0.9 }, "expand")
-          .to(hInnerT, { y: xTo(pos.hInnerT, 0), duration: 0.9 }, "expand")
-          .to(hInnerB, { y: xTo(pos.hInnerB, h), duration: 0.9 }, "expand")
-          .to(panelTop, { scaleY: 0, duration: 0.9 }, "expand")
-          .to(panelBottom, { scaleY: 0, duration: 0.9 }, "expand")
-          .to(panelLeft, { scaleX: 0, duration: 0.9 }, "expand")
-          .to(panelRight, { scaleX: 0, duration: 0.9 }, "expand")
-          .to(innerLines, { autoAlpha: 0, duration: 0.4 }, "expand+=0.5");
+        gsap
+          .timeline({
+            defaults: { ease: "power2.inOut" },
+            onUpdate: apply,
+            onComplete: finish,
+          })
+          .to(edges, { seal: 0, duration: SEAL_S, ease: "power1.out" }, 0)
+          .to(edges, { ...geo.outer, duration: 0.5 }, 0)
+          .to(edges, { ...geo.open, duration: 0.9 })
+          .to(innerLines, { autoAlpha: 0, duration: 0.4 }, "-=0.4");
       });
     },
     { scope: root },
@@ -389,19 +330,19 @@ export default function PageTransition() {
     >
       <div
         data-panel="top"
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-[calc(50%+1px)] origin-top scale-y-0 bg-cream"
+        className="pointer-events-none absolute inset-0 z-0 bg-cream"
       />
       <div
         data-panel="bottom"
-        className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-[calc(50%+1px)] origin-bottom scale-y-0 bg-cream"
+        className="pointer-events-none absolute inset-0 z-0 bg-cream"
       />
       <div
         data-panel="left"
-        className="pointer-events-none absolute inset-y-0 left-0 z-0 w-[calc(50%+1px)] origin-left scale-x-0 bg-cream"
+        className="pointer-events-none absolute inset-0 z-0 bg-cream"
       />
       <div
         data-panel="right"
-        className="pointer-events-none absolute inset-y-0 right-0 z-0 w-[calc(50%+1px)] origin-right scale-x-0 bg-cream"
+        className="pointer-events-none absolute inset-0 z-0 bg-cream"
       />
 
       <MaskLine line="v-inner-l" axis="v" />

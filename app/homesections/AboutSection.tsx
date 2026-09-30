@@ -56,7 +56,7 @@ function showChapter(parts: Parts, index: number, animate: boolean) {
     });
   });
 
-  if (numeral) numeral.textContent = padIndex(index);
+  if (numeral) numeral.textContent = STORY[index]?.year ?? padIndex(index);
   if (count) count.textContent = padIndex(index);
 
   // Keep the active station in view when the tab strip scrolls (mobile).
@@ -313,7 +313,7 @@ export default function AboutSection() {
             trigger: root,
             pin: true,
             start: "top top",
-            end: "+=250%",
+            end: "+=350%",
             id: "about-story-desktop",
           });
         },
@@ -471,7 +471,7 @@ export default function AboutSection() {
             </span>
           ))}
           <span aria-hidden data-chapter-numeral className="about-chapter-numeral">
-            01
+            {STORY[0]?.year}
           </span>
           </div>
         </div>
@@ -482,7 +482,7 @@ export default function AboutSection() {
             <div key={item.id} data-chapter-text={i} className="about-chapter-text">
               <p className="index-tag flex items-center justify-between gap-4">
                 <span>{item.label}</span>
-                <span aria-hidden>[{padIndex(i)}]</span>
+                <span className="tabular-nums">{item.year}</span>
               </p>
               <p className="font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
                 {item.body}

@@ -92,10 +92,11 @@ export function useHomeSection(enabled: boolean) {
   return enabled ? active : -1;
 }
 
+/** Same plus as the dashboard links' station mark. */
 const MARK = 7;
 const WEIGHT = 1.5;
 
-function Tick({ filled }: { filled: boolean }) {
+function Plus() {
   const mid = MARK / 2;
   const inset = WEIGHT / 2;
 
@@ -106,32 +107,26 @@ function Tick({ filled }: { filled: boolean }) {
       height={MARK}
       viewBox={`0 0 ${MARK} ${MARK}`}
       fill="none"
-      className="sb-tick size-[7px]"
+      className="sb-index-plus size-[7px]"
     >
-      {filled ? (
-        <rect x={inset} y={inset} width={MARK - WEIGHT * 2} height={MARK - WEIGHT * 2} fill="currentColor" />
-      ) : (
-        <>
-          <line
-            x1={inset}
-            y1={mid}
-            x2={MARK - inset}
-            y2={mid}
-            stroke="currentColor"
-            strokeWidth={WEIGHT}
-            strokeLinecap="square"
-          />
-          <line
-            x1={mid}
-            y1={inset}
-            x2={mid}
-            y2={MARK - inset}
-            stroke="currentColor"
-            strokeWidth={WEIGHT}
-            strokeLinecap="square"
-          />
-        </>
-      )}
+      <line
+        x1={inset}
+        y1={mid}
+        x2={MARK - inset}
+        y2={mid}
+        stroke="currentColor"
+        strokeWidth={WEIGHT}
+        strokeLinecap="square"
+      />
+      <line
+        x1={mid}
+        y1={inset}
+        x2={mid}
+        y2={MARK - inset}
+        stroke="currentColor"
+        strokeWidth={WEIGHT}
+        strokeLinecap="square"
+      />
     </svg>
   );
 }
@@ -147,95 +142,74 @@ export default function HomeProgress({
   onNavigate,
   className = "",
 }: HomeProgressProps) {
-  const fills = useRef<(HTMLSpanElement | null)[]>([]);
-  const [hovered, setHovered] = useState<number | null>(null);
+  const meter = useRef<HTMLSpanElement>(null);
+  const [focused, setFocused] = useState<number | null>(null);
 
   useSectionFrame(true, (snap) => {
-    snap.progress.forEach((p, i) => {
-      const el = fills.current[i];
-      if (el) el.style.transform = `scaleY(${p.toFixed(4)})`;
-    });
+    const el = meter.current;
+    if (!el) return;
+    const at = snap.active;
+    const overall = (at + (snap.progress[at] ?? 0)) / COUNT;
+    el.style.transform = `scaleX(${overall.toFixed(4)})`;
   });
 
   const current = Math.max(0, active);
-  const shown = hovered ?? current;
-  const readoutStyle = {
+  const shown = focused ?? current;
+  const trackStyle = {
     "--sb-at": `${shown}`,
     "--sb-count": `${COUNT}`,
   } as CSSProperties;
 
   return (
     <div
-      className={`sb-progress ${className}`}
+      className={`sb-panel ${className}`}
       aria-label="Homepage sections"
       role="navigation"
     >
-      <div className="sb-progress-head">
-        <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
+      <div className="sb-panel-head">
+        <span className="sidebar-group font-heading leading-none font-medium uppercase">
           Index
         </span>
-        <span className="index-tag text-steel" aria-live="polite">
+        <span className="sb-panel-count index-tag" aria-live="polite">
           {padIndex(current)}
-          <span className="text-steel/50"> / {padIndex(COUNT - 1)}</span>
+          <span className="text-steel/50">/{padIndex(COUNT - 1)}</span>
+        </span>
+        <span aria-hidden className="sb-index-meter">
+          <span ref={meter} className="sb-index-meter-fill" />
         </span>
       </div>
 
-      <div className="sb-progress-body">
-        <ol className="sb-progress-track">
-          {HOME_SECTIONS.map((item, index) => {
-            const isActive = index === current;
-            return (
-              <li key={item.id} className="sb-progress-seg">
-                <a
-                  href={`/#${item.id}`}
-                  aria-label={`Go to ${padIndex(index)} ${item.label}`}
-                  aria-current={isActive ? "true" : undefined}
-                  className={`sb-station ${isActive ? "is-active" : ""}`}
-                  onClick={onNavigate}
-                  onPointerEnter={() => setHovered(index)}
-                  onPointerLeave={() => setHovered(null)}
-                  onFocus={() => setHovered(index)}
-                  onBlur={() => setHovered(null)}
-                >
-                  <Tick filled={isActive} />
-                  <span aria-hidden className="sb-seg-rail">
-                    <span
-                      ref={(node) => {
-                        fills.current[index] = node;
-                      }}
-                      className="sb-seg-fill"
-                    />
-                  </span>
-                </a>
-              </li>
-            );
-          })}
-          <li aria-hidden className="sb-progress-end">
-            <Tick filled={false} />
-          </li>
-        </ol>
-
-        <div
-          aria-hidden
-          className={`sb-progress-names ${hovered !== null && hovered !== current ? "is-preview" : ""}`}
-          style={readoutStyle}
-        >
-          <div className="sb-progress-names-track">
+      <div className="sb-progress">
+        <div className="sb-index-window">
+          <ol className="sb-index-track" style={trackStyle}>
             {HOME_SECTIONS.map((item, index) => {
-              const distance = Math.abs(index - shown);
-              const place =
-                distance === 0 ? "is-current" : distance === 1 ? "is-near" : "";
+              const isCurrent = index === current;
               return (
-                <span key={item.id} className={`sb-progress-name ${place}`}>
-                  <span className="sb-progress-name-leader" />
-                  <span className="index-tag tabular-nums">{padIndex(index)}</span>
-                  <span className="sb-progress-label font-heading text-[12px] leading-none font-medium uppercase">
-                    {item.label}
-                  </span>
-                </span>
+                <li
+                  key={item.id}
+                  className={`sb-index-item ${isCurrent ? "is-current" : ""}`}
+                >
+                  <a
+                    href={`/#${item.id}`}
+                    aria-current={isCurrent ? "true" : undefined}
+                    className="sb-index-row"
+                    onClick={onNavigate}
+                    onFocus={() => setFocused(index)}
+                    onBlur={() => setFocused(null)}
+                  >
+                    <Plus />
+                    <span aria-hidden className="sb-index-leader" />
+                    <span className="sb-index-num index-tag">
+                      {padIndex(index)}
+                    </span>
+                    <span className="sb-index-label font-heading font-medium uppercase">
+                      {item.label}
+                    </span>
+                  </a>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </div>
     </div>

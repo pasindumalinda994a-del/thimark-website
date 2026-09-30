@@ -6,7 +6,10 @@ export type GlyphKind =
   | "fabrication"
   | "oem"
   | "machinery"
-  | "automation";
+  | "automation"
+  | "coating"
+  | "inquiry"
+  | "upload";
 
 type P3 = [number, number, number];
 
@@ -38,6 +41,13 @@ function circleSide(a: number, cb: number, cc: number, r: number): P3[] {
   return Array.from({ length: CIRCLE_STEPS }, (_, i) => {
     const t = (i / CIRCLE_STEPS) * Math.PI * 2;
     return [a, cb + r * Math.cos(t), cc + r * Math.sin(t)] as P3;
+  });
+}
+
+function circleFront(ca: number, b: number, cc: number, r: number): P3[] {
+  return Array.from({ length: CIRCLE_STEPS }, (_, i) => {
+    const t = (i / CIRCLE_STEPS) * Math.PI * 2;
+    return [ca + r * Math.cos(t), b, cc + r * Math.sin(t)] as P3;
   });
 }
 
@@ -239,6 +249,60 @@ const GLYPHS: Record<GlyphKind, Seg[]> = {
     { pts: [[1.9, 2, 4.3], [1.9, 2, 5.4], [4.6, 2, 5.4]], hidden: true },
     { pts: circleSide(4.6, 2, 5.4, 0.22), closed: true },
   ],
+  coating: [
+    // overhead conveyor rail
+    ...box(0, 1.6, 7, 9, 2.4, 7.5),
+    // hook
+    { pts: [[4.5, 2, 7], [4.5, 2, 6.3], [4.5, 2.5, 6], [4.5, 2, 5.7]] },
+    // hanging bracket plate
+    ...box(2.6, 1.8, 2, 6.4, 2.2, 5.6),
+    { pts: circleFront(3.6, 2.2, 4.6, 0.35), closed: true },
+    { pts: circleFront(5.4, 2.2, 4.6, 0.35), closed: true },
+    { pts: [[2.6, 2.2, 3.2], [6.4, 2.2, 3.2]], hidden: true },
+    // spray gun and fan
+    ...box(4, 7, 3.4, 5, 8.4, 4.2),
+    { pts: [[4.5, 7, 3.8], [3, 2.2, 5.2]], hidden: true },
+    { pts: [[4.5, 7, 3.8], [6, 2.2, 5.2]], hidden: true },
+    { pts: [[4.5, 7, 3.8], [3, 2.2, 2.4]], hidden: true },
+    { pts: [[4.5, 7, 3.8], [6, 2.2, 2.4]], hidden: true },
+  ],
+  inquiry: [
+    ...box(0, 0, 0, 5, 4, 3),
+    // unknown internal feature
+    {
+      pts: [
+        [1.2, 1, 3],
+        [3.8, 1, 3],
+        [3.8, 3, 3],
+        [1.2, 3, 3],
+      ],
+      closed: true,
+      hidden: true,
+    },
+    // dimension along +a edge
+    { pts: [[0, 5.2, 0], [5, 5.2, 0]] },
+    { pts: [[0, 4.6, 0], [0, 5.8, 0]] },
+    { pts: [[5, 4.6, 0], [5, 5.8, 0]] },
+    // leader to a callout balloon
+    { pts: [[2.5, 2, 3], [2.5, 2, 5.6], [5.4, 2, 5.6]] },
+    { pts: circleFront(6.4, 2, 5.6, 1), closed: true },
+    { pts: [[6.1, 2, 5.9], [6.4, 2, 6.1], [6.7, 2, 5.9], [6.4, 2, 5.5], [6.4, 2, 5.2]] },
+    { pts: [[6.4, 2, 4.95], [6.4, 2, 4.85]] },
+  ],
+  upload: [
+    // open tray
+    { pts: [[0, 0, 1], [6, 0, 1], [6, 4, 1], [0, 4, 1]], closed: true },
+    { pts: [[0.5, 0.5, 1], [5.5, 0.5, 1], [5.5, 3.5, 1], [0.5, 3.5, 1]], closed: true, hidden: true },
+    { pts: [[6, 0, 0], [6, 4, 0], [0, 4, 0]] },
+    { pts: [[6, 0, 0], [6, 0, 1]] },
+    { pts: [[6, 4, 0], [6, 4, 1]] },
+    { pts: [[0, 4, 0], [0, 4, 1]] },
+    { pts: [[0, 0, 0], [6, 0, 0]], hidden: true },
+    { pts: [[0, 0, 0], [0, 4, 0]], hidden: true },
+    // arrow up out of the tray
+    { pts: [[3, 2, 1.4], [3, 2, 5.4]] },
+    { pts: [[3, 1.2, 4.4], [3, 2, 5.4], [3, 2.8, 4.4]] },
+  ],
 };
 
 function project(segs: Seg[]) {
@@ -285,6 +349,9 @@ const PROJECTED: Record<GlyphKind, ReturnType<typeof project>> = {
   oem: project(GLYPHS.oem),
   machinery: project(GLYPHS.machinery),
   automation: project(GLYPHS.automation),
+  coating: project(GLYPHS.coating),
+  inquiry: project(GLYPHS.inquiry),
+  upload: project(GLYPHS.upload),
 };
 
 type CapabilityGlyphProps = {

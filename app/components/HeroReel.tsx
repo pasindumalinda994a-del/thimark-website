@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -26,7 +26,7 @@ function StationPlus() {
       height={7}
       viewBox="0 0 7 7"
       fill="none"
-      className="size-[7px] shrink-0"
+      className="hero-reel-plus size-[7px] shrink-0"
     >
       <line
         x1="0"
@@ -68,6 +68,8 @@ export default function HeroReel() {
         skipCaption.current = false;
         return;
       }
+      // Hover already revealed this label; replaying the fade would flicker.
+      if (el.closest("li")?.matches(":hover")) return;
       gsap.fromTo(
         el,
         { x: CAPTION_SHIFT, autoAlpha: 0 },
@@ -328,15 +330,18 @@ export default function HeroReel() {
 
       <div className="hero-reel-scrim" aria-hidden />
       <div className="hero-reel-meta">
-        <ol className="hero-reel-tracks" aria-label="Hero clips">
+        <ol className="hero-reel-tracks" aria-label="Company values">
           {HERO_CLIPS.map((item, index) => {
             const isActive = index === active;
 
             return (
-              <li key={item.id} className="flex min-h-0 flex-1 flex-col">
+              <li
+                key={item.id}
+                className="hero-reel-station relative flex min-h-0 flex-1 flex-col"
+              >
                 <button
                   type="button"
-                  aria-label={`Show clip ${padIndex(index)}: ${item.label}`}
+                  aria-label={`Show clip ${padIndex(index)}: ${item.label}. ${item.detail}`}
                   aria-current={isActive}
                   className="flex h-full min-h-0 flex-1 flex-col text-left"
                   onClick={() => goToRef.current(index)}
@@ -353,11 +358,15 @@ export default function HeroReel() {
                       <span
                         ref={captionRef}
                         aria-live="polite"
-                        className="min-w-0"
+                        className="hero-reel-label min-w-0"
                       >
                         {item.label}
                       </span>
-                    ) : null}
+                    ) : (
+                      <span aria-hidden className="hero-reel-label hero-reel-peek">
+                        {item.label}
+                      </span>
+                    )}
                   </span>
                   <span className="hero-reel-rail">
                     <span className="relative h-full w-[1.5px] overflow-hidden bg-cream/50">
@@ -370,6 +379,19 @@ export default function HeroReel() {
                     </span>
                   </span>
                 </button>
+                <span aria-hidden className="hero-reel-detail font-heading">
+                  <span className="hero-reel-detail-copy">
+                    {item.detail.split(" ").map((word, wordIndex) => (
+                      <span
+                        key={wordIndex}
+                        className="hero-reel-word"
+                        style={{ "--i": wordIndex } as CSSProperties}
+                      >
+                        <span>{word}</span>{" "}
+                      </span>
+                    ))}
+                  </span>
+                </span>
               </li>
             );
           })}

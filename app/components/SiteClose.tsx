@@ -10,12 +10,16 @@ export default function SiteClose() {
   const path = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
   if (path === "/gallery") return null;
 
+  const showQuote = path !== "/contact" && path !== "/request-a-quote";
+
   return (
     <>
-      <div className="content-plate relative z-10 bg-steel md:ml-sidebar [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
-        <SectionBreak tone="page" />
-        <QuoteSection />
-      </div>
+      {showQuote ? (
+        <div className="content-plate relative z-10 bg-steel md:ml-sidebar [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
+          <SectionBreak tone="page" />
+          <QuoteSection />
+        </div>
+      ) : null}
       <Footer />
     </>
   );

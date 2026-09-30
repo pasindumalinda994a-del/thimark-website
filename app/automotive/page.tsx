@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function AutomotivePage() {
-  return <UnderDevelopmentPage name="Automotive" />;
+  return <UnderDevelopmentPage name="Automotive" quoteService="automotive" />;
 }

@@ -16,8 +16,8 @@ type PlusMarkProps = {
 
 function axisSpan(negative: boolean, positive: boolean) {
   if (negative && positive) return { from: 0, to: 7 };
-  if (positive) return { from: 4, to: 7 };
-  if (negative) return { from: 0, to: 3 };
+  if (positive) return { from: 3.5, to: 7 };
+  if (negative) return { from: 0, to: 3.5 };
   return null;
 }
 

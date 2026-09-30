@@ -204,7 +204,7 @@ export default function HeroSection() {
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
         <BrandButton
-          href="/#contact"
+          href="/request-a-quote"
           font="sans"
           data-hero-item
           className="hero-cta-primary w-full md:w-auto"

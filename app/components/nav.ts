@@ -14,20 +14,50 @@ export type NavItem = Omit<NavLink, "href"> & {
 export const NAV_ITEMS: NavItem[] = [
   { id: "about", label: "About Us", href: "/about" },
   {
-    id: "capabilities",
-    label: "Products / Services",
+    id: "automotive",
+    label: "Automotive",
     children: [
       {
-        id: "automotive",
-        label: "Automotive",
-        fullLabel: "Automotive Component Manufacturing",
-        href: "/automotive",
+        id: "automotive-products",
+        label: "Products",
+        fullLabel: "Automotive Products",
+        href: "/automotive/products",
       },
       {
-        id: "machinery",
-        label: "Industrial Machinery",
-        fullLabel: "Design & Manufacture of Industrial Machinery Components",
-        href: "/industrial-machinery",
+        id: "automotive-services",
+        label: "Services",
+        fullLabel: "Automotive Services",
+        href: "/automotive/services",
+      },
+      {
+        id: "automotive-value",
+        label: "Local Value Addition",
+        fullLabel: "Automotive Local Value Addition",
+        href: "/automotive/local-value-addition",
+      },
+    ],
+  },
+  {
+    id: "machinery",
+    label: "Industrial Machinery",
+    children: [
+      {
+        id: "machinery-products",
+        label: "Products",
+        fullLabel: "Industrial Machinery Products",
+        href: "/industrial-machinery/products",
+      },
+      {
+        id: "machinery-services",
+        label: "Services",
+        fullLabel: "Industrial Machinery Services",
+        href: "/industrial-machinery/services",
+      },
+      {
+        id: "machinery-exports",
+        label: "Exports",
+        fullLabel: "Industrial Machinery Exports",
+        href: "/industrial-machinery/exports",
       },
     ],
   },
@@ -39,7 +69,13 @@ export const NAV_ITEMS: NavItem[] = [
 export const PATH_ACTIVE_IDS: Record<string, string> = {
   "/about": "about",
   "/automotive": "automotive",
+  "/automotive/products": "automotive-products",
+  "/automotive/services": "automotive-services",
+  "/automotive/local-value-addition": "automotive-value",
   "/industrial-machinery": "machinery",
+  "/industrial-machinery/products": "machinery-products",
+  "/industrial-machinery/services": "machinery-services",
+  "/industrial-machinery/exports": "machinery-exports",
   "/newsroom": "newsroom",
   "/gallery": "gallery",
   "/contact": "contact",
@@ -48,7 +84,7 @@ export const PATH_ACTIVE_IDS: Record<string, string> = {
 export const RAQ_LINK = {
   id: "raq",
   label: "RAQ",
-  href: "/#contact",
+  href: "/request-a-quote",
   ariaLabel: "Request a Quote",
 } as const;
 
@@ -88,6 +124,7 @@ export function collectNavLinks(items: NavItem[]): NavLink[] {
 
 const PATH_LABELS: Record<string, string> = {
   "/": "Home",
+  "/request-a-quote": "Request a Quote",
 };
 
 for (const link of collectNavLinks(NAV_ITEMS)) {
@@ -99,6 +136,15 @@ export function normalizePath(pathname: string): string {
     return pathname.slice(0, -1);
   }
   return pathname || "/";
+}
+
+/** Label of the nav group that owns `pathname`, or "Main" for top-level pages. */
+export function pathSection(pathname: string): string {
+  const path = normalizePath(pathname);
+  const group = NAV_ITEMS.find((item) =>
+    item.children?.some((child) => child.href === path),
+  );
+  return group?.label ?? "Main";
 }
 
 export function pathLabel(pathname: string): string {

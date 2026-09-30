@@ -292,7 +292,7 @@ export default function QuoteSection() {
         {/* CTAs */}
         <div className="quote-ctas">
         <BrandButton
-          href="mailto:info@thimark.com?subject=Request%20a%20Quote"
+          href="/request-a-quote"
           font="sans"
           className="quote-cta-primary"
         >

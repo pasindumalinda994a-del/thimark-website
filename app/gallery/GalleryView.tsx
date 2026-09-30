@@ -12,7 +12,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import MaskRevealHeading from "@/app/components/MaskRevealHeading";
-import PlusMark from "@/app/components/PlusMark";
+import PlusMark, { type PlusArms } from "@/app/components/PlusMark";
 import ScrollHint from "@/app/components/ScrollHint";
 import SectionGrid, { GridLine } from "@/app/components/SectionGrid";
 import GalleryStrip, { type GalleryStripHandle } from "@/app/gallery/GalleryStrip";
@@ -26,6 +26,11 @@ import {
 } from "@/app/gallery/records";
 
 gsap.registerPlugin(useGSAP);
+
+const armDown: PlusArms = { up: false, down: true, left: false, right: false };
+const armUp: PlusArms = { up: true, down: false, left: false, right: false };
+const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
+const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -288,22 +293,22 @@ export default function GalleryView() {
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-top-7 hidden md:block" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-7-end hidden md:block" />
 
-        <PlusMark tone="page" className="v-g1-0 gallery-plus-top hidden md:block" />
-        <PlusMark tone="page" className="v-g1-3 gallery-plus-top hidden md:block" />
-        <PlusMark tone="page" className="v-g1-9 gallery-plus-top hidden md:block" />
-        <PlusMark tone="page" className="v-g1-12 gallery-plus-top hidden md:block" />
+        <PlusMark tone="page" arms={armDown} className="v-g1-0 gallery-plus-top hidden md:block" />
+        <PlusMark tone="page" arms={armDown} className="v-g1-3 gallery-plus-top hidden md:block" />
+        <PlusMark tone="page" arms={armDown} className="v-g1-9 gallery-plus-top hidden md:block" />
+        <PlusMark tone="page" arms={armDown} className="v-g1-12 gallery-plus-top hidden md:block" />
 
         <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-0-3 gallery-at-7 hidden md:block" />
         <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-9g-12 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" className="v-g1-0 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" className="v-g1-3 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" className="v-g1-9 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" className="v-g1-12 gallery-at-7 hidden md:block" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 gallery-at-7 hidden md:block" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-3 gallery-at-7 hidden md:block" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-9 gallery-at-7 hidden md:block" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 gallery-at-7 hidden md:block" />
 
-        <PlusMark tone="page" className="v-g1-0 at-bottom hidden md:block" />
-        <PlusMark tone="page" className="v-g1-3 at-bottom hidden md:block" />
-        <PlusMark tone="page" className="v-g1-9 at-bottom hidden md:block" />
-        <PlusMark tone="page" className="v-g1-12 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-0 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-3 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-9 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-12 at-bottom hidden md:block" />
 
         <div className="gallery-stage-copy">
           <div className="gallery-reel-above">
@@ -323,8 +328,8 @@ export default function GalleryView() {
               data-gal-item
               className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.35] font-medium uppercase"
             >
-              Components, machinery, people, and the work between them on the
-              Kadawatha floor.
+              The Kadawatha workshop, Kilgharrah 600 in the field, and the
+              evening the company was received.
             </p>
             <p data-gal-item className="index-tag gallery-stage-readout">
               <span>{pad2(GALLERY_CATEGORIES.length)} Fields</span>

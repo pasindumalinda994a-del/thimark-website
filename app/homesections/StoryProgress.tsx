@@ -2,6 +2,7 @@ import type { GlyphKind } from "@/app/components/CapabilityGlyph";
 
 export const STORY: {
   id: string;
+  year: string;
   label: string;
   glyph: GlyphKind;
   image: string;
@@ -10,49 +11,74 @@ export const STORY: {
   body: string;
 }[] = [
   {
-    id: "steel",
-    label: "Steel Fabrication",
+    id: "founded",
+    year: "2014",
+    label: "Founded",
     glyph: "fabrication",
     image: "/home-images/about-steel-fabrication.jpeg",
     alt: "Fabricators welding structural steel in a workshop",
     objectPosition: "50% 45%",
-    body: "Thimark began as a modest steel fabrication business — cutting, forming and welding to order for local industry. That hands-on fabrication capability remains the foundation of everything we build.",
+    body: "Founded as a backyard steel fabrication business.",
   },
   {
     id: "iso",
-    label: "ISO Certification",
+    year: "2019",
+    label: "ISO 9001",
     glyph: "precision",
     image: "/home-images/about-iso-precision.jpeg",
-    alt: "Engineers inspecting a precision-machined gear assembly",
+    alt: "Engineers inspecting a precision-machined component in a factory",
     objectPosition: "48% 40%",
-    body: "Today, Thimark Technocreations (Pvt) Ltd combines mechanical engineering, fabrication and manufacturing expertise to serve the automotive, industrial, construction, water supply and hydropower sectors.",
+    body: "Relocated to a newly built factory and achieved ISO 9001:2015 certification.",
+  },
+  {
+    id: "cida",
+    year: "2020",
+    label: "CIDA EM2",
+    glyph: "engineering",
+    image: "/home-images/about-workshop.png",
+    alt: "Welders fabricating heavy steel frames in the workshop",
+    objectPosition: "50% 42%",
+    body: "Awarded CIDA EM2 Grade in Heavy Steel Fabrication.",
   },
   {
     id: "automotive",
-    label: "Automotive Manufacturing",
+    year: "2022",
+    label: "Automotive",
     glyph: "oem",
     image: "/home-images/about-automotive-manufacturing.jpeg",
     alt: "Engineers assembling motorcycle gearbox components",
     objectPosition: "42% 40%",
-    body: "We serve the automotive sector with OEM components built around the demands of production environments, consistent quality and increased local value addition.",
+    body: "Commenced automotive parts manufacturing.",
   },
   {
-    id: "automation",
-    label: "Industrial Automation",
-    glyph: "automation",
-    image: "/home-images/about-industrial-automation.jpeg",
-    alt: "Engineers operating an industrial automation line with a robotic arm",
-    objectPosition: "38% 45%",
-    body: "Industrial, construction, water supply and hydropower work sits on the same engineering mindset — machines designed around the challenge, not adapted to it.",
-  },
-  {
-    id: "international",
-    label: "International Engineering",
+    id: "kengen",
+    year: "2024",
+    label: "KenGen",
     glyph: "machinery",
     image: "/home-images/about-international-engineering.jpeg",
-    alt: "Engineers inspecting industrial equipment at a hydropower installation",
+    alt: "Engineers inspecting a trash-cleaning machine at a hydropower intake",
     objectPosition: "62% 40%",
-    body: "Our journey has taken us from local manufacturing to international engineering projects — including the design and manufacture of an automated trash-cleaning system for KenGen in Kenya.",
+    body: "Designed and manufactured an automated trash cleaning machine for KenGen (Kenya).",
+  },
+  {
+    id: "expansion",
+    year: "2025",
+    label: "Expansion",
+    glyph: "automation",
+    image: "/home-images/about-industrial-automation.jpeg",
+    alt: "Engineers beside upgraded production machinery in a larger factory",
+    objectPosition: "38% 45%",
+    body: "Expanded the factory to 15,000 sq ft, upgraded machinery with state-of-the-art systems, and implemented lean manufacturing practices.",
+  },
+  {
+    id: "coating",
+    year: "2026",
+    label: "Coating",
+    glyph: "coating",
+    image: "/home-images/quality-continuous-improvement.jpeg",
+    alt: "Engineers reviewing production plans for a new coating facility",
+    objectPosition: "48% 38%",
+    body: "Launching a powder coating facility at Ekala IDB Industrial Zone.",
   },
 ];
 
@@ -60,11 +86,11 @@ export function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
 }
 
-function StationCopy({ label, index }: { label: string; index: number }) {
+function StationCopy({ label, year }: { label: string; year: string }) {
   return (
     <span className="about-station-copy">
       <span>{label}</span>
-      <span aria-hidden>[{padIndex(index)}]</span>
+      <span className="tabular-nums">{year}</span>
     </span>
   );
 }
@@ -122,7 +148,7 @@ export default function StoryProgress() {
   return (
     <div
       role="tablist"
-      aria-label="Company story chapters"
+      aria-label="Company journey"
       className="about-tabs"
     >
       {STORY.map((item, i) => (
@@ -137,9 +163,9 @@ export default function StoryProgress() {
           {i > 0 ? (
             <span aria-hidden className="catalogue-tab-divider" />
           ) : null}
-          <StationCopy label={item.label} index={i} />
+          <StationCopy label={item.label} year={item.year} />
           <span aria-hidden data-story-wash="" className="about-station-wash">
-            <StationCopy label={item.label} index={i} />
+            <StationCopy label={item.label} year={item.year} />
           </span>
         </button>
       ))}

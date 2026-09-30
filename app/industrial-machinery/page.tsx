@@ -6,5 +6,5 @@ export const metadata: Metadata = {
 };
 
 export default function IndustrialMachineryPage() {
-  return <UnderDevelopmentPage name="Industrial Machinery" />;
+  return <UnderDevelopmentPage name="Industrial Machinery" quoteService="industrial" />;
 }

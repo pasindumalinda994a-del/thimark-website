@@ -18,6 +18,7 @@ import {
   RAQ_LINK,
   normalizePath,
   pathLabel,
+  pathSection,
   type NavItem,
   type NavLink,
 } from "@/app/components/nav";
@@ -72,16 +73,6 @@ function StationPlus({ className = "" }: { className?: string }) {
         strokeLinecap="square"
       />
     </svg>
-  );
-}
-
-function StationDash({ className = "" }: { className?: string }) {
-  return (
-    <span
-      aria-hidden
-      className={`inline-block shrink-0 bg-current ${className}`}
-      style={{ width: MARK, height: WEIGHT }}
-    />
   );
 }
 
@@ -187,7 +178,7 @@ function NavRow({
     >
       <StationMark active={active} />
       <span aria-hidden className="sb-nav-leader" />
-      <span className="sb-nav-label font-heading text-[12px] leading-none font-medium tracking-[0.04em] uppercase">
+      <span className="sb-nav-label font-heading font-medium tracking-[0.04em] uppercase">
         {item.label}
       </span>
       {index !== undefined ? (
@@ -215,36 +206,29 @@ function NavGroup({
     activeId === item.id || children.some((c) => c.id === activeId);
 
   return (
-    <div className="sb-nav-group">
+    <div className="sb-nav-group" style={{ flexGrow: children.length + 1 }}>
       <p
         data-sb-item
         className={`sb-nav-row sb-nav-row-static ${groupActive ? "is-active" : ""}`}
       >
         <StationMark active={groupActive} />
         <span aria-hidden className="sb-nav-leader" />
-        <span className="sb-nav-label font-heading text-[12px] leading-none font-medium tracking-[0.04em] uppercase">
+        <span className="sb-nav-label font-heading font-medium tracking-[0.04em] uppercase">
           {item.label}
         </span>
         <span aria-hidden className="sb-nav-index index-tag">
           [{padIndex(index)}]
         </span>
       </p>
-      <div className="sb-branch">
+      <div className="sb-branch" style={{ flexGrow: children.length }}>
         {children.map((child) => (
-          <span key={child.id} className="sb-branch-row">
-            <GridLine
-              axis="h"
-              unstyled
-              tone="dark"
-              className="sb-branch-join"
-            />
-            <NavRow
-              item={child}
-              active={activeId === child.id}
-              child
-              onNavigate={onNavigate}
-            />
-          </span>
+          <NavRow
+            key={child.id}
+            item={child}
+            active={activeId === child.id}
+            child
+            onNavigate={onNavigate}
+          />
         ))}
       </div>
     </div>
@@ -274,6 +258,7 @@ function NavShell({
   logoPriority?: boolean;
   className?: string;
 }) {
+  const sectionName = pathSection(pathname);
   const linkCount = NAV_ITEMS.reduce(
     (n, item) => n + (item.href ? 1 : 0) + (item.children?.length ?? 0),
     0,
@@ -284,16 +269,27 @@ function NavShell({
       {/* Logo block */}
       <div className="sb-block sb-block-logo hidden h-rows-2 md:flex">
         <PlateRails />
-        <BrandLogo className="sb-logo" priority={logoPriority} />
+        <div className="sb-logo-lockup">
+          <BrandLogo
+            className="sb-logo"
+            imageClassName="h-7"
+            priority={logoPriority}
+          />
+          <p className="sb-logo-tagline">
+            Engineering Excellence.
+            <br />
+            Delivering Trust.
+          </p>
+        </div>
         <PlateRule edge="bottom" />
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Primary" className="sb-block sb-block-nav">
+      <nav aria-label="Dashboard" className="sb-block sb-block-nav">
         <PlateRails />
         <div data-sb-item className="sb-nav-head">
           <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
-            Nav
+            Dashboard
           </span>
           <span className="index-tag text-steel/60" aria-hidden>
             [{padIndex(linkCount - 1)}]
@@ -329,22 +325,41 @@ function NavShell({
         {isHome ? (
           <HomeProgress active={section} onNavigate={onNavigate} />
         ) : (
-          <div className="sb-progress" data-sb-item>
-            <div className="sb-progress-head">
-              <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
-                Page
-              </span>
-              <span className="index-tag text-steel/60 normal-case">
-                {pathname}
-              </span>
-            </div>
-            <div className="sb-page-readout">
-              <StationPlus />
-              <StationDash />
-              <span className="font-heading text-[12px] leading-none font-medium tracking-[0.04em] text-steel uppercase">
-                {pageName}
-              </span>
-            </div>
+          <div className="sb-panel" data-sb-item>
+            <dl className="sb-spec">
+              <div className="sb-spec-row">
+                <dt className="sb-spec-key sidebar-group font-heading leading-none font-medium uppercase">
+                  Section
+                </dt>
+                <dd className="sb-spec-val">
+                  <span className="sb-spec-text font-heading font-medium tracking-[0.04em] uppercase">
+                    {sectionName}
+                  </span>
+                </dd>
+              </div>
+              <div className="sb-spec-row is-page">
+                <dt className="sb-spec-key sidebar-group font-heading leading-none font-medium uppercase">
+                  Page
+                </dt>
+                <dd className="sb-spec-val">
+                  <StationPlus />
+                  <span aria-hidden className="sb-spec-leader" />
+                  <span className="sb-spec-text font-heading font-medium tracking-[0.04em] uppercase">
+                    {pageName}
+                  </span>
+                </dd>
+              </div>
+              <div className="sb-spec-row">
+                <dt className="sb-spec-key sidebar-group font-heading leading-none font-medium uppercase">
+                  Path
+                </dt>
+                <dd className="sb-spec-val">
+                  <span className="sb-spec-text index-tag" title={pathname}>
+                    {pathname}
+                  </span>
+                </dd>
+              </div>
+            </dl>
           </div>
         )}
         <PlateRule edge="bottom" />

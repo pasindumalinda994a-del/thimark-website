@@ -4,7 +4,7 @@ import GalleryView from "@/app/gallery/GalleryView";
 export const metadata: Metadata = {
   title: "Gallery — Thimark",
   description:
-    "A visual index of Thimark's manufacturing floor, automotive components, industrial machinery, engineering work, projects, and people in Kadawatha.",
+    "Photographs from Thimark's Kadawatha workshop, the Kilgharrah 600, SLTC awards, and company events.",
 };
 
 export default function GalleryPage() {

@@ -1,6 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState, type AnchorHTMLAttributes } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+  type Ref,
+} from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
@@ -13,18 +21,26 @@ const TARGET_CELL_H = 22;
 const MAX_CELLS = 120;
 const COVER_SCALE = 1.15;
 
-type BrandButtonProps = {
+type BrandButtonShared = {
   children: string;
-  href?: string;
   font?: "heading" | "sans";
   tone?: "brand" | "steel" | "outline";
   className?: string;
   onClick?: () => void;
   "aria-label"?: string;
-} & Omit<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  "children" | "href" | "className" | "onClick"
->;
+};
+
+type BrandButtonProps = BrandButtonShared &
+  (
+    | ({ type?: undefined } & Omit<
+        AnchorHTMLAttributes<HTMLAnchorElement>,
+        "children" | "href" | "className" | "onClick" | "type"
+      > & { href?: string })
+    | ({ type: "button" | "submit" } & Omit<
+        ButtonHTMLAttributes<HTMLButtonElement>,
+        "children" | "className" | "onClick" | "type"
+      >)
+  );
 
 function gridFor(width: number, height: number) {
   if (!width || !height) return { cols: 1, rows: 1 };
@@ -69,10 +85,11 @@ export default function BrandButton({
   tone = "brand",
   className = "",
   onClick,
+  type,
   "aria-label": ariaLabel,
   ...rest
 }: BrandButtonProps) {
-  const root = useRef<HTMLAnchorElement>(null);
+  const root = useRef<HTMLAnchorElement | HTMLButtonElement>(null);
   const label = useRef<HTMLSpanElement>(null);
   const [grid, setGrid] = useState({ cols: 1, rows: 1 });
 
@@ -181,21 +198,12 @@ export default function BrandButton({
     { scope: root, dependencies: [grid.cols, grid.rows], revertOnUpdate: true },
   );
 
-  return (
-    <a
-      ref={root}
-      href={href}
-      onClick={onClick}
-      aria-label={ariaLabel}
-      {...rest}
-      className={`group relative inline-flex h-[111px] overflow-hidden ${
-        tone === "steel"
-          ? "bg-steel"
-          : tone === "outline"
-            ? "bg-transparent"
-            : "bg-brand"
-      } ${className}`}
-    >
+  const classNames = `group relative inline-flex h-[111px] cursor-pointer overflow-hidden border-0 ${
+    tone === "steel" ? "bg-steel" : tone === "outline" ? "bg-transparent" : "bg-brand"
+  } ${className}`;
+
+  const face: ReactNode = (
+    <>
       <span
         className="pointer-events-none absolute inset-0 grid h-full w-full gap-0"
         style={{
@@ -229,6 +237,34 @@ export default function BrandButton({
       >
         {children}
       </span>
+    </>
+  );
+
+  if (type) {
+    return (
+      <button
+        ref={root as Ref<HTMLButtonElement>}
+        type={type}
+        onClick={onClick}
+        aria-label={ariaLabel}
+        {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)}
+        className={classNames}
+      >
+        {face}
+      </button>
+    );
+  }
+
+  return (
+    <a
+      ref={root as Ref<HTMLAnchorElement>}
+      href={href}
+      onClick={onClick}
+      aria-label={ariaLabel}
+      {...rest}
+      className={classNames}
+    >
+      {face}
     </a>
   );
 }

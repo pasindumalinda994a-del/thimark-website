@@ -261,15 +261,6 @@ export default function FeturedProducts() {
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
         <div className="solutions-readout index-tag">
-          <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span>03 Solutions</span>
-            <span aria-hidden>·</span>
-            <span>Kilgharrah 600</span>
-            <span aria-hidden>·</span>
-            <span>OEM</span>
-            <span aria-hidden>·</span>
-            <span>Machinery</span>
-          </p>
           <p className="hidden font-normal md:block">
             Engineered around the application, the environment and the
             challenge.

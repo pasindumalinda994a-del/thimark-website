@@ -1,0 +1,108 @@
+{
+  "1280": {
+    "hScroll": 0,
+    "#overview": [
+      {
+        "i": 9,
+        "cls": "plate-cell ",
+        "overflowBottom": 5,
+        "overflowRight": -16
+      }
+    ],
+    "#vision-mission": [],
+    "#lean": [],
+    "#quality-system": [],
+    "#way-of-working": [],
+    "#partnerships": [],
+    "#why-thimark": [],
+    "#network": [],
+    "journey": {
+      "0.02": {
+        "active": 0,
+        "numeral": "2014"
+      },
+      "0.35": {
+        "active": 2,
+        "numeral": "2020"
+      },
+      "0.68": {
+        "active": 4,
+        "numeral": "2024"
+      },
+      "0.98": {
+        "active": 5,
+        "numeral": "2025"
+      }
+    },
+    "journeyOverflow": []
+  },
+  "1440": {
+    "hScroll": 0,
+    "#overview": [
+      {
+        "i": 9,
+        "cls": "plate-cell ",
+        "overflowBottom": 7,
+        "overflowRight": -16
+      }
+    ],
+    "#vision-mission": [],
+    "#lean": [],
+    "#quality-system": [],
+    "#way-of-working": [],
+    "#partnerships": [],
+    "#why-thimark": [],
+    "#network": [],
+    "journey": {
+      "0.02": {
+        "active": 0,
+        "numeral": "2014"
+      },
+      "0.35": {
+        "active": 2,
+        "numeral": "2020"
+      },
+      "0.68": {
+        "active": 4,
+        "numeral": "2024"
+      },
+      "0.98": {
+        "active": 5,
+        "numeral": "2025"
+      }
+    },
+    "journeyOverflow": []
+  },
+  "mobile": {
+    "hScroll": 0
+  },
+  "reduced": {
+    "#overview": {
+      "hidden": 0
+    },
+    "#journey": {
+      "hidden": 1
+    },
+    "#quality-system": {
+      "hidden": 0
+    },
+    "#why-thimark": {
+      "hidden": 0
+    }
+  },
+  "home": {
+    "0.1": {
+      "slides": 6,
+      "numeral": null
+    },
+    "0.6": {
+      "slides": 6,
+      "numeral": null
+    },
+    "0.98": {
+      "slides": 6,
+      "numeral": null
+    }
+  },
+  "issues": []
+}

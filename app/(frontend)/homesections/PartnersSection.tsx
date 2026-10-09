@@ -202,7 +202,22 @@ export default function PartnersSection({
                   className="h-16 w-auto object-contain"
                 />
               ) : (
-                <span aria-hidden>{partner.brand}</span>
+                <span
+                  aria-hidden
+                  style={
+                    partner.mark
+                      ? {
+                          fontFamily: partner.mark.font,
+                          fontWeight: partner.mark.weight,
+                          fontStyle: partner.mark.italic ? "italic" : "normal",
+                          letterSpacing: partner.mark.tracking,
+                          textTransform: partner.mark.uppercase === false ? "none" : "uppercase",
+                        }
+                      : undefined
+                  }
+                >
+                  {partner.brand}
+                </span>
               )}
             </div>
             <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase">

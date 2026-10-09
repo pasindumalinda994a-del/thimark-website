@@ -92,6 +92,68 @@ export function useHomeSection(enabled: boolean) {
   return enabled ? active : -1;
 }
 
+function midlineNavId(
+  sections: readonly { id: string; navId: string }[],
+): string | null {
+  const height = window.innerHeight;
+  let navId: string | null = null;
+  let best = 0;
+
+  for (const section of sections) {
+    const el = document.getElementById(section.id);
+    if (!el) continue;
+    const rect = el.getBoundingClientRect();
+    const overlap = Math.min(rect.bottom, height) - Math.max(rect.top, 0);
+    if (overlap > best) {
+      best = overlap;
+      navId = section.navId;
+    }
+  }
+
+  return navId;
+}
+
+/** Nav id of the division section occupying the most of the viewport. */
+export function useMidlineNavId(
+  sections: readonly { id: string; navId: string }[],
+  enabled: boolean,
+) {
+  const [navId, setNavId] = useState<string | null>(null);
+  const sectionsRef = useRef(sections);
+  const key = sections.map((section) => `${section.id}:${section.navId}`).join("|");
+
+  useEffect(() => {
+    sectionsRef.current = sections;
+  });
+
+  useLenis(() => {
+    if (!enabled) return;
+    const next = midlineNavId(sectionsRef.current);
+    setNavId((current) => (current === next ? current : next));
+  });
+
+  useEffect(() => {
+    if (!enabled) return;
+    const run = () => {
+      const next = midlineNavId(sectionsRef.current);
+      setNavId((current) => (current === next ? current : next));
+    };
+    run();
+    const timer = window.setTimeout(run, 400);
+    window.addEventListener("resize", run);
+    window.addEventListener("thimark:preload-done", run);
+    ScrollTrigger.addEventListener("refresh", run);
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", run);
+      window.removeEventListener("thimark:preload-done", run);
+      ScrollTrigger.removeEventListener("refresh", run);
+    };
+  }, [enabled, key]);
+
+  return enabled ? navId : null;
+}
+
 /** Same plus as the dashboard links' station mark. */
 const MARK = 7;
 const WEIGHT = 1.5;

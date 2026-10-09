@@ -47,15 +47,14 @@ export default function FeturedProducts() {
 
         bands.forEach((band) => {
           const note = band.querySelector<HTMLElement>(".solutions-note");
-          const line = band.querySelector<HTMLElement>(".solutions-datum");
-          if (!note || !line) return;
+          if (!note) return;
 
           gsap.set(note, { yPercent: -50 });
 
           const distance = () => Math.max(0, (band.offsetHeight - note.offsetHeight) / 2 - 16);
 
           gsap.fromTo(
-            [note, line],
+            note,
             { y: () => -distance() },
             {
               y: () => distance(),

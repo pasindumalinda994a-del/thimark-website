@@ -9,6 +9,7 @@ import BrandButton from "@/app/(frontend)/components/BrandButton";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { HOME_FIG, figLabel } from "@/app/(frontend)/components/FigMark";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -363,7 +364,7 @@ export default function QualitySection() {
               />
             ) : null}
             <p className="index-tag flex items-center justify-between">
-              <span>Pillar</span>
+              <span>{figLabel(HOME_FIG.quality + i)}</span>
               <span aria-hidden>[{padIndex(i)}]</span>
             </p>
             <div className="quality-pillar-media">

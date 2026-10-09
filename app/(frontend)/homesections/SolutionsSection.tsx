@@ -3,6 +3,7 @@ import Link from "next/link";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import FigMark, { HOME_FIG } from "@/app/(frontend)/components/FigMark";
 
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
@@ -112,8 +113,8 @@ export default function SolutionsSection() {
                 <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />
                 <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10" />
                 <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
+                <FigMark n={HOME_FIG.solutions + index} />
               </div>
-              <span aria-hidden className="solutions-datum hidden md:block" />
               <MobileRails />
             </div>
 

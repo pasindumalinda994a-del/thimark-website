@@ -83,9 +83,16 @@ export default function HeroSection() {
       rows={14}
       tone="light"
       outerV={false}
-      className="flex flex-col text-white"
+      className="flex flex-col text-white max-md:h-dvh max-md:overflow-hidden"
     >
-      <HeroReel />
+      <div className="hero-stage relative min-h-0 flex-1 md:contents">
+        <HeroReel />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
+        <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+      </div>
       <div className="hero-copy-scrim" aria-hidden />
 
       {/* Mobile rails are split per band so each plus keeps a 4px gap. */}
@@ -147,15 +154,6 @@ export default function HeroSection() {
       <PlusMark tone="light" className="v-g1-9 at-br-2 hidden md:block" />
       <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
-      {/* Mobile reel band */}
-      <div className="relative h-rows-7 shrink-0 md:hidden" aria-hidden>
-        <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus" />
-        <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus" />
-        <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom" />
-        <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom" />
-        <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom" />
-      </div>
-
       <div className="hero-title">
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
@@ -167,7 +165,7 @@ export default function HeroSection() {
           as="h1"
           id="hero-heading"
           waitForPreload
-          className="hero-heading font-heading text-[clamp(40px,3.5vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
+          className="hero-heading font-heading text-[clamp(30px,8vw,34px)] leading-[0.92] font-medium tracking-[-0.01em] uppercase md:text-[clamp(40px,3.5vw,64px)] md:leading-[0.89]"
         >
           Engineering What Moves Industry Forward.
         </MaskRevealHeading>
@@ -178,7 +176,7 @@ export default function HeroSection() {
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
         <p
           data-hero-item
-          className="hero-body font-heading text-justify text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase"
+          className="hero-body font-heading text-left text-[12px] leading-snug font-medium uppercase md:text-justify md:text-[clamp(12px,1vw,16px)] md:leading-none"
         >
           From precision-engineered motorcycle components to custom industrial
           machinery, Thimark combines engineering expertise, advanced

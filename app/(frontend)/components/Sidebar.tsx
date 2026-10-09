@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,7 +8,10 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import HomeProgress, { useHomeSection } from "@/app/(frontend)/components/HomeProgress";
+import HomeProgress, {
+  useHomeSection,
+  useMidlineNavId,
+} from "@/app/(frontend)/components/HomeProgress";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import {
@@ -16,6 +19,7 @@ import {
   NAV_ITEMS,
   PATH_ACTIVE_IDS,
   RAQ_LINK,
+  divisionSectionTargets,
   normalizePath,
   pathLabel,
   pathSection,
@@ -156,12 +160,14 @@ function NavRow({
   index,
   active,
   child = false,
+  showIndex = true,
   onNavigate,
 }: {
   item: NavLink;
   index?: number;
   active: boolean;
   child?: boolean;
+  showIndex?: boolean;
   onNavigate?: () => void;
 }) {
   return (
@@ -181,7 +187,7 @@ function NavRow({
       <span className="sb-nav-label font-heading font-medium tracking-[0.04em] uppercase">
         {item.label}
       </span>
-      {index !== undefined ? (
+      {showIndex && index !== undefined ? (
         <span aria-hidden className="sb-nav-index index-tag">
           [{padIndex(index)}]
         </span>
@@ -195,6 +201,7 @@ function NavGroup({
   index,
   activeId,
   open,
+  showIndex = true,
   onToggle,
   onNavigate,
   idPrefix,
@@ -203,6 +210,7 @@ function NavGroup({
   index: number;
   activeId: string;
   open: boolean;
+  showIndex?: boolean;
   onToggle: () => void;
   onNavigate?: () => void;
   idPrefix: string;
@@ -242,9 +250,11 @@ function NavGroup({
             strokeLinecap="square"
           />
         </svg>
-        <span aria-hidden className="sb-nav-index index-tag">
-          [{padIndex(index)}]
-        </span>
+        {showIndex ? (
+          <span aria-hidden className="sb-nav-index index-tag">
+            [{padIndex(index)}]
+          </span>
+        ) : null}
       </button>
       <div
         id={panelId}
@@ -262,6 +272,7 @@ function NavGroup({
                 item={child}
                 active={activeId === child.id}
                 child
+                showIndex={showIndex}
                 onNavigate={onNavigate}
               />
             ))}
@@ -286,6 +297,7 @@ function NavShell({
   logoPriority = false,
   className = "",
   idPrefix,
+  variant = "sidebar",
 }: {
   activeId: string;
   isHome: boolean;
@@ -296,15 +308,21 @@ function NavShell({
   logoPriority?: boolean;
   className?: string;
   idPrefix: string;
+  variant?: "sidebar" | "drawer";
 }) {
+  const isDrawer = variant === "drawer";
   const sectionName = pathSection(pathname);
   const linkCount = NAV_ITEMS.reduce(
     (n, item) => n + (item.href ? 1 : 0) + (item.children?.length ?? 0),
     0,
   );
   const routeGroup =
-    NAV_ITEMS.find((item) => item.children?.some((child) => child.id === activeId))
-      ?.id ?? null;
+    NAV_ITEMS.find(
+      (item) =>
+        Boolean(item.children?.length) &&
+        (item.id === activeId ||
+          item.children?.some((child) => child.id === activeId)),
+    )?.id ?? null;
   const [openId, setOpenId] = useState<string | null>(routeGroup);
 
   useEffect(() => {
@@ -312,18 +330,20 @@ function NavShell({
   }, [pathname, routeGroup]);
 
   return (
-    <div className={`sidebar-plate ${className}`}>
-      <div className="sb-block sb-block-logo hidden h-rows-2 md:flex">
-        <PlateRails />
-        <div className="sb-logo-lockup">
-          <BrandLogo
-            className="sb-logo"
-            imageClassName="h-7"
-            priority={logoPriority}
-          />
+    <div className={`sidebar-plate${isDrawer ? " sb-drawer-plate" : ""} ${className}`}>
+      {isDrawer ? null : (
+        <div className="sb-block sb-block-logo h-rows-2">
+          <PlateRails />
+          <div className="sb-logo-lockup">
+            <BrandLogo
+              className="sb-logo"
+              imageClassName="h-7"
+              priority={logoPriority}
+            />
+          </div>
+          <PlateRule edge="bottom" />
         </div>
-        <PlateRule edge="bottom" />
-      </div>
+      )}
 
       {/* Navigation */}
       <nav aria-label="Dashboard" className="sb-block sb-block-nav">
@@ -332,9 +352,11 @@ function NavShell({
           <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
             Dashboard
           </span>
-          <span className="index-tag text-steel/60" aria-hidden>
-            [{padIndex(linkCount - 1)}]
-          </span>
+          {isDrawer ? null : (
+            <span className="index-tag text-steel/60" aria-hidden>
+              [{padIndex(linkCount - 1)}]
+            </span>
+          )}
         </div>
         <div className="sidebar-nav">
           {NAV_ITEMS.map((item, index) =>
@@ -345,6 +367,7 @@ function NavShell({
                 index={index}
                 activeId={activeId}
                 open={openId === item.id}
+                showIndex={!isDrawer}
                 onToggle={() =>
                   setOpenId((current) => (current === item.id ? null : item.id))
                 }
@@ -357,6 +380,7 @@ function NavShell({
                 item={{ id: item.id, label: item.label, href: item.href }}
                 index={index}
                 active={activeId === item.id}
+                showIndex={!isDrawer}
                 onNavigate={onNavigate}
               />
             ) : null,
@@ -366,6 +390,7 @@ function NavShell({
       </nav>
 
       {/* Homepage progress rail / page readout */}
+      {isDrawer ? null : (
       <div className="sb-block sb-block-progress h-rows-3">
         <PlateRails />
         {isHome ? (
@@ -410,6 +435,7 @@ function NavShell({
         )}
         <PlateRule edge="bottom" />
       </div>
+      )}
 
       {/* Enquire */}
       <div className="sb-block sb-block-raq" data-sb-item>
@@ -434,16 +460,25 @@ export default function Sidebar() {
   const pathname = normalizePath(usePathname() ?? "/");
   const isHome = pathname === "/";
   const section = useHomeSection(isHome);
+  const divisionTargets = useMemo(
+    () => divisionSectionTargets(pathname),
+    [pathname],
+  );
+  const divisionNavId = useMidlineNavId(
+    divisionTargets,
+    !isHome && divisionTargets.length > 0,
+  );
   const activeId = isHome
     ? (HOME_SECTIONS[section]?.navId ?? "")
-    : (PATH_ACTIVE_IDS[pathname] ?? "");
+    : (divisionNavId ?? PATH_ACTIVE_IDS[pathname] ?? "");
   const pageName = pathLabel(pathname);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [seenPath, setSeenPath] = useState(pathname);
   const aside = useRef<HTMLElement>(null);
   const overlay = useRef<HTMLDivElement>(null);
-  const menuPlus = useRef<SVGSVGElement>(null);
+  const menuTop = useRef<HTMLSpanElement>(null);
+  const menuBottom = useRef<HTMLSpanElement>(null);
   const overlayFirst = useRef(true);
   const lenis = useLenis();
 
@@ -466,40 +501,93 @@ export default function Sidebar() {
     };
   }, [menuOpen, lenis]);
 
-  // Overlay fade + plus rotation.
+  // The sheet draws down from the header. Rows follow, and the bars cross into a close mark.
   useGSAP(
     () => {
       const el = overlay.current;
-      const plus = menuPlus.current;
+      const top = menuTop.current;
+      const bottom = menuBottom.current;
       if (!el) return;
+
+      const closedClip = "inset(0% 0% 100% 0%)";
+      const openClip = "inset(0% 0% 0% 0%)";
+      const items = gsap.utils.toArray<HTMLElement>("[data-sb-item]", el);
+
+      const placeBars = (open: boolean, timeline?: gsap.core.Timeline) => {
+        const bars = [
+          { bar: top, y: open ? 3.25 : 0, rotation: open ? 45 : 0 },
+          { bar: bottom, y: open ? -3.25 : 0, rotation: open ? -45 : 0 },
+        ];
+        for (const { bar, y, rotation } of bars) {
+          if (!bar) continue;
+          const vars = {
+            y,
+            rotation,
+            transformOrigin: "center center",
+            duration: 0.3,
+            ease: "power2.out",
+          };
+          if (timeline) timeline.to(bar, vars, 0);
+          else gsap.set(bar, vars);
+        }
+      };
 
       if (overlayFirst.current) {
         overlayFirst.current = false;
-        gsap.set(el, { autoAlpha: 0 });
-        if (plus) gsap.set(plus, { rotation: 0 });
+        gsap.set(el, { autoAlpha: 0, clipPath: closedClip });
+        gsap.set(items, { autoAlpha: 0, y: 14 });
+        placeBars(false);
         return;
       }
 
       if (prefersReducedMotion()) {
-        gsap.set(el, { autoAlpha: menuOpen ? 1 : 0 });
-        if (plus) gsap.set(plus, { rotation: menuOpen ? 45 : 0 });
+        gsap.set(el, {
+          autoAlpha: menuOpen ? 1 : 0,
+          clipPath: menuOpen ? openClip : closedClip,
+        });
+        gsap.set(items, { autoAlpha: menuOpen ? 1 : 0, y: 0 });
+        placeBars(menuOpen);
         return;
       }
 
-      gsap.to(el, {
-        autoAlpha: menuOpen ? 1 : 0,
-        duration: menuOpen ? 0.32 : 0.24,
-        ease: "power2.out",
-      });
-      if (plus) {
-        gsap.to(plus, {
-          rotation: menuOpen ? 45 : 0,
-          duration: 0.3,
-          ease: "power2.out",
-        });
+      const tl = gsap.timeline();
+      if (menuOpen) {
+        tl.set(el, { autoAlpha: 1 }, 0);
+        tl.fromTo(
+          el,
+          { clipPath: closedClip },
+          { clipPath: openClip, duration: 0.55, ease: "power4.out" },
+          0,
+        );
+        tl.fromTo(
+          items,
+          { autoAlpha: 0, y: 14 },
+          {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: 0.04,
+            ease: "power3.out",
+          },
+          0.06,
+        );
+      } else {
+        tl.to(
+          items,
+          { autoAlpha: 0, duration: 0.18, stagger: 0.02, ease: "power2.in" },
+          0,
+        );
+        tl.fromTo(
+          el,
+          { clipPath: openClip },
+          { clipPath: closedClip, duration: 0.38, ease: "power3.in" },
+          0.08,
+        );
+        tl.set(el, { autoAlpha: 0 });
       }
+      placeBars(menuOpen, tl);
     },
-    { dependencies: [menuOpen] },
+    { dependencies: [menuOpen], revertOnUpdate: true },
   );
 
   const closeMenu = () => setMenuOpen(false);
@@ -531,33 +619,16 @@ export default function Sidebar() {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen((value) => !value)}
         >
-          <svg
-            ref={menuPlus}
-            aria-hidden
-            width={14}
-            height={14}
-            viewBox="0 0 14 14"
-            fill="none"
-          >
-            <line
-              x1="0"
-              y1="7"
-              x2="14"
-              y2="7"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="square"
+          <span aria-hidden className="relative block h-2 w-4.5">
+            <span
+              ref={menuTop}
+              className="absolute inset-x-0 top-0 h-[1.5px] bg-current"
             />
-            <line
-              x1="7"
-              y1="0"
-              x2="7"
-              y2="14"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="square"
+            <span
+              ref={menuBottom}
+              className="absolute inset-x-0 bottom-0 h-[1.5px] bg-current"
             />
-          </svg>
+          </span>
         </button>
         <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom" />
         <PlusMark tone="dark" className="v-g1-0 at-bottom" />
@@ -582,6 +653,7 @@ export default function Sidebar() {
           onNavigate={closeMenu}
           className="min-h-0 flex-1 overflow-y-auto"
           idPrefix="menu"
+          variant="drawer"
         />
       </div>
     </>

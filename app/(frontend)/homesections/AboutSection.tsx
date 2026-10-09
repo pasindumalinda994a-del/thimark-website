@@ -13,6 +13,7 @@ import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { figLabel } from "@/app/(frontend)/components/FigMark";
 import StoryProgress, {
   STORY,
   StationDash,
@@ -54,12 +55,13 @@ type Parts = {
   glyphs: HTMLElement[];
   texts: HTMLElement[];
   numeral: HTMLElement | null;
+  fig: HTMLElement | null;
   count: HTMLElement | null;
   tabs: HTMLElement | null;
 };
 
 function showChapter(parts: Parts, index: number, animate: boolean) {
-  const { glyphs, texts, numeral, count, tabs, stations } = parts;
+  const { glyphs, texts, numeral, fig, count, tabs, stations } = parts;
   const duration = animate ? 0.32 : 0;
 
   glyphs.forEach((glyph, i) => {
@@ -82,6 +84,7 @@ function showChapter(parts: Parts, index: number, animate: boolean) {
   });
 
   if (numeral) numeral.textContent = parts.years[index] ?? padIndex(index);
+  if (fig) fig.textContent = figLabel(index + 1);
   if (count) count.textContent = padIndex(index);
 
   // Keep the active station in view when the tab strip scrolls (mobile).
@@ -179,6 +182,28 @@ function applyChapter(parts: Parts, progress: number) {
   return index;
 }
 
+function StoryArrow({ direction }: { direction: "prev" | "next" }) {
+  const prev = direction === "prev";
+
+  return (
+    <button
+      type="button"
+      className={`about-story-arrow about-story-${direction} md:hidden`}
+      data-story-step={prev ? -1 : 1}
+      aria-label={prev ? "Previous chapter" : "Next chapter"}
+    >
+      <svg aria-hidden width={14} height={14} viewBox="0 0 14 14" fill="none">
+        <path
+          d={prev ? "M9 2.5 4.5 7 9 11.5" : "M5 2.5 9.5 7 5 11.5"}
+          stroke="currentColor"
+          strokeWidth="1.25"
+          strokeLinecap="square"
+        />
+      </svg>
+    </button>
+  );
+}
+
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
@@ -189,11 +214,13 @@ export default function AboutSection({
   copy = HOME_COPY,
   items = STORY,
   showTitles = false,
+  figures = false,
 }: {
   id?: string;
   copy?: StoryCopy;
   items?: StoryItem[];
   showTitles?: boolean;
+  figures?: boolean;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const lenis = useLenis();
@@ -216,6 +243,7 @@ export default function AboutSection({
         glyphs: gsap.utils.toArray<HTMLElement>("[data-chapter-glyph]", root),
         texts: gsap.utils.toArray<HTMLElement>("[data-chapter-text]", root),
         numeral: root.querySelector<HTMLElement>("[data-chapter-numeral]"),
+        fig: root.querySelector<HTMLElement>("[data-story-fig]"),
         count: root.querySelector<HTMLElement>("[data-story-count]"),
         tabs: root.querySelector<HTMLElement>(".about-tabs"),
       };
@@ -230,6 +258,13 @@ export default function AboutSection({
         if (!glyph) return;
         glyphTl?.kill();
         glyphTl = drawChapterGlyph(glyph);
+      };
+
+      const syncArrows = (index: number) => {
+        const prev = root.querySelector<HTMLButtonElement>("[data-story-step='-1']");
+        const next = root.querySelector<HTMLButtonElement>("[data-story-step='1']");
+        if (prev) prev.disabled = index <= 0;
+        if (next) next.disabled = index >= parts.stations.length - 1;
       };
 
       const mm = gsap.matchMedia();
@@ -248,6 +283,7 @@ export default function AboutSection({
           });
           showChapter(parts, index, false);
           activeChapter = index;
+          syncArrows(index);
         };
 
         const handlers = parts.stations.map((station, i) => {
@@ -255,12 +291,22 @@ export default function AboutSection({
           station.addEventListener("click", onClick);
           return onClick;
         });
+        const onStep = (event: Event) => {
+          const btn = event.currentTarget;
+          if (!(btn instanceof HTMLButtonElement)) return;
+          const index = activeChapter + Number(btn.dataset.storyStep);
+          if (index < 0 || index >= parts.stations.length) return;
+          select(index);
+        };
+        const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
+        arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
         select(0);
 
         return () => {
           parts.stations.forEach((station, i) => {
             station.removeEventListener("click", handlers[i]);
           });
+          arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
         };
       });
 
@@ -364,14 +410,91 @@ export default function AboutSection({
       mm.add(
         "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
         () => {
-          const chapter = root.querySelector(".about-chapter") ?? root;
-          return bindScrub({
-            trigger: chapter,
-            pin: false,
+          gsap.fromTo(
+            header,
+            { autoAlpha: 0, y: 10 },
+            {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+              stagger: 0.1,
+              scrollTrigger: { trigger: root, start: "top 80%", once: true },
+            },
+          );
+
+          const selectChapter = (index: number, animate: boolean) => {
+            parts.washes.forEach((wash, i) => {
+              setStoryWash(wash, i === index ? 1 : 0);
+            });
+            parts.stations.forEach((station, i) => {
+              const current = i === index;
+              station.setAttribute("aria-selected", current ? "true" : "false");
+              if (current) station.setAttribute("aria-current", "true");
+              else station.removeAttribute("aria-current");
+            });
+            parts.slides.forEach((slide, i) => {
+              const open = i === 0 || i <= index;
+              if (animate && i === index && i > 0) {
+                gsap.fromTo(
+                  slide,
+                  { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" },
+                  {
+                    autoAlpha: 1,
+                    clipPath: "inset(0 0% 0 0)",
+                    duration: 0.45,
+                    ease: "power2.inOut",
+                    overwrite: "auto",
+                  },
+                );
+              } else {
+                setStorySlide(slide, open ? 1 : 0);
+              }
+            });
+            showChapter(parts, index, animate);
+            activeChapter = index;
+            syncArrows(index);
+            if (animate) playGlyph(index);
+          };
+
+          selectChapter(0, false);
+
+          const reveal = ScrollTrigger.create({
+            trigger: root,
             start: "top 80%",
-            end: "bottom 30%",
-            id: `${id}-story-mobile`,
+            once: true,
+            onEnter: () => playGlyph(activeChapter),
           });
+
+          const onClick = (event: Event) => {
+            const btn = event.currentTarget;
+            if (!(btn instanceof HTMLElement)) return;
+            const index = parts.stations.indexOf(btn);
+            if (index < 0 || index === activeChapter) return;
+            selectChapter(index, true);
+          };
+
+          parts.stations.forEach((station) => {
+            station.addEventListener("click", onClick);
+          });
+          const onStep = (event: Event) => {
+            const btn = event.currentTarget;
+            if (!(btn instanceof HTMLButtonElement)) return;
+            const index = activeChapter + Number(btn.dataset.storyStep);
+            if (index < 0 || index >= parts.stations.length || index === activeChapter) return;
+            selectChapter(index, true);
+          };
+          const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
+          arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
+
+          return () => {
+            parts.stations.forEach((station) => {
+              station.removeEventListener("click", onClick);
+            });
+            arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
+            glyphTl?.kill();
+            reveal.kill();
+          };
         },
       );
 
@@ -470,7 +593,7 @@ export default function AboutSection({
         </div>
         <p
           data-about-header
-          className="about-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="about-lede font-heading text-[clamp(12px,1vw,16px)] leading-snug font-medium text-left uppercase md:text-justify md:leading-none md:[text-align-last:left]"
         >
           {copy.lede}
         </p>
@@ -482,7 +605,7 @@ export default function AboutSection({
       </div>
 
       {/* Chapter tabs */}
-      <div className="relative min-w-0 md:contents">
+      <div className="about-tabs-band relative min-w-0 md:contents">
         <StoryProgress items={items} />
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
@@ -519,13 +642,18 @@ export default function AboutSection({
           </div>
         </div>
         <div className="about-chapter-copy">
-          <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
-          <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
+          <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+          <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+          <StoryArrow direction="prev" />
+          <div className="about-chapter-texts">
           {items.map((item, i) => (
             <div key={item.id} data-chapter-text={i} className="about-chapter-text">
               <p className="index-tag flex items-center justify-between gap-4">
                 <span>{item.label}</span>
-                <span className="tabular-nums">{item.year}</span>
+                <span className="about-story-year tabular-nums">{item.year}</span>
               </p>
               {showTitles ? (
                 <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
@@ -537,11 +665,13 @@ export default function AboutSection({
               </p>
             </div>
           ))}
+          </div>
+          <StoryArrow direction="next" />
         </div>
       </div>
 
       {/* Story reel */}
-      <div className="relative md:contents">
+      <div className="about-media relative md:contents">
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="about-reel">
@@ -563,6 +693,11 @@ export default function AboutSection({
           <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />
           <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10" />
           <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
+          {figures ? (
+            <p aria-hidden data-story-fig className="fig-mark index-tag">
+              {figLabel(1)}
+            </p>
+          ) : null}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
@@ -570,7 +705,7 @@ export default function AboutSection({
       </div>
 
       {/* Readout */}
-      <div className="relative flex flex-col md:contents">
+      <div className="about-foot relative flex flex-col md:contents">
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
       <div className="about-readout">

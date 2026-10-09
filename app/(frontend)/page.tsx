@@ -20,7 +20,7 @@ export default function Home() {
         >
           <HeroSection />
           <SectionBreak tone="dark" />
-          <AboutSection />
+          <AboutSection figures />
           <SectionBreak tone="dark" />
           <OurTwoCoreSection />
         </div>

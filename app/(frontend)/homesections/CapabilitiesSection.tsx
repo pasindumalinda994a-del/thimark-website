@@ -16,13 +16,22 @@ import { StationDash, StationPlus } from "@/app/(frontend)/homesections/StoryPro
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
-const CAPABILITIES: {
+export type Capability = {
   id: string;
   tag: string;
   title: string;
   body: string;
   icon: IsoIcon;
-}[] = [
+};
+
+type CapabilitiesCta = { label: string; href: string };
+
+const DEFAULT_CTA: CapabilitiesCta = {
+  label: "Explore Our Capabilities",
+  href: "/#catalogue",
+};
+
+const CAPABILITIES: Capability[] = [
   {
     id: "precision",
     tag: "Precision",
@@ -84,7 +93,15 @@ function CornerPlus({ className }: { className: string }) {
   return <PlusMark tone="page" className={`${className} z-10`} />;
 }
 
-export default function CapabilitiesSection() {
+export default function CapabilitiesSection({
+  id = "manufacturing",
+  items = CAPABILITIES,
+  cta = DEFAULT_CTA,
+}: {
+  id?: string;
+  items?: readonly Capability[];
+  cta?: CapabilitiesCta;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -208,7 +225,7 @@ export default function CapabilitiesSection() {
           el.textContent = formatStat(Number(el.dataset.statValue), pad);
         });
         if (fill) gsap.set(fill, { scaleX: 1 });
-        setCount(CAPABILITIES.length);
+        setCount(items.length);
       });
 
       mm.add(
@@ -234,7 +251,7 @@ export default function CapabilitiesSection() {
               invalidateOnRefresh: true,
               onUpdate: (self) => {
                 if (fill) gsap.set(fill, { scaleX: self.progress });
-                const extra = CAPABILITIES.length - VISIBLE_CARDS;
+                const extra = items.length - VISIBLE_CARDS;
                 setCount(
                   VISIBLE_CARDS + Math.round(gsap.utils.clamp(0, 1, (self.progress - 0.2) / 0.8) * extra),
                 );
@@ -296,7 +313,7 @@ export default function CapabilitiesSection() {
   return (
     <SectionGrid
       ref={sectionRef}
-      id="manufacturing"
+      id={id}
       aria-labelledby="caps-heading"
       rows={14}
       tone="page"
@@ -384,7 +401,7 @@ export default function CapabilitiesSection() {
           aria-label="Capability cards"
         >
           <ol data-caps-track className="caps-track m-0 list-none p-0">
-            {CAPABILITIES.map((item, i) => (
+            {items.map((item, i) => (
               <li key={item.id} data-caps-card className="caps-card">
                 <span aria-hidden className="caps-halo top-0 left-0" />
                 <span aria-hidden className="caps-halo top-full left-0" />
@@ -497,7 +514,7 @@ export default function CapabilitiesSection() {
             <span className="tabular-nums">
               <span data-caps-count>{padIndex(VISIBLE_CARDS - 1)}</span>
               {" / "}
-              {padIndex(CAPABILITIES.length - 1)}
+              {padIndex(items.length - 1)}
             </span>
           </div>
           <div className="caps-progress-rail">
@@ -507,10 +524,10 @@ export default function CapabilitiesSection() {
 
         <BrandButton
           tone="steel"
-          href="/#catalogue"
+          href={cta.href}
           className="caps-cta"
         >
-          Explore Our Capabilities
+          {cta.label}
         </BrandButton>
       </div>
       <ScrollHint seat="col-9" />

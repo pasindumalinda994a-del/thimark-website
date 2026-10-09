@@ -21,13 +21,13 @@ export const NAV_ITEMS: NavItem[] = [
         id: "automotive-manufacturing",
         label: "Manufacturing",
         fullLabel: "Automotive Components Manufacturing",
-        href: "/automotive/manufacturing",
+        href: "/automotive#manufacturing",
       },
       {
         id: "automotive-value",
         label: "Local Value Addition",
         fullLabel: "Automotive Local Value Addition",
-        href: "/automotive/local-value-addition",
+        href: "/automotive#local-value-addition",
       },
     ],
   },
@@ -39,19 +39,19 @@ export const NAV_ITEMS: NavItem[] = [
         id: "engineering-powder-coating",
         label: "Powder Coating",
         fullLabel: "Powder Coating",
-        href: "/engineering-services/powder-coating",
+        href: "/engineering-services#powder-coating",
       },
       {
         id: "engineering-npd",
         label: "New Product Development",
         fullLabel: "New Product Development",
-        href: "/engineering-services/new-product-development",
+        href: "/engineering-services#new-product-development",
       },
       {
         id: "engineering-reverse",
         label: "Reverse Engineering",
         fullLabel: "Reverse Engineering",
-        href: "/engineering-services/reverse-engineering",
+        href: "/engineering-services#reverse-engineering",
       },
     ],
   },
@@ -63,13 +63,13 @@ export const NAV_ITEMS: NavItem[] = [
         id: "machinery-products-services",
         label: "Product & Services",
         fullLabel: "Industrial Machinery Product & Services",
-        href: "/industrial-machinery/products-services",
+        href: "/industrial-machinery#products-services",
       },
       {
         id: "machinery-exports",
         label: "Exports",
         fullLabel: "Industrial Machinery Exports",
-        href: "/industrial-machinery/exports",
+        href: "/industrial-machinery#exports",
       },
     ],
   },
@@ -80,17 +80,8 @@ export const NAV_ITEMS: NavItem[] = [
 export const PATH_ACTIVE_IDS: Record<string, string> = {
   "/about": "about",
   "/automotive": "automotive",
-  "/automotive/manufacturing": "automotive-manufacturing",
-  "/automotive/products": "automotive-manufacturing",
-  "/automotive/local-value-addition": "automotive-value",
-  "/engineering-services/powder-coating": "engineering-powder-coating",
-  "/engineering-services/new-product-development": "engineering-npd",
-  "/engineering-services/reverse-engineering": "engineering-reverse",
+  "/engineering-services": "engineering",
   "/industrial-machinery": "machinery",
-  "/industrial-machinery/products-services": "machinery-products-services",
-  "/industrial-machinery/products": "machinery-products-services",
-  "/industrial-machinery/services": "machinery-products-services",
-  "/industrial-machinery/exports": "machinery-exports",
   "/newsroom": "newsroom",
   "/gallery": "gallery",
 };
@@ -152,11 +143,45 @@ export function normalizePath(pathname: string): string {
   return pathname || "/";
 }
 
+/** Path portion of a nav href, without a section hash. */
+export function hrefPath(href: string): string {
+  const hash = href.indexOf("#");
+  return hash === -1 ? href : href.slice(0, hash);
+}
+
+for (const item of NAV_ITEMS) {
+  const base = item.children?.[0] ? hrefPath(item.children[0].href) : "";
+  if (!base || PATH_LABELS[base]) continue;
+  if (item.children?.every((child) => hrefPath(child.href) === base)) {
+    PATH_LABELS[base] = item.label;
+  }
+}
+
+/** In-page sections for a division route, in sidebar order. */
+export function divisionSectionTargets(
+  pathname: string,
+): { id: string; navId: string }[] {
+  const path = normalizePath(pathname);
+  const group = NAV_ITEMS.find((item) =>
+    item.children?.some((child) => hrefPath(child.href) === path),
+  );
+  if (!group?.children) return [];
+
+  return group.children.flatMap((child) => {
+    if (hrefPath(child.href) !== path) return [];
+    const id = child.href.split("#")[1];
+    if (!id) return [];
+    return [{ id, navId: child.id }];
+  });
+}
+
 /** Label of the nav group that owns `pathname`, or "Main" for top-level pages. */
 export function pathSection(pathname: string): string {
   const path = normalizePath(pathname);
-  const group = NAV_ITEMS.find((item) =>
-    item.children?.some((child) => child.href === path),
+  const group = NAV_ITEMS.find(
+    (item) =>
+      item.href === path ||
+      item.children?.some((child) => hrefPath(child.href) === path),
   );
   return group?.label ?? "Main";
 }

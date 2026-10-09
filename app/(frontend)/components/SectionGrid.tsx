@@ -52,7 +52,7 @@ export function GridLine({
 
 type SectionGridProps = {
   tone?: GridTone;
-  rows?: 14 | 16 | 18 | 20;
+  rows?: 14 | 16 | 17 | 18 | 20;
   className?: string;
   children: ReactNode;
   id?: string;
@@ -74,11 +74,13 @@ export default function SectionGrid({
   const plate =
     rows === 14
       ? "h-rows-14"
-      : rows === 18
-        ? "h-rows-18"
-        : rows === 20
-          ? "h-rows-20"
-          : "h-rows-16";
+      : rows === 17
+        ? "h-rows-17"
+        : rows === 18
+          ? "h-rows-18"
+          : rows === 20
+            ? "h-rows-20"
+            : "h-rows-16";
 
   return (
     <section

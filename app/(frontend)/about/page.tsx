@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
 import AboutSection from "@/app/(frontend)/homesections/AboutSection";
-import AboutHero from "@/app/(frontend)/aboutsections/AboutHero";
-import LeadershipSection from "@/app/(frontend)/aboutsections/LeadershipSection";
-import OverviewSection from "@/app/(frontend)/aboutsections/OverviewSection";
-import RecognitionSection from "@/app/(frontend)/aboutsections/RecognitionSection";
-import VisionMissionSection from "@/app/(frontend)/aboutsections/VisionMissionSection";
-import { JOURNEY, JOURNEY_COPY } from "@/app/(frontend)/aboutsections/about";
+import AboutHero from "./pagesection/AboutHero";
+import LeadershipSection from "./pagesection/LeadershipSection";
+import OverviewSection from "./pagesection/OverviewSection";
+import RecognitionSection from "./pagesection/RecognitionSection";
+import VisionMissionSection from "./pagesection/VisionMissionSection";
+import { JOURNEY, JOURNEY_COPY } from "./pagesection/about";
 
 export const metadata: Metadata = {
   title: "About Us — Thimark",

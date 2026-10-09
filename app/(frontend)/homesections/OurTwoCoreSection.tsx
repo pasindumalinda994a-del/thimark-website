@@ -10,38 +10,81 @@ import BrandButton from "@/app/(frontend)/components/BrandButton";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import FigMark, { HOME_FIG } from "@/app/(frontend)/components/FigMark";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
-const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
 const COLUMNS = [
   {
     id: "automotive",
     index: "01",
-    label: "Automotive Component Manufacturing",
-    title: "Precision Components for the Mobility Industry",
-    href: "/#catalogue",
-    cta: "Explore Automotive Components",
+    title: "Automotive Components",
+    href: "/automotive",
+    cta: "Explore Automotive",
     image: "/home-images/two-core-automotive.jpeg",
     alt: "Engineers assembling a motorcycle frame on the production line",
-    body: "We design, fabricate and supply high-quality motorcycle components for local assembly lines, supporting leading manufacturers with consistent production, dependable quality and increased local value addition. From individual brackets and stands to structural motorcycle components, our OEM manufacturing capabilities are built around the demands of production environments.",
+    body: "We design, fabricate and supply motorcycle components for local assembly lines, with consistent production and dependable quality for leading manufacturers.",
+    areas: [
+      { index: "01", label: "Manufacturing", href: "/automotive#manufacturing" },
+      {
+        index: "02",
+        label: "Local Value Addition",
+        href: "/automotive#local-value-addition",
+      },
+    ],
+  },
+  {
+    id: "engineering",
+    index: "02",
+    title: "Engineering & Services",
+    href: "/engineering-services",
+    cta: "Explore Services",
+    image: "/home-images/about-workshop.png",
+    alt: "Welders fabricating heavy steel frames in the Thimark workshop",
+    body: "We take a requirement through to a finished part, with new product development, reverse engineering and powder coating for production components.",
+    areas: [
+      {
+        index: "01",
+        label: "Powder Coating",
+        href: "/engineering-services#powder-coating",
+      },
+      {
+        index: "02",
+        label: "New Product Development",
+        href: "/engineering-services#new-product-development",
+      },
+      {
+        index: "03",
+        label: "Reverse Engineering",
+        href: "/engineering-services#reverse-engineering",
+      },
+    ],
   },
   {
     id: "machinery",
-    index: "02",
-    label: "Industrial Machinery Design & Manufacturing",
-    title: "Machines Engineered Around the Challenge",
-    href: "/#manufacturing",
-    cta: "Explore Industrial Solutions",
+    index: "03",
+    title: "Industrial Machinery",
+    href: "/industrial-machinery",
+    cta: "Explore Machinery",
     image: "/home-images/two-core-machinery.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
-    body: "We design and manufacture customized industrial equipment for applications across construction, hydropower, water management and manufacturing. From fabricated systems and conveyors to specialized automated machinery, we bring engineering, fabrication and problem-solving together to create solutions for demanding industrial environments.",
+    body: "We design and manufacture custom equipment for hydropower, water management, construction and other demanding industrial environments.",
+    areas: [
+      {
+        index: "01",
+        label: "Product & Services",
+        href: "/industrial-machinery#products-services",
+      },
+      { index: "02", label: "Exports", href: "/industrial-machinery#exports" },
+    ],
   },
 ] as const;
+
+const COL_CLASS = ["two-core-col-0", "two-core-col-1", "two-core-col-2"] as const;
 
 type ColumnNodes = {
   head: HTMLElement | null;
@@ -50,6 +93,7 @@ type ColumnNodes = {
   numeral: HTMLElement | null;
   title: HTMLElement | null;
   body: HTMLElement | null;
+  areas: HTMLElement | null;
   cta: HTMLElement | null;
 };
 
@@ -58,8 +102,8 @@ function revealColumn(
   nodes: ColumnNodes,
   position: number,
 ) {
-  const { head, rule, image, numeral, title, body, cta } = nodes;
-  if (!head || !image || !title || !body || !cta) return;
+  const { head, rule, image, title, body, areas, cta } = nodes;
+  if (!head || !image || !title || !body || !areas || !cta) return;
 
   tl.to(head, { autoAlpha: 1, duration: 0.45, ease: "power2.out" }, position);
   if (rule) {
@@ -75,16 +119,12 @@ function revealColumn(
     { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: "power2.out" },
     position + 0.12,
   );
-  if (numeral) {
-    tl.to(
-      numeral,
-      { autoAlpha: 1, duration: 0.5, ease: "power2.out" },
-      position + 0.42,
-    );
+  if (title !== head) {
+    tl.to(title, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, position + 0.5);
   }
-  tl.to(title, { autoAlpha: 1, duration: 0.5, ease: "power2.out" }, position + 0.5);
   tl.to(body, { autoAlpha: 1, duration: 0.45, ease: "power2.out" }, position + 0.62);
-  tl.to(cta, { autoAlpha: 1, duration: 0.4, ease: "power2.out" }, position + 0.72);
+  tl.to(areas, { autoAlpha: 1, duration: 0.45, ease: "power2.out" }, position + 0.7);
+  tl.to(cta, { autoAlpha: 1, duration: 0.4, ease: "power2.out" }, position + 0.8);
 }
 
 export default function OurTwoCoreSection() {
@@ -105,12 +145,13 @@ export default function OurTwoCoreSection() {
         numeral: pick("numeral", i),
         title: pick("title", i),
         body: pick("body", i),
+        areas: pick("areas", i),
         cta: pick("cta", i),
       }));
 
       const header = gsap.utils.toArray<HTMLElement>("[data-core-header]", root);
       const fades = columns.flatMap((c) =>
-        [c.head, c.numeral, c.title, c.body, c.cta].filter(
+        [c.head, c.numeral, c.title, c.body, c.areas, c.cta].filter(
           (el): el is HTMLElement => Boolean(el),
         ),
       );
@@ -160,7 +201,7 @@ export default function OurTwoCoreSection() {
       });
 
       mm.add(
-        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
+        "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
         () => {
           hide();
           const tl = gsap.timeline({
@@ -175,7 +216,7 @@ export default function OurTwoCoreSection() {
       );
 
       mm.add(
-        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
+        "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
         () => {
           hide();
           columns.forEach((nodes) => {
@@ -202,69 +243,84 @@ export default function OurTwoCoreSection() {
       ref={sectionRef}
       id="capabilities"
       aria-labelledby="two-core-heading"
-      rows={16}
+      rows={17}
       tone="page"
       outerV={false}
       className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
     >
       {/* Desktop rails */}
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-br5 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-3 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-4 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-br5 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-3-4 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-4-br5 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br5-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-top-3 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-top-3 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-3 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-3-4 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-3-4 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-4 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-11 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-4-11 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-4-11 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-11 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-11-br2 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-11-br2 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-11-br2 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-11-br2 hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-br2-end hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-br2-end hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden lg:block" />
 
-      {/* Row 3 — intro base / card heads */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid top-rows-3 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-6-8 top-rows-3 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-8 top-rows-3 hidden md:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
+      {/* Row 3 — intro base */}
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 top-rows-3 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden lg:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden lg:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-3 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-3 hidden lg:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden lg:block" />
 
-      {/* Row 4 — head base (drawn per column) */}
+      {/* Row 4 — plate numbers */}
       <GridLine
         axis="h"
         unstyled
         tone="page"
         data-core-rule="0"
-        className="h-seg-0-mid top-rows-4 hidden md:block"
+        className="h-seg-0-4 top-rows-4 hidden lg:block"
       />
       <GridLine
         axis="h"
         unstyled
         tone="page"
         data-core-rule="1"
-        className="h-seg-mid-12 top-rows-4 hidden md:block"
+        className="h-seg-4-8 top-rows-4 hidden lg:block"
       />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 top-rows-4 hidden md:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
+      <GridLine
+        axis="h"
+        unstyled
+        tone="page"
+        data-core-rule="2"
+        className="h-seg-8-12 top-rows-4 hidden lg:block"
+      />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden lg:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden lg:block" />
 
-      {/* Row 11 — media base */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-5 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-mid-12 at-br-5 hidden md:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-5 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 at-br-5 hidden md:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-5 hidden md:block" />
+      {/* Row 9 — media base */}
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-11 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-11 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-11 hidden lg:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-11 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-4 top-rows-11 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-11 hidden lg:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-11 hidden lg:block" />
 
-      {/* Row 14 — CTA band */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-mid at-br-2 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-mid-12 at-br-2 hidden md:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-6 at-br-2 hidden md:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
+      {/* CTA band */}
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-2 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-2 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden lg:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-4 at-br-2 hidden lg:block" />
+      <PlusMark tone="page" className="v-g1-8 at-br-2 hidden lg:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden lg:block" />
 
       {/* Intro */}
       <div className="two-core-intro min-h-rows-3">
@@ -276,23 +332,21 @@ export default function OurTwoCoreSection() {
             id="two-core-heading"
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
-            Two Capabilities.
+            Three Disciplines.
             <span className="block">One Engineering Mindset.</span>
           </MaskRevealHeading>
         </div>
         <p
           data-core-header
-          className="two-core-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          className="two-core-lede font-heading text-[clamp(12px,1vw,16px)] leading-[1.15] font-medium text-left uppercase"
         >
-          Thimark operates across two complementary areas of engineering and
-          manufacturing — helping customers source precision components while
-          also developing complete, custom-engineered machinery and systems.
+          Components, services, and custom machinery for production.
         </p>
-        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
-        <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
-        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus lg:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus lg:hidden" />
+        <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom lg:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom lg:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom lg:hidden" />
       </div>
 
       {/* Cards */}
@@ -301,12 +355,17 @@ export default function OurTwoCoreSection() {
           <article
             key={col.id}
             id={col.id}
-            className={`two-core-card ${i === 0 ? "two-core-col-a" : "two-core-col-b"} scroll-mt-16 md:scroll-mt-0`}
+            className={`two-core-card ${COL_CLASS[i]} scroll-mt-16 lg:scroll-mt-0`}
           >
-            <p data-core-label={i} className="two-core-card-head index-tag">
-              <span>{col.label}</span>
-              <span aria-hidden>[{col.index}]</span>
-            </p>
+            <div
+              data-core-label={i}
+              className="two-core-card-head index-tag"
+            >
+              <span>{col.title}</span>
+              <span aria-hidden className="shrink-0">
+                [{col.index}]
+              </span>
+            </div>
             <Link
               href={col.href}
               data-core-image={i}
@@ -318,30 +377,41 @@ export default function OurTwoCoreSection() {
                 src={col.image}
                 alt={col.alt}
                 fill
-                sizes="(min-width: 768px) 46vw, 100vw"
+                sizes="(min-width: 1024px) 30vw, 100vw"
                 className="object-cover"
               />
               <PlusMark tone="light" className="top-4 left-4 z-10" />
               <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />
-              <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10" />
-              <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
-              <span aria-hidden data-core-numeral={i} className="two-core-numeral">
-                {col.index}
-              </span>
+              <PlusMark tone="light" className="bottom-4 left-4 z-10" />
+              <PlusMark tone="light" className="bottom-4 left-[calc(100%-16px)] z-10" />
+              <FigMark n={HOME_FIG.core + i} />
             </Link>
             <div className="two-core-card-base">
               <h3
                 data-core-title={i}
-                className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium text-left uppercase"
+                className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase"
               >
                 {col.title}
               </h3>
               <p
                 data-core-body={i}
-                className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
+                className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.2] font-normal uppercase"
               >
                 {col.body}
               </p>
+              <div data-core-areas={i} className="two-core-areas">
+                <ul aria-label="Main areas">
+                  {col.areas.map((area) => (
+                    <li key={area.href}>
+                      <Link href={area.href} data-cursor="explore" className="two-core-area">
+                        <span className="two-core-area-index">[{area.index}]</span>
+                        <span className="two-core-area-rule" aria-hidden />
+                        <span className="two-core-area-name">{area.label}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
             <div className="two-core-card-foot">
               <BrandButton
@@ -354,11 +424,11 @@ export default function OurTwoCoreSection() {
                 {col.cta}
               </BrandButton>
             </div>
-            <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
-            <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
-            <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-            <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
-            <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses lg:hidden" />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses lg:hidden" />
+            <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom lg:hidden" />
+            <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom lg:hidden" />
+            <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom lg:hidden" />
           </article>
         ))}
       </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Onest, Space_Grotesk } from "next/font/google";
+import { Montserrat, Onest, Oswald, Oxanium, Saira, Space_Grotesk } from "next/font/google";
 import CustomCursor from "@/app/(frontend)/components/CustomCursor";
 import PageTransition from "@/app/(frontend)/components/PageTransition";
 import Sidebar from "@/app/(frontend)/components/Sidebar";
@@ -20,6 +20,31 @@ const onest = Onest({
   weight: "400",
 });
 
+const oxanium = Oxanium({
+  variable: "--font-oxanium",
+  subsets: ["latin"],
+  weight: "700",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+  weight: "700",
+});
+
+const saira = Saira({
+  variable: "--font-saira",
+  subsets: ["latin"],
+  weight: "800",
+  style: "italic",
+});
+
+const oswald = Oswald({
+  variable: "--font-oswald",
+  subsets: ["latin"],
+  weight: "600",
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(SERVER_URL),
   title: "Thimark — We Engineer What Moves Industry Forward",
@@ -31,7 +56,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${onest.variable} antialiased`}
+      className={`${spaceGrotesk.variable} ${onest.variable} ${oxanium.variable} ${montserrat.variable} ${saira.variable} ${oswald.variable} antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <SmoothScroll />

@@ -15,6 +15,22 @@ const QUOTE_COPY: Record<string, QuoteCopy> = {
     primary: { label: RAQ_LINK.label, href: RAQ_LINK.href },
     secondary: { label: "Explore Our Capabilities", href: "/#capabilities" },
   },
+  "/industrial-machinery": {
+    eyebrow: "Have an Engineering Challenge?",
+    heading: "Let\u2019s Turn Your Requirement Into a Solution.",
+    lede: "Whether you need custom industrial machinery, specialized mechanical equipment, fabricated components or an automated system, our engineering team is ready to understand your requirement and explore the right solution.",
+    closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
+    primary: { label: "Request an Industrial Quote", href: RAQ_LINK.href },
+    secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
+  },
+  "/engineering-services": {
+    eyebrow: "Have an Engineering Requirement?",
+    heading: "Let\u2019s Turn Your Requirement Into a Solution.",
+    lede: "Whether you\u2019re developing a new product, investigating an existing component or looking for a powder coating partner, our team is ready to understand your requirements and explore the right solution.",
+    closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
+    primary: { label: "Request a Quote", href: RAQ_LINK.href },
+    secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
+  },
 };
 
 export default function SiteClose() {

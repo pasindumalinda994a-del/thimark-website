@@ -24,7 +24,7 @@ const V: VLine[] = [
 
 export default function AboutHero() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref);
+  usePlateMotion(ref, { image: "rise" });
 
   return (
     <SectionGrid
@@ -49,7 +49,7 @@ export default function AboutHero() {
           className="font-heading text-[clamp(40px,4.4vw,80px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
         >
           {HERO.heading[0]}
-          <span className="block">{HERO.heading[1]}</span>
+          <span className="ab-statement-muted">{HERO.heading[1]}</span>
         </MaskRevealHeading>
       </Cell>
 

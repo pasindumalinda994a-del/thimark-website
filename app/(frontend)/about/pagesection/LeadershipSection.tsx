@@ -38,7 +38,7 @@ const V: VLine[] = [
 
 export default function LeadershipSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref);
+  usePlateMotion(ref, { image: "rise" });
 
   const { leader, leaders, message } = LEADERSHIP;
   const half = Math.ceil(message.length / 2);
@@ -66,7 +66,7 @@ export default function LeadershipSection() {
           className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
           {LEADERSHIP.heading[0]}
-          <span className="block">{LEADERSHIP.heading[1]}</span>
+          <span className="ab-statement-muted">{LEADERSHIP.heading[1]}</span>
         </MaskRevealHeading>
       </Cell>
 

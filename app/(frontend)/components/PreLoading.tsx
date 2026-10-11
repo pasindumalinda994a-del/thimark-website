@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
+import { MASK_MOTION as MASK } from "@/app/(frontend)/components/maskMotion";
 
 gsap.registerPlugin(useGSAP);
 
@@ -132,8 +133,6 @@ export default function PreLoading() {
       const my = Math.round((vh - MARK_H) / 2);
       const cx = mx + MARK_W / 2;
       const cy = my + MARK_H / 2;
-      const halfW = vw / 2;
-      const halfH = vh / 2;
 
       const vOuterL = q("[data-line='v-outer-l']");
       const vInnerL = q("[data-line='v-inner-l']");
@@ -147,7 +146,6 @@ export default function PreLoading() {
       const hLines = q("[data-axis='h']");
       const vOuters = [...vOuterL, ...vOuterR];
       const hOuters = [...hOuterT, ...hOuterB];
-      const innerLines = [...vInnerL, ...vInnerR, ...hInnerT, ...hInnerB];
       const cells = q("[data-cell]");
       const mark = q("[data-mark]");
       const copy = q("[data-copy]");
@@ -287,35 +285,27 @@ export default function PreLoading() {
 
       tl.addLabel("hold").to({}, { duration: 0.4 });
 
-      const holeX = mx / halfW;
-      const holeY = my / halfH;
-      const holeR = (vw - (mx + MARK_W)) / halfW;
-      const holeB = (vh - (my + MARK_H)) / halfH;
+      const mid = vh / 2;
 
       tl.addLabel("reveal")
-        .set(innerLines, { autoAlpha: 1 })
-        .to(vInnerL, { x: xTo(pos.vInnerL, pos.vOuterL), duration: 0.5 }, "reveal")
-        .to(vInnerR, { x: xTo(pos.vInnerR, pos.vOuterR), duration: 0.5 }, "reveal")
-        .to(hInnerT, { y: xTo(pos.hInnerT, pos.hOuterT), duration: 0.5 }, "reveal")
-        .to(hInnerB, { y: xTo(pos.hInnerB, pos.hOuterB), duration: 0.5 }, "reveal")
-        .to(panelTop, { scaleY: holeY, duration: 0.5 }, "reveal")
-        .to(panelBottom, { scaleY: holeB, duration: 0.5 }, "reveal")
-        .to(panelLeft, { scaleX: holeX, duration: 0.5 }, "reveal")
-        .to(panelRight, { scaleX: holeR, duration: 0.5 }, "reveal")
-        .to(cells, { autoAlpha: 0, duration: 0.3 }, "reveal")
-        .to(brand, { autoAlpha: 0, duration: 0.3 }, "reveal")
-        .to(progressEl, { autoAlpha: 0, duration: 0.3 }, "reveal");
-
-      tl.addLabel("expand")
-        .to(vInnerL, { x: xTo(pos.vInnerL, 0), duration: 0.9 }, "expand")
-        .to(vInnerR, { x: xTo(pos.vInnerR, vw), duration: 0.9 }, "expand")
-        .to(hInnerT, { y: xTo(pos.hInnerT, 0), duration: 0.9 }, "expand")
-        .to(hInnerB, { y: xTo(pos.hInnerB, vh), duration: 0.9 }, "expand")
-        .to(panelTop, { scaleY: 0, duration: 0.9 }, "expand")
-        .to(panelBottom, { scaleY: 0, duration: 0.9 }, "expand")
-        .to(panelLeft, { scaleX: 0, duration: 0.9 }, "expand")
-        .to(panelRight, { scaleX: 0, duration: 0.9 }, "expand")
-        .to(innerLines, { autoAlpha: 0, duration: 0.4 }, "expand+=0.5");
+        .set(vInnerL, { autoAlpha: 0 })
+        .set(vInnerR, { autoAlpha: 0 })
+        .set(panelLeft, { scaleX: 0 })
+        .set(panelRight, { scaleX: 0 })
+        .set(hInnerT, { y: xTo(pos.hInnerT, mid), autoAlpha: 1 })
+        .set(hInnerB, { y: xTo(pos.hInnerB, mid), autoAlpha: 1 })
+        .to(panelTop, { scaleY: 0, ...MASK.split }, "reveal")
+        .to(panelBottom, { scaleY: 0, ...MASK.split }, "reveal")
+        .to(hInnerT, { y: xTo(pos.hInnerT, 0), ...MASK.split }, "reveal")
+        .to(hInnerB, { y: xTo(pos.hInnerB, vh), ...MASK.split }, "reveal")
+        .to(cells, { autoAlpha: 0, duration: MASK.fade.duration }, "reveal")
+        .to(brand, { autoAlpha: 0, duration: MASK.fade.duration }, "reveal")
+        .to(progressEl, { autoAlpha: 0, duration: MASK.fade.duration }, "reveal")
+        .to(
+          [hInnerT, hInnerB],
+          { autoAlpha: 0, duration: MASK.lineFade.duration },
+          `reveal+=${MASK.lineFade.at}`,
+        );
     },
     { scope: root },
   );

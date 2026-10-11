@@ -262,8 +262,14 @@ export default function QualitySection() {
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Flank textures */}
-      <div className="quality-flank quality-flank-l dot-field" aria-hidden />
-      <div className="quality-flank quality-flank-r dot-field" aria-hidden />
+      {(["l", "r"] as const).map((side) => (
+        <div key={side} className={`quality-flank quality-flank-${side} dot-field-mark`} aria-hidden>
+          <PlusMark tone="page" className="plus-at-tl" />
+          <PlusMark tone="page" className="plus-at-tr" />
+          <PlusMark tone="page" className="plus-at-bl" />
+          <PlusMark tone="page" className="plus-at-br" />
+        </div>
+      ))}
 
       {/* Header */}
       <div className="relative md:contents">
@@ -275,11 +281,10 @@ export default function QualitySection() {
           </p>
           <MaskRevealHeading
             id="quality-heading"
-            className="max-w-[640px] font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
+            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
           >
-            Precision Is Not
-            <span className="block">a Promise.</span>
-            <span className="block">It&rsquo;s a Process.</span>
+            Precision Is Not a Promise.
+            <span className="ab-statement-muted">It&rsquo;s a Process.</span>
           </MaskRevealHeading>
           <div
             data-q-header

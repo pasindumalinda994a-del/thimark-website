@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import ArticleShare from "@/app/(frontend)/newsroom/ArticleShare";
 import PreviewBar from "@/app/(frontend)/newsroom/PreviewBar";
 import {
   categoryById,
@@ -160,29 +161,31 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-8 hero-v-between-pluses hidden md:block" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses" />
-        <nav className="news-article-toc" aria-label="Contents">
-          <p className="news-meta index-tag">Contents</p>
-          <ol>
-            {record.body.map((section, i) => (
-              <li key={sectionId(i)}>
-                <a href={`#${sectionId(i)}`}>
-                  <span aria-hidden className="news-toc-leader" />
-                  <span className="news-toc-label">{section.heading}</span>
-                  <span aria-hidden className="news-toc-index">
-                    [{padIndex(i)}]
-                  </span>
-                </a>
-              </li>
-            ))}
-          </ol>
-        </nav>
+        <div className="news-article-toc-rail">
+          <div className="news-article-toc-stick">
+            <nav className="news-article-toc" aria-label="Contents">
+              <p className="news-meta index-tag">Contents</p>
+              <ol>
+                {record.body.map((section, i) => (
+                  <li key={sectionId(i)}>
+                    <a href={`#${sectionId(i)}`}>
+                      <span aria-hidden className="news-toc-leader" />
+                      <span className="news-toc-label">{section.heading}</span>
+                      <span aria-hidden className="news-toc-index">
+                        [{padIndex(i)}]
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <ArticleShare title={record.title} />
+          </div>
+        </div>
         <div className="news-article-prose">
           {record.body.map((section, i) => (
             <section key={sectionId(i)} id={sectionId(i)} className="news-article-section">
-              <h2 className="news-section-label index-tag">
-                <span aria-hidden>[{padIndex(i)}]</span>
-                <span>{section.heading}</span>
-              </h2>
+              <h2 className="news-section-label index-tag">{section.heading}</h2>
               <p>{section.text}</p>
               {section.href ? (
                 <a

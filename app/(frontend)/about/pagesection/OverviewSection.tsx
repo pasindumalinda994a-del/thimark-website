@@ -2,6 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText } from "gsap/SplitText";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { STATS, formatStat } from "@/app/(frontend)/components/stats";
@@ -18,9 +22,11 @@ import {
 } from "@/app/(frontend)/components/plate";
 import { padIndex } from "@/app/(frontend)/homesections/StoryProgress";
 
+gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText);
+
 const H: HLine[] = [
   [3, 0, 12],
-  [4, 0, 12],
+  [4, 6, 12],
   [13, 0, 12],
   [16, 0, 12],
 ];
@@ -28,7 +34,6 @@ const H: HLine[] = [
 const V: VLine[] = [
   [0, 0, 20],
   [12, 0, 20],
-  [8, 0, 3],
   [6, 3, 13],
   [8, 13, 16],
   [4, 16, 20],
@@ -39,9 +44,56 @@ const V: VLine[] = [
 
 export default function OverviewSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref);
+  usePlateMotion(ref, { image: "rise" });
 
-  const [lead, ...rest] = OVERVIEW.paragraphs;
+  useGSAP(
+    () => {
+      const root = ref.current;
+      if (!root) return;
+
+      const paragraphs = gsap.utils.toArray<HTMLElement>("[data-letters]", root);
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: reduce)", () => {
+        gsap.set(paragraphs, { opacity: 1 });
+      });
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const split = SplitText.create(paragraphs, {
+          type: "chars",
+          autoSplit: true,
+          tag: "span",
+          onSplit(self) {
+            const tl = gsap.timeline({
+              scrollTrigger: {
+                trigger: paragraphs[0],
+                endTrigger: paragraphs[paragraphs.length - 1],
+                start: "top 80%",
+                end: "bottom 45%",
+                scrub: true,
+              },
+            });
+            paragraphs.forEach((el, i) => {
+              const chars = self.chars.filter((char) => el.contains(char));
+              if (!chars.length) return;
+              tl.fromTo(
+                chars,
+                { opacity: 0.5 },
+                { opacity: 1, ease: "none", duration: 0.15, stagger: 0.2 },
+                i === 0 ? 0 : ">",
+              );
+            });
+            return tl;
+          },
+        });
+
+        return () => split.revert();
+      });
+
+      return () => mm.revert();
+    },
+    { scope: ref },
+  );
 
   return (
     <SectionGrid
@@ -55,7 +107,7 @@ export default function OverviewSection() {
     >
       <Frame h={H} v={V} />
 
-      <Cell at={[0, 8, 0, 3]} className="plate-title">
+      <Cell at={[0, 12, 0, 3]} className="plate-title">
         <MobileEdge open />
         <Eyebrow data-reveal index={OVERVIEW.index}>
           {OVERVIEW.eyebrow}
@@ -65,27 +117,11 @@ export default function OverviewSection() {
           className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
           {OVERVIEW.heading[0]}
-          <span className="block">{OVERVIEW.heading[1]}</span>
+          <span className="ab-statement-muted">{OVERVIEW.heading[1]}</span>
         </MaskRevealHeading>
       </Cell>
 
-      <Cell at={[8, 12, 0, 3]} className="plate-lede">
-        <MobileEdge />
-        <p
-          data-reveal
-          className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.1] font-medium uppercase md:text-justify md:[text-align-last:left]"
-        >
-          {OVERVIEW.lede}
-        </p>
-      </Cell>
-
-      <Cell at={[0, 6, 3, 4]} className="ab-head index-tag">
-        <MobileEdge open />
-        <span>{OVERVIEW.mediaLabel}</span>
-        <span>[Fig. 02]</span>
-      </Cell>
-
-      <Cell at={[0, 6, 4, 13]} className="ov-media">
+      <Cell at={[0, 6, 3, 13]} className="ov-media">
         <MobileEdge />
         <div data-wipe className="plate-media">
           <Image
@@ -113,26 +149,15 @@ export default function OverviewSection() {
 
       <Cell at={[6, 12, 4, 13]} className="ov-story">
         <MobileEdge />
-        <p
-          data-reveal
-          className="font-heading text-[clamp(16px,1.5vw,26px)] leading-[1.05] font-medium uppercase"
-        >
-          {lead}
-        </p>
-        <div className="ov-story-list">
-          {rest.map((paragraph, i) => {
-            const index = i + 1;
-            const marked = index === OVERVIEW.highlight;
-            return (
-              <div key={paragraph} data-reveal className="ov-story-item">
-                <span className="index-tag tabular-nums" aria-hidden>
-                  {marked ? <span className="ab-marker" /> : padIndex(index)}
-                </span>
-                <p className="ab-copy">{paragraph}</p>
-              </div>
-            );
-          })}
-        </div>
+        {OVERVIEW.paragraphs.map((paragraph) => (
+          <p
+            key={paragraph}
+            data-letters
+            className="font-heading text-[clamp(16px,1.5vw,26px)] leading-[1.05] font-medium uppercase"
+          >
+            {paragraph}
+          </p>
+        ))}
       </Cell>
 
       <Cell at={[0, 8, 13, 16]} className="plate-statement">

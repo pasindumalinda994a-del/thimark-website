@@ -588,7 +588,7 @@ export default function AboutSection({
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             {copy.heading[0]}
-            <span className="block">{copy.heading[1]}</span>
+            <span className="ab-statement-muted">{copy.heading[1]}</span>
           </MaskRevealHeading>
         </div>
         <p
@@ -622,11 +622,11 @@ export default function AboutSection({
           <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
           <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
           <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
-          <div className="about-chapter-glyph dot-field-soft">
-          <PlusMark tone="page" className="top-4 left-4 z-10" />
-          <PlusMark tone="page" className="top-4 left-[calc(100%-16px)] z-10" />
-          <PlusMark tone="page" className="top-[calc(100%-16px)] left-4 z-10" />
-          <PlusMark tone="page" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
+          <div className="about-chapter-glyph dot-field-mark">
+          <PlusMark tone="page" className="plus-at-tl z-10" />
+          <PlusMark tone="page" className="plus-at-tr z-10" />
+          <PlusMark tone="page" className="plus-at-bl z-10" />
+          <PlusMark tone="page" className="plus-at-br z-10" />
           {items.map((item, i) => (
             <span
               key={item.id}

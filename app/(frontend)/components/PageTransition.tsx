@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
 import { normalizePath } from "@/app/(frontend)/components/nav";
+import { MASK_MOTION as MASK } from "@/app/(frontend)/components/maskMotion";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -15,7 +16,6 @@ const MARK_W = 78;
 const MARK_H = 100;
 const NAV_TIMEOUT_MS = 2500;
 const CLOSE_WATCHDOG_MS = 1800;
-const SEAL_S = 0.12;
 
 type Edges = { l: number; r: number; t: number; b: number };
 
@@ -205,18 +205,31 @@ export default function PageTransition() {
           return;
         }
 
-        place(geo.open, 0);
-        gsap.set(innerLines, { autoAlpha: 1 });
+        // Sides stay off the field. Parking them on the open edges would let
+        // the seam seal drag those plates back in, because seal closes whatever
+        // gap is left between each pair.
+        const park = -(geo.w + 2);
+        const mid = Math.round(geo.h / 2);
+        place({ l: park, r: park, t: geo.open.t, b: geo.open.b }, 0);
+        gsap.set([vInnerL, vInnerR], { autoAlpha: 0 });
+        gsap.set([hInnerT, hInnerB], { autoAlpha: 1 });
 
         gsap
           .timeline({
-            defaults: { ease: "power2.inOut" },
             onUpdate: apply,
             onComplete: onClosed,
           })
-          .to(edges, { ...geo.outer, duration: 0.9 })
-          .to(edges, { ...geo.inner, duration: 0.5 })
-          .to(edges, { seal: 1, duration: SEAL_S, ease: "power1.in" }, `-=${SEAL_S}`);
+          .to(edges, {
+            t: mid,
+            b: mid,
+            duration: MASK.split.duration,
+            ease: MASK.split.ease,
+          })
+          .to(
+            edges,
+            { seal: 1, duration: MASK.seal.duration, ease: MASK.seal.ease },
+            `-=${MASK.seal.duration}`,
+          );
       });
 
       playReveal.current = contextSafe(() => {
@@ -240,19 +253,37 @@ export default function PageTransition() {
           return;
         }
 
-        place(geo.inner, 1);
-        gsap.set(innerLines, { autoAlpha: 1 });
+        const park = -(geo.w + 2);
+        const mid = Math.round(geo.h / 2);
+        place({ l: park, r: park, t: mid, b: mid }, 1);
+        gsap.set([vInnerL, vInnerR], { autoAlpha: 0 });
+        gsap.set([hInnerT, hInnerB], { autoAlpha: 1 });
 
         gsap
           .timeline({
-            defaults: { ease: "power2.inOut" },
             onUpdate: apply,
             onComplete: finish,
           })
-          .to(edges, { seal: 0, duration: SEAL_S, ease: "power1.out" }, 0)
-          .to(edges, { ...geo.outer, duration: 0.5 }, 0)
-          .to(edges, { ...geo.open, duration: 0.9 })
-          .to(innerLines, { autoAlpha: 0, duration: 0.4 }, "-=0.4");
+          .to(
+            edges,
+            { seal: 0, duration: MASK.seal.duration, ease: MASK.unsealEase },
+            0,
+          )
+          .to(
+            edges,
+            {
+              t: geo.open.t,
+              b: geo.open.b,
+              duration: MASK.split.duration,
+              ease: MASK.split.ease,
+            },
+            0,
+          )
+          .to(
+            [hInnerT, hInnerB],
+            { autoAlpha: 0, duration: MASK.lineFade.duration },
+            MASK.lineFade.at,
+          );
       });
     },
     { scope: root },

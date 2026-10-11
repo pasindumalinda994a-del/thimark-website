@@ -8,23 +8,24 @@ export type GalleryStripHandle = {
   step: (direction: 1 | -1) => void;
 };
 
-const HEIGHTS = [1, 1.35, 1.12, 1.48, 1.2];
+const HEIGHT = 1;
+const WIDTHS = [1, 1.35, 1.12, 1.48, 1.2];
 const ASPECT = 1.45;
-const GAP = 0.14;
+const GAP = 0.32;
 const CREAM = 0xf4f4ed;
 
 const config = {
-  smoothing: 0.08,
-  distortionStrength: 1.15,
-  distortionSmoothing: 0.12,
-  momentumFriction: 0.92,
-  momentumThreshold: 0.001,
-  wheelSpeed: 0.008,
-  wheelMax: 120,
-  dragSpeed: 0.008,
+  smoothing: 0.062,
+  distortionStrength: 0.7,
+  distortionSmoothing: 0.042,
+  momentumFriction: 0.955,
+  momentumThreshold: 0.0004,
+  wheelSpeed: 0.0066,
+  wheelMax: 64,
+  dragSpeed: 0.0084,
   dragMomentum: 0.012,
-  touchSpeed: 0.009,
-  touchMomentum: 0.08,
+  touchSpeed: 0.0082,
+  touchMomentum: 0.046,
 };
 
 type GalleryStripProps = {
@@ -71,22 +72,24 @@ export default function GalleryStrip({
 
       const pinned = slides.length < 2;
       const total = slides.length;
-      const heights = slides.map((_, index) => HEIGHTS[index % HEIGHTS.length]);
+      const widths = slides.map(
+        (_, index) => WIDTHS[index % WIDTHS.length] * ASPECT,
+      );
       const offsets: number[] = [];
       let stack = 0;
 
       for (let index = 0; index < total; index += 1) {
         if (index === 0) {
           offsets.push(0);
-          stack = heights[0] / 2;
+          stack = widths[0] / 2;
         } else {
-          stack += GAP + heights[index] / 2;
+          stack += GAP + widths[index] / 2;
           offsets.push(stack);
-          stack += heights[index] / 2;
+          stack += widths[index] / 2;
         }
       }
 
-      const loopLength = Math.max(stack + GAP + heights[0] / 2, 0.001);
+      const loopLength = Math.max(stack + GAP + widths[0] / 2, 0.001);
       const halfLoop = loopLength / 2;
       const wrap = (value: number, range: number) =>
         ((value % range) + range) % range;
@@ -94,9 +97,9 @@ export default function GalleryStrip({
       const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
-        alpha: false,
+        alpha: true,
       });
-      renderer.setClearColor(CREAM, 1);
+      renderer.setClearColor(0x000000, 0);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
 
@@ -132,9 +135,8 @@ export default function GalleryStrip({
       };
 
       for (let index = 0; index < total; index += 1) {
-        const height = heights[index];
-        const width = height * ASPECT;
-        const geometry = new THREE.PlaneGeometry(width, height, 32, 16);
+        const width = widths[index];
+        const geometry = new THREE.PlaneGeometry(width, HEIGHT, 48, 12);
         const material = new THREE.MeshBasicMaterial({
           color: CREAM,
           side: THREE.DoubleSide,
@@ -159,7 +161,7 @@ export default function GalleryStrip({
           textures.push(texture);
           const image = texture.image as { width: number; height: number };
           const imageAspect = image.width / Math.max(image.height, 1);
-          const planeAspect = width / height;
+          const planeAspect = width / HEIGHT;
 
           if (fit === "contain") {
             const pad = 0.78;
@@ -181,15 +183,15 @@ export default function GalleryStrip({
         meshes.push(mesh);
       }
 
-      const applyDistortion = (mesh: SlideMesh, positionY: number, strength: number) => {
+      const applyDistortion = (mesh: SlideMesh, positionX: number, strength: number) => {
         const positions = mesh.geometry.attributes.position;
         const original = mesh.userData.originalVertices as number[];
         for (let index = 0; index < positions.count; index += 1) {
           const x = original[index * 3];
           const y = original[index * 3 + 1];
-          const distance = Math.sqrt(x * x + (positionY + y) ** 2);
-          const falloff = Math.max(0, 1 - distance / 2);
-          const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.5);
+          const distance = Math.sqrt((positionX + x) ** 2 + y * y);
+          const falloff = Math.max(0, 1 - distance / 2.6);
+          const bend = Math.pow(Math.sin((falloff * Math.PI) / 2), 1.7);
           positions.setZ(index, bend * strength);
         }
         positions.needsUpdate = true;
@@ -213,19 +215,21 @@ export default function GalleryStrip({
       const resize = () => {
         const parent = canvas.parentElement;
         if (!parent) return;
-        const width = parent.clientWidth;
-        const height = parent.clientHeight;
-        if (!width || !height) return;
-        camera.aspect = width / height;
+        const viewW = parent.clientWidth;
+        const viewH = parent.clientHeight;
+        if (!viewW || !viewH) return;
+        camera.aspect = viewW / viewH;
         const vFov = THREE.MathUtils.degToRad(camera.fov);
-        const planeW = 1.15 * ASPECT;
-        const desiredVisibleW = planeW / 0.68;
-        const zForWidth =
-          desiredVisibleW / (2 * Math.tan(vFov / 2) * Math.max(camera.aspect, 0.01));
-        const zForHeight = 1.85 / (2 * Math.tan(vFov / 2));
-        camera.position.z = Math.max(zForWidth, zForHeight);
+        const tan = Math.tan(vFov / 2);
+        const aspect = Math.max(camera.aspect, 0.01);
+        const avgW = widths.reduce((sum, value) => sum + value, 0) / widths.length;
+        const widest = Math.max(...widths);
+        const zFill = HEIGHT / 0.92 / (2 * tan);
+        const zPeek = (avgW * 2.35 + GAP * 2) / (2 * tan * aspect);
+        const zFit = (widest + GAP) / (2 * tan * aspect);
+        camera.position.z = Math.max(zFill, zPeek, zFit);
         camera.updateProjectionMatrix();
-        renderer.setSize(width, height, false);
+        renderer.setSize(viewW, viewH, false);
       };
 
       const place = (strength: number) => {
@@ -235,15 +239,16 @@ export default function GalleryStrip({
 
         meshes.forEach((mesh) => {
           const offset = mesh.userData.offset as number;
-          let y = -(offset - wrap(scrollPosition, loopLength));
-          y = wrap(y + halfLoop, loopLength) - halfLoop;
-          mesh.position.y = y;
-          if (Math.abs(y) < closestDistance) {
-            closestDistance = Math.abs(y);
+          let x = -(offset - wrap(scrollPosition, loopLength));
+          x = wrap(x + halfLoop, loopLength) - halfLoop;
+          mesh.position.x = x;
+          mesh.position.y = 0;
+          if (Math.abs(x) < closestDistance) {
+            closestDistance = Math.abs(x);
             closestIndex = mesh.userData.index as number;
           }
-          if (bend && Math.abs(y) < halfLoop + 1.5) {
-            applyDistortion(mesh, y, strength);
+          if (bend && Math.abs(x) < halfLoop + 1.5) {
+            applyDistortion(mesh, x, strength);
           }
         });
 
@@ -256,7 +261,7 @@ export default function GalleryStrip({
 
       const burst = (amount: number) => {
         if (pinned) return;
-        distortionTarget = Math.min(1, distortionTarget + amount);
+        distortionTarget = Math.min(0.84, distortionTarget + amount);
       };
 
       const armScrollEnd = (delay: number) => {
@@ -276,25 +281,29 @@ export default function GalleryStrip({
         scrollTarget = dest;
         scrollMomentum = 0;
         isScrolling = true;
-        burst(0.42);
-        armScrollEnd(700);
+        burst(0.22);
+        armScrollEnd(900);
       };
 
       const onWheel = (event: WheelEvent) => {
         if (pinned) return;
         event.preventDefault();
         event.stopPropagation();
+        const raw =
+          Math.abs(event.deltaX) > Math.abs(event.deltaY)
+            ? event.deltaX
+            : event.deltaY;
         const clamped =
-          Math.sign(event.deltaY) *
-          Math.min(Math.abs(event.deltaY), config.wheelMax);
+          Math.sign(raw) * Math.min(Math.abs(raw), config.wheelMax);
         burst(Math.abs(clamped) * 0.001);
         scrollTarget += clamped * config.wheelSpeed;
         isScrolling = true;
-        armScrollEnd(150);
+        armScrollEnd(520);
       };
 
       let dragging = false;
-      let dragStartY = 0;
+      let axisLock: "x" | "y" | null = null;
+      let dragStartX = 0;
       let dragDelta = 0;
       let pointerStartX = 0;
       let pointerStartY = 0;
@@ -305,38 +314,49 @@ export default function GalleryStrip({
         if (event.button !== 0) return;
         dragging = true;
         moved = false;
-        dragStartY = event.clientY;
+        axisLock = null;
+        dragStartX = event.clientX;
         pointerStartX = event.clientX;
         pointerStartY = event.clientY;
         dragDelta = 0;
         scrollMomentum = 0;
         pointerId = event.pointerId;
-        canvas.setPointerCapture(event.pointerId);
       };
 
       const onPointerMove = (event: PointerEvent) => {
         if (!dragging || event.pointerId !== pointerId) return;
         const dx = event.clientX - pointerStartX;
         const dy = event.clientY - pointerStartY;
-        if (dx * dx + dy * dy > 25) moved = true;
-        if (pinned) return;
-        const deltaY = event.clientY - dragStartY;
-        dragStartY = event.clientY;
-        dragDelta = deltaY;
+        if (!axisLock && dx * dx + dy * dy > 25) {
+          moved = true;
+          axisLock = Math.abs(dx) >= Math.abs(dy) ? "x" : "y";
+          if (axisLock === "y") {
+            dragging = false;
+            return;
+          }
+          canvas.setPointerCapture(event.pointerId);
+        }
+        if (axisLock !== "x" || pinned) return;
+        const deltaX = event.clientX - dragStartX;
+        dragStartX = event.clientX;
+        dragDelta = deltaX;
         const touch = event.pointerType === "touch";
-        burst(Math.abs(deltaY) * (touch ? 0.02 : 0.015));
-        scrollTarget -= deltaY * (touch ? config.touchSpeed : config.dragSpeed);
+        burst(Math.abs(deltaX) * (touch ? 0.02 : 0.015));
+        scrollTarget -= deltaX * (touch ? config.touchSpeed : config.dragSpeed);
         isScrolling = true;
       };
 
       const onPointerUp = (event: PointerEvent) => {
-        if (!dragging || event.pointerId !== pointerId) return;
+        if (event.pointerId !== pointerId || (!dragging && axisLock !== "x")) return;
+        const wasHorizontal = axisLock === "x";
+        const didMove = moved;
         dragging = false;
+        axisLock = null;
         if (canvas.hasPointerCapture(event.pointerId)) {
           canvas.releasePointerCapture(event.pointerId);
         }
 
-        if (!moved) {
+        if (!didMove) {
           const rect = canvas.getBoundingClientRect();
           if (!rect.width || !rect.height) return;
           pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -348,19 +368,19 @@ export default function GalleryStrip({
           return;
         }
 
-        if (pinned) return;
+        if (pinned || !wasHorizontal) return;
         const touch = event.pointerType === "touch";
         if (Math.abs(dragDelta) > (touch ? 4 : 2)) {
           scrollMomentum =
             -dragDelta * (touch ? config.touchMomentum : config.dragMomentum);
           burst(Math.abs(dragDelta) * (touch ? 0.02 : 0.004));
           isScrolling = true;
-          armScrollEnd(800);
+          armScrollEnd(1100);
         }
       };
 
       const onTouchMove = (event: TouchEvent) => {
-        if (!pinned && event.cancelable) event.preventDefault();
+        if (axisLock === "x" && !pinned && event.cancelable) event.preventDefault();
       };
 
       canvas.addEventListener("wheel", onWheel, { passive: false });
@@ -398,7 +418,7 @@ export default function GalleryStrip({
         if (Math.abs(frameDelta) > 0.00001) {
           directionTarget = frameDelta > 0 ? 1 : -1;
         }
-        scrollDirection += (directionTarget - scrollDirection) * 0.08;
+        scrollDirection += (directionTarget - scrollDirection) * 0.032;
 
         const velocity = Math.abs(frameDelta) / Math.max(deltaTime, 0.001);
         velocityHistory.push(velocity);
@@ -411,14 +431,14 @@ export default function GalleryStrip({
           average / (velocityPeak + 0.001) < 0.7 && velocityPeak > 0.5;
         velocityPeak *= 0.99;
 
-        if (!pinned && velocity > 0.05) {
+        if (!pinned && velocity > 0.06) {
           distortionTarget = Math.max(
             distortionTarget,
-            Math.min(1, velocity * 0.1),
+            Math.min(0.84, velocity * 0.085),
           );
         }
-        if (decelerating || average < 0.2) {
-          distortionTarget *= decelerating ? 0.95 : 0.855;
+        if (decelerating || average < 0.16) {
+          distortionTarget *= decelerating ? 0.975 : 0.93;
         }
         distortionAmount +=
           (distortionTarget - distortionAmount) * config.distortionSmoothing;

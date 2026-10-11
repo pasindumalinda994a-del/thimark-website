@@ -8,9 +8,9 @@ import { Icon as Icon_0bd5cbb699f0163b484a96b464fddc1d } from '../../../cms/admi
 import { Logo as Logo_1a69130e64e06b4f56096bb7acc3d208 } from '../../../cms/admin/brand/Logo'
 import { LoginIntro as LoginIntro_3dfba43fffa5fd1f08709a2d8f0ed270 } from '../../../cms/admin/brand/LoginIntro'
 import { InboxLink as InboxLink_449ccd8d788fe1f8a7178a66adb00ba5 } from '../../../cms/admin/nav/InboxLink'
+import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 import { Dashboard as Dashboard_ac5e73e07aaecf4a73df6823b5fd3dfb } from '../../../cms/admin/dashboard/Dashboard'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
-import { VercelBlobClientUploadHandler as VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e } from '@payloadcms/storage-vercel-blob/client'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -24,7 +24,7 @@ export const importMap = {
   "/cms/admin/brand/Logo#Logo": Logo_1a69130e64e06b4f56096bb7acc3d208,
   "/cms/admin/brand/LoginIntro#LoginIntro": LoginIntro_3dfba43fffa5fd1f08709a2d8f0ed270,
   "/cms/admin/nav/InboxLink#InboxLink": InboxLink_449ccd8d788fe1f8a7178a66adb00ba5,
+  "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e,
   "/cms/admin/dashboard/Dashboard#Dashboard": Dashboard_ac5e73e07aaecf4a73df6823b5fd3dfb,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
-  "@payloadcms/storage-vercel-blob/client#VercelBlobClientUploadHandler": VercelBlobClientUploadHandler_16c82c5e25f430251a3e3ba57219ff4e
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
 }

@@ -333,7 +333,7 @@ export default function OurTwoCoreSection() {
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Three Disciplines.
-            <span className="block">One Engineering Mindset.</span>
+            <span className="ab-statement-muted">One Engineering Mindset.</span>
           </MaskRevealHeading>
         </div>
         <p

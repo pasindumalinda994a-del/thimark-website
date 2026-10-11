@@ -97,7 +97,7 @@ export default function FeturedProducts() {
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             When the Challenge Is Complex,
-            <span className="block">Engineering Has to Be Smarter.</span>
+            <span className="ab-statement-muted">Engineering Has to Be Smarter.</span>
           </MaskRevealHeading>
         </div>
         <p

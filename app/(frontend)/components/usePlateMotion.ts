@@ -40,15 +40,26 @@ function setCount(el: HTMLElement, n: number) {
   el.textContent = formatStat(n, pad);
 }
 
+export type PlateMotionOptions = {
+  /** Image open. "rise" matches the homepage bottom clip. Default opens from the centre. */
+  image?: "center" | "rise";
+};
+
 /**
  * Shared entrances for plate-grid sections:
- * [data-reveal] fades up, [data-wipe] opens from the centre,
+ * [data-reveal] fades up, [data-wipe] opens from the centre (or from the
+ * bottom when image is "rise"),
  * [data-draw] draws its strokes, [data-count] counts up,
  * [data-redraw] replays its strokes on hover,
  * [data-scrub-x] grows left-to-right with scroll and sets data-passed on
  * [data-scrub-stop="0.5"] markers once its progress reaches their value.
  */
-export function usePlateMotion(scope: RefObject<HTMLElement | null>) {
+export function usePlateMotion(
+  scope: RefObject<HTMLElement | null>,
+  options?: PlateMotionOptions,
+) {
+  const rise = options?.image === "rise";
+
   useGSAP(
     () => {
       const root = scope.current;
@@ -97,7 +108,7 @@ export function usePlateMotion(scope: RefObject<HTMLElement | null>) {
       });
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.set(reveals, { autoAlpha: 0, y: 12 });
+        gsap.set(reveals, { autoAlpha: 0, y: rise ? 10 : 12 });
         ScrollTrigger.batch(reveals, {
           start: "top 88%",
           once: true,
@@ -113,6 +124,20 @@ export function usePlateMotion(scope: RefObject<HTMLElement | null>) {
         });
 
         wipes.forEach((el) => {
+          if (rise) {
+            gsap.fromTo(
+              el,
+              { clipPath: "inset(0% 0% 100% 0%)" },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration: 0.9,
+                ease: "power2.out",
+                scrollTrigger: { trigger: el, start: "top 82%", once: true },
+              },
+            );
+            return;
+          }
+
           gsap.fromTo(
             el,
             { clipPath: "inset(0% 50% 0% 50%)" },
@@ -187,6 +212,6 @@ export function usePlateMotion(scope: RefObject<HTMLElement | null>) {
 
       return () => mm.revert();
     },
-    { scope },
+    { scope, dependencies: [rise], revertOnUpdate: true },
   );
 }

@@ -11,13 +11,13 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
+import BrandButton from "@/app/(frontend)/components/BrandButton";
+import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
-import ScrollHint from "@/app/(frontend)/components/ScrollHint";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import GalleryStrip, { type GalleryStripHandle } from "@/app/(frontend)/gallery/GalleryStrip";
 import {
-  GALLERY_CATEGORIES,
   categoryById,
   frameSrc,
   pad2,
@@ -30,6 +30,8 @@ const armDown: PlusArms = { up: false, down: true, left: false, right: false };
 const armUp: PlusArms = { up: true, down: false, left: false, right: false };
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
+const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
+const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -90,7 +92,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
           yPercent: -50,
           transformOrigin: "left center",
         });
-        gsap.set(media, { clipPath: "inset(0% 0% 100% 0%)" });
+        gsap.set(media, { clipPath: "inset(0% 100% 0% 0%)" });
 
         const tl = gsap.timeline();
         tl.to(rules, {
@@ -285,34 +287,43 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
         <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
         <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
 
-        <GridLine axis="v" unstyled tone="page" className="v-g1-0 gallery-v-top-7 hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-0 gallery-v-7-end hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-3 gallery-v-top-7 hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-3 gallery-v-7-end hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-9 gallery-v-top-7 hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-9 gallery-v-7-end hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-top-7 hidden md:block" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-7-end hidden md:block" />
-
         <PlusMark tone="page" arms={armDown} className="v-g1-0 gallery-plus-top hidden md:block" />
-        <PlusMark tone="page" arms={armDown} className="v-g1-3 gallery-plus-top hidden md:block" />
-        <PlusMark tone="page" arms={armDown} className="v-g1-9 gallery-plus-top hidden md:block" />
+        <PlusMark tone="page" arms={armDown} className="v-g1-8 gallery-plus-top hidden md:block" />
         <PlusMark tone="page" arms={armDown} className="v-g1-12 gallery-plus-top hidden md:block" />
 
-        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-0-3 gallery-at-7 hidden md:block" />
-        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-9g-12 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-3 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-9 gallery-at-7 hidden md:block" />
-        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 gallery-at-7 hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 gallery-v-head hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-8 gallery-v-head hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-head hidden md:block" />
+
+        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-0-8 top-rows-3 hidden md:block" />
+        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-8-12 top-rows-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinTeeUp} className="v-g1-8 top-rows-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
+
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 gallery-v-runway hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 gallery-v-runway hidden md:block" />
+
+        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-0-2 at-br-3 hidden md:block" />
+        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-2-10 at-br-3 hidden md:block" />
+        <GridLine axis="h" unstyled tone="page" data-gal-rule className="h-seg-10-12 at-br-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinTeeDown} className="v-g1-2 at-br-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinTeeDown} className="v-g1-10 at-br-3 hidden md:block" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-3 hidden md:block" />
+
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br3-end hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-2 v-seg-br3-end hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-10 v-seg-br3-end hidden md:block" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br3-end hidden md:block" />
 
         <PlusMark tone="page" arms={armUp} className="v-g1-0 at-bottom hidden md:block" />
-        <PlusMark tone="page" arms={armUp} className="v-g1-3 at-bottom hidden md:block" />
-        <PlusMark tone="page" arms={armUp} className="v-g1-9 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-2 at-bottom hidden md:block" />
+        <PlusMark tone="page" arms={armUp} className="v-g1-10 at-bottom hidden md:block" />
         <PlusMark tone="page" arms={armUp} className="v-g1-12 at-bottom hidden md:block" />
 
         <div className="gallery-stage-copy">
-          <div className="gallery-reel-above">
+          <div className="gallery-head-title">
             <p data-gal-item className="eyebrow">
               Gallery
             </p>
@@ -324,63 +335,66 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
               Seen where it is made.
             </MaskRevealHeading>
           </div>
-          <div className="gallery-reel-below">
+          <div className="gallery-head-aside">
             <p
               data-gal-item
-              className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.35] font-medium uppercase"
+              className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.35] font-medium uppercase md:text-justify md:[text-align-last:left]"
             >
               The Kadawatha workshop, Kilgharrah 600 in the field, and the
               evening the company was received.
             </p>
-            <p data-gal-item className="index-tag gallery-stage-readout">
-              <span>{pad2(GALLERY_CATEGORIES.length)} Fields</span>
-              <span aria-hidden>·</span>
-              <span>{pad2(frames.length)} Frames</span>
-            </p>
           </div>
         </div>
 
-        <div
-          ref={frameRef}
-          data-gal-media
-          className="gallery-reel-frame"
-          {...(interactive ? { "data-lenis-prevent": "" } : {})}
-        >
-          {shown && reduced ? (
-            <button
-              type="button"
-              className="gallery-reel-still"
-              data-cursor="explore"
-              onClick={(event) => openShown(event.currentTarget)}
-              aria-label={`Open ${shown.title}, ${categoryById(shown.category).full}`}
-            >
-              <Image
-                src={frameSrc(shown.image)}
-                alt={shown.alt}
-                fill
-                sizes="(min-width: 768px) 50vw, 100vw"
-                priority
-                className={
-                  shown.fit === "contain" ? "object-contain p-[12%]" : "object-cover"
-                }
+        <div className="gallery-reel-slot">
+          <div
+            ref={frameRef}
+            data-gal-media
+            className="gallery-reel-frame"
+            {...(interactive ? { "data-lenis-prevent": "" } : {})}
+          >
+            {shown && reduced ? (
+              <button
+                type="button"
+                className="gallery-reel-still"
+                data-cursor="explore"
+                onClick={(event) => openShown(event.currentTarget)}
+                aria-label={`Open ${shown.title}, ${categoryById(shown.category).full}`}
+              >
+                <Image
+                  src={frameSrc(shown.image)}
+                  alt={shown.alt}
+                  fill
+                  sizes="(min-width: 768px) 80vw, 100vw"
+                  priority
+                  className={
+                    shown.fit === "contain" ? "object-contain p-[12%]" : "object-cover"
+                  }
+                />
+              </button>
+            ) : (
+              <GalleryStrip
+                ref={stripRef}
+                frames={frames}
+                onActiveIndex={setActiveIndex}
+                onOpen={(id) => {
+                  const trigger = frameRef.current;
+                  if (!trigger) return;
+                  openFrame(
+                    id,
+                    frames.map((frame) => frame.id),
+                    trigger,
+                  );
+                }}
               />
-            </button>
-          ) : (
-            <GalleryStrip
-              ref={stripRef}
-              frames={frames}
-              onActiveIndex={setActiveIndex}
-              onOpen={(id) => {
-                const trigger = frameRef.current;
-                if (!trigger) return;
-                openFrame(
-                  id,
-                  frames.map((frame) => frame.id),
-                  trigger,
-                );
-              }}
-            />
-          )}
+            )}
+          </div>
+          {interactive ? (
+            <div className="gallery-drag-cue" aria-hidden>
+              <span className="index-tag">Drag</span>
+              <DirectionPulse direction="right" stack="trio" />
+            </div>
+          ) : null}
         </div>
 
         {shown ? (
@@ -389,57 +403,50 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
             className="gallery-reel-detail"
             onKeyDown={onSlotKey}
           >
-            <div data-reel-copy className="gallery-reel-above">
-              <p className="index-tag">
-                <span>[{pad2(catalogueIndex + 1)}]</span>
-                <span aria-hidden> · </span>
-                <span>
-                  {pad2(safeIndex + 1)} / {pad2(frames.length)}
-                </span>
-              </p>
-              <p className="index-tag font-normal">
-                {categoryById(shown.category).full}
-              </p>
-              <p className="gallery-reel-title" aria-live="polite">
-                {shown.title}
-              </p>
-            </div>
-            <div data-reel-copy className="gallery-reel-below">
-              <p className="gallery-reel-note">{shown.note}</p>
-              <p className="index-tag font-normal">{shown.place}</p>
-              <div className="gallery-reel-steps">
-                <button
-                  type="button"
-                  className="gallery-reel-nav index-tag"
-                  onClick={() => stepReel(-1)}
-                  disabled={frames.length < 2}
-                >
-                  Prev
-                </button>
-                <button
-                  type="button"
-                  className="gallery-reel-nav index-tag"
-                  onClick={() => stepReel(1)}
-                  disabled={frames.length < 2}
-                >
-                  Next
-                </button>
+            <BrandButton
+              type="button"
+              tone="steel"
+              className="gallery-reel-corner gallery-reel-corner-prev"
+              onClick={() => stepReel(-1)}
+              disabled={frames.length < 2}
+              aria-label="Previous frame"
+            >
+              Prev
+            </BrandButton>
+            <div className="gallery-reel-center">
+              <div data-reel-copy className="gallery-title-index">
+                <div className="gallery-title-kicker">
+                  <p className="index-tag">
+                    <span>[{pad2(catalogueIndex + 1)}]</span>
+                    <span aria-hidden> · </span>
+                    <span>
+                      {pad2(safeIndex + 1)} / {pad2(frames.length)}
+                    </span>
+                  </p>
+                  <p className="index-tag font-normal">
+                    {categoryById(shown.category).full}
+                  </p>
+                </div>
+                <p className="gallery-reel-title" aria-live="polite">
+                  {shown.title}
+                </p>
               </div>
-              <button
-                type="button"
-                className="gallery-reel-nav index-tag"
-                onClick={(event) => openShown(event.currentTarget)}
-              >
-                Open
-              </button>
+              <div data-reel-copy className="gallery-title-note">
+                <p className="gallery-reel-note">{shown.note}</p>
+                <p className="index-tag font-normal">{shown.place}</p>
+              </div>
             </div>
+            <BrandButton
+              type="button"
+              tone="steel"
+              className="gallery-reel-corner gallery-reel-corner-next"
+              onClick={() => stepReel(1)}
+              disabled={frames.length < 2}
+              aria-label="Next frame"
+            >
+              Next
+            </BrandButton>
           </div>
-        ) : null}
-        {interactive ? (
-          <>
-            <ScrollHint seat="col-9" edge="top" />
-            <ScrollHint seat="col-9" />
-          </>
         ) : null}
       </SectionGrid>
 

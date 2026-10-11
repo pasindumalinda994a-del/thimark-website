@@ -104,14 +104,6 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
     >
       <defs>
         <pattern
-          id="mark-dots"
-          width="12"
-          height="12"
-          patternUnits="userSpaceOnUse"
-        >
-          <circle cx="6" cy="6" r="0.6" fill="currentColor" opacity="0.35" />
-        </pattern>
-        <pattern
           id="mark-hatch"
           width="6"
           height="6"
@@ -128,16 +120,6 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
           />
         </pattern>
       </defs>
-
-      {/* Field */}
-      <rect
-        x="0"
-        y="0"
-        width={VIEW}
-        height={VIEW}
-        fill="url(#mark-dots)"
-        data-mark-field
-      />
 
       {/* Construction guides */}
       <g opacity="0.4" data-mark-guides>

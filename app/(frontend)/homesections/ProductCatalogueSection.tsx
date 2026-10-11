@@ -269,7 +269,7 @@ export default function ProductCatalogueSection() {
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Precision Components.
-            <span className="block">Built to Perform.</span>
+            <span className="ab-statement-muted">Built to Perform.</span>
           </MaskRevealHeading>
         </div>
         <p

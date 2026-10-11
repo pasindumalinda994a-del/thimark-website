@@ -26,8 +26,6 @@ export const OVERVIEW = {
   index: "01",
   eyebrow: "Overview",
   heading: ["From Steel Fabrication", "to Advanced Engineering."],
-  lede: "Thimark Technocreations (Pvt) Ltd is a proudly Sri Lankan engineering and manufacturing company with a strong reputation for quality, reliability and innovation.",
-  mediaLabel: "Engineering in Practice",
   media: {
     src: "/home-images/two-core-machinery.png",
     alt: "Thimark engineers assembling and testing a heavy industrial machine",
@@ -35,13 +33,11 @@ export const OVERVIEW = {
   },
   storyLabel: "Our Story",
   paragraphs: [
-    "What began as a modest steel fabrication business has grown into an ISO 9001:2015 certified organization with capabilities spanning automotive component manufacturing, mechanical engineering, industrial machinery and custom-engineered solutions.",
-    "Today, Thimark designs and manufactures specialized equipment for sectors including water supply, hydropower, construction and industrial manufacturing, while also producing high-quality OEM components for local motorcycle assembly programs.",
-    "Our capabilities extend beyond Sri Lanka. Through projects such as the Kilgharrah 600 automated trash-cleaning machine developed for Kenya Electricity Generating Company (KenGen), Thimark has demonstrated its ability to take Sri Lankan engineering expertise to international applications.",
-    "Today, we continue to invest in technology, manufacturing capability, research and innovation to build solutions for the evolving needs of industry.",
+    "What began as a modest steel fabrication business is now an ISO 9001:2015 certified organization, with capabilities across automotive component manufacturing, mechanical engineering, industrial machinery and custom-engineered solutions.",
+    "Thimark designs and manufactures specialized equipment for water supply, hydropower, construction and industrial manufacturing, and high-quality OEM components for local motorcycle assembly. The Kilgharrah 600, an automated trash-cleaning machine built for Kenya Electricity Generating Company (KenGen), carried that Sri Lankan engineering expertise abroad, and continued investment in technology, manufacturing capability, research and innovation keeps those solutions matched to the evolving needs of industry.",
   ],
   /** Paragraph that carries the international marker. */
-  highlight: 2,
+  highlight: 1,
   statement: ["From Fabrication to Innovation.", "From Local Capability to Global Possibility."],
   aside: [
     "Our story is not simply about how much we have grown.",
@@ -68,8 +64,6 @@ export const VISION_MISSION = {
     word: "Mission",
     paragraphs: [
       "To advance Sri Lanka\u2019s industrial and automotive capability through precision engineering, innovation, and professionalism.",
-      "We specialize in designing and manufacturing high-quality two-wheeler components that support and strengthen our local motorcycle manufacturers, while also developing commercial vehicles and machinery that serve the needs of Sri Lanka\u2019s industries and infrastructure.",
-      "Guided by integrity, technology, and a strong commitment to ethical business practices, we strive to enhance local value addition, empower Sri Lankan engineering talent, and build dependable, purpose-driven vehicles and machinery proudly made in Sri Lanka.",
     ],
   },
 } as const;

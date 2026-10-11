@@ -167,7 +167,8 @@ export default function HeroSection() {
           waitForPreload
           className="hero-heading font-heading text-[clamp(30px,8vw,34px)] leading-[0.92] font-medium tracking-[-0.01em] uppercase md:text-[clamp(40px,3.5vw,64px)] md:leading-[0.89]"
         >
-          Engineering What Moves Industry Forward.
+          Engineering What Moves
+          <span className="ab-statement-muted">Industry Forward.</span>
         </MaskRevealHeading>
       </div>
 

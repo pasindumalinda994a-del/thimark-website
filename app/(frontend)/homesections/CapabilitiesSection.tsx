@@ -372,7 +372,7 @@ export default function CapabilitiesSection({
             className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
           >
             Capability You
-            <span className="block">Can Build On.</span>
+            <span className="ab-statement-muted">Can Build On.</span>
           </MaskRevealHeading>
         </div>
         <div className="caps-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]">
@@ -432,7 +432,7 @@ export default function CapabilitiesSection({
                   <span aria-hidden>[{padIndex(i)}]</span>
                 </div>
 
-                <div className="caps-card-glyph dot-field-soft">
+                <div className="caps-card-glyph dot-field-mark">
                   <CornerPlus className="plus-at-tl" />
                   <CornerPlus className="plus-at-tr" />
                   <CornerPlus className="plus-at-bl" />

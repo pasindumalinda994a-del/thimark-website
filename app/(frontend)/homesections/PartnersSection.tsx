@@ -23,7 +23,7 @@ function padIndex(index: number) {
 
 export type PartnersCopy = {
   eyebrow: string;
-  heading: string;
+  heading: readonly [string, string];
   lede: { strong: string; rest: string };
   statement: string;
   cta?: { label: string; href: string };
@@ -31,7 +31,7 @@ export type PartnersCopy = {
 
 const HOME_COPY: PartnersCopy = {
   eyebrow: "Trusted by Industry",
-  heading: "Engineering That Earns Trust.",
+  heading: ["Engineering That", "Earns Trust."],
   lede: {
     strong: "Strong engineering partnerships are built over time.",
     rest: "Thimark works with established organizations that rely on our manufacturing capability, technical expertise and commitment to quality.",
@@ -160,7 +160,8 @@ export default function PartnersSection({
           id={headingId}
           className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
-          {copy.heading}
+          {copy.heading[0]}
+          <span className="ab-statement-muted">{copy.heading[1]}</span>
         </MaskRevealHeading>
         <p
           data-p-header

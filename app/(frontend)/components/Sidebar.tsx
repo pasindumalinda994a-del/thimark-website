@@ -453,6 +453,196 @@ function NavShell({
 }
 
 /* ------------------------------------------------------------------ */
+/* Mobile drawing sheet                                                */
+/* ------------------------------------------------------------------ */
+
+function SheetArrow() {
+  return (
+    <svg aria-hidden width={28} height={8} viewBox="0 0 28 8" fill="none" className="shrink-0">
+      <path d="M0 4h24" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M20.5 1 26 4l-5.5 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="square" />
+    </svg>
+  );
+}
+
+function SheetChevron() {
+  return (
+    <svg aria-hidden width={8} height={8} viewBox="0 0 8 8" fill="none" className="mn-chevron">
+      <path
+        d="M2.25 1.25 5.75 4 2.25 6.75"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
+}
+
+function MobileRow({
+  item,
+  index,
+  active,
+  onNavigate,
+}: {
+  item: NavLink;
+  index: number;
+  active: boolean;
+  onNavigate?: () => void;
+}) {
+  return (
+    <Link
+      href={item.href}
+      data-sb-item
+      aria-current={active ? "page" : undefined}
+      aria-label={item.fullLabel}
+      onClick={onNavigate}
+      className={`mn-row ${active ? "is-active" : ""}`}
+    >
+      <span aria-hidden className="mn-index index-tag">
+        {padIndex(index)}
+      </span>
+      <StationMark active={active} />
+      <span className="mn-label font-heading font-medium tracking-[0.04em] uppercase">
+        {item.label}
+      </span>
+    </Link>
+  );
+}
+
+function MobileGroup({
+  item,
+  index,
+  activeId,
+  open,
+  onToggle,
+  onNavigate,
+}: {
+  item: NavItem;
+  index: number;
+  activeId: string;
+  open: boolean;
+  onToggle: () => void;
+  onNavigate?: () => void;
+}) {
+  const children = item.children ?? [];
+  const groupActive =
+    activeId === item.id || children.some((child) => child.id === activeId);
+  const panelId = `menu-nav-${item.id}`;
+
+  return (
+    <div className={`mn-group ${open ? "is-open" : ""}`}>
+      <button
+        type="button"
+        data-sb-item
+        className={`mn-row ${groupActive ? "is-active" : ""}`}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={onToggle}
+      >
+        <span aria-hidden className="mn-index index-tag">
+          {padIndex(index)}
+        </span>
+        <StationMark active={groupActive} />
+        <span className="mn-label font-heading font-medium tracking-[0.04em] uppercase">
+          {item.label}
+        </span>
+        <SheetChevron />
+      </button>
+      <div id={panelId} className="mn-sub" role="region" aria-label={item.label} aria-hidden={!open} inert={!open}>
+        <div className="mn-sub-clip">
+          <div className="mn-branch">
+            {children.map((child) => (
+              <Link
+                key={child.id}
+                href={child.href}
+                {...(open ? { "data-sb-item": true } : {})}
+                aria-current={activeId === child.id ? "page" : undefined}
+                aria-label={child.fullLabel}
+                onClick={onNavigate}
+                className={`mn-row mn-row-child ${activeId === child.id ? "is-active" : ""}`}
+              >
+                <span aria-hidden className="mn-leader" />
+                <span className="mn-label font-heading font-medium tracking-wider uppercase">
+                  {child.label}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function MobileSheet({
+  activeId,
+  pageName,
+  pathname,
+  onNavigate,
+}: {
+  activeId: string;
+  pageName: string;
+  pathname: string;
+  onNavigate?: () => void;
+}) {
+  const routeGroup =
+    NAV_ITEMS.find(
+      (item) =>
+        Boolean(item.children?.length) &&
+        (item.id === activeId || item.children?.some((child) => child.id === activeId)),
+    )?.id ?? null;
+  const [openId, setOpenId] = useState<string | null>(routeGroup);
+
+  useEffect(() => {
+    setOpenId(routeGroup);
+  }, [pathname, routeGroup]);
+
+  return (
+    <div className="mn-sheet">
+      <div data-sb-item className="mn-head">
+        <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
+          Menu
+        </span>
+        <span className="mn-head-page index-tag">{pageName}</span>
+      </div>
+      <nav aria-label="Menu" className="mn-nav">
+        {NAV_ITEMS.map((item, index) =>
+          item.children ? (
+            <MobileGroup
+              key={item.id}
+              item={item}
+              index={index}
+              activeId={activeId}
+              open={openId === item.id}
+              onToggle={() => setOpenId((current) => (current === item.id ? null : item.id))}
+              onNavigate={onNavigate}
+            />
+          ) : item.href ? (
+            <MobileRow
+              key={item.id}
+              item={{ id: item.id, label: item.label, href: item.href }}
+              index={index}
+              active={activeId === item.id}
+              onNavigate={onNavigate}
+            />
+          ) : null,
+        )}
+      </nav>
+      <Link
+        href={RAQ_LINK.href}
+        data-sb-item
+        aria-label={RAQ_LINK.ariaLabel}
+        onClick={onNavigate}
+        className="mn-enquire"
+      >
+        <span className="font-heading font-medium tracking-[0.06em] uppercase">{RAQ_LINK.label}</span>
+        <SheetArrow />
+      </Link>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Sidebar                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -613,21 +803,29 @@ export default function Sidebar() {
         <BrandLogo className="px-4" imageClassName="h-7" priority />
         <button
           type="button"
-          className="relative z-10 mr-2 flex size-10 items-center justify-center text-steel"
+          className="mn-toggle relative z-10 text-steel"
           aria-expanded={menuOpen}
           aria-controls="mobile-nav"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen((value) => !value)}
         >
-          <span aria-hidden className="relative block h-2 w-4.5">
-            <span
-              ref={menuTop}
-              className="absolute inset-x-0 top-0 h-[1.5px] bg-current"
-            />
-            <span
-              ref={menuBottom}
-              className="absolute inset-x-0 bottom-0 h-[1.5px] bg-current"
-            />
+          <span className="mn-toggle-label font-heading text-[11px] leading-none font-medium tracking-[0.16em] uppercase">
+            Menu
+          </span>
+          <span className="mn-toggle-rule" aria-hidden>
+            <PlusMark tone="dark" className="mn-toggle-plus" />
+          </span>
+          <span className="mn-toggle-mark">
+            <span aria-hidden className="relative block h-2 w-4.5">
+              <span
+                ref={menuTop}
+                className="absolute inset-x-0 top-0 h-[1.5px] bg-current"
+              />
+              <span
+                ref={menuBottom}
+                className="absolute inset-x-0 bottom-0 h-[1.5px] bg-current"
+              />
+            </span>
           </span>
         </button>
         <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom" />
@@ -638,23 +836,30 @@ export default function Sidebar() {
       <div
         ref={overlay}
         id="mobile-nav"
-        className={`fixed inset-0 z-30 flex flex-col bg-cream pt-14 opacity-0 md:hidden ${
+        className={`fixed inset-0 z-30 opacity-0 md:hidden ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         aria-hidden={!menuOpen}
         inert={!menuOpen}
       >
-        <NavShell
-          activeId={activeId}
-          isHome={isHome}
-          section={section}
-          pageName={pageName}
-          pathname={pathname}
-          onNavigate={closeMenu}
-          className="min-h-0 flex-1 overflow-y-auto"
-          idPrefix="menu"
-          variant="drawer"
-        />
+        <div className="mn-scrim" onClick={closeMenu} />
+        <div className="mn-frame">
+          <div className="mn-plate">
+            <MobileSheet
+              activeId={activeId}
+              pageName={pageName}
+              pathname={pathname}
+              onNavigate={closeMenu}
+            />
+          </div>
+          <GridLine axis="v" unstyled tone="dark" className="mn-rail mn-rail-l" />
+          <GridLine axis="v" unstyled tone="dark" className="mn-rail mn-rail-r" />
+          <GridLine axis="h" unstyled tone="dark" className="mn-rule" />
+          <PlusMark tone="dark" className="mn-plus-tl" />
+          <PlusMark tone="dark" className="mn-plus-tr" />
+          <PlusMark tone="dark" className="mn-plus-bl" />
+          <PlusMark tone="dark" className="mn-plus-br" />
+        </div>
       </div>
     </>
   );

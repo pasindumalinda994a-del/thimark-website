@@ -3,12 +3,12 @@
 import { useRef } from "react";
 import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { PRINCIPLES, VISION_MISSION } from "./about";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
 import {
   Cell,
-  Corners,
   Eyebrow,
   Frame,
   MobileEdge,
@@ -19,7 +19,6 @@ import { padIndex } from "@/app/(frontend)/homesections/StoryProgress";
 
 const H: HLine[] = [
   [3, 0, 12],
-  [4, 0, 12],
   [10, 0, 12],
   [11, 0, 12],
   [14, 0, 12],
@@ -62,7 +61,7 @@ export default function VisionMissionSection() {
           className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
           {VISION_MISSION.heading[0]}
-          <span className="block">{VISION_MISSION.heading[1]}</span>
+          <span className="ab-statement-muted">{VISION_MISSION.heading[1]}</span>
         </MaskRevealHeading>
       </Cell>
 
@@ -79,46 +78,36 @@ export default function VisionMissionSection() {
         </ol>
       </Cell>
 
-      <Cell at={[0, 6, 3, 4]} className="ab-head index-tag">
-        <MobileEdge open />
-        <span className="flex items-center gap-2">
-          <span aria-hidden className="ab-marker" />
-          {vision.word}
-        </span>
-        <span className="tabular-nums">[{padIndex(0)}]</span>
-      </Cell>
-
-      <Cell at={[6, 12, 3, 4]} className="ab-head index-tag">
-        <MobileEdge open />
-        <span className="flex items-center gap-2">
-          <span aria-hidden className="ab-marker" />
-          {mission.word}
-        </span>
-        <span className="tabular-nums">[{padIndex(1)}]</span>
-      </Cell>
-
-      <Cell at={[0, 6, 4, 10]} as="article" className="vm-plate" aria-label={vision.word}>
+      <Cell at={[0, 6, 3, 10]} as="article" className="vm-plate" aria-label={vision.word}>
         <MobileEdge />
-        <p data-reveal className="vm-declare">
-          {vision.paragraphs[0]}
-        </p>
-      </Cell>
-
-      <Cell at={[6, 12, 4, 10]} as="article" className="vm-plate" aria-label={mission.word}>
-        <MobileEdge />
-        <p data-reveal className="vm-lead">
-          {mission.paragraphs[0]}
-        </p>
-        <div className="ov-story-list">
-          {mission.paragraphs.slice(1).map((paragraph, i) => (
-            <div key={paragraph} data-reveal className="ov-story-item">
-              <span className="index-tag tabular-nums" aria-hidden>
-                {padIndex(i)}
-              </span>
-              <p className="ab-copy">{paragraph}</p>
-            </div>
-          ))}
+        <div className="vm-plate-copy">
+          <p data-reveal className="index-tag tabular-nums">
+            [{padIndex(0)}]
+          </p>
+          <p data-reveal className="vm-declare">
+            {vision.paragraphs[0]}
+          </p>
+          <span aria-hidden className="vm-rule" />
         </div>
+        <p aria-hidden className="vm-word ab-outline">
+          {vision.word}
+        </p>
+      </Cell>
+
+      <Cell at={[6, 12, 3, 10]} as="article" className="vm-plate" aria-label={mission.word}>
+        <MobileEdge />
+        <div className="vm-plate-copy">
+          <p data-reveal className="index-tag tabular-nums">
+            [{padIndex(1)}]
+          </p>
+          <p data-reveal className="vm-lead">
+            {mission.paragraphs[0]}
+          </p>
+          <span aria-hidden className="vm-rule" />
+        </div>
+        <p aria-hidden className="vm-word ab-outline">
+          {mission.word}
+        </p>
       </Cell>
 
       {PRINCIPLES.map((principle, i) => (
@@ -136,18 +125,25 @@ export default function VisionMissionSection() {
             <span>Principle</span>
             <span className="tabular-nums">[{padIndex(i)}]</span>
           </p>
-          <div data-draw className="vm-principle-glyph dot-field-soft">
-            <Corners />
+          <div data-draw className="vm-principle-glyph dot-field-mark">
+            <PlusMark tone="page" className="plus-at-tl z-10" />
+            <PlusMark tone="page" className="plus-at-tr z-10" />
+            <PlusMark tone="page" className="plus-at-bl z-10" />
+            <PlusMark tone="page" className="plus-at-br z-10" />
             <IsoGlyph kind={principle.icon} className="vm-principle-mark" />
           </div>
           <div className="vm-principle-copy">
             <h3
               id={`principle-${principle.id}`}
+              data-reveal
               className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase"
             >
               {principle.title}
             </h3>
-            <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.2] font-normal uppercase">
+            <p
+              data-reveal
+              className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.2] font-normal uppercase"
+            >
               {principle.body}
             </p>
           </div>

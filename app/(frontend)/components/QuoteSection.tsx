@@ -52,7 +52,7 @@ type QuoteLink = { label: string; href: string };
 
 export type QuoteCopy = {
   eyebrow: string;
-  heading: string;
+  heading: readonly [string, string];
   lede: string;
   closing: readonly [string, string];
   primary: QuoteLink;
@@ -61,7 +61,7 @@ export type QuoteCopy = {
 
 const DEFAULT_COPY: QuoteCopy = {
   eyebrow: "Have an Engineering Challenge?",
-  heading: "Let\u2019s Turn Your Requirement Into a Solution.",
+  heading: ["Let\u2019s Turn Your Requirement", "Into a Solution."],
   lede: "Whether you need a reliable OEM manufacturing partner, precision components or a custom industrial machine, our engineering team is ready to understand your requirement and explore the right solution.",
   closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
   primary: { label: RAQ_LINK.label, href: RAQ_LINK.href },
@@ -82,7 +82,7 @@ export default function QuoteSection({
       if (!root) return;
 
       const copy = gsap.utils.toArray<HTMLElement>("[data-quote-copy]", root);
-      const drawing = root.querySelector<SVGSVGElement>("[data-quote-drawing] svg");
+      const drawing = root.querySelector<SVGSVGElement>("[data-quote-drawing] .quote-mark");
       const ctas = gsap.utils.toArray<HTMLElement>(
         ".quote-cta-primary, .quote-cta-secondary",
         root,
@@ -113,7 +113,6 @@ export default function QuoteSection({
           const draws = drawing.querySelectorAll("[data-mark-draw]");
           const labels = drawing.querySelectorAll("[data-mark-label]");
           const hatchEl = drawing.querySelector("[data-mark-hatch]");
-          const field = drawing.querySelector("[data-mark-field]");
           const guides = drawing.querySelectorAll("[data-mark-guide]");
           const statics = drawing.querySelectorAll("[data-mark-static]");
 
@@ -124,7 +123,6 @@ export default function QuoteSection({
               toggleActions: "play none play reverse",
             },
           });
-          tl.fromTo(field, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.6 });
           tl.fromTo(
             statics,
             { autoAlpha: 0 },
@@ -274,7 +272,8 @@ export default function QuoteSection({
             id="quote-heading"
             className="font-heading text-[clamp(40px,5.2vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
           >
-            {copy.heading}
+            {copy.heading[0]}
+            <span className="ab-statement-muted">{copy.heading[1]}</span>
           </MaskRevealHeading>
         </div>
         <p
@@ -287,8 +286,12 @@ export default function QuoteSection({
 
       {/* Technical drawing */}
       <div className="relative md:contents">
-        <div data-quote-drawing className="quote-drawing">
-          <MarkDrawing />
+        <div data-quote-drawing className="quote-drawing dot-field-mark">
+          <PlusMark tone="page" className="plus-at-tl" />
+          <PlusMark tone="page" className="plus-at-tr" />
+          <PlusMark tone="page" className="plus-at-bl" />
+          <PlusMark tone="page" className="plus-at-br" />
+          <MarkDrawing className="quote-mark" />
         </div>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />

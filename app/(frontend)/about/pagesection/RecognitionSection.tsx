@@ -63,7 +63,7 @@ export default function RecognitionSection() {
           className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
         >
           {RECOGNITION.heading[0]}
-          <span className="block">{RECOGNITION.heading[1]}</span>
+          <span className="ab-statement-muted">{RECOGNITION.heading[1]}</span>
         </MaskRevealHeading>
       </Cell>
 

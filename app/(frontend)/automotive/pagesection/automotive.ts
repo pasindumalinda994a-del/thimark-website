@@ -14,8 +14,8 @@ export const HERO: HeroCopy = {
   eyebrow: "Automotive Components \u00b7 OEM Manufacturing",
   heading: ["Precision Components.", "Built for Production."],
   intro:
-    "At Thimark, we manufacture precision-engineered motorcycle components designed to meet the demands of modern vehicle assembly. From stands and brackets to guards, handlebars and carriers, our components combine practical engineering, consistent manufacturing and dependable quality.",
-  body: "Working with Sri Lankan motorcycle manufacturers and assembly partners, we turn engineering requirements into production-ready components that support local manufacturing and value addition.",
+    "We manufacture precision-engineered motorcycle components for modern vehicle assembly \u2014 stands, brackets, guards, handlebars and carriers, built with practical engineering and dependable quality.",
+  body: "With Sri Lankan manufacturers and assembly partners, we turn engineering requirements into production-ready components that support local value addition.",
   supporting: ["Practical Engineering.", "Consistent Manufacturing.", "Dependable Quality."],
   cta: { label: "Enquire About Automotive Components", href: "/enquire" },
   image: {
@@ -37,7 +37,7 @@ export const RANGE = {
   headMeta: "OEM \u00b7 Assembly",
   paragraphs: [
     "At Thimark, we manufacture a range of metallic components designed to meet specific vehicle requirements and support reliable production.",
-    "Our capabilities cover a wide range of motorcycle parts, from structural supports and protective guards to mounting brackets and functional accessories. Each component is manufactured with attention to its design, dimensions, forming requirements and assembly application.",
+    "Our range covers structural supports, protective guards, mounting brackets and functional accessories, each made to its design, dimensions and assembly application.",
   ],
   media: {
     src: "/home-images/two-core-automotive.png",
@@ -46,7 +46,7 @@ export const RANGE = {
   } satisfies Media,
   rangeLabel: "Our Component Range",
   closing:
-    "From individual parts to coordinated component ranges, our focus remains on manufacturing components that fit their intended application and support the needs of vehicle assembly.",
+    "From individual parts to coordinated ranges, we manufacture components that fit their application and support vehicle assembly.",
   cta: { label: "Explore Our Production Process", href: "#process" } satisfies Link,
 } as const;
 
@@ -100,7 +100,7 @@ export const OEM = {
   eyebrow: "Working with Industry",
   heading: ["Built Around OEM Requirements.", "Driven by Manufacturing Reliability."],
   intro:
-    "Successful OEM manufacturing depends on more than producing a component. It requires an understanding of design specifications, material requirements, production processes, dimensional consistency and the needs of the final assembly.",
+    "OEM manufacturing means understanding design specifications, materials, production processes, dimensional consistency and the needs of final assembly.",
   band: {
     label: "Our Approach",
     callout: ["Local Vehicle Assembly", "Sri Lanka"],
@@ -154,7 +154,7 @@ export const PROCESS = {
   eyebrow: "From Material to Component",
   heading: ["Precision at Every Stage", "of Production."],
   lede: [
-    "A dependable component begins with the right process. At Thimark, manufacturing combines cutting, forming, machining and joining operations to transform raw material into components ready for their intended application.",
+    "A dependable component begins with the right process \u2014 cutting, forming, machining and joining, from raw material to a part ready for its application.",
     "Each stage contributes to the accuracy, consistency and functionality required for automotive assembly.",
   ],
   readoutLabel: "Stage",
@@ -179,7 +179,7 @@ export const STAGES: readonly Stage[] = [
     id: "cutting",
     label: "Cutting",
     title: "Laser & Profile Cutting",
-    body: "The manufacturing process begins by cutting sheet metal, tubes and profiles to the required shapes and dimensions. Accurate cutting establishes the foundation for subsequent forming and assembly operations.",
+    body: "Sheet metal, tubes and profiles are cut to the required shapes and dimensions, setting the foundation for forming and assembly.",
     operations: ["Sheet metal", "Tubes", "Profiles"],
     icon: "precision",
     media: {
@@ -218,7 +218,7 @@ export const STAGES: readonly Stage[] = [
     id: "joining",
     label: "Joining",
     title: "Joining & Sub-Assembly",
-    body: "Welding and suitable joining processes bring individual parts together to create functional components and sub-assemblies. Depending on the application, this can include robotic or resistance spot welding.",
+    body: "Welding and suitable joining processes create functional components and sub-assemblies, including robotic and resistance spot welding where needed.",
     operations: ["Welding", "Robotic welding", "Resistance spot welding"],
     icon: "work",
     media: {
@@ -236,7 +236,7 @@ export const CAPABILITIES_COPY: CapabilitiesCopy = {
   heading: ["The Capability to Make It.", "The Discipline to Make It Consistently."],
   lede: [
     "Reliable automotive manufacturing requires the right combination of engineering knowledge, production equipment, skilled people and repeatable processes.",
-    "Thimark brings these elements together to manufacture metallic motorcycle components for OEM and assembly applications, from material processing through forming, machining, welding and sub-assembly.",
+    "We bring them together for OEM and assembly, from material through forming, machining and welding.",
   ],
 };
 
@@ -245,42 +245,42 @@ export const CAPABILITIES: readonly Capability[] = [
     id: "precision",
     tag: "Precision",
     title: "Precision Manufacturing",
-    body: "Laser and profile cutting, CNC and NC press-brake operations, pipe bending, stamping and machining support the production of components with defined shapes and dimensions.",
+    body: "Laser cutting, press-brake forming, pipe bending and machining for defined shapes.",
     icon: "precision",
   },
   {
     id: "welding",
     tag: "Welding",
     title: "Welding & Component Assembly",
-    body: "Welding, robotic welding and resistance spot welding support the joining of metallic parts and the manufacture of functional sub-assemblies.",
+    body: "Robotic and spot welding for functional parts and sub-assemblies.",
     icon: "work",
   },
   {
     id: "engineering",
     tag: "Engineering",
     title: "Engineering-Led Production",
-    body: "Engineering and design capabilities help translate component requirements into practical manufacturing solutions, supporting manufacturability and production efficiency.",
+    body: "Design that turns requirements into manufacturable production solutions.",
     icon: "schema",
   },
   {
     id: "oem",
     tag: "OEM",
     title: "OEM-Focused Manufacturing",
-    body: "Our experience with motorcycle component production supports collaboration with local manufacturers and assembly partners, with attention to application-specific specifications and production needs.",
+    body: "Motorcycle components built with local manufacturers and assembly partners.",
     icon: "car",
   },
   {
     id: "improvement",
     tag: "Improvement",
     title: "Continuous Manufacturing Improvement",
-    body: "Visual management, standardized work sheets, Kanban, 5S, Kaizen and structured problem-solving methods support organized production and ongoing process improvement.",
+    body: "Kanban, 5S and Kaizen for organized, improving production.",
     icon: "expand",
   },
   {
     id: "local",
     tag: "Local Value",
     title: "Supporting Local Value Addition",
-    body: "By manufacturing automotive metallic components locally, Thimark contributes to Sri Lanka\u2019s industrial capability and the development of a stronger domestic automotive supply chain.",
+    body: "Metallic components made locally for Sri Lanka\u2019s supply chain.",
     icon: "factory",
   },
 ];

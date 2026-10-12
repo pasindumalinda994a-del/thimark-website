@@ -20,7 +20,7 @@ export const HERO: HeroCopy = {
   heading: ["Custom Machinery.", "Engineered for Real-World Challenges."],
   intro:
     "Complex industrial challenges demand more than standard equipment. They require practical engineering, dependable manufacturing, and machinery designed around the realities of the application.",
-  body: "At Thimark, we engineer and manufacture custom machinery and industrial systems for demanding applications across water and hydropower infrastructure, industrial processing, and material handling. From heavy steel structures to specialized mechanical systems, we combine engineering knowledge with manufacturing capability to turn operational requirements into practical solutions.",
+  body: "We engineer and manufacture custom machinery and industrial systems for water and hydropower, industrial processing and material handling \u2014 from heavy steel structures to specialized mechanical systems.",
   supporting: [
     "Engineered around the challenge.",
     "Built for the application.",
@@ -42,7 +42,7 @@ export const PORTFOLIO = {
   index: "01",
   eyebrow: "Solutions for Industry & Infrastructure",
   heading: ["Engineered Solutions for", "Demanding Industrial Applications."] as const,
-  lede: "Every industrial operation has its own challenges. Whether managing debris in a hydropower facility, controlling industrial dust, or moving materials through a processing system, the right equipment can make a meaningful difference.",
+  lede: "Whether managing debris at a hydropower intake, controlling industrial dust, or moving materials through a process, the right equipment makes a meaningful difference.",
   headLabel: "Industrial Machinery Portfolio",
   headMeta: "Infrastructure \u00b7 Industry",
   paragraphs: [
@@ -106,7 +106,7 @@ export const BANDS: readonly PortfolioBand[] = [
       },
     ],
     closing:
-      "Each project can require different mechanical arrangements, dimensions, operating conditions, and integration requirements. Our approach begins with understanding the application and engineering a solution around its needs.",
+      "Each project differs in arrangement, dimensions and integration, so we start with the application and engineer around its needs.",
     imageSide: "right",
     media: {
       src: "/home-images/featured-kilgharrah.png",
@@ -121,7 +121,7 @@ export const BANDS: readonly PortfolioBand[] = [
     title: "Industrial Processing & Material Handling",
     subtitle: "Practical machinery for specialized industrial processes.",
     intro:
-      "Industrial environments often require equipment that is tailored to the material being handled, the available space, and the wider production process. Thimark\u2019s industrial machinery capabilities cover a range of custom-fabricated equipment and systems, including:",
+      "Equipment tailored to the material, the available space and the wider production process.",
     items: [
       {
         name: "Pneumatic Conveying Systems",
@@ -178,7 +178,7 @@ export const STAGES: readonly Stage[] = [
     id: "scanning",
     label: "Scanning",
     title: "Reverse Engineering & 3D Scanning",
-    body: "Where existing equipment, physical samples, or reference components are available, reverse engineering and 3D scanning can help capture geometry and establish a useful digital starting point for design and development.",
+    body: "Where existing equipment or samples are available, reverse engineering and 3D scanning capture geometry as a digital starting point for design.",
     operations: ["Geometry", "Physical samples", "Digital starting point"],
     icon: "schema",
     media: {
@@ -204,7 +204,7 @@ export const STAGES: readonly Stage[] = [
     id: "fabrication",
     label: "Fabrication",
     title: "Fabrication & Manufacturing",
-    body: "Cutting, forming, machining, welding, and heavy steel fabrication bring the engineered design into physical form. Manufacturing methods are selected according to the project\u2019s materials, dimensions, and specifications.",
+    body: "Cutting, forming, machining, welding and heavy steel fabrication bring the design into physical form, matched to the project\u2019s materials and specifications.",
     operations: ["Cutting", "Forming", "Welding"],
     icon: "work",
     media: {
@@ -217,7 +217,7 @@ export const STAGES: readonly Stage[] = [
     id: "controls",
     label: "Controls",
     title: "Automation & Controls",
-    body: "Where required by the project, automation and control systems can support machinery operation and integration with the wider process. Hydraulic systems and PLC-based controls are defined according to the specific equipment design and control requirements.",
+    body: "Where the project requires it, automation, hydraulic systems and PLC controls support operation and integration with the wider process.",
     operations: ["Hydraulic systems", "PLC controls", "Integration"],
     icon: "electrical",
     media: {
@@ -230,7 +230,7 @@ export const STAGES: readonly Stage[] = [
     id: "commissioning",
     label: "Commissioning",
     title: "Finishing & Commissioning",
-    body: "Finishing and final preparation help ready equipment for its intended environment. Where included in the project scope, installation, commissioning, and operational checks support the transition from manufactured machinery to an operating solution.",
+    body: "Finishing readies equipment for its environment. Where in scope, installation, commissioning and operational checks take it into service.",
     operations: ["Finishing", "Installation", "Commissioning"],
     icon: "verified",
     media: {
@@ -247,11 +247,11 @@ export const FEATURED = {
   index: "03",
   eyebrow: "Featured Engineering Project",
   heading: ["Engineering a Better Approach", "to Trash Rack Cleaning."] as const,
-  lede: "Hydropower facilities depend on effective water intake systems. Debris accumulating on trash racks can interfere with water flow and create additional operational demands, making effective rack cleaning an important part of intake management.",
+  lede: "Hydropower facilities depend on clear water intakes. Debris on trash racks can restrict flow, so effective rack cleaning is part of intake management.",
   storyLabel: "KILGARRAH 600 \u00b7 KenGen",
   paragraphs: [
-    "To address this type of challenge, Thimark designed and manufactured the KILGARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), in a documented project partnership with Varomatech Ltd, Kenya.",
-    "The KILGARRAH 600 was developed as a hydraulic machine for cleaning trash racks at a hydropower facility. Designed around the site rather than taken from standard equipment, it helps remove accumulated debris and supports the operation of the water intake.",
+    "Thimark designed and manufactured the KILGARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), with Varomatech Ltd, Kenya.",
+    "Developed for a hydropower facility and designed around the site, it removes accumulated debris and supports water-intake operation.",
   ],
   media: {
     src: KILGARRAH_PHOTO,
@@ -282,54 +282,53 @@ export const CAPABILITIES_COPY: CapabilitiesCopy = {
   heading: ["The Engineering Behind", "Every Solution."],
   lede: [
     "Reliable industrial machinery depends on the relationship between design, materials, manufacturing processes, and the demands of the operating environment.",
-    "Thimark brings together engineering and manufacturing capabilities to support custom machinery, heavy steel fabrication, and specialized industrial equipment. By considering the application and manufacturing requirements together, we work to turn complex project needs into practical engineered solutions.",
+    "Engineering and manufacturing together, for custom machinery, heavy fabrication and specialized equipment.",
   ],
 };
 
-export const CAPABILITIES_CLOSING =
-  "By combining these capabilities, Thimark supports projects that require more than off-the-shelf equipment: machinery developed around specific industrial requirements, practical manufacturing constraints, and the intended application.";
+export const CLOSING_PHRASES = ["Engineering.", "Fabrication.", "The Application."] as const;
 
 export const CAPABILITIES: readonly Capability[] = [
   {
     id: "fabrication",
     tag: "Fabrication",
     title: "Heavy Steel Fabrication",
-    body: "Fabrication capabilities support the manufacture of steel structures, frames, tanks, and machinery assemblies designed around project specifications.",
+    body: "Steel structures, frames, tanks and assemblies built to the project.",
     icon: "work",
   },
   {
     id: "precision",
     tag: "Precision",
     title: "Precision Manufacturing & CNC Processes",
-    body: "Laser cutting, CNC and NC press-brake operations, machining, drilling, and finishing processes support the accurate manufacture of parts and assemblies.",
+    body: "Laser cutting, press-brake work and machining for accurate parts.",
     icon: "precision",
   },
   {
     id: "welding",
     tag: "Welding",
     title: "Welding & Structural Assembly",
-    body: "Welding and suitable joining methods support the production of fabricated structures, mechanical assemblies, and custom machinery components.",
+    body: "Welding and joining for structures and custom components.",
     icon: "factory",
   },
   {
     id: "hydraulic",
     tag: "Systems",
     title: "Mechanical & Hydraulic Systems",
-    body: "Machinery projects can incorporate mechanical and hydraulic arrangements suited to the intended operation. The configuration and performance requirements are defined for each project.",
+    body: "Mechanical and hydraulic systems defined for each operation.",
     icon: "forklift",
   },
   {
     id: "design",
     tag: "Design",
     title: "Industrial Engineering & Design",
-    body: "CAD modelling, reverse engineering, 3D scanning, and virtual prototyping help establish and evaluate machinery designs before and during manufacturing.",
+    body: "CAD, 3D scanning and reverse engineering for machinery design.",
     icon: "schema",
   },
   {
     id: "automation",
     tag: "Automation",
     title: "Automation & Custom Solutions",
-    body: "Where required, automation and PLC control systems can be incorporated into project designs to support the required machine functions and operating sequence.",
+    body: "PLC controls and automation for the machine sequence.",
     icon: "electrical",
   },
 ];

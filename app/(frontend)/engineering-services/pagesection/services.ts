@@ -18,7 +18,7 @@ export const HERO: HeroCopy = {
   heading: ["From Concept to", "Production-Ready Solutions."],
   intro:
     "Every great product begins with a requirement. Turning that requirement into a manufacturable, reliable solution takes engineering knowledge, practical design, and the right production capabilities.",
-  body: "At Thimark, we bring these elements together through product development, reverse engineering, and surface finishing services. Whether you are developing something new, recreating an existing component, or looking for the right finish, we help bridge the gap between engineering intent and manufacturing reality.",
+  body: "Through product development, reverse engineering and surface finishing, we help turn a new idea, an existing component or a required finish into something ready to manufacture.",
   supporting: [
     "Engineering expertise.",
     "Practical solutions.",
@@ -42,12 +42,12 @@ export const NPD: ProcessCopy = {
   heading: ["Turning Ideas into Products", "Built for the Real World."],
   lede: [
     "A promising idea becomes a successful product when it can be designed, manufactured, tested, and produced consistently.",
-    "Our New Product Development capabilities help transform concepts and requirements into practical engineering solutions. By considering design intent, manufacturability, performance, and production needs throughout the development journey, we work to ensure that ideas are not only technically considered but also ready for manufacturing.",
+    "New Product Development turns concepts into practical solutions, keeping design intent, manufacturability, performance and production in view so ideas are ready to make.",
   ],
   readoutLabel: "Step",
   tabsLabel: "Our development journey",
   statement:
-    "From the first concept to the first inspected component, our focus is on helping customers develop solutions that are practical to manufacture and aligned with their requirements.",
+    "From first concept to first inspected component, we help develop solutions that are practical to manufacture and aligned with the requirement.",
 };
 
 export const NPD_CTA: Link = {
@@ -74,7 +74,7 @@ export const NPD_STEPS: readonly Stage[] = [
     id: "modelling",
     label: "3D Modelling",
     title: "3D Modelling",
-    body: "Translate concepts and specifications into detailed three-dimensional models that help visualize product geometry, dimensions, and component relationships.",
+    body: "Translate concepts and specifications into three-dimensional models of geometry, dimensions and component relationships.",
     operations: ["Geometry", "Dimensions", "Component relationships"],
     icon: "schema",
     media: {
@@ -87,7 +87,7 @@ export const NPD_STEPS: readonly Stage[] = [
     id: "dfma",
     label: "DFMA",
     title: "Design for Manufacturing and Assembly",
-    body: "Evaluate designs with manufacturing and assembly in mind, identifying opportunities to simplify production, improve practicality, and support efficient assembly.",
+    body: "Evaluate designs for manufacturing and assembly, to simplify production and support efficient assembly.",
     operations: ["Manufacturability", "Assembly", "Simplification"],
     icon: "factory",
     media: {
@@ -100,7 +100,7 @@ export const NPD_STEPS: readonly Stage[] = [
     id: "simulation",
     label: "Simulation",
     title: "Simulation",
-    body: "Use engineering simulation and virtual evaluation, where applicable, to assess design behaviour and identify potential issues before physical production.",
+    body: "Use simulation, where applicable, to assess design behaviour and find issues before physical production.",
     operations: ["Virtual evaluation", "Design behaviour", "Issue detection"],
     icon: "electrical",
     media: {
@@ -139,7 +139,7 @@ export const NPD_STEPS: readonly Stage[] = [
     id: "inspection",
     label: "FAI",
     title: "First Article Inspection",
-    body: "Inspect the initial manufactured component against the applicable specifications to evaluate conformity before proceeding to further production stages.",
+    body: "Inspect the first manufactured component against specifications before further production.",
     operations: ["Specifications", "Conformity", "Production release"],
     icon: "verified",
     media: {
@@ -156,11 +156,11 @@ export const REVERSE = {
   index: "02",
   eyebrow: "Understand. Recreate. Improve.",
   heading: ["Bringing Existing Components", "Back into Focus."],
-  lede: "Sometimes the solution already exists in physical form. It may be an existing component that needs to be recreated, a part without complete technical drawings, or a design that needs to be better understood before further development.",
+  lede: "Sometimes the solution already exists \u2014 a component to recreate, a part without complete drawings, or a design to understand before further development.",
   storyLabel: "From Existing Part to New Possibilities",
   storyMeta: "Physical \u2192 Digital",
   paragraphs: [
-    "Thimark\u2019s reverse engineering capabilities help transform physical components and existing designs into usable engineering information. Through 3D scanning, digital modelling, simulation, and design evaluation, we help customers move from a physical reference to a digital foundation for manufacturing or improvement.",
+    "Reverse engineering turns physical components into usable engineering information, through 3D scanning, digital modelling, simulation and design evaluation.",
     "Reverse engineering can help establish a digital reference for legacy components, support the recreation of parts, and provide a starting point for design improvements.",
   ],
   media: {
@@ -207,7 +207,7 @@ export const REVERSE_CAPABILITIES: readonly {
   {
     id: "optimization",
     title: "Design Optimization",
-    body: "Explore opportunities to improve component geometry, manufacturability, or functional design while considering the original application and requirements.",
+    body: "Explore ways to improve geometry, manufacturability or function while keeping the original application in view.",
     icon: "work",
   },
 ];
@@ -220,7 +220,7 @@ export const FINISHING = {
   heading: ["The Right Finish.", "Applied with Purpose."],
   lede: [
     "Surface finishing plays an important role in a component\u2019s appearance, surface condition, and suitability for its intended application.",
-    "Through our surface finishing offering associated with the Ekala facility, Thimark provides a range of finishing processes for metallic components. From powder coating to specialist electroplating, the available processes support different finishing requirements based on the component, its application, and the specified finish.",
+    "Through the Ekala facility, we finish metallic components \u2014 from powder coating to specialist electroplating \u2014 matched to the part, its application and the specified finish.",
   ],
   servicesLabel: "Our Finishing Services",
   processLabel: "Process & Environment",
@@ -250,7 +250,7 @@ export const FINISHES: readonly Finish[] = [
       alt: "Black coated steel rear plate with a textured, uniform finish",
       objectPosition: "50% 50%",
     },
-    lead: "A coating solution for metallic components where a durable, uniform finish and the desired appearance are important considerations.",
+    lead: "A durable, uniform coating for metallic components where appearance and finish matter.",
   },
   {
     id: "e-coating",
@@ -262,7 +262,7 @@ export const FINISHES: readonly Finish[] = [
       alt: "Welded steel battery bracket with an even black coating",
       objectPosition: "50% 50%",
     },
-    lead: "An electrodeposition coating process used to apply a coating to suitable components, according to the required application and process specifications.",
+    lead: "An electrodeposition process that coats suitable components to the required specification.",
   },
   {
     id: "black-zinc",
@@ -274,7 +274,7 @@ export const FINISHES: readonly Finish[] = [
       alt: "Formed steel pillion bracket with a black finish",
       objectPosition: "50% 50%",
     },
-    lead: "An electroplated finish that provides a black appearance and can be specified for components requiring a particular surface finish and corrosion-protection performance.",
+    lead: "An electroplated black finish, specified where appearance and corrosion protection are required.",
   },
   {
     id: "hard-chromium",
@@ -286,7 +286,7 @@ export const FINISHES: readonly Finish[] = [
       alt: "Machined pillion bar component with a finished surface",
       objectPosition: "50% 50%",
     },
-    lead: "A chromium electroplating process used for applications where the specified surface properties and functional requirements call for a hard chromium finish.",
+    lead: "A chromium finish for applications that call for specified surface properties and a hard chromium surface.",
   },
 ];
 
@@ -295,7 +295,7 @@ export const PRETREATMENT = {
   stages: 11,
   stagesLabel: "Stage Dip Pre-Treatment",
   paragraphs: [
-    "A finishing result begins before the coating or plating is applied. The documented Ekala facility configuration includes an 11-stage dip pre-treatment system, designed to prepare components for subsequent finishing operations.",
+    "A finish begins before coating or plating. The Ekala facility includes an 11-stage dip pre-treatment system that prepares components for finishing.",
     "Appropriate pre-treatment and process control are important to supporting coating adhesion, surface consistency, and the performance requirements defined for each application.",
   ],
 } as const;
@@ -321,8 +321,8 @@ export const ENGINEERING: QualityCopy = {
   lede: "Engineering is most valuable when design decisions are connected to real manufacturing requirements.",
   headLabel: "Design to Production",
   paragraphs: [
-    "At Thimark, engineering services are supported by manufacturing knowledge and a practical understanding of how components are developed, prepared, and produced. This connection helps us consider manufacturability early, evaluate design options, and support a more informed transition from engineering development to production.",
-    "By bringing engineering, manufacturing, and quality considerations together, Thimark helps customers approach product development and component requirements with a clearer path from concept to production.",
+    "Our engineering services draw on manufacturing knowledge \u2014 how components are developed, prepared and produced \u2014 so manufacturability is considered early and the path to production is clearer.",
+    "Engineering, manufacturing and quality together give customers a clearer path from concept to production.",
   ],
   media: {
     src: "/home-images/two-core-machinery.jpeg",
@@ -337,7 +337,7 @@ export const CAPABILITIES_COPY: CapabilitiesCopy = {
   heading: ["Six Capabilities.", "One Path to Production."],
   lede: [
     "Our documented quality framework is based on ISO 9001:2015.",
-    "The objective is to identify requirements early, assess conformity at appropriate stages, and support consistent results throughout the manufacturing process.",
+    "Identify requirements early, check conformity at each stage, and keep results consistent.",
   ],
 };
 
@@ -346,42 +346,42 @@ export const CAPABILITIES: readonly Capability[] = [
     id: "engineering",
     tag: "Engineering",
     title: "Engineering & Design",
-    body: "3D modelling, parametric design, engineering documentation, and Design for Manufacturing and Assembly help translate requirements into practical component designs.",
+    body: "3D modelling and design for manufacture, into practical designs.",
     icon: "schema",
   },
   {
     id: "simulation",
     tag: "Simulation",
     title: "Simulation & Design Evaluation",
-    body: "Virtual prototyping, kinematic simulation, and appropriate engineering analysis help evaluate designs and explore potential improvements before committing to physical production.",
+    body: "Virtual prototyping and analysis before physical production.",
     icon: "electrical",
   },
   {
     id: "tooling",
     tag: "Tooling",
     title: "Tooling & Prototyping",
-    body: "Tooling, jig and fixture design, and prototyping support the evaluation of component fit, assembly, and manufacturing feasibility.",
+    body: "Jigs, fixtures and prototypes to prove fit and assembly.",
     icon: "work",
   },
   {
     id: "digitization",
     tag: "Digitization",
     title: "Reverse Engineering & Digitization",
-    body: "3D scanning and point-cloud-to-CAD workflows help convert physical references into digital engineering models for further evaluation and development.",
+    body: "3D scanning and point-cloud-to-CAD for digital models.",
     icon: "expand",
   },
   {
     id: "finishing",
     tag: "Finishing",
     title: "Surface Finishing Capabilities",
-    body: "A range of coating and electroplating processes supports finishing requirements for metallic components, subject to the applicable process specifications and facility capabilities.",
+    body: "Coating and electroplating for metallic components.",
     icon: "factory",
   },
   {
     id: "quality",
     tag: "Quality",
     title: "Quality Assurance & Inspection",
-    body: "Material verification, review of material certificates, inspection using calibrated instruments, and first-article and final inspections as applicable.",
+    body: "Material certificates, calibrated instruments, and first-article and final inspection.",
     icon: "verified",
   },
 ];

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Copy from "@/app/(frontend)/components/Copy";
+import PhraseBar from "@/app/(frontend)/components/PhraseBar";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
 import CapabilitiesSection from "@/app/(frontend)/homesections/CapabilitiesSection";
 import AboutHero from "@/app/(frontend)/about/pagesection/AboutHero";
@@ -10,8 +10,8 @@ import FeaturedSection from "./pagesection/FeaturedSection";
 import PortfolioSection from "./pagesection/PortfolioSection";
 import {
   CAPABILITIES,
-  CAPABILITIES_CLOSING,
   CAPABILITIES_COPY,
+  CLOSING_PHRASES,
   HERO,
   PROCESS,
   STAGES,
@@ -50,7 +50,7 @@ export default function IndustrialMachineryPage() {
           items={CAPABILITIES}
           copy={CAPABILITIES_COPY}
           progressLabel="Capabilities"
-          foot={<Copy variant="title" size="sm" className="ps-statement im-caps-close">{CAPABILITIES_CLOSING}</Copy>}
+          foot={<PhraseBar phrases={CLOSING_PHRASES} />}
           cta={null}
           aside={<QualityCred {...QUALITY.cred} />}
         />

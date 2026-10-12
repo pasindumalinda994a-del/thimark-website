@@ -11,7 +11,7 @@ export const HERO = {
   eyebrow: "About Thimark",
   heading: ["Engineering Excellence.", "Delivering Trust."],
   intro:
-    "Thimark Technocreations (Pvt) Ltd is a Sri Lankan engineering and manufacturing company built on precision, innovation and a commitment to quality. From automotive components to custom industrial machinery, we combine practical engineering expertise with advanced manufacturing capabilities to create dependable solutions for real-world challenges.",
+    "Thimark Technocreations (Pvt) Ltd is a Sri Lankan engineering and manufacturing company built on precision, innovation and quality. From automotive components to custom industrial machinery, we turn practical engineering into dependable solutions.",
   supporting: ["Proudly Sri Lankan.", "Driven by Engineering.", "Built on Trust."],
   cta: { label: "Discover Our Story", href: "#story" } satisfies Link,
   image: {
@@ -32,8 +32,8 @@ export const STORY = {
   storyLabel: "Our Story",
   since: "Since 2014",
   paragraphs: [
-    "Over the years, Thimark has expanded its capabilities, invested in technology and developed the expertise to transform engineering concepts, technical drawings and physical samples into precision-engineered components and custom-built machinery.",
-    "Today, our work spans OEM motorcycle components, heavy steel fabrication, industrial machinery, engineering development and surface finishing \u2014 bringing multiple capabilities together to solve complex manufacturing challenges.",
+    "Over the years, Thimark has expanded its capabilities and invested in technology, turning engineering concepts, technical drawings and physical samples into precision components and custom-built machinery.",
+    "Today our work spans OEM motorcycle components, heavy steel fabrication, industrial machinery, engineering development and surface finishing, brought together to solve complex manufacturing challenges.",
   ],
   media: {
     src: "/home-images/about-workshop.png",
@@ -71,12 +71,12 @@ const JOURNEY_COPY_BY_ID: Record<
   foundation: {
     label: "Founded",
     title: "From the Ground Up",
-    body: "Thimark began as a backyard steel fabrication business, laying the foundation for a journey shaped by hard work, practical engineering and a commitment to building lasting capability.",
+    body: "Thimark began as a backyard steel fabrication business, built on hard work, practical engineering and a commitment to lasting capability.",
   },
   iso: {
     label: "ISO 9001",
     title: "A New Standard of Quality",
-    body: "Relocating to a newly built factory and achieving ISO 9001:2015 certification marked an important step forward, strengthening our quality management practices and commitment to consistent manufacturing standards.",
+    body: "Relocating to a new factory and achieving ISO 9001:2015 strengthened our quality management and commitment to consistent manufacturing standards.",
   },
   cida: {
     label: "CIDA EM2",
@@ -91,12 +91,12 @@ const JOURNEY_COPY_BY_ID: Record<
   kengen: {
     label: "KenGen",
     title: "Engineering Beyond Borders",
-    body: "We designed and manufactured the Kilgharrah 600 automated trash rack cleaning machine for Kenya Electricity Generating Company (KenGen), demonstrating our ability to develop specialized engineering solutions for international infrastructure projects.",
+    body: "We designed and manufactured the Kilgharrah 600 automated trash rack cleaning machine for Kenya Electricity Generating Company (KenGen), an international infrastructure project.",
   },
   expansion: {
     label: "Expansion",
     title: "Building for the Future",
-    body: "Our factory expanded to 15,000 sq. ft., supported by machinery upgrades and the introduction of Lean Manufacturing Practices to strengthen production capability, efficiency and future growth.",
+    body: "Our factory expanded to 15,000 sq. ft., with machinery upgrades and Lean Manufacturing Practices to strengthen production, efficiency and future growth.",
   },
   finishing: {
     label: "Surface Finishing",
@@ -119,7 +119,7 @@ export const DRIVES = {
   eyebrow: "What Drives Us",
   heading: ["Engineering a Stronger", "Industrial Future."],
   intro:
-    "We believe engineering is about more than manufacturing products. It is about developing local capability, solving practical challenges and creating lasting value through technology, skilled people and responsible business practices.",
+    "Engineering is about more than manufacturing. It is about developing local capability, solving practical challenges and creating lasting value through technology, skilled people and responsible practice.",
   bands: [
     {
       id: "vision",
@@ -146,8 +146,8 @@ export const DRIVES = {
       },
       lead: "To advance Sri Lanka\u2019s industrial and automotive capability through precision engineering, innovation and professionalism.",
       paragraphs: [
-        "We specialize in designing and manufacturing high-quality two-wheeler components that support local motorcycle manufacturers, while also developing commercial vehicles and machinery to serve the needs of Sri Lanka\u2019s industries and infrastructure.",
-        "Guided by integrity, technology and ethical business practices, we strive to enhance local value addition, empower Sri Lankan engineering talent and build dependable, purpose-driven vehicles and machinery proudly made in Sri Lanka.",
+        "We design and manufacture high-quality two-wheeler components for local motorcycle manufacturers, and develop commercial vehicles and machinery for Sri Lanka\u2019s industries and infrastructure.",
+        "Guided by integrity, technology and ethical practice, we enhance local value addition, empower Sri Lankan engineering talent and build dependable vehicles and machinery made in Sri Lanka.",
       ],
     },
   ] as const,
@@ -163,31 +163,31 @@ export const PRINCIPLES: readonly {
   {
     id: "quality",
     title: "Quality Without Compromise",
-    body: "We focus on precision, controlled processes and consistent manufacturing standards to deliver products our customers can depend on.",
+    body: "Precision, controlled processes and consistent standards, so customers can depend on what we deliver.",
     icon: "precision",
   },
   {
     id: "innovation",
     title: "Innovation Through Engineering",
-    body: "We combine technical knowledge, practical thinking and emerging technologies to develop solutions for real-world applications.",
+    body: "Technical knowledge, practical thinking and emerging technologies, applied to real-world problems.",
     icon: "schema",
   },
   {
     id: "integrity",
     title: "Integrity in Every Relationship",
-    body: "We believe lasting partnerships are built through honesty, accountability, professionalism and ethical business practices.",
+    body: "Lasting partnerships built through honesty, accountability, professionalism and ethical practice.",
     icon: "verified",
   },
   {
     id: "improvement",
     title: "Continuous Improvement",
-    body: "We challenge ourselves to refine processes, reduce waste and strengthen our capabilities as customer and industry requirements evolve.",
+    body: "We refine processes, reduce waste and strengthen our capabilities as requirements evolve.",
     icon: "expand",
   },
   {
     id: "local",
     title: "Local Capability, Global Ambition",
-    body: "We are committed to strengthening Sri Lankan manufacturing while developing engineering solutions capable of serving demanding industrial applications beyond our borders.",
+    body: "Strengthening Sri Lankan manufacturing, with solutions for demanding applications beyond our borders.",
     icon: "factory",
   },
 ];
@@ -201,7 +201,7 @@ export const QUALITY = {
   lede: "Quality is not simply the final inspection of a finished product. At Thimark, it influences how we plan, engineer, manufacture and improve our work.",
   headLabel: "Our Quality System",
   paragraphs: [
-    "Our ISO 9001:2015-certified quality management system provides a structured foundation for consistent manufacturing. From material verification and production controls to testing and final inspection, we focus on maintaining standards throughout the manufacturing process.",
+    "Our ISO 9001:2015 quality system supports consistent manufacturing, from material verification and production controls through testing and final inspection.",
     "But quality does not stop with meeting requirements. We continually look for ways to work smarter, improve efficiency and deliver greater value to our customers.",
   ],
   media: {
@@ -227,42 +227,42 @@ export const PRACTICES: readonly Capability[] = [
     id: "iso",
     tag: "ISO 9001:2015",
     title: "A Foundation for Quality",
-    body: "Our certified quality management framework supports consistent processes, customer-focused manufacturing and a disciplined approach to meeting specifications.",
+    body: "A certified framework for consistent processes, customer-focused manufacturing and meeting specifications.",
     icon: "verified",
   },
   {
     id: "lean",
     tag: "Lean Manufacturing",
     title: "Creating More Value",
-    body: "We apply Lean Manufacturing principles to identify unnecessary activities, improve workflow, reduce waste and make better use of resources.",
+    body: "Lean principles that cut unnecessary activity, improve workflow and make better use of resources.",
     icon: "forklift",
   },
   {
     id: "5s",
     tag: "5S",
     title: "Building Better Workplaces",
-    body: "Workplace organization, cleanliness and standardized practices help create safer, more organized and efficient working environments.",
+    body: "Organization, cleanliness and standardized practice for safer, more efficient workplaces.",
     icon: "factory",
   },
   {
     id: "standard",
     tag: "Standardized Work",
     title: "Consistency in Every Process",
-    body: "Clear work methods and documented procedures help establish consistent practices, improve repeatability and support dependable production.",
+    body: "Clear methods and documented procedures for repeatable, dependable production.",
     icon: "schema",
   },
   {
     id: "kaizen",
     tag: "Kaizen",
     title: "Progress Through Small Improvements",
-    body: "We believe meaningful progress comes from continually identifying opportunities to improve the way we work, solve problems and develop our capabilities.",
+    body: "Continual small improvements in how we work, solve problems and develop our capabilities.",
     icon: "expand",
   },
   {
     id: "problem-solving",
     tag: "Problem-Solving",
     title: "Learning From Every Challenge",
-    body: "Structured approaches such as Root Cause Analysis, 5 Whys, A3 thinking and PDCA help identify underlying issues, guide corrective action and support ongoing improvement.",
+    body: "Root Cause Analysis, 5 Whys, A3 and PDCA to find causes, guide action and keep improving.",
     icon: "precision",
   },
 ];
@@ -278,7 +278,7 @@ export const RECOGNITION = {
   band: {
     label: "Our Recognitions",
     callout: ["SLTC Research &", "Innovation Awards 2025"],
-    body: "From business performance and industrial manufacturing to research and engineering innovation, these recognitions encourage us to keep raising our standards and exploring what is possible.",
+    body: "From business performance and industrial manufacturing to research and innovation, these recognitions push us to raise our standards.",
     media: {
       src: "/news/awards-01.jpg",
       alt: "Two SLTC Research & Innovation Awards 2025 trophies presented to Thimark Technocreations",
@@ -287,7 +287,7 @@ export const RECOGNITION = {
   },
   closingLabel: "Closing Note",
   closing:
-    "These achievements represent important milestones in our development. Our focus remains on earning trust through the quality of our work, the strength of our engineering and the value we create for our customers.",
+    "These milestones mark our development. Our focus remains on earning trust through the quality of our work, our engineering and the value we create.",
 } as const;
 
 export type Award = {
@@ -353,7 +353,7 @@ export const LEADERSHIP = {
   heading: ["Driven by People.", "Built Through Expertise."],
   intro:
     "Behind every component manufactured, every engineering challenge solved and every project delivered is a team committed to getting the details right.",
-  body: "At Thimark, leadership, engineering knowledge and hands-on manufacturing experience come together to turn customer requirements into practical solutions. We value professionalism, collaboration and continuous learning because strong engineering depends on both capable people and a shared commitment to quality.",
+  body: "Leadership, engineering knowledge and hands-on experience turn customer requirements into practical solutions. We value professionalism, collaboration and continuous learning.",
   teamLabel: "Our Leadership Team",
   leaders: [
     {
@@ -408,7 +408,7 @@ export const PEOPLE = {
   label: "Our People, Our Strength",
   paragraphs: [
     "Our engineers, production teams and skilled manufacturing personnel bring practical knowledge, technical expertise and dedication to every stage of our work.",
-    "From engineering design and fabrication to production, inspection and finishing, we work together to build dependable products and develop solutions that meet the demands of real-world applications.",
+    "From design and fabrication to production, inspection and finishing, we build dependable products for real-world applications.",
   ],
   media: {
     src: "/Gallery Images/ThimarkWorkshop-tlkjrLBgY8PszAucZdS4Cg.jpg",

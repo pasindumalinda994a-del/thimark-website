@@ -1,4 +1,3 @@
-import type { GlyphKind } from "@/app/(frontend)/components/CapabilityGlyph";
 import type { IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
 
 export type StoryItem = {
@@ -6,7 +5,6 @@ export type StoryItem = {
   year: string;
   label: string;
   title: string;
-  glyph: GlyphKind;
   icon: IsoIcon;
   image: string;
   alt: string;
@@ -21,7 +19,6 @@ export const STORY: StoryItem[] = [
     year: "2014",
     label: "Founded",
     title: "From the Ground Up",
-    glyph: "fabrication",
     icon: "factory",
     image: "/home-images/about-steel-fabrication.jpeg",
     alt: "Fabricators welding structural steel in a workshop",
@@ -35,7 +32,6 @@ export const STORY: StoryItem[] = [
     year: "2019",
     label: "ISO 9001",
     title: "A New Standard of Quality",
-    glyph: "precision",
     icon: "verified",
     image: "/home-images/about-iso-precision.jpeg",
     alt: "Engineers inspecting a precision-machined component in a factory",
@@ -48,36 +44,33 @@ export const STORY: StoryItem[] = [
     id: "cida",
     year: "2020",
     label: "CIDA EM2",
-    title: "Heavy Fabrication Capability Recognized",
-    glyph: "engineering",
+    title: "Heavy Fabrication Recognized",
     icon: "work",
     image: "/home-images/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the workshop",
     objectPosition: "50% 42%",
-    body: "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important recognition of its professional and manufacturing capabilities.",
+    body: "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important milestone in its professional and manufacturing capabilities.",
     longBody:
-      "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important recognition of its professional and manufacturing capabilities.",
+      "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important milestone in its professional and manufacturing capabilities.",
   },
   {
     id: "automotive",
-    year: "2021",
+    year: "2022",
     label: "Automotive",
     title: "Entering Automotive Manufacturing",
-    glyph: "oem",
     icon: "car",
     image: "/home-images/about-automotive-manufacturing.jpeg",
     alt: "Engineers assembling motorcycle gearbox components",
     objectPosition: "42% 40%",
-    body: "Thimark expanded into automotive parts manufacturing, beginning a new chapter as an OEM manufacturing partner for local motorcycle assembly programs.",
+    body: "Thimark expanded into automotive parts manufacturing, beginning a new chapter in precision-engineered motorcycle components for local assembly programmes.",
     longBody:
-      "Thimark expanded into automotive parts manufacturing, beginning a new chapter as an OEM manufacturing partner for local motorcycle assembly programs.",
+      "Thimark expanded into automotive parts manufacturing, beginning a new chapter in precision-engineered motorcycle components for local assembly programmes.",
   },
   {
     id: "kengen",
     year: "2024",
     label: "KenGen",
     title: "Engineering Beyond Borders",
-    glyph: "machinery",
     icon: "precision",
     image: "/home-images/about-international-engineering.jpeg",
     alt: "Engineers inspecting a trash-cleaning machine at a hydropower intake",
@@ -91,14 +84,26 @@ export const STORY: StoryItem[] = [
     year: "2025",
     label: "Expansion",
     title: "Building for the Next Chapter",
-    glyph: "automation",
     icon: "expand",
     image: "/home-images/about-industrial-automation.jpeg",
     alt: "Engineers beside upgraded production machinery in a larger factory",
     objectPosition: "38% 45%",
-    body: "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with state-of-the-art systems, strengthening its capacity for advanced manufacturing and future growth.",
+    body: "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with advanced systems, strengthening its capacity for precision manufacturing and future growth.",
     longBody:
-      "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with state-of-the-art systems, strengthening its capacity for advanced manufacturing and future growth.",
+      "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with advanced systems, strengthening its capacity for precision manufacturing and future growth.",
+  },
+  {
+    id: "finishing",
+    year: "2026",
+    label: "Surface Finishing",
+    title: "Expanding Manufacturing Capability",
+    icon: "precision",
+    image: "/home-images/quality-inspection.jpeg",
+    alt: "Engineer inspecting a machined metal component with a digital caliper",
+    objectPosition: "62% 35%",
+    body: "Thimark planned to introduce a powder-coating facility at the Ekala IDB Industrial Zone, extending its manufacturing and finishing capabilities.",
+    longBody:
+      "Thimark planned to introduce a powder-coating facility at the Ekala IDB Industrial Zone, extending its manufacturing and finishing capabilities.",
   },
 ];
 
@@ -164,11 +169,19 @@ export function StationDash() {
   );
 }
 
-export default function StoryProgress({ items = STORY }: { items?: StoryItem[] }) {
+export type StationItem = Pick<StoryItem, "id" | "label" | "year">;
+
+export default function StoryProgress({
+  items = STORY,
+  label = "Company journey",
+}: {
+  items?: readonly StationItem[];
+  label?: string;
+}) {
   return (
     <div
       role="tablist"
-      aria-label="Company journey"
+      aria-label={label}
       className="about-tabs"
     >
       {items.map((item, i) => (

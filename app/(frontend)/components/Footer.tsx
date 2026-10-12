@@ -7,6 +7,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
+import Copy from "@/app/(frontend)/components/Copy";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
@@ -232,15 +233,16 @@ export default function Footer() {
             <p data-footer-item className="eyebrow text-steel">
               {COMPANY.name}
             </p>
-            <p
+            <Copy
               data-footer-item
-              className="footer-statement font-heading text-[clamp(16px,1.25vw,24px)] leading-[1.05] font-medium uppercase text-steel"
+              variant="title"
+              className="footer-statement text-steel"
             >
               {COMPANY.statement}
-            </p>
-            <p data-footer-item className="footer-description">
+            </Copy>
+            <Copy data-footer-item variant="meta" className="footer-description">
               {COMPANY.description}
-            </p>
+            </Copy>
             <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom md:hidden" />
             <PlusMark tone="dark" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
             <PlusMark tone="dark" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />

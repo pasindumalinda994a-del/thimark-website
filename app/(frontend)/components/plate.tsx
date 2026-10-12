@@ -35,11 +35,23 @@ function within(value: number, from: number, to: number) {
   return value >= from && value <= to;
 }
 
+/** [col, row, arms] — a joint that also reaches into a neighbouring block. */
+export type Join = readonly [number, number, PlusArms];
+
 /**
  * Desktop rails for one section. Joints are derived from where the lines
- * meet, so a layout only lists its lines.
+ * meet, so a layout only lists its lines. `joins` adds arms (or whole joints)
+ * where a rail carries on into the next stacked block.
  */
-export function Frame({ h, v }: { h: readonly HLine[]; v: readonly VLine[] }) {
+export function Frame({
+  h,
+  v,
+  joins = [],
+}: {
+  h: readonly HLine[];
+  v: readonly VLine[];
+  joins?: readonly Join[];
+}) {
   const joints = new Map<string, { c: number; r: number; arms: PlusArms }>();
 
   for (const [r, hc0, hc1] of h) {
@@ -58,6 +70,26 @@ export function Frame({ h, v }: { h: readonly HLine[]; v: readonly VLine[] }) {
         },
       });
     }
+  }
+
+  for (const [c, r, extra] of joins) {
+    const key = `${c}:${r}`;
+    const arms: PlusArms = { ...joints.get(key)?.arms };
+    for (const [hr, hc0, hc1] of h) {
+      if (hr !== r || !within(c, hc0, hc1)) continue;
+      arms.left = arms.left || hc0 < c;
+      arms.right = arms.right || hc1 > c;
+    }
+    joints.set(key, {
+      c,
+      r,
+      arms: {
+        up: arms.up || extra.up,
+        down: arms.down || extra.down,
+        left: arms.left || extra.left,
+        right: arms.right || extra.right,
+      },
+    });
   }
 
   const stops = (line: "h" | "v", at: number, from: number, to: number) => {
@@ -128,6 +160,30 @@ export function Frame({ h, v }: { h: readonly HLine[]; v: readonly VLine[] }) {
         />
       ))}
     </>
+  );
+}
+
+/**
+ * A run of grid rows inside a section that grows to fit its content
+ * (`plate-auto`). Cells and Frame lines inside it count rows from its top.
+ */
+export function PlateBlock({
+  rows,
+  className = "",
+  children,
+  ...rest
+}: { rows: number; className?: string; children?: ReactNode } & Omit<
+  HTMLAttributes<HTMLDivElement>,
+  "children" | "className"
+>) {
+  return (
+    <div
+      className={`plate-block ${className}`}
+      style={{ "--block-rows": rows } as CSSProperties}
+      {...rest}
+    >
+      {children}
+    </div>
   );
 }
 

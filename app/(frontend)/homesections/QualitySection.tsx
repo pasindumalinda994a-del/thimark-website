@@ -1,12 +1,14 @@
 "use client";
 
+import Copy from "@/app/(frontend)/components/Copy";
 import { useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { HOME_FIG, figLabel } from "@/app/(frontend)/components/FigMark";
@@ -33,7 +35,7 @@ const PILLARS = [
     image: "/home-images/quality-inspection.jpeg",
     alt: "Engineer inspecting a machined metal component with a digital caliper",
     objectPosition: "62% 35%",
-    body: "Controlled processes and attention to detail at every stage of manufacturing.",
+    body: "Controlled processes and attention to detail throughout manufacturing.",
   },
   {
     id: "lean",
@@ -41,7 +43,7 @@ const PILLARS = [
     image: "/home-images/quality-lean-production.jpeg",
     alt: "Operators working a lean production line with organized workstations",
     objectPosition: "38% 42%",
-    body: "Continuous improvement focused on efficiency, productivity and reducing unnecessary waste.",
+    body: "Improving efficiency, productivity and resource utilization while reducing unnecessary waste.",
   },
   {
     id: "improvement",
@@ -49,7 +51,7 @@ const PILLARS = [
     image: "/home-images/quality-continuous-improvement.jpeg",
     alt: "Engineers reviewing a manufactured housing against production drawings",
     objectPosition: "48% 38%",
-    body: "A culture of learning, process improvement and the adoption of emerging technologies.",
+    body: "Learning, refining processes and adopting technologies that strengthen performance.",
   },
 ] as const;
 
@@ -58,13 +60,13 @@ const CREDS = [
     id: "iso",
     org: "ISO",
     code: "9001:2015",
-    sub: "Certified Quality Management",
+    sub: "Certified Quality Management System",
   },
   {
     id: "cida",
     org: "CIDA",
     code: "EM2",
-    sub: "Heavy Steel Fabrication",
+    sub: "Heavy Steel Fabrication Grade",
   },
 ] as const;
 
@@ -279,29 +281,28 @@ export default function QualitySection() {
           <p data-q-header className="eyebrow">
             Quality by Design
           </p>
-          <MaskRevealHeading
-            id="quality-heading"
-            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
-          >
+          <H2Heading id="quality-heading">
             Precision Is Not a Promise.
             <span className="ab-statement-muted">It&rsquo;s a Process.</span>
-          </MaskRevealHeading>
-          <div
-            data-q-header
-            className="quality-copy font-heading text-[clamp(12px,1vw,16px)] leading-none font-normal uppercase"
-          >
-            <p className="font-medium">
+          </H2Heading>
+          <div data-q-header className="quality-copy">
+            <Copy variant="lede">
               At Thimark, quality is embedded into the way we engineer and
               manufacture.
-            </p>
-            <p>
-              Our ISO 9001:2015 certification, CIDA EM2 accreditation and focus
-              on continuous improvement reflect our commitment to professional
-              standards, controlled production and consistent results.
-            </p>
-            <p className="pt-2 text-[12px] font-medium tracking-[0.12em]">
+            </Copy>
+            <Copy variant="lede" weight="normal">
+              Our ISO 9001:2015 certification and CIDA EM2 Grade in Heavy Steel
+              Fabrication reflect our commitment to professional standards,
+              controlled production and consistent results.
+            </Copy>
+            <Copy variant="lede" weight="normal">
+              Our quality approach includes material verification, in-process
+              controls, testing and final inspection, supported by structured
+              problem-solving and continuous improvement.
+            </Copy>
+            <Copy variant="caption" weight="medium" className="pt-2 tracking-[0.12em]">
               Our approach is guided by a simple principle:
-            </p>
+            </Copy>
           </div>
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -335,15 +336,12 @@ export default function QualitySection() {
                   </svg>
                 </span>
               ) : null}
-              <p
-                data-q-phrase
-                className="font-heading text-[clamp(20px,1.8vw,24px)] leading-none font-medium uppercase"
-              >
+              <Copy data-q-phrase variant="lead">
                 <span aria-hidden className="mr-3 text-[12px] font-medium tracking-[0.12em] align-middle">
                   {padIndex(i)}
                 </span>
                 {phrase}
-              </p>
+              </Copy>
             </div>
           ))}
         </div>
@@ -386,12 +384,10 @@ export default function QualitySection() {
               {padIndex(i)}
             </span>
             <div className="quality-pillar-copy">
-              <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
-                {pillar.title}
-              </h3>
-              <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]">
+              <H3Heading variant="title">{pillar.title}</H3Heading>
+              <Copy variant="caption" className="md:text-justify md:[text-align-last:left]">
                 {pillar.body}
-              </p>
+              </Copy>
             </div>
           </div>
         ))}
@@ -435,7 +431,7 @@ export default function QualitySection() {
             <div data-q-stamp="" className="quality-cred-body">
               <p className="quality-cred-org">{cred.org}</p>
               <div className="quality-cred-copy">
-                <p className="quality-cred-code">{cred.code}</p>
+                <Copy variant="lead" className="quality-cred-code tabular-nums tracking-[0.06em]">{cred.code}</Copy>
                 <p className="quality-cred-sub">{cred.sub}</p>
               </div>
             </div>

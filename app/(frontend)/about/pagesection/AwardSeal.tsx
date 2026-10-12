@@ -22,23 +22,25 @@ function ticksPath() {
 const TICKS = ticksPath();
 
 /**
- * Engineered award seal. Gold carries a solid inner disc, Bronze an open
+ * Engineered award seal. Top honours carry a solid inner disc, others an open
  * dashed one, so rank reads without metallic colour.
  */
 export default function AwardSeal({
-  tier,
+  label,
+  solid,
   ring,
   year,
   className = "",
 }: {
-  tier: "Gold" | "Bronze";
+  label: string;
+  solid: boolean;
   ring: string;
   year: string;
   className?: string;
 }) {
   const id = useId();
   const ringId = `${id}-ring`;
-  const solid = tier === "Gold";
+  const labelSize = label.length > 6 ? 14 : solid ? 26 : 20;
 
   return (
     <svg
@@ -101,8 +103,8 @@ export default function AwardSeal({
         <text x={C} y={C - 18} fontSize="8" letterSpacing="2">
           {year}
         </text>
-        <text x={C} y={C + 8} fontSize={solid ? 26 : 20} letterSpacing="0.5">
-          {tier.toUpperCase()}
+        <text x={C} y={C + 8} fontSize={labelSize} letterSpacing="0.5">
+          {label.toUpperCase()}
         </text>
         <text x={C} y={C + 26} fontSize="7" letterSpacing="2.4">
           AWARD

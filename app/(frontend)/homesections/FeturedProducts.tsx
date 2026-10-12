@@ -4,7 +4,8 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import SolutionsSection from "@/app/(frontend)/homesections/SolutionsSection";
@@ -92,22 +93,16 @@ export default function FeturedProducts() {
           <p data-featured-copy className="eyebrow">
             Engineered for the Real World
           </p>
-          <MaskRevealHeading
-            id="featured-heading"
-            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
-          >
+          <H2Heading id="featured-heading" className="text-left">
             When the Challenge Is Complex,
             <span className="ab-statement-muted">Engineering Has to Be Smarter.</span>
-          </MaskRevealHeading>
+          </H2Heading>
         </div>
-        <p
-          data-featured-copy
-          className="featured-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
-        >
+        <Copy data-featured-copy variant="lede" className="featured-lede">
           Our solutions are developed around the application, the environment
           and the challenge — combining practical engineering with precision
           manufacturing and automation.
-        </p>
+        </Copy>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />

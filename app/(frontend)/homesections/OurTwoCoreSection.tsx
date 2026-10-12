@@ -7,7 +7,9 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import FigMark, { HOME_FIG } from "@/app/(frontend)/components/FigMark";
@@ -27,14 +29,11 @@ const COLUMNS = [
     cta: "Explore Automotive",
     image: "/home-images/two-core-automotive.jpeg",
     alt: "Engineers assembling a motorcycle frame on the production line",
-    body: "We design, fabricate and supply motorcycle components for local assembly lines, with consistent production and dependable quality for leading manufacturers.",
+    body: "We design, fabricate and supply motorcycle components for local assembly lines, supporting established manufacturers with consistent production and dependable quality. Over 30% local value addition.",
     areas: [
-      { index: "01", label: "Manufacturing", href: "/automotive#manufacturing" },
-      {
-        index: "02",
-        label: "Local Value Addition",
-        href: "/automotive#local-value-addition",
-      },
+      { index: "01", label: "Component Range", href: "/automotive#product-range" },
+      { index: "02", label: "OEM Partnerships", href: "/automotive#oem-partnerships" },
+      { index: "03", label: "Manufacturing", href: "/automotive#process" },
     ],
   },
   {
@@ -45,22 +44,22 @@ const COLUMNS = [
     cta: "Explore Services",
     image: "/home-images/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
-    body: "We take a requirement through to a finished part, with new product development, reverse engineering and powder coating for production components.",
+    body: "We take requirements from concept to finished part through new product development, reverse engineering and precision engineering.",
     areas: [
       {
         index: "01",
-        label: "Powder Coating",
-        href: "/engineering-services#powder-coating",
-      },
-      {
-        index: "02",
         label: "New Product Development",
         href: "/engineering-services#new-product-development",
       },
       {
-        index: "03",
+        index: "02",
         label: "Reverse Engineering",
         href: "/engineering-services#reverse-engineering",
+      },
+      {
+        index: "03",
+        label: "Surface Finishing",
+        href: "/engineering-services#surface-finishing",
       },
     ],
   },
@@ -72,14 +71,23 @@ const COLUMNS = [
     cta: "Explore Machinery",
     image: "/home-images/two-core-machinery.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
-    body: "We design and manufacture custom equipment for hydropower, water management, construction and other demanding industrial environments.",
+    body: "We design and manufacture custom machinery and fabricated systems for hydropower, water management, construction and other demanding industrial environments.",
     areas: [
       {
         index: "01",
-        label: "Product & Services",
-        href: "/industrial-machinery#products-services",
+        label: "Custom Machinery",
+        href: "/industrial-machinery#portfolio",
       },
-      { index: "02", label: "Exports", href: "/industrial-machinery#exports" },
+      {
+        index: "02",
+        label: "Heavy Fabrication",
+        href: "/industrial-machinery#capabilities",
+      },
+      {
+        index: "03",
+        label: "International Projects",
+        href: "/industrial-machinery#kilgarrah",
+      },
     ],
   },
 ] as const;
@@ -328,20 +336,16 @@ export default function OurTwoCoreSection() {
           <p data-core-header className="eyebrow">
             What We Do
           </p>
-          <MaskRevealHeading
-            id="two-core-heading"
-            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
-          >
+          <H2Heading id="two-core-heading" className="text-left">
             Three Disciplines.
             <span className="ab-statement-muted">One Engineering Mindset.</span>
-          </MaskRevealHeading>
+          </H2Heading>
         </div>
-        <p
-          data-core-header
-          className="two-core-lede font-heading text-[clamp(12px,1vw,16px)] leading-[1.15] font-medium text-left uppercase"
-        >
-          Components, services, and custom machinery for production.
-        </p>
+        <Copy data-core-header variant="lede" className="two-core-lede">
+          From individual components to complete machinery, we combine engineering
+          expertise and manufacturing capability to deliver practical solutions
+          for automotive and industrial applications.
+        </Copy>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus lg:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus lg:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom lg:hidden" />
@@ -387,18 +391,12 @@ export default function OurTwoCoreSection() {
               <FigMark n={HOME_FIG.core + i} />
             </Link>
             <div className="two-core-card-base">
-              <h3
-                data-core-title={i}
-                className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase"
-              >
+              <H3Heading data-core-title={i} variant="title">
                 {col.title}
-              </h3>
-              <p
-                data-core-body={i}
-                className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.2] font-normal uppercase"
-              >
+              </H3Heading>
+              <Copy data-core-body={i} variant="caption">
                 {col.body}
-              </p>
+              </Copy>
               <div data-core-areas={i} className="two-core-areas">
                 <ul aria-label="Main areas">
                   {col.areas.map((area) => (

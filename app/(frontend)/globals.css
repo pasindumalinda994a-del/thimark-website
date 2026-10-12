@@ -822,16 +822,30 @@ body {
   padding-left: 14px;
 }
 
+.mn-header {
+  --mn-menu-x: calc(100% - var(--g1-offset) - 3rem - 0.5px);
+}
+
+.mn-header-rule-l {
+  left: calc(var(--g1-offset) + var(--line-stop));
+  width: calc(var(--mn-menu-x) - var(--g1-offset) - 2 * var(--line-stop));
+}
+
+.mn-header-rule-r {
+  left: calc(var(--mn-menu-x) + var(--line-stop));
+  width: calc(100% - var(--g1-offset) - var(--mn-menu-x) - 2 * var(--line-stop));
+}
+
 .mn-toggle-rule {
   position: relative;
   width: 1px;
-  height: calc(100% - var(--plus-size) / 2);
+  height: calc(100% - var(--plus-size) / 2 - var(--line-stop));
   align-self: flex-start;
   background: var(--steel);
 }
 
 .mn-toggle-plus {
-  top: 100%;
+  top: calc(100% + var(--line-stop));
   left: 50%;
 }
 
@@ -1100,11 +1114,6 @@ button.mn-row {
 .sb-logo-lockup .sb-logo {
   height: auto;
   padding-left: 0;
-}
-
-.sb-rail {
-  top: var(--line-stop);
-  height: calc(100% - 2 * var(--line-stop));
 }
 
 .sb-block-nav {
@@ -1659,8 +1668,6 @@ button.sb-nav-toggle {
 .footer-description {
   margin: 0;
   max-width: 36ch;
-  font-size: 13px;
-  line-height: 1.5;
   color: color-mix(in srgb, var(--steel) 80%, transparent);
 }
 
@@ -2306,22 +2313,6 @@ button.sb-nav-toggle {
   background: var(--brand);
 }
 
-.solutions-band-name {
-  font-family: var(--font-heading);
-  font-size: clamp(20px, 1.9vw, 32px);
-  font-weight: 500;
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-
-.solutions-band-title {
-  font-family: var(--font-heading);
-  font-size: clamp(12px, 1vw, 16px);
-  font-weight: 500;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
 .solutions-v {
   top: var(--line-stop);
   height: calc(100% - 2 * var(--line-stop));
@@ -2375,14 +2366,6 @@ button.sb-nav-toggle {
   flex-direction: column;
   gap: 10px;
   padding: 16px;
-}
-
-.solutions-note-body {
-  font-family: var(--font-heading);
-  font-size: clamp(11px, 0.85vw, 13px);
-  font-weight: 400;
-  line-height: 1.35;
-  text-transform: uppercase;
 }
 
 .solutions-note-foot {
@@ -3231,41 +3214,6 @@ button.sb-nav-toggle {
   display: none;
 }
 
-/* Dashed stamp frame (shared with hero provenance edges) */
-.stamp {
-  position: relative;
-  display: inline-flex;
-  width: max-content;
-  max-width: 100%;
-  padding: 8px;
-  font-family: var(--font-heading);
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--page-ink);
-}
-
-.stamp-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 14px 16px;
-  background: color-mix(in srgb, var(--page-ink) 8%, transparent);
-}
-
-.stamp-strong {
-  letter-spacing: 0.18em;
-  padding-bottom: 3px;
-  box-shadow: inset 0 -1.5px 0 var(--brand);
-}
-
-.stamp-sub {
-  letter-spacing: 0.1em;
-  opacity: 0.85;
-}
-
 /* ---- 05 Capabilities ---------------------------------------------- */
 
 .caps-intro {
@@ -3745,13 +3693,6 @@ button.sb-nav-toggle {
 
 .quality-cred-code {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(22px, 2.2vw, 28px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  font-variant-numeric: tabular-nums;
 }
 
 .quality-cred-sub {
@@ -3928,13 +3869,6 @@ button.sb-nav-toggle {
   align-items: center;
   justify-content: center;
   padding: 8px 0;
-  font-family: var(--font-heading);
-  font-size: clamp(28px, 2.6vw, 40px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  text-align: center;
 }
 
 .partner-statement {
@@ -4490,12 +4424,6 @@ button.sb-nav-toggle {
 
 .news-article-title {
   margin: 0;
-  font-family: var(--font-heading);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  font-size: clamp(36px, 4.6vw, 64px);
 }
 
 .news-article-photo {
@@ -4526,8 +4454,6 @@ button.sb-nav-toggle {
 
 .news-article-side p {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.45;
   color: color-mix(in srgb, var(--page-ink) 78%, transparent);
 }
 
@@ -4656,15 +4582,10 @@ button.sb-nav-toggle {
 .news-section-label {
   margin: 0;
   color: var(--page-ink);
-  font-size: clamp(18px, 1.5vw, 24px);
-  line-height: 1.1;
-  letter-spacing: 0.02em;
 }
 
 .news-article-prose p {
   margin: 0;
-  font-size: 15px;
-  line-height: 1.45;
   color: color-mix(in srgb, var(--page-ink) 78%, transparent);
 }
 
@@ -4797,12 +4718,6 @@ button.sb-nav-toggle {
 
 .news-related-title {
   margin: 0;
-  font-family: var(--font-heading);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  font-size: clamp(28px, 3.4vw, 48px);
 }
 
 .news-related-head {
@@ -4919,12 +4834,6 @@ button.sb-nav-toggle {
 
 .news-related-entry h3 {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(16px, 1.35vw, 22px);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
 }
 
 @media (hover: hover) {
@@ -5177,17 +5086,8 @@ button.sb-nav-toggle {
   color: inherit;
   cursor: pointer;
 }
-.gallery-reel-title {
-  font-family: var(--font-heading);
-  font-size: clamp(22px, 2vw, 36px);
-  font-weight: 500;
-  line-height: 0.95;
-  text-transform: uppercase;
-}
 .gallery-reel-note {
   max-width: 36ch;
-  font-size: 14px;
-  line-height: 1.45;
   color: color-mix(in srgb, var(--steel) 80%, transparent);
 }
 .gallery-reel-empty {
@@ -6043,8 +5943,6 @@ a.contact-channel-value:focus-visible {
 
 .enquire-drop.has-files .enquire-well-title {
   max-width: none;
-  font-size: 16px;
-  line-height: 1;
 }
 
 .enquire-well-frame {
@@ -6097,12 +5995,6 @@ a.contact-channel-value:focus-visible {
 .enquire-well-title {
   max-width: 10ch;
   margin-inline: auto;
-  font-family: var(--font-heading);
-  font-size: clamp(22px, 2.2vw, 30px);
-  font-weight: 500;
-  line-height: 0.9;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
 }
 
 .enquire-well-formats,
@@ -6535,11 +6427,6 @@ a.contact-channel-value:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  font-family: var(--font-heading);
-  font-size: clamp(11px, 0.85vw, 13px);
-  font-weight: 400;
-  line-height: 1.3;
-  text-transform: uppercase;
 }
 
 .ab-statement {
@@ -6840,12 +6727,6 @@ a.contact-channel-value:focus-visible {
 .vm-declare,
 .vm-lead {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(22px, 1.85vw, 34px);
-  font-weight: 500;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
 }
 
 .vm-rule {
@@ -6902,15 +6783,20 @@ a.contact-channel-value:focus-visible {
 .vm-principle-glyph {
   position: relative;
   display: flex;
-  min-height: 12rem;
+  height: 16rem;
+  min-height: 16rem;
   align-items: center;
   justify-content: center;
   margin: 8px calc(var(--g1-offset) + 8px);
 }
 
 .vm-principle-mark {
-  width: min(46%, 120px);
-  max-height: 70%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: auto;
+  height: min(78%, calc(100% - 48px));
+  transform: translate(-50%, -50%);
 }
 
 .vm-principle-copy {
@@ -7164,6 +7050,85 @@ a.contact-channel-value:focus-visible {
   font-size: clamp(72px, 22cqw, 120px);
 }
 
+.ld-roster-light {
+  --page-ink: var(--steel);
+  background: var(--cream);
+  color: var(--steel);
+  transition:
+    background-color 0.5s var(--ease-out, ease),
+    color 0.5s var(--ease-out, ease);
+}
+
+.ld-roster-light .ld-portrait-frame {
+  background: color-mix(in srgb, var(--steel) 6%, var(--cream));
+  transition: background-color 0.5s var(--ease-out, ease);
+}
+
+.ld-roster-light .ld-monogram::before {
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--page-ink) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.ld-roster-light .ld-monogram::after {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--page-ink) 0 4px,
+    transparent 4px 8px
+  );
+}
+
+.ld-roster-light .ld-monogram-text {
+  -webkit-text-stroke-color: color-mix(in srgb, var(--page-ink) 75%, transparent);
+}
+
+.ld-roster-light .ld-portrait-marker {
+  opacity: 0;
+  transform: scale(0.4);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s var(--ease-out, ease);
+}
+
+.ld-portrait-cell:hover .ld-roster-light {
+  --page-ink: var(--cream);
+  background: var(--steel);
+  color: var(--cream);
+}
+
+.ld-portrait-cell:hover .ld-roster-light .ld-portrait-frame {
+  background: color-mix(in srgb, var(--cream) 9%, var(--steel));
+}
+
+.ld-portrait-cell:hover .ld-roster-light .ld-portrait-marker {
+  opacity: 1;
+  transform: none;
+}
+
+.ld-bio {
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ld-credential {
+  opacity: 0.55;
+}
+
+.ld-bio-copy {
+  max-width: 34ch;
+  opacity: 0.8;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-roster-light,
+  .ld-roster-light .ld-portrait-frame,
+  .ld-roster-light .ld-portrait-marker {
+    transition: none;
+  }
+}
+
 @media (min-width: 768px) {
   .ld-portrait {
     position: absolute;
@@ -7189,6 +7154,465 @@ a.contact-channel-value:focus-visible {
   .vm-principle,
   .vm-principle::before {
     transition: none;
+  }
+}
+
+/* Stacked plate blocks: a section that grows to fit several row runs. */
+.plate-block {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .content-plate.plate-auto {
+    height: auto;
+    min-height: 0;
+  }
+
+  .plate-block {
+    display: block;
+    height: calc(var(--block-rows) * var(--row));
+  }
+}
+
+/* Brand phrase bar (homepage quality bar, reusable) */
+.phrase-bar {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  margin: 8px calc(var(--g1-offset) + 8px);
+  background: var(--brand);
+  color: var(--cream);
+}
+
+.phrase-bar-cell {
+  position: relative;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  padding: 16px;
+}
+
+.phrase-bar-rail {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .phrase-bar {
+    position: absolute;
+    inset: 8px;
+    flex-direction: row;
+    margin: 0;
+  }
+
+  .phrase-bar-rail {
+    position: absolute;
+    top: var(--line-stop);
+    bottom: var(--line-stop);
+    left: 0;
+    display: block;
+    width: 1px;
+    transform: translateX(-50%);
+  }
+}
+
+/* About 01 Story */
+.st-media .plate-media {
+  min-height: 22rem;
+}
+
+.st-story {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px;
+}
+
+.st-story-item {
+  display: grid;
+  grid-template-columns: 2.5em minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+}
+
+.st-story-item > .index-tag {
+  display: flex;
+  min-height: 1.1em;
+  align-items: center;
+}
+
+.st-closing {
+  display: flex;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+.st-closing p {
+  max-width: 40ch;
+}
+
+.st-closing p::before {
+  content: "\201C";
+  color: var(--brand);
+}
+
+.st-closing p::after {
+  content: "\201D";
+  color: var(--brand);
+}
+
+@media (min-width: 768px) {
+  .st-media .plate-media {
+    min-height: 0;
+  }
+
+  .st-story {
+    justify-content: center;
+    gap: 32px;
+    padding: 16px 24px;
+  }
+
+  .st-closing {
+    padding: 0 24px;
+  }
+
+  .plate-lede.st-scope {
+    justify-content: space-between;
+  }
+}
+
+/* About 01b Journey — the homepage story timeline on a wider plate */
+.jr-readout {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+}
+
+.jr-numeral {
+  align-self: flex-end;
+  font-size: clamp(56px, 6.4vw, 120px);
+  line-height: 0.82;
+  font-variant-numeric: tabular-nums;
+  -webkit-text-stroke-color: color-mix(in srgb, var(--page-ink) 70%, transparent);
+}
+
+.jr-reel {
+  position: relative;
+  height: clamp(200px, 38vh, 300px);
+  overflow: hidden;
+  margin: 8px calc(var(--g1-offset) + 8px);
+}
+
+.jr-reel img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.jr-reel img:not(:first-of-type) {
+  clip-path: inset(0 100% 0 0);
+}
+
+.jr-reel-caption {
+  position: absolute;
+  z-index: 12;
+  right: 32px;
+  bottom: 16px;
+  left: 32px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  color: var(--cream);
+}
+
+.jr-status {
+  padding: 3px 6px 2px;
+  background: var(--brand);
+  color: var(--cream);
+  line-height: 1;
+}
+
+.jr-copy .about-chapter-text .ab-copy {
+  text-align: left;
+  text-align-last: auto;
+}
+
+@media (min-width: 768px) {
+  .jr-readout {
+    padding: 16px 24px 12px;
+  }
+
+  .jr-tabs .about-tabs {
+    position: relative;
+    top: auto;
+    right: auto;
+    left: auto;
+    height: 100%;
+    margin: 0;
+  }
+
+  .jr-reel {
+    position: absolute;
+    inset: 8px;
+    height: auto;
+    margin: 0;
+  }
+
+  .jr-glyph .about-chapter-glyph {
+    position: absolute;
+    inset: 8px;
+    height: auto;
+    min-height: 0;
+  }
+
+  .jr-copy .about-chapter-copy {
+    position: absolute;
+    inset: 0;
+    min-height: 0;
+  }
+
+  .jr-copy .about-chapter-text {
+    inset: 16px 24px;
+    gap: 14px;
+  }
+
+  .jr-axis-track,
+  .jr-axis-fill {
+    position: absolute;
+    top: calc(50% - 1px);
+    right: 72px;
+    left: 72px;
+  }
+
+  .jr-axis-track {
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      to right,
+      currentColor 0 4px,
+      transparent 4px 8px
+    );
+    opacity: 0.4;
+  }
+
+  .jr-axis-fill {
+    height: 2px;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--brand);
+  }
+
+  .jr-axis-stop {
+    position: absolute;
+    top: 50%;
+    left: calc(72px + var(--at) * (100% - 144px));
+    width: 0;
+    height: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .jr-axis-stop:not([data-passed="true"]) {
+    opacity: 0.5;
+  }
+
+  .jr-axis-dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    background: var(--page-bg);
+    box-shadow: inset 0 0 0 1px currentColor;
+    transform: translate(-50%, -50%);
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease;
+  }
+
+  .jr-axis-stop[data-passed="true"] .jr-axis-dot {
+    background: var(--brand);
+    box-shadow: none;
+  }
+
+  .jr-axis-year,
+  .jr-axis-label {
+    position: absolute;
+    left: 0;
+    white-space: nowrap;
+    transform: translateX(-50%);
+  }
+
+  .jr-axis-stop[data-side="below"] .jr-axis-year {
+    top: 14px;
+  }
+
+  .jr-axis-stop[data-side="below"] .jr-axis-label {
+    top: 30px;
+    opacity: 0.7;
+  }
+
+  .jr-axis-stop[data-side="above"] .jr-axis-year {
+    bottom: 30px;
+  }
+
+  .jr-axis-stop[data-side="above"] .jr-axis-label {
+    bottom: 14px;
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 767px) {
+  .jr-glyph .about-chapter-glyph {
+    margin: 0 calc(var(--g1-offset) + 8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jr-axis-stop,
+  .jr-axis-dot {
+    transition: none;
+  }
+}
+
+/* About 02 What Drives Us — solution bands with a cream note on steel */
+.dr-bands .solutions-note {
+  background: var(--cream);
+  color: var(--steel);
+}
+
+.dr-note-copy {
+  gap: 14px;
+  padding: 20px;
+}
+
+.dr-note-body {
+  gap: 10px;
+}
+
+.dr-note-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 12px 20px;
+  background: color-mix(in srgb, var(--steel) 12%, var(--cream));
+}
+
+.dr-principles-intro {
+  display: flex;
+  min-height: 12rem;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 16px;
+}
+
+.dr-principles-count {
+  align-self: flex-end;
+  font-size: clamp(96px, 10vw, 200px);
+  line-height: 0.8;
+}
+
+@media (min-width: 768px) {
+  .dr-note-copy {
+    padding: 24px;
+  }
+
+  .dr-note-foot {
+    padding: 12px 24px;
+  }
+
+  .dr-principles-intro {
+    min-height: 0;
+    padding: 16px 24px;
+  }
+}
+
+/* About 04 Recognition */
+.rc-legend {
+  gap: 10px;
+}
+
+.rc-distinctions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-heading);
+  font-size: clamp(11px, 0.85vw, 13px);
+  font-weight: 400;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.rc-distinctions li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.rc-distinctions .ab-marker {
+  margin-top: 0.3em;
+}
+
+.rc-award .rc-award-year {
+  align-self: flex-end;
+}
+
+@media (min-width: 768px) {
+  .rc-award {
+    padding: 16px 20px;
+  }
+
+  .plate-lede.rc-close-label {
+    justify-content: center;
+  }
+}
+
+/* Capabilities track with a custom foot (About · How We Work) */
+.caps-foot {
+  position: relative;
+  z-index: 10;
+}
+
+.caps-aside {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .caps-foot {
+    position: absolute;
+    top: calc(100% - 4 * var(--row));
+    right: calc(100% - var(--g1-line-12));
+    left: var(--g1-line-0);
+    height: calc(2 * var(--row));
+    min-height: 0;
+  }
+
+  .caps-aside {
+    position: absolute;
+    top: calc(100% - 2 * var(--row));
+    right: calc(100% - var(--g1-line-12));
+    bottom: 0;
+    left: var(--g1-line-9);
+    padding: 16px;
+  }
+
+  .caps-aside .quality-cred {
+    height: 100%;
+    min-height: 0;
   }
 }
 
@@ -7218,7 +7642,7 @@ a.contact-channel-value:focus-visible {
 /* Tiles: the vm-principle card at other heights and on cream plates */
 @media (min-width: 768px) {
   .im-tile-short .vm-principle-glyph {
-    height: calc(2 * var(--row) - 16px);
+    height: calc(3 * var(--row) - 16px);
   }
 
   .im-tile-short .vm-principle-copy {
@@ -7337,8 +7761,6 @@ a.contact-channel-value:focus-visible {
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: clamp(10px, 0.75vw, 12px);
-  line-height: 1.2;
 }
 
 .im-cat-list .ab-marker {
@@ -7349,11 +7771,6 @@ a.contact-channel-value:focus-visible {
   margin: 0;
   padding-left: 12px;
   box-shadow: inset 2px 0 0 var(--brand);
-  font-family: var(--font-heading);
-  font-size: clamp(13px, 1vw, 16px);
-  font-weight: 500;
-  line-height: 1.15;
-  text-transform: uppercase;
 }
 
 @media (min-width: 640px) {
@@ -7617,11 +8034,6 @@ a.contact-channel-value:focus-visible {
 
 .im-fact-value {
   margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(14px, 1.15vw, 20px);
-  font-weight: 500;
-  line-height: 1.08;
-  text-transform: uppercase;
 }
 
 .im-statement {
@@ -7634,6 +8046,66 @@ a.contact-channel-value:focus-visible {
   align-items: center;
   justify-content: center;
   padding: 24px 16px;
+}
+
+/* Portfolio solution splits — image half / steel note, as on the homepage bands */
+.im-split-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.im-split {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px;
+  padding: 16px;
+  background: var(--steel);
+  color: var(--cream);
+}
+
+.im-split-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.im-split-sub {
+  margin: 0;
+}
+
+.im-split .ab-copy {
+  text-align: left;
+  text-align-last: auto;
+}
+
+.im-glance .vm-legend {
+  gap: 8px;
+}
+
+.im-glance .vm-legend-item {
+  align-items: flex-start;
+}
+
+.im-glance .vm-legend-rule {
+  margin-top: 0.55em;
+}
+
+.im-caps-close {
+  max-width: 78ch;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 12px 16px;
+}
+
+@media (min-width: 768px) {
+  .im-split {
+    min-height: 0;
+    padding: 20px 24px;
+  }
 }
 
 @media (min-width: 768px) {
@@ -7671,4 +8143,188 @@ a.contact-channel-value:focus-visible {
   justify-content: flex-start;
   gap: 20px;
   padding: 16px;
+}
+
+/* ---- Automotive page ----------------------------------------------- */
+
+/* Hero second paragraph — four rows cannot hold both paragraphs on short desktops */
+@media (min-width: 768px) and (max-height: 820px) {
+  .ah-body {
+    display: none;
+  }
+}
+
+/* 01 Product Range — principle tiles carrying a parts list */
+.rg-list {
+  gap: 8px;
+}
+
+.rg-next {
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 12px 16px;
+}
+
+/* 02 OEM Partnerships — wordmark plates over model lists */
+.oem-mark {
+  position: relative;
+  display: flex;
+  min-height: 14rem;
+  flex-direction: column;
+  margin: 8px calc(var(--g1-offset) + 8px);
+  padding: 28px 28px 20px;
+}
+
+.oem-mark-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.oem-models {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px;
+}
+
+@media (min-width: 768px) {
+  .oem-mark {
+    position: absolute;
+    inset: 8px;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .oem-models {
+    padding: 16px 20px;
+  }
+}
+
+/* 03 Production Process — stage cards that stack while the plate is pinned */
+.ps-stack {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-card {
+  position: relative;
+  background: var(--page-bg);
+}
+
+.ps-card-shade {
+  display: none;
+}
+
+.ps-glyph-field {
+  display: flex;
+  height: 12rem;
+  align-items: center;
+  justify-content: center;
+  margin: 8px calc(var(--g1-offset) + 8px);
+  color: var(--page-ink);
+}
+
+.ps-glyph-mark {
+  width: min(40%, 120px);
+  max-height: 70%;
+}
+
+.ps-numeral {
+  position: absolute;
+  right: 28px;
+  bottom: 22px;
+  font-size: clamp(40px, 4vw, 72px);
+}
+
+.ps-copy {
+  padding: 16px;
+}
+
+.ps-copy-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ps-statement {
+  max-width: 52ch;
+  margin: 0;
+}
+
+.ps-readout {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ps-stack {
+    position: absolute;
+    top: calc(4 * var(--row));
+    right: 0;
+    left: 0;
+    display: block;
+    height: calc(8 * var(--row));
+    overflow: hidden;
+  }
+
+  .ps-card {
+    position: absolute;
+    inset: 0;
+    transform-origin: 50% 0%;
+    will-change: transform;
+  }
+
+  .ps-card-shade {
+    position: absolute;
+    inset: 0;
+    z-index: 30;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: color-mix(in srgb, var(--steel) 55%, transparent);
+  }
+
+  .ps-glyph-field {
+    position: absolute;
+    inset: 8px;
+    height: auto;
+    margin: 0;
+  }
+
+  .ps-copy {
+    padding: 16px 24px;
+  }
+
+  .ps-copy-inner {
+    height: 100%;
+    gap: 14px;
+  }
+
+  .ps-readout {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 24px;
+  }
+
+  .ps-rail {
+    position: relative;
+    height: 1.5px;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--page-ink) 30%, transparent);
+  }
+
+  .ps-rail-fill {
+    position: absolute;
+    inset: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: var(--brand);
+  }
 }

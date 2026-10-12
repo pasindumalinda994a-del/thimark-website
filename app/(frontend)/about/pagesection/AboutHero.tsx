@@ -2,7 +2,10 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import BrandButton from "@/app/(frontend)/components/BrandButton";
+import Copy from "@/app/(frontend)/components/Copy";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
+import PhraseBar from "@/app/(frontend)/components/PhraseBar";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { HERO } from "./about";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
@@ -15,22 +18,55 @@ import {
   type VLine,
 } from "@/app/(frontend)/components/plate";
 
-const H: HLine[] = [[4, 0, 12]];
+export type HeroCopy = {
+  eyebrow: string;
+  heading: readonly [string, string];
+  intro: string;
+  /** Optional second paragraph, set lighter under the intro. */
+  body?: string;
+  supporting: readonly string[];
+  cta: { label: string; href: string };
+  /** Optional second button; splits the bar row into phrases, secondary and primary. */
+  secondary?: { label: string; href: string };
+  image: { src: string; alt: string; objectPosition: string };
+  caption: readonly [string, string];
+};
 
-const V: VLine[] = [
-  [0, 4, 14],
-  [12, 4, 14],
+const H: HLine[] = [
+  [4, 0, 12],
+  [12, 0, 12],
 ];
 
-export default function AboutHero() {
+export default function AboutHero({
+  id = "about-hero",
+  copy = HERO,
+  ctaCol = 9,
+}: {
+  id?: string;
+  copy?: HeroCopy;
+  /** Column where the phrase bar ends and the CTA cell begins. */
+  ctaCol?: number;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
+
+  const secondary = copy.secondary;
+  // With two buttons the bar gives up columns 6–9 to the secondary CTA.
+  const barEnd = secondary ? 6 : ctaCol;
+  const primaryCol = secondary ? 9 : ctaCol;
+
+  const V: VLine[] = [
+    [0, 4, 14],
+    [12, 4, 14],
+    [barEnd, 12, 14],
+    ...(secondary ? ([[primaryCol, 12, 14]] as VLine[]) : []),
+  ];
 
   return (
     <SectionGrid
       ref={ref}
-      id="about-hero"
-      aria-labelledby="about-hero-heading"
+      id={id}
+      aria-labelledby={`${id}-heading`}
       rows={14}
       tone="page"
       outerV={false}
@@ -41,47 +77,69 @@ export default function AboutHero() {
       <Cell at={[0, 8, 0, 4]} className="ah-title">
         <MobileEdge open />
         <p data-reveal className="eyebrow">
-          {HERO.eyebrow}
+          {copy.eyebrow}
         </p>
-        <MaskRevealHeading
-          as="h1"
-          id="about-hero-heading"
-          className="font-heading text-[clamp(40px,4.4vw,80px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
-        >
-          {HERO.heading[0]}
-          <span className="ab-statement-muted">{HERO.heading[1]}</span>
-        </MaskRevealHeading>
+        <H1Heading id={`${id}-heading`}>
+          {copy.heading[0]}
+          <span className="ab-statement-muted">{copy.heading[1]}</span>
+        </H1Heading>
       </Cell>
 
       <Cell at={[8, 12, 0, 4]} className="ah-copy">
         <MobileEdge />
-        <p
-          data-reveal
-          className="ah-intro font-heading text-[clamp(12px,1vw,16px)] leading-[1.15] font-medium uppercase md:text-justify md:[text-align-last:left]"
-        >
-          {HERO.intro}
-        </p>
+        <Copy data-reveal variant="lede" size="sm" className="ah-intro">
+          {copy.intro}
+        </Copy>
+        {copy.body ? (
+          <Copy data-reveal variant="body" className="ah-intro ah-body ab-copy">
+            {copy.body}
+          </Copy>
+        ) : null}
       </Cell>
 
-      <Cell at={[0, 12, 4, 14]} className="ah-media">
+      <Cell at={[0, 12, 4, 12]} className="ah-media">
         <MobileEdge />
         <div data-wipe className="plate-media">
           <Image
-            src={HERO.image.src}
-            alt={HERO.image.alt}
+            src={copy.image.src}
+            alt={copy.image.alt}
             fill
             priority
             sizes="(min-width: 768px) calc(100vw - 260px), 100vw"
             className="object-cover"
-            style={{ objectPosition: HERO.image.objectPosition }}
+            style={{ objectPosition: copy.image.objectPosition }}
           />
           <span aria-hidden className="ah-media-scrim" />
           <Corners tone="light" />
           <p aria-hidden className="ah-media-caption index-tag">
-            <span>Fig. 01</span>
-            <span>Thimark Technocreations (Pvt) Ltd</span>
+            <span>{copy.caption[0]}</span>
+            <span>{copy.caption[1]}</span>
           </p>
         </div>
+      </Cell>
+
+      <Cell at={[0, barEnd, 12, 14]} className="ah-bar">
+        <MobileEdge />
+        <PhraseBar
+          phrases={copy.supporting}
+          className={secondary ? "[&_p]:text-[clamp(13px,1.15vw,18px)]" : ""}
+        />
+      </Cell>
+
+      {secondary ? (
+        <Cell at={[barEnd, primaryCol, 12, 14]} className="plate-cta">
+          <MobileEdge />
+          <BrandButton href={secondary.href} tone="steel" data-reveal>
+            {secondary.label}
+          </BrandButton>
+        </Cell>
+      ) : null}
+
+      <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
+        <MobileEdge />
+        <BrandButton href={copy.cta.href} font="sans" data-reveal>
+          {copy.cta.label}
+        </BrandButton>
       </Cell>
     </SectionGrid>
   );

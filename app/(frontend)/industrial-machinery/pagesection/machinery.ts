@@ -1,286 +1,335 @@
-import type { IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
-import type { Capability } from "@/app/(frontend)/homesections/CapabilitiesSection";
+import type { HeroCopy } from "@/app/(frontend)/about/pagesection/AboutHero";
+import type { Stage } from "@/app/(frontend)/automotive/pagesection/automotive";
+import type { ProcessCopy } from "@/app/(frontend)/automotive/pagesection/ProcessSection";
+import type {
+  Capability,
+  CapabilitiesCopy,
+} from "@/app/(frontend)/homesections/CapabilitiesSection";
 
-type Media = { src: string; alt: string; objectPosition?: string };
+type Link = { label: string; href: string };
+type Media = { src: string; alt: string; objectPosition: string };
 
-const KILGHARRAH_PHOTO = "/Gallery Images/Kilgharrah600-H4eS3WLBj1Hf5xwZhFBNSw.jpg";
+export const ENQUIRE = "/enquire?service=industrial";
+
+const KILGARRAH_PHOTO = "/Gallery Images/Kilgharrah600-H4eS3WLBj1Hf5xwZhFBNSw.jpg";
 
 /* ---- Hero ---------------------------------------------------------- */
 
-export const HERO = {
-  eyebrow: "Industrial Machinery Design & Manufacturing",
-  heading: ["Engineering Solutions for", "Complex Industrial Challenges."],
+export const HERO: HeroCopy = {
+  eyebrow: "Industrial Machinery \u00b7 Engineering \u00b7 Manufacturing",
+  heading: ["Custom Machinery.", "Engineered for Real-World Challenges."],
   intro:
-    "From specialized hydraulic equipment to custom industrial machinery, Thimark designs and manufactures engineering solutions for demanding applications across hydropower, water management, construction and industry.",
-  body: "Combining mechanical engineering, heavy fabrication and practical problem-solving, we transform operational requirements into purpose-built machinery designed around the challenges our customers face.",
-  disciplinesLabel: "Disciplines",
-  disciplines: ["Custom Engineering", "Industrial Machinery", "Heavy Fabrication", "Automation"],
-  media: {
-    src: KILGHARRAH_PHOTO,
-    alt: "The Kilgharrah 600 mobile hydraulic trash rack cleaner, built by Thimark, on test at the Kadawatha works",
-    objectPosition: "50% 55%",
-  } satisfies Media,
-  caption: ["Fig. 01", "Kilgharrah 600 \u2014 KenGen, Kenya"],
-  primary: { label: "Request a Quote", href: "/enquire" },
-  secondary: { label: "Explore Our Solutions", href: "#products-services" },
-  next: { label: "Products & Services", index: "01" },
-} as const;
-
-/* ---- 01 Products & Services ---------------------------------------- */
-
-export const PRODUCTS = {
-  index: "01",
-  eyebrow: "What We Engineer",
-  heading: ["Built Around the Work", "That Needs to Be Done."],
-  lede: "Every industrial application comes with its own operational demands. Thimark develops specialized machinery and mechanical systems to address these requirements, combining engineering knowledge with manufacturing and fabrication expertise.",
-  mediaLabel: "Application",
-  listLabel: "Product Categories",
-  statement: ["Developed around the function", "they need to perform."],
-  aside:
-    "From water management infrastructure to industrial material handling, our solutions are developed around the function they need to perform.",
-  cta: { label: "Discuss Your Application", href: "/enquire" },
-} as const;
-
-export type ProductCategory = {
-  id: string;
-  title: string;
-  body: string;
-  items: readonly string[];
-  pull?: string;
-  media: Media;
+    "Complex industrial challenges demand more than standard equipment. They require practical engineering, dependable manufacturing, and machinery designed around the realities of the application.",
+  body: "At Thimark, we engineer and manufacture custom machinery and industrial systems for demanding applications across water and hydropower infrastructure, industrial processing, and material handling. From heavy steel structures to specialized mechanical systems, we combine engineering knowledge with manufacturing capability to turn operational requirements into practical solutions.",
+  supporting: [
+    "Engineered around the challenge.",
+    "Built for the application.",
+    "Made to perform.",
+  ],
+  cta: { label: "Discuss Your Project", href: ENQUIRE },
+  secondary: { label: "Explore Our Machinery", href: "#portfolio" },
+  image: {
+    src: "/home-images/two-core-machinery.jpeg",
+    alt: "Engineers inspecting a custom industrial water-treatment machine",
+    objectPosition: "50% 50%",
+  },
+  caption: ["Fig. 01", "Custom Industrial Machinery"],
 };
 
-export const CATEGORIES: readonly ProductCategory[] = [
+/* ---- 01 Portfolio -------------------------------------------------- */
+
+export const PORTFOLIO = {
+  index: "01",
+  eyebrow: "Solutions for Industry & Infrastructure",
+  heading: ["Engineered Solutions for", "Demanding Industrial Applications."] as const,
+  lede: "Every industrial operation has its own challenges. Whether managing debris in a hydropower facility, controlling industrial dust, or moving materials through a processing system, the right equipment can make a meaningful difference.",
+  headLabel: "Industrial Machinery Portfolio",
+  headMeta: "Infrastructure \u00b7 Industry",
+  paragraphs: [
+    "Thimark develops and manufactures machinery and fabricated systems designed around specific operational needs.",
+    "Our portfolio brings together mechanical engineering, steel fabrication, and manufacturing capabilities to support infrastructure and industrial applications.",
+  ],
+  media: {
+    src: "/home-images/about-workshop.png",
+    alt: "Welders fabricating heavy steel frames in the Thimark workshop",
+    objectPosition: "50% 42%",
+  } satisfies Media,
+};
+
+export type MachineryItem = {
+  name: string;
+  body: string;
+};
+
+export type PortfolioBand = {
+  id: string;
+  index: string;
+  title: string;
+  subtitle: string;
+  intro: string;
+  items: readonly MachineryItem[];
+  closing: string;
+  /** Image half, matching the homepage solutions bands. */
+  imageSide: "left" | "right";
+  media: Media;
+  caption: readonly [string, string];
+};
+
+export const BANDS: readonly PortfolioBand[] = [
   {
-    id: "hydropower",
-    title: "Hydropower & Water Management Equipment",
-    body: "Specialized mechanical equipment for water infrastructure and hydropower applications, designed to support reliable operation and maintenance.",
+    id: "water-hydropower",
+    index: "01",
+    title: "Water & Hydropower Infrastructure",
+    subtitle: "Machinery designed to support water infrastructure operations.",
+    intro:
+      "Our water and hydropower-related solutions include specialized equipment and fabricated systems intended for demanding water-management environments.",
     items: [
-      "Automated hydraulic trash-cleaning systems",
-      "Trash racks and automated rotary trash screens",
-      "Sludge scrapers",
-      "Sluice gates and penstock gates",
+      {
+        name: "KILGARRAH 600 Hydraulic Trash Rack Cleaning Machine",
+        body: "A movable hydraulic machine developed for cleaning trash racks at hydropower facilities.",
+      },
+      {
+        name: "Automated Rotary Trash Screens & Racks",
+        body: "Systems designed for debris screening applications, subject to project requirements.",
+      },
+      {
+        name: "Sluice Gates & Penstock Gates",
+        body: "Fabricated gate solutions for water-control applications.",
+      },
+      {
+        name: "Stop Logs",
+        body: "Removable barrier systems for suitable water infrastructure applications.",
+      },
+      {
+        name: "Sludge Scrapers & Skimmers",
+        body: "Equipment for sludge removal and surface-material collection in applicable treatment and processing systems.",
+      },
     ],
+    closing:
+      "Each project can require different mechanical arrangements, dimensions, operating conditions, and integration requirements. Our approach begins with understanding the application and engineering a solution around its needs.",
+    imageSide: "right",
     media: {
-      src: "/home-images/about-international-engineering.jpeg",
-      alt: "Engineers inspecting automated trash screens at a hydropower intake",
-      objectPosition: "40% 50%",
+      src: "/home-images/featured-kilgharrah.png",
+      alt: "The KILGARRAH 600 clearing debris from a hydropower trash rack as engineers supervise",
+      objectPosition: "50% 45%",
     },
+    caption: ["Fig. 02", "Water & Hydropower"],
   },
   {
-    id: "material-handling",
-    title: "Industrial Machinery & Material Handling",
-    body: "Mechanical systems and custom-built machinery developed to support industrial processes, material movement and operational requirements.",
+    id: "industrial-processing",
+    index: "02",
+    title: "Industrial Processing & Material Handling",
+    subtitle: "Practical machinery for specialized industrial processes.",
+    intro:
+      "Industrial environments often require equipment that is tailored to the material being handled, the available space, and the wider production process. Thimark\u2019s industrial machinery capabilities cover a range of custom-fabricated equipment and systems, including:",
     items: [
-      "Pneumatic conveyors",
-      "Industrial machinery and mechanical systems",
-      "Customized material-handling solutions",
+      {
+        name: "Pneumatic Conveying Systems",
+        body: "Equipment and system solutions for moving suitable materials through air-powered conveying arrangements.",
+      },
+      {
+        name: "Dust Collection & Bag Filter Systems",
+        body: "Solutions designed to capture and manage airborne dust in industrial applications.",
+      },
+      {
+        name: "Special-Purpose Machinery (SPM)",
+        body: "Custom machinery developed around specific operational or production requirements.",
+      },
+      {
+        name: "Heavy Steel Structures & Tanks",
+        body: "Fabricated structures and vessels designed to suit project specifications.",
+      },
+      {
+        name: "Process Equipment & Custom Fabrication",
+        body: "Engineered and fabricated components supporting industrial installations and processes.",
+      },
     ],
+    closing:
+      "From individual fabricated assemblies to integrated machinery projects, our goal is to deliver practical solutions that respond to real operational requirements.",
+    imageSide: "left",
     media: {
       src: "/home-images/about-industrial-automation.jpeg",
       alt: "Engineers commissioning an automated material-handling line",
       objectPosition: "50% 50%",
     },
+    caption: ["Fig. 03", "Processing & Material Handling"],
   },
+];
+
+/* ---- 02 Process ---------------------------------------------------- */
+
+export const PROCESS: ProcessCopy = {
+  index: "02",
+  eyebrow: "Our Engineering Approach",
+  heading: ["From the First Drawing", "to a Working Solution."],
+  lede: [
+    "Custom machinery requires more than a good concept. It demands a connected process in which engineering, fabrication, mechanical systems, controls, and final installation work together.",
+    "At Thimark, we approach industrial machinery projects by translating operational requirements into engineering designs and coordinating the manufacturing stages needed to bring them to life.",
+  ],
+  readoutLabel: "Stage",
+  tabsLabel: "Engineering stages",
+  statement:
+    "One connected process. From engineering intent to machinery built around the job it needs to do.",
+};
+
+// Stage photography is provisional until dedicated process shots are available.
+export const STAGES: readonly Stage[] = [
   {
-    id: "filtration",
-    title: "Dust Collection & Filtration Systems",
-    body: "Engineered filtration equipment for industrial environments, designed around application requirements and the needs of the production process.",
-    items: [
-      "Dust bag filters",
-      "Custom-engineered filtration systems",
-      "Application-specific mechanical assemblies",
-    ],
+    id: "scanning",
+    label: "Scanning",
+    title: "Reverse Engineering & 3D Scanning",
+    body: "Where existing equipment, physical samples, or reference components are available, reverse engineering and 3D scanning can help capture geometry and establish a useful digital starting point for design and development.",
+    operations: ["Geometry", "Physical samples", "Digital starting point"],
+    icon: "schema",
     media: {
-      src: "/home-images/two-core-machinery.jpeg",
-      alt: "Engineers inspecting a custom process machine on the factory floor",
-      objectPosition: "60% 50%",
+      src: "/home-images/about-iso-precision.jpeg",
+      alt: "Engineers checking a gear assembly against its technical drawings",
+      objectPosition: "50% 45%",
     },
   },
   {
-    id: "custom",
-    title: "Custom Engineering & Fabrication",
-    body: "Not every industrial challenge can be solved with standard equipment. Thimark also undertakes customized mechanical engineering and fabrication requirements based on specific project needs.",
-    items: [],
-    pull: "From individual fabricated components to specialized machinery, the solution starts with understanding the application.",
+    id: "cad",
+    label: "CAD Design",
+    title: "CAD Design & Virtual Prototyping",
+    body: "Engineering models and virtual design methods help define component geometry, evaluate arrangements, and explore how the proposed machinery will fit its intended application.",
+    operations: ["Component geometry", "Arrangements", "Application fit"],
+    icon: "precision",
+    media: {
+      src: "/home-images/about-international-engineering.jpeg",
+      alt: "Engineers reviewing an installed system on site to understand its application",
+      objectPosition: "55% 45%",
+    },
+  },
+  {
+    id: "fabrication",
+    label: "Fabrication",
+    title: "Fabrication & Manufacturing",
+    body: "Cutting, forming, machining, welding, and heavy steel fabrication bring the engineered design into physical form. Manufacturing methods are selected according to the project\u2019s materials, dimensions, and specifications.",
+    operations: ["Cutting", "Forming", "Welding"],
+    icon: "work",
     media: {
       src: "/home-images/about-steel-fabrication.jpeg",
       alt: "Fabricators welding a heavy steel beam in the Thimark workshop",
       objectPosition: "50% 55%",
     },
   },
+  {
+    id: "controls",
+    label: "Controls",
+    title: "Automation & Controls",
+    body: "Where required by the project, automation and control systems can support machinery operation and integration with the wider process. Hydraulic systems and PLC-based controls are defined according to the specific equipment design and control requirements.",
+    operations: ["Hydraulic systems", "PLC controls", "Integration"],
+    icon: "electrical",
+    media: {
+      src: "/home-images/about-industrial-automation.jpeg",
+      alt: "Engineers commissioning an automated material-handling line",
+      objectPosition: "42% 48%",
+    },
+  },
+  {
+    id: "commissioning",
+    label: "Commissioning",
+    title: "Finishing & Commissioning",
+    body: "Finishing and final preparation help ready equipment for its intended environment. Where included in the project scope, installation, commissioning, and operational checks support the transition from manufactured machinery to an operating solution.",
+    operations: ["Finishing", "Installation", "Commissioning"],
+    icon: "verified",
+    media: {
+      src: "/home-images/quality-inspection.jpeg",
+      alt: "Engineer inspecting a machined metal component with a digital caliper",
+      objectPosition: "50% 45%",
+    },
+  },
 ];
 
-/* ---- 02 Featured Project — Kilgharrah 600 -------------------------- */
+/* ---- 03 Featured — KILGARRAH 600 ----------------------------------- */
 
 export const FEATURED = {
-  index: "02",
-  eyebrow: "Featured Project \u00b7 Kenya",
-  heading: ["Kilgharrah 600 \u2014", "Engineering Beyond Conventional Solutions."],
-  lede: "Some engineering challenges demand more than standard machinery. They demand a solution designed around the environment, the operation and the task itself.",
-  mediaLabel: "Fig. 03 \u00b7 Mobile Hydraulic Trash Rack Cleaner",
-  briefLabel: "Project Brief",
+  index: "03",
+  eyebrow: "Featured Engineering Project",
+  heading: ["Engineering a Better Approach", "to Trash Rack Cleaning."] as const,
+  lede: "Hydropower facilities depend on effective water intake systems. Debris accumulating on trash racks can interfere with water flow and create additional operational demands, making effective rack cleaning an important part of intake management.",
+  storyLabel: "KILGARRAH 600 \u00b7 KenGen",
+  paragraphs: [
+    "To address this type of challenge, Thimark designed and manufactured the KILGARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), in a documented project partnership with Varomatech Ltd, Kenya.",
+    "The KILGARRAH 600 was developed as a hydraulic machine for cleaning trash racks at a hydropower facility. Designed around the site rather than taken from standard equipment, it helps remove accumulated debris and supports the operation of the water intake.",
+  ],
   media: {
-    src: "/home-images/featured-kilgharrah.png",
-    alt: "The Kilgharrah 600 clearing debris from a hydropower trash rack as engineers supervise",
+    src: KILGARRAH_PHOTO,
+    alt: "The KILGARRAH 600 movable hydraulic trash rack cleaner, built by Thimark, on test at the Kadawatha works",
     objectPosition: "50% 45%",
   } satisfies Media,
-  callout: ["KenGen", "Hydropower"],
-  numeral: "600",
-  lead: "Developed and manufactured by Thimark Technocreations for the Kenya Electricity Generating Company (KenGen), the Kilgharrah 600 is a mobile hydraulic trash rack cleaning machine designed for hydropower plant applications.",
-  paragraphs: [
-    "Integrating hydraulic technology, custom controls, heavy fabrication and mobile adaptability, the machine automates trash-rack cleaning to support operational efficiency, safety and maintenance performance.",
-    "The project represents a significant milestone in Thimark\u2019s development of advanced automation and its ability to deliver specialized engineering solutions beyond Sri Lanka.",
-  ],
-  /** Paragraph that carries the international marker. */
-  highlight: 1,
-  elementsLabel: "Key Engineering Elements",
-  credit: { label: "Project Collaboration", value: "Varomatech Ltd, Kenya" },
-  tags: ["Client \u00b7 KenGen", "Site \u00b7 Hydropower Plant", "Built \u00b7 Kadawatha, Sri Lanka"],
-  cta: { label: "Explore the Kilgharrah 600 Project", href: "/gallery" },
-} as const;
-
-export type Tile = { id: string; title: string; body?: string; icon: IsoIcon };
-
-export const ELEMENTS: readonly Tile[] = [
-  { id: "hydraulic", title: "Mobile Hydraulic Cleaning System", icon: "forklift" },
-  { id: "controls", title: "Custom Control Integration", icon: "electrical" },
-  { id: "fabrication", title: "Heavy Steel Fabrication", icon: "work" },
-  { id: "adaptability", title: "Adaptability for Different Site Conditions", icon: "expand" },
-];
-
-/* ---- 03 Approach --------------------------------------------------- */
-
-export const APPROACH = {
-  index: "03",
-  eyebrow: "Our Approach",
-  heading: ["The Right Solution Starts", "With the Right Understanding."],
-  lede: "Industrial machinery is only as useful as its ability to solve the problem it was designed for.",
-  railLabel: "From Requirement to Solution",
-  lead: "At Thimark, the focus is on understanding the intended application and developing a practical engineering response, whether that means manufacturing from an existing drawing or creating specialized equipment for a specific operational challenge.",
-  pathsLabel: "Two Starting Points",
-  paths: [
-    { id: "A", from: "Existing drawing", to: "Manufacture" },
-    { id: "B", from: "Operational challenge", to: "Specialized equipment" },
-  ],
-} as const;
-
-export const STEPS: readonly (Tile & { body: string; short: string })[] = [
-  {
-    id: "understand",
-    short: "Understand",
-    title: "Understand the Application",
-    body: "Identify the operational challenge, site conditions, functional requirements and project objectives.",
-    icon: "expand",
-  },
-  {
-    id: "develop",
-    short: "Develop",
-    title: "Develop the Engineering Approach",
-    body: "Establish the appropriate mechanical solution around the application, technical requirements and available specifications.",
-    icon: "schema",
-  },
-  {
-    id: "manufacture",
-    short: "Manufacture",
-    title: "Manufacture & Fabricate",
-    body: "Apply engineering and manufacturing expertise to produce the required machinery, systems and fabricated assemblies.",
-    icon: "work",
-  },
-  {
-    id: "quality",
-    short: "Quality",
-    title: "Focus on Quality",
-    body: "Maintain a focus on manufacturing consistency, quality requirements and the intended function of the finished solution.",
-    icon: "verified",
-  },
-];
-
-/* ---- 04 Exports ---------------------------------------------------- */
-
-export const EXPORTS = {
-  index: "04",
-  eyebrow: "Sri Lankan Engineering \u00b7 International Applications",
-  heading: ["Engineering Made in Sri Lanka.", "Built for Challenges Beyond Borders."],
-  lede: "Thimark\u2019s engineering capabilities are not limited to local manufacturing requirements.",
-  routeLabel: "Route \u00b7 Kadawatha \u2192 Kenya",
-  highlightLabel: "International Project Highlight",
-  route: {
-    origin: { name: "Kadawatha", country: "Sri Lanka", coords: "7.00\u00b0N \u00b7 79.95\u00b0E" },
-    destination: { name: "Nairobi", country: "Kenya", coords: "1.29\u00b0S \u00b7 36.82\u00b0E" },
-    caption: "Indian Ocean crossing",
-  },
-  lead: "Through its collaboration on the Kilgharrah 600 project for Kenya Electricity Generating Company (KenGen), Thimark demonstrated its ability to design and manufacture specialized machinery for an international hydropower application.",
-  paragraphs: [
-    "Delivered in collaboration with Varomatech Ltd, Kenya, the project marked an important step in Thimark\u2019s international engineering journey and showcased the potential of Sri Lankan manufacturing expertise in demanding industrial environments.",
-    "For Thimark, international projects represent more than geographical expansion. They are opportunities to apply engineering knowledge, develop technical capabilities and demonstrate what locally developed industrial solutions can achieve.",
-  ],
-  facts: [
-    { id: "region", label: "Region", value: "Kenya \u2014 Hydropower Engineering" },
-    { id: "client", label: "Client", value: "Kenya Electricity Generating Company (KenGen)" },
+  caption: ["Fig. 04", "KILGARRAH 600 \u00b7 KenGen"] as const,
+  closing:
+    "The KILGARRAH 600 stands as an example of Thimark\u2019s ability to take on specialized engineering requirements and develop machinery for demanding industrial and infrastructure applications.",
+  glanceLabel: "Project at a glance",
+  glance: [
+    { label: "Client", value: "Kenya Electricity Generating Company PLC (KenGen)" },
+    { label: "Project", value: "KILGARRAH 600 movable hydraulic trash rack cleaning machine" },
+    { label: "Partner", value: "Varomatech Ltd, Kenya" },
+    { label: "Application", value: "Hydropower infrastructure and trash rack cleaning" },
     {
-      id: "solution",
-      label: "Solution",
-      value: "Kilgharrah 600 mobile hydraulic trash rack cleaning machine",
-    },
-    {
-      id: "focus",
-      label: "Engineering Focus",
-      value: "Hydraulic systems, custom controls, heavy fabrication and automation.",
+      label: "Scope",
+      value: "Design and manufacture, with commissioning to be stated according to verified project records",
     },
   ],
-  statement: [
-    "Our ambition is to keep developing engineering solutions that create value locally",
-    "and meet industrial needs internationally.",
-  ],
-  stamp: { strong: "Made in Sri Lanka", sub: "Kadawatha \u00b7 Est. 2014" },
-} as const;
+  cta: { label: "Discuss a Custom Machinery Project", href: ENQUIRE } satisfies Link,
+};
 
-/* ---- 05 Capabilities ----------------------------------------------- */
+/* ---- 04 Capabilities ----------------------------------------------- */
+
+export const CAPABILITIES_COPY: CapabilitiesCopy = {
+  eyebrow: "Built on Engineering Strength",
+  heading: ["The Engineering Behind", "Every Solution."],
+  lede: [
+    "Reliable industrial machinery depends on the relationship between design, materials, manufacturing processes, and the demands of the operating environment.",
+    "Thimark brings together engineering and manufacturing capabilities to support custom machinery, heavy steel fabrication, and specialized industrial equipment. By considering the application and manufacturing requirements together, we work to turn complex project needs into practical engineered solutions.",
+  ],
+};
+
+export const CAPABILITIES_CLOSING =
+  "By combining these capabilities, Thimark supports projects that require more than off-the-shelf equipment: machinery developed around specific industrial requirements, practical manufacturing constraints, and the intended application.";
 
 export const CAPABILITIES: readonly Capability[] = [
-  {
-    id: "precision",
-    tag: "Precision",
-    title: "Precision Manufacturing",
-    body: "Quality-controlled production processes designed for accuracy, reliability and consistency.",
-    icon: "precision",
-  },
-  {
-    id: "engineering",
-    tag: "Engineering",
-    title: "Engineering & Design",
-    body: "Engineering expertise focused on developing practical solutions for industrial applications.",
-    icon: "schema",
-  },
   {
     id: "fabrication",
     tag: "Fabrication",
     title: "Heavy Steel Fabrication",
-    body: "Proven fabrication capability developed through years of mechanical engineering and industrial projects.",
+    body: "Fabrication capabilities support the manufacture of steel structures, frames, tanks, and machinery assemblies designed around project specifications.",
     icon: "work",
   },
   {
-    id: "machinery",
-    tag: "Machinery",
-    title: "Industrial Machinery",
-    body: "Design and manufacture of customized machinery and mechanical systems.",
+    id: "precision",
+    tag: "Precision",
+    title: "Precision Manufacturing & CNC Processes",
+    body: "Laser cutting, CNC and NC press-brake operations, machining, drilling, and finishing processes support the accurate manufacture of parts and assemblies.",
+    icon: "precision",
+  },
+  {
+    id: "welding",
+    tag: "Welding",
+    title: "Welding & Structural Assembly",
+    body: "Welding and suitable joining methods support the production of fabricated structures, mechanical assemblies, and custom machinery components.",
+    icon: "factory",
+  },
+  {
+    id: "hydraulic",
+    tag: "Systems",
+    title: "Mechanical & Hydraulic Systems",
+    body: "Machinery projects can incorporate mechanical and hydraulic arrangements suited to the intended operation. The configuration and performance requirements are defined for each project.",
     icon: "forklift",
+  },
+  {
+    id: "design",
+    tag: "Design",
+    title: "Industrial Engineering & Design",
+    body: "CAD modelling, reverse engineering, 3D scanning, and virtual prototyping help establish and evaluate machinery designs before and during manufacturing.",
+    icon: "schema",
   },
   {
     id: "automation",
     tag: "Automation",
     title: "Automation & Custom Solutions",
-    body: "Integration of mechanical, hydraulic and control technologies to address specialized industrial challenges.",
+    body: "Where required, automation and PLC control systems can be incorporated into project designs to support the required machine functions and operating sequence.",
     icon: "electrical",
   },
-  {
-    id: "quality",
-    tag: "Quality",
-    title: "Quality Management",
-    body: "An ISO 9001:2015-certified quality management system supporting consistent manufacturing practices.",
-    icon: "verified",
-  },
 ];
-
-export const CAPABILITIES_CTA = { label: "About Thimark", href: "/about" } as const;

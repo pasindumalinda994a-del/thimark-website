@@ -9,7 +9,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import ScrollHint from "@/app/(frontend)/components/ScrollHint";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
@@ -35,13 +37,13 @@ export type StoryCopy = {
 };
 
 const HOME_COPY: StoryCopy = {
-  eyebrow: "Built From The Ground Up",
-  heading: ["From Steel Fabrication", "to Advanced Engineering."],
+  eyebrow: "Our Journey",
+  heading: ["Every Milestone", "Built the Next."],
   lede: "What began as a modest steel fabrication business has evolved into a Sri Lankan engineering company delivering precision manufacturing, OEM components and custom-built industrial machinery.",
   readoutLabel: "Our Story",
   readout: [
     { text: "We invest in people and technology " },
-    { text: "to turn challenges into dependable solutions", strong: true },
+    { text: "to turn engineering challenges into dependable solutions", strong: true },
     { text: "." },
   ],
   cta: { label: "Discover Our Story", href: "/#manufacturing" },
@@ -583,20 +585,14 @@ export default function AboutSection({
             ) : null}
             {copy.eyebrow}
           </p>
-          <MaskRevealHeading
-            id={`${id}-heading`}
-            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
-          >
+          <H2Heading id={`${id}-heading`} className="text-left">
             {copy.heading[0]}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
-          </MaskRevealHeading>
+          </H2Heading>
         </div>
-        <p
-          data-about-header
-          className="about-lede font-heading text-[clamp(12px,1vw,16px)] leading-snug font-medium text-left uppercase md:text-justify md:leading-none md:[text-align-last:left]"
-        >
+        <Copy data-about-header variant="lede" className="about-lede">
           {copy.lede}
-        </p>
+        </Copy>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -656,13 +652,9 @@ export default function AboutSection({
                 <span className="about-story-year tabular-nums">{item.year}</span>
               </p>
               {showTitles ? (
-                <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
-                  {item.title}
-                </h3>
+                <H3Heading variant="title">{item.title}</H3Heading>
               ) : null}
-              <p className="font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
-                {item.body}
-              </p>
+              <Copy variant="lede">{item.body}</Copy>
             </div>
           ))}
           </div>
@@ -721,7 +713,7 @@ export default function AboutSection({
             {padIndex(items.length - 1)}
           </span>
         </div>
-        <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-[1.3] font-normal uppercase">
+        <Copy variant="caption">
           {copy.readout.map((part) =>
             part.strong ? (
               <strong key={part.text} className="font-medium">
@@ -731,7 +723,7 @@ export default function AboutSection({
               part.text
             ),
           )}
-        </p>
+        </Copy>
       </div>
 
       <BrandButton tone="steel" href={copy.cta.href} className="about-cta">

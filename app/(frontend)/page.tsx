@@ -1,12 +1,12 @@
 import PreLoading from "@/app/(frontend)/components/PreLoading";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
+import StorySection from "@/app/(frontend)/about/pagesection/StorySection";
 import AboutSection from "@/app/(frontend)/homesections/AboutSection";
 import CapabilitiesSection from "@/app/(frontend)/homesections/CapabilitiesSection";
 import FeturedProducts from "@/app/(frontend)/homesections/FeturedProducts";
 import HeroSection from "@/app/(frontend)/homesections/HeroSection";
 import OurTwoCoreSection from "@/app/(frontend)/homesections/OurTwoCoreSection";
 import PartnersSection from "@/app/(frontend)/homesections/PartnersSection";
-import ProductCatalogueSection from "@/app/(frontend)/homesections/ProductCatalogueSection";
 import QualitySection from "@/app/(frontend)/homesections/QualitySection";
 
 export default function Home() {
@@ -19,6 +19,8 @@ export default function Home() {
           className="relative z-10 bg-steel [--page-bg:var(--steel)] [--page-ink:var(--cream)]"
         >
           <HeroSection />
+          <SectionBreak tone="dark" />
+          <StorySection />
           <SectionBreak tone="dark" />
           <AboutSection figures showTitles />
           <SectionBreak tone="dark" />
@@ -40,7 +42,6 @@ export default function Home() {
           <SectionBreak tone="dark" />
           <PartnersSection />
           <SectionBreak tone="dark" />
-          {/* <ProductCatalogueSection /> */}
         </div>
       </main>
     </>

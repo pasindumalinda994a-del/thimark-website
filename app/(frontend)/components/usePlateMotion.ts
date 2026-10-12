@@ -52,7 +52,9 @@ export type PlateMotionOptions = {
  * [data-draw] draws its strokes, [data-count] counts up,
  * [data-redraw] replays its strokes on hover,
  * [data-scrub-x] grows left-to-right with scroll and sets data-passed on
- * [data-scrub-stop="0.5"] markers once its progress reaches their value.
+ * [data-scrub-stop="0.5"] markers once its progress reaches their value,
+ * [data-drift] (a note centred on its [data-drift-band]) slides through the
+ * band with scroll from md up, like the homepage solution notes.
  */
 export function usePlateMotion(
   scope: RefObject<HTMLElement | null>,
@@ -72,8 +74,35 @@ export function usePlateMotion(
       const redraws = gsap.utils.toArray<HTMLElement>("[data-redraw]", root);
       const scrubs = gsap.utils.toArray<HTMLElement>("[data-scrub-x]", root);
       const stops = gsap.utils.toArray<HTMLElement>("[data-scrub-stop]", root);
+      const drifts = gsap.utils.toArray<HTMLElement>("[data-drift]", root);
 
       const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
+        drifts.forEach((note) => {
+          const band = note.closest<HTMLElement>("[data-drift-band]") ?? note.parentElement;
+          if (!band) return;
+
+          gsap.set(note, { yPercent: -50 });
+          const distance = () => Math.max(0, (band.offsetHeight - note.offsetHeight) / 2 - 16);
+
+          gsap.fromTo(
+            note,
+            { y: () => -distance() },
+            {
+              y: () => distance(),
+              ease: "none",
+              scrollTrigger: {
+                trigger: band,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+                invalidateOnRefresh: true,
+              },
+            },
+          );
+        });
+      });
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
         counts.forEach((el) => setCount(el, Number(el.dataset.count)));
@@ -110,7 +139,8 @@ export function usePlateMotion(
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.set(reveals, { autoAlpha: 0, y: rise ? 10 : 12 });
         ScrollTrigger.batch(reveals, {
-          start: "top 88%",
+          // Measured after the y offset above; hero CTAs sit at rows 12–14 of the first viewport.
+          start: "top 92%",
           once: true,
           onEnter: (batch) =>
             gsap.to(batch, {

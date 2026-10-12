@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Copy from "@/app/(frontend)/components/Copy";
 import Link from "next/link";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
@@ -17,38 +19,38 @@ const SOLUTIONS = [
   {
     id: "kilgharrah",
     name: "Kilgharrah 600",
-    title: "Trash Rack Cleaning Machine",
-    callout: ["KenGen", "Mobile hydraulic"],
+    title: "Automated Trash Rack Cleaning Machine",
+    callout: ["KenGen", "Hydropower Infrastructure"],
     image: "/home-images/featured-kilgharrah.png",
     alt: "Kilgharrah 600 trash-rack cleaner operating at a hydropower intake",
     href: "/#contact",
     cta: "Discover Kilgharrah 600",
     imageSide: "right",
-    body: "Thimark built the Kilgharrah 600 for KenGen, a mobile hydraulic trash rack cleaner with custom controls and fabrication.",
+    body: "Thimark designed and manufactured the Kilgharrah 600 for KenGen, delivering a custom-engineered hydraulic trash-rack cleaning solution for hydropower infrastructure.",
   },
   {
     id: "oem",
     name: "OEM Motorcycle Components",
     title: "Precision for Local Assembly",
-    callout: ["DPMC · Bajaj", "Local assembly"],
+    callout: ["DPMC / Bajaj", "Senaro", "Ranomoto"],
     image: "/home-images/two-core-automotive.png",
     alt: "Precision motorcycle components on a workshop bench",
     href: "/#catalogue",
     cta: "Explore OEM Components",
     imageSide: "left",
-    body: "Thimark now supplies key parts for the local motorcycle assembly with its OEM partners DPMC/Bajaj, Senaro and Ranomoto.",
+    body: "Thimark manufactures key motorcycle components for local assembly programmes, supporting established OEM partners with precision-engineered parts and dependable production.",
   },
   {
     id: "machinery-work",
     name: "Custom Industrial Machinery",
     title: "Built Around Your Application",
-    callout: ["Custom build", "Built for the site"],
+    callout: ["Custom Engineering", "Site-Specific Solutions"],
     image: "/home-images/two-core-machinery.png",
     alt: "Engineers assembling custom industrial machinery",
     href: "/#manufacturing",
     cta: "Explore Industrial Machinery",
     imageSide: "right",
-    body: "Thimark also develops custom machinery and fabricated systems built around the real operational needs of each new site.",
+    body: "From specialized equipment to fabricated industrial systems, Thimark develops machinery around real operational requirements, helping customers address complex engineering challenges.",
   },
 ] as const;
 
@@ -124,11 +126,11 @@ export default function SolutionsSection() {
                   <span aria-hidden className="solutions-band-mark" />
                   [{padIndex(index)}]
                 </p>
-                <h3 id={`${solution.id}-title`} className="solutions-band-name">
+                <H3Heading id={`${solution.id}-title`} variant="statement">
                   {solution.name}
-                </h3>
-                <p className="solutions-band-title">{solution.title}</p>
-                <p className="solutions-note-body">{solution.body}</p>
+                </H3Heading>
+                <Copy variant="lede" className="solutions-band-title">{solution.title}</Copy>
+                <Copy variant="body" className="solutions-note-body">{solution.body}</Copy>
               </div>
               <Link
                 href={solution.href}

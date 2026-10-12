@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy, { copyClass } from "@/app/(frontend)/components/Copy";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import PartnerWordmark from "@/app/(frontend)/homesections/PartnerWordmark";
 import { PARTNERS } from "@/app/(frontend)/homesections/partners";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -34,7 +35,7 @@ const HOME_COPY: PartnersCopy = {
   heading: ["Engineering That", "Earns Trust."],
   lede: {
     strong: "Strong engineering partnerships are built over time.",
-    rest: "Thimark works with established organizations that rely on our manufacturing capability, technical expertise and commitment to quality.",
+    rest: "Thimark works with established organizations that rely on its manufacturing capability, technical expertise and commitment to quality.",
   },
   statement:
     "From local manufacturing partnerships to international engineering projects, our work speaks through the relationships we build.",
@@ -156,20 +157,14 @@ export default function PartnersSection({
         <p data-p-header className="eyebrow">
           {copy.eyebrow}
         </p>
-        <MaskRevealHeading
-          id={headingId}
-          className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
-        >
+        <H2Heading id={headingId}>
           {copy.heading[0]}
           <span className="ab-statement-muted">{copy.heading[1]}</span>
-        </MaskRevealHeading>
-        <p
-          data-p-header
-          className="max-w-[720px] font-heading text-[clamp(12px,1vw,16px)] leading-none font-normal uppercase"
-        >
+        </H2Heading>
+        <Copy data-p-header variant="lede" weight="normal" className="max-w-[720px]">
           <span className="font-medium">{copy.lede.strong}</span>{" "}
           {copy.lede.rest}
-        </p>
+        </Copy>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
@@ -193,37 +188,10 @@ export default function PartnersSection({
               <span>{partner.sector}</span>
               <span aria-hidden>[{padIndex(i)}]</span>
             </p>
-            <div data-p-mark className="partner-wordmark">
-              {partner.logo ? (
-                <Image
-                  src={partner.logo}
-                  alt={partner.brand}
-                  width={240}
-                  height={80}
-                  className="h-16 w-auto object-contain"
-                />
-              ) : (
-                <span
-                  aria-hidden
-                  style={
-                    partner.mark
-                      ? {
-                          fontFamily: partner.mark.font,
-                          fontWeight: partner.mark.weight,
-                          fontStyle: partner.mark.italic ? "italic" : "normal",
-                          letterSpacing: partner.mark.tracking,
-                          textTransform: partner.mark.uppercase === false ? "none" : "uppercase",
-                        }
-                      : undefined
-                  }
-                >
-                  {partner.brand}
-                </span>
-              )}
+            <div data-p-mark className={`partner-wordmark ${copyClass("display")}`}>
+              <PartnerWordmark partner={partner} />
             </div>
-            <p className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase">
-              {partner.legalName}
-            </p>
+            <Copy variant="caption">{partner.legalName}</Copy>
             <GridLine
               axis="h"
               unstyled
@@ -236,9 +204,7 @@ export default function PartnersSection({
           data-p-cell
           className={`partner-statement dot-field-soft${copy.cta ? " partner-statement-stack" : ""}`}
         >
-          <p className="font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium uppercase md:text-justify md:[text-align-last:left]">
-            {copy.statement}
-          </p>
+          <Copy variant="lede">{copy.statement}</Copy>
           {copy.cta ? (
             <BrandButton href={copy.cta.href} className="partner-statement-cta">
               {copy.cta.label}

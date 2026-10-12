@@ -1,4 +1,5 @@
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
 import { RAQ_LINK } from "@/app/(frontend)/components/nav";
 
 type UnderDevelopmentPageProps = {
@@ -11,9 +12,7 @@ export default function UnderDevelopmentPage({ name, quoteService }: UnderDevelo
   return (
     <main className="content-plate min-h-dvh bg-cream pt-14 md:ml-sidebar md:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       <div className="flex min-h-[calc(100dvh-3.5rem)] flex-col items-center justify-center gap-10 px-4 md:min-h-dvh">
-        <h1 className="font-heading text-center text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-steel uppercase">
-          {name} under development
-        </h1>
+        <H1Heading className="text-center text-steel">{name} under development</H1Heading>
         {quoteService ? (
           <BrandButton
             href={`${RAQ_LINK.href}?service=${quoteService}`}

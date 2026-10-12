@@ -1,11 +1,11 @@
 "use client";
 
-import { useRef } from "react";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
-import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
+import Copy from "@/app/(frontend)/components/Copy";
+import { Fragment, useRef } from "react";
+import Image from "next/image";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
-import AwardSeal from "./AwardSeal";
-import { AWARDS, CREDENTIALS, RECOGNITION } from "./about";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
 import {
   Cell,
@@ -13,33 +13,51 @@ import {
   Eyebrow,
   Frame,
   MobileEdge,
+  PlateBlock,
   type HLine,
+  type Join,
   type VLine,
 } from "@/app/(frontend)/components/plate";
+import { padIndex } from "@/app/(frontend)/homesections/StoryProgress";
+import AwardSeal from "./AwardSeal";
+import { AWARDS, RECOGNITION } from "./about";
+import { BandMobileRails, BandRails } from "./bands";
 
-const joinStubDown: PlusArms = { up: false, down: true, left: false, right: false };
-const joinStubUp: PlusArms = { up: true, down: false, left: false, right: false };
-
-const H: HLine[] = [
-  [3, 0, 12],
-  [4, 0, 12],
-  [11, 0, 12],
-  [13, 0, 12],
+const HEAD_H: HLine[] = [[3, 0, 12]];
+const HEAD_V: VLine[] = [
+  [0, 0, 3],
+  [12, 0, 3],
+  [8, 0, 3],
+];
+const HEAD_JOINS: Join[] = [
+  [0, 3, { down: true }],
+  [6, 3, { down: true }],
+  [12, 3, { down: true }],
 ];
 
-const V: VLine[] = [
-  [0, 0, 16],
-  [12, 0, 16],
-  [8, 0, 3],
-  [6, 3, 13],
-  [3, 4, 11],
-  [9, 4, 11],
-  [8, 13, 16],
+const GRID_H: HLine[] = [
+  [0, 0, 12],
+  [6, 0, 12],
+  [12, 0, 12],
+];
+const GRID_V: VLine[] = [
+  [0, 0, 15],
+  [12, 0, 15],
+  [3, 0, 15],
+  [6, 0, 12],
+  [9, 0, 12],
+];
+const GRID_JOINS: Join[] = [
+  [0, 0, { up: true }],
+  [6, 0, { up: true }],
+  [12, 0, { up: true }],
 ];
 
 export default function RecognitionSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref);
+  usePlateMotion(ref, { image: "rise" });
+
+  const { band } = RECOGNITION;
 
   return (
     <SectionGrid
@@ -49,145 +67,159 @@ export default function RecognitionSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)]"
+      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
     >
-      <Frame h={H} v={V} />
+      <PlateBlock rows={3}>
+        <Frame h={HEAD_H} v={HEAD_V} joins={HEAD_JOINS} />
 
-      <Cell at={[0, 8, 0, 3]} className="plate-title">
-        <MobileEdge open />
-        <Eyebrow data-reveal index={RECOGNITION.index}>
-          {RECOGNITION.eyebrow}
-        </Eyebrow>
-        <MaskRevealHeading
-          id="recognition-heading"
-          className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase"
-        >
-          {RECOGNITION.heading[0]}
-          <span className="ab-statement-muted">{RECOGNITION.heading[1]}</span>
-        </MaskRevealHeading>
-      </Cell>
-
-      <Cell at={[8, 12, 0, 3]} className="plate-lede">
-        <MobileEdge />
-        <p
-          data-reveal
-          className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.1] font-medium uppercase md:text-justify md:[text-align-last:left]"
-        >
-          {RECOGNITION.intro}
-        </p>
-      </Cell>
-
-      {AWARDS.map((award, i) => {
-        const c = i * 6;
-        return [
-          <Cell key={`${award.id}-head`} at={[c, c + 6, 3, 4]} className="ab-head index-tag">
-            <MobileEdge open />
-            <span className="flex items-center gap-2">
-              <span aria-hidden className="ab-marker" />
-              {award.name}
-            </span>
-            <span className="tabular-nums">[{award.year}]</span>
-          </Cell>,
-          <Cell
-            key={`${award.id}-seal`}
-            at={[c, c + 3, 4, 11]}
-            className="rc-seal-cell"
-            data-redraw=""
-          >
-            <MobileEdge open />
-            <div data-draw className="rc-seal dot-field-soft">
-              <Corners />
-              <AwardSeal
-                tier={award.tier}
-                ring={award.ring}
-                year={award.year}
-                className="rc-seal-mark"
-              />
-            </div>
-          </Cell>,
-          <Cell
-            key={`${award.id}-copy`}
-            at={[c + 3, c + 6, 4, 11]}
-            as="article"
-            className="rc-award"
-            aria-labelledby={`award-${award.id}`}
-          >
-            <MobileEdge />
-            <div data-reveal className="rc-award-title">
-              <h3
-                id={`award-${award.id}`}
-                className="font-heading text-[clamp(22px,2vw,36px)] leading-none font-medium uppercase"
-              >
-                {award.title}
-                <span className="sr-only">, {award.name} {award.year}</span>
-              </h3>
-              <p className="index-tag leading-[1.2] opacity-80">{award.sector}</p>
-            </div>
-            <span aria-hidden className="rc-award-year ab-outline">
-              {award.year}
-            </span>
-            <p data-reveal className="ab-copy">
-              {award.body}
-            </p>
-          </Cell>,
-        ];
-      })}
-
-      {CREDENTIALS.map((cred, i) => (
-        <Cell key={cred.id} at={[i * 6, i * 6 + 6, 11, 13]} className="rc-cred">
-          <MobileEdge />
-          <article data-reveal className="quality-cred">
-            <span className="quality-cred-bracket" aria-hidden>
-              <PlusMark tone="page" arms={joinStubDown} className="top-0 left-0" />
-              <span className="quality-cred-rail">
-                <svg width="1" height="100%" className="h-full w-px">
-                  <line
-                    x1="0.5"
-                    x2="0.5"
-                    y1="0"
-                    y2="100%"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    strokeDasharray="8 8"
-                  />
-                </svg>
-              </span>
-              <PlusMark tone="page" arms={joinStubUp} className="top-full left-0" />
-            </span>
-            <div className="quality-cred-body">
-              <p className="quality-cred-org">{cred.org}</p>
-              <div className="quality-cred-copy">
-                <p className="quality-cred-code">{cred.code}</p>
-                <p className="quality-cred-sub">{cred.sub}</p>
-              </div>
-            </div>
-          </article>
-          <span className="rc-cred-tag index-tag">
-            {i === 0 ? "Certified" : "Accredited"}
-          </span>
+        <Cell at={[0, 8, 0, 3]} className="plate-title">
+          <MobileEdge open />
+          <Eyebrow data-reveal index={RECOGNITION.index}>
+            {RECOGNITION.eyebrow}
+          </Eyebrow>
+          <H2Heading id="recognition-heading">
+            {RECOGNITION.heading[0]}
+            <span className="ab-statement-muted">{RECOGNITION.heading[1]}</span>
+          </H2Heading>
         </Cell>
-      ))}
 
-      <Cell at={[0, 8, 13, 16]} className="plate-statement">
-        <MobileEdge open />
-        <p data-reveal className="ab-statement">
-          {RECOGNITION.statement[0]}
-          <span className="ab-statement-muted">{RECOGNITION.statement[1]}</span>
-        </p>
-      </Cell>
-
-      <Cell at={[8, 12, 13, 16]} className="plate-lede">
-        <MobileEdge />
-        {RECOGNITION.aside.map((line, i) => (
-          <p
-            key={line}
+        <Cell at={[8, 12, 0, 3]} className="plate-lede">
+          <MobileEdge />
+          <Copy
             data-reveal
-            className={`font-heading text-[clamp(12px,1vw,16px)] leading-[1.1] uppercase ${i === 0 ? "font-medium" : "font-normal opacity-80"}`}
+            variant="lede"
           >
-            {line}
+            {RECOGNITION.intro}
+          </Copy>
+        </Cell>
+      </PlateBlock>
+
+      <div className="solutions-sheet dr-bands">
+        <article
+          data-image="right"
+          data-drift-band=""
+          aria-label={band.label}
+          className="solutions-band"
+        >
+          <BandRails foot={false} />
+
+          <div className="solutions-plate">
+            <div data-wipe className="solutions-plate-shot">
+              <Image
+                src={band.media.src}
+                alt={band.media.alt}
+                fill
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover"
+                style={{ objectPosition: band.media.objectPosition }}
+              />
+              <p className="solutions-callout index-tag">
+                {band.callout.map((line) => (
+                  <span key={line}>{line}</span>
+                ))}
+              </p>
+              <Corners tone="light" />
+            </div>
+            <BandMobileRails />
+          </div>
+
+          <div data-drift className="solutions-note dr-note">
+            <div className="solutions-note-copy dr-note-copy">
+              <p className="solutions-band-kicker index-tag">
+                <span aria-hidden className="solutions-band-mark" />
+                {band.label}
+              </p>
+              <Copy variant="lead">{band.body}</Copy>
+              <ol className="vm-legend rc-legend">
+                {AWARDS.map((award) => (
+                  <li key={award.id} className="vm-legend-item index-tag">
+                    <span className="tabular-nums opacity-60">[{award.year}]</span>
+                    <span className="vm-legend-rule" aria-hidden />
+                    <span>{award.name}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+            <p aria-hidden className="dr-note-foot index-tag">
+              <span>
+                {AWARDS.reduce((sum, award) => sum + award.distinctions.length, 0)} Distinctions
+              </span>
+              <span className="tabular-nums">
+                {AWARDS[AWARDS.length - 1]?.year}&ndash;{AWARDS[0]?.year}
+              </span>
+            </p>
+            <BandMobileRails />
+          </div>
+        </article>
+      </div>
+
+      <PlateBlock rows={15}>
+        <Frame h={GRID_H} v={GRID_V} joins={GRID_JOINS} />
+
+        {AWARDS.map((award, i) => {
+          const c = (i % 2) * 6;
+          const r = Math.floor(i / 2) * 6;
+          return (
+            <Fragment key={award.id}>
+              <Cell at={[c, c + 3, r, r + 6]} className="rc-seal-cell" data-redraw="">
+                <MobileEdge open />
+                <div data-draw className="rc-seal dot-field-soft">
+                  <Corners />
+                  <AwardSeal
+                    label={award.seal.label}
+                    solid={award.seal.solid}
+                    ring={award.ring}
+                    year={award.year}
+                    className="rc-seal-mark"
+                  />
+                </div>
+              </Cell>
+              <Cell
+                at={[c + 3, c + 6, r, r + 6]}
+                as="article"
+                className="rc-award"
+                aria-labelledby={`award-${award.id}`}
+              >
+                <MobileEdge />
+                <div data-reveal className="rc-award-title">
+                  <p className="index-tag flex items-center justify-between gap-3 opacity-80">
+                    <span>{award.org}</span>
+                    <span className="tabular-nums">[{padIndex(i)}]</span>
+                  </p>
+                  <H3Heading id={`award-${award.id}`} variant="title">
+                    {award.name}
+                    <span className="sr-only">, {award.year}</span>
+                  </H3Heading>
+                </div>
+                <ul data-reveal className="rc-distinctions">
+                  {award.distinctions.map((line) => (
+                    <li key={line}>
+                      <span aria-hidden className="ab-marker" />
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+                <span aria-hidden className="rc-award-year ab-outline">
+                  {award.year}
+                </span>
+              </Cell>
+            </Fragment>
+          );
+        })}
+
+        <Cell at={[0, 3, 12, 15]} className="plate-lede rc-close-label">
+          <MobileEdge open />
+          <p data-reveal className="index-tag flex items-center gap-2">
+            <span aria-hidden className="ab-marker" />
+            {RECOGNITION.closingLabel}
           </p>
-        ))}
-      </Cell>
+        </Cell>
+
+        <Cell at={[3, 12, 12, 15]} as="blockquote" className="st-closing m-0">
+          <MobileEdge />
+          <Copy data-reveal variant="statement">{RECOGNITION.closing}</Copy>
+        </Cell>
+      </PlateBlock>
     </SectionGrid>
   );
 }

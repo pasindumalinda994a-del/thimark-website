@@ -24,7 +24,7 @@ export const PARTNERS: Partner[] = [
     id: "dpmc",
     brand: "Bajaj",
     legalName: "David Pieris Motor Company Lanka Ltd.",
-    sector: "OEM Partner",
+    sector: "OEM Manufacturing Partner",
     mark: {
       font: "var(--font-oxanium)",
       weight: 700,
@@ -35,7 +35,7 @@ export const PARTNERS: Partner[] = [
     id: "senaro",
     brand: "Senaro",
     legalName: "Senaro Motor Company (Pvt) Ltd.",
-    sector: "OEM Partner",
+    sector: "OEM Manufacturing Partner",
     mark: {
       font: "var(--font-saira)",
       weight: 800,
@@ -47,7 +47,7 @@ export const PARTNERS: Partner[] = [
     id: "ranomoto",
     brand: "Ranomoto",
     legalName: "Ranatunga Motors (Pvt) Ltd.",
-    sector: "OEM Partner",
+    sector: "OEM Manufacturing Partner",
     mark: {
       font: "var(--font-oswald)",
       weight: 600,
@@ -58,7 +58,7 @@ export const PARTNERS: Partner[] = [
     id: "kengen",
     brand: "KenGen",
     legalName: "Kenya Electricity Generating Company",
-    sector: "International Project",
+    sector: "International Engineering Project",
     mark: {
       font: "var(--font-montserrat)",
       weight: 700,
@@ -69,7 +69,7 @@ export const PARTNERS: Partner[] = [
   {
     id: "varomatech",
     brand: "Varomatech",
-    legalName: "Varomatech Ltd — Kenya",
-    sector: "International Project",
+    legalName: "Varomatech Ltd. — Kenya",
+    sector: "International Project Collaborator",
   },
 ];

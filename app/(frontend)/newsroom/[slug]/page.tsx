@@ -3,6 +3,10 @@ import { draftMode } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import Copy from "@/app/(frontend)/components/Copy";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
+import H3Heading, { ArticleHeading } from "@/app/(frontend)/components/H3Heading";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import ArticleShare from "@/app/(frontend)/newsroom/ArticleShare";
@@ -111,11 +115,11 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
             <span aria-hidden> | </span>
             <time dateTime={record.date}>{formatRecordDate(record.date)}</time>
           </p>
-          <h1 className="news-article-title">{record.title}</h1>
+          <H1Heading className="news-article-title">{record.title}</H1Heading>
         </div>
 
         <aside className="news-article-side">
-          <p>{record.excerpt}</p>
+          <Copy variant="meta">{record.excerpt}</Copy>
         </aside>
 
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -185,8 +189,8 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
         <div className="news-article-prose">
           {record.body.map((section, i) => (
             <section key={sectionId(i)} id={sectionId(i)} className="news-article-section">
-              <h2 className="news-section-label index-tag">{section.heading}</h2>
-              <p>{section.text}</p>
+              <ArticleHeading className="news-section-label">{section.heading}</ArticleHeading>
+              <Copy variant="prose">{section.text}</Copy>
               {section.href ? (
                 <a
                   href={section.href}
@@ -248,9 +252,9 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
             />
             <div className="news-related-lead">
               <p className="news-meta index-tag">Related</p>
-              <h2 id="news-related-heading" className="news-related-title">
+              <H2Heading id="news-related-heading" className="news-related-title">
                 Further records.
-              </h2>
+              </H2Heading>
             </div>
             <p className="news-related-note">{relatedNote(related)}</p>
             <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -324,7 +328,7 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
                         </span>
                         <time dateTime={item.date}>{formatRecordDate(item.date)}</time>
                       </p>
-                      <h3>{item.title}</h3>
+                      <H3Heading variant="title" className="tracking-[-0.02em]">{item.title}</H3Heading>
                     </span>
                   </Link>
                   <GridLine

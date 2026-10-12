@@ -6,7 +6,9 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import {
@@ -283,19 +285,18 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
           <p data-cat-header className="eyebrow">
             Newsroom
           </p>
-          <MaskRevealHeading
-            id="newsroom-heading"
-            className="font-heading text-[clamp(28px,3.4vw,48px)] leading-none font-medium text-left uppercase"
-          >
+          <H1Heading id="newsroom-heading" className="text-left">
             On the record.
-          </MaskRevealHeading>
+          </H1Heading>
         </div>
-        <p
+        <Copy
           data-cat-header
-          className="catalogue-lede font-heading text-[16px] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]"
+          variant="lede" size="fixed"
+          weight="medium"
+          className="catalogue-lede md:text-justify md:[text-align-last:left]"
         >
           Company news, project dispatches, awards, and work that leaves Sri Lanka.
-        </p>
+        </Copy>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
@@ -378,12 +379,10 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
                     {categoryById(record.category).full} · {formatRecordDate(record.date)}
                   </span>
                 </p>
-                <h3 className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase">
-                  {record.title}
-                </h3>
-                <p className="line-clamp-2 text-[13px] leading-[1.4] text-steel/75">
+                <H3Heading variant="title">{record.title}</H3Heading>
+                <Copy variant="meta" className="line-clamp-2 text-steel/75">
                   {record.excerpt}
-                </p>
+                </Copy>
               </div>
             </Link>
             <GridLine

@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import Copy from "@/app/(frontend)/components/Copy";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import { RAQ_LINK } from "@/app/(frontend)/components/nav";
 import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
@@ -27,6 +28,8 @@ const CONTACT = [
     id: "company",
     label: "Company",
     lines: ["Thimark Technocreations (Pvt) Ltd"],
+    website: "www.thimark.com",
+    websiteHref: "https://www.thimark.com",
   },
   {
     id: "address",
@@ -62,7 +65,7 @@ export type QuoteCopy = {
 const DEFAULT_COPY: QuoteCopy = {
   eyebrow: "Have an Engineering Challenge?",
   heading: ["Let\u2019s Turn Your Requirement", "Into a Solution."],
-  lede: "Whether you need a reliable OEM manufacturing partner, precision components or a custom industrial machine, our engineering team is ready to understand your requirement and explore the right solution.",
+  lede: "Whether you need a reliable OEM manufacturing partner, precision components or custom industrial machinery, our engineering team is ready to understand your requirements and explore the right solution.",
   closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
   primary: { label: RAQ_LINK.label, href: RAQ_LINK.href },
   secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
@@ -276,12 +279,14 @@ export default function QuoteSection({
             <span className="ab-statement-muted">{copy.heading[1]}</span>
           </MaskRevealHeading>
         </div>
-        <p
+        <Copy
           data-quote-copy
-          className="max-w-[560px] font-heading text-[16px] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
+          variant="lede" size="fixed"
+          weight="normal"
+          className="max-w-[560px] md:text-justify md:[text-align-last:left]"
         >
           {copy.lede}
-        </p>
+        </Copy>
       </div>
 
       {/* Technical drawing */}
@@ -306,13 +311,10 @@ export default function QuoteSection({
 
         {/* Closing line */}
         <div className="quote-close">
-        <p
-          data-quote-copy
-          className="font-heading text-[clamp(20px,1.8vw,24px)] leading-none font-medium uppercase"
-        >
+        <Copy data-quote-copy variant="lead">
           {copy.closing[0]}
           <span className="block">{copy.closing[1]}</span>
-        </p>
+        </Copy>
         </div>
 
         {/* CTAs */}
@@ -373,13 +375,26 @@ export default function QuoteSection({
                 {cell.lines.join(" ")}
               </a>
             ) : (
-              <p className="font-heading text-[12px] leading-[1.3] font-medium uppercase">
-                {cell.lines.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
-              </p>
+              <div className="flex flex-col gap-1">
+                <p className="font-heading text-[12px] leading-[1.3] font-medium uppercase">
+                  {cell.lines.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </p>
+                {"website" in cell ? (
+                  <>
+                    <p className="index-tag mt-2 opacity-80">Website</p>
+                    <a
+                      href={cell.websiteHref}
+                      className="font-heading text-[12px] leading-[1.3] font-medium underline-offset-4 hover:underline focus-visible:underline outline-none"
+                    >
+                      {cell.website}
+                    </a>
+                  </>
+                ) : null}
+              </div>
             )}
           </div>
         ))}

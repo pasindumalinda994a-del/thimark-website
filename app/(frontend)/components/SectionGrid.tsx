@@ -107,21 +107,3 @@ export default function SectionGrid({
     </section>
   );
 }
-
-export function ContentColumns({
-  children,
-  className = "",
-  cols = 2,
-}: {
-  children: ReactNode;
-  className?: string;
-  cols?: 2 | 3;
-}) {
-  return (
-    <div
-      className={`relative z-10 grid grid-cols-1 gap-4 px-4 ${cols === 3 ? "md:grid-cols-3" : "md:grid-cols-2"} ${className}`}
-    >
-      {children}
-    </div>
-  );
-}

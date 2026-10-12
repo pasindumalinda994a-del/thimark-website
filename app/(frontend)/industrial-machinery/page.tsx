@@ -1,17 +1,26 @@
 import type { Metadata } from "next";
+import Copy from "@/app/(frontend)/components/Copy";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
 import CapabilitiesSection from "@/app/(frontend)/homesections/CapabilitiesSection";
-import ApproachSection from "./pagesection/ApproachSection";
-import ExportsSection from "./pagesection/ExportsSection";
-import FeaturedProjectSection from "./pagesection/FeaturedProjectSection";
-import HeroSection from "./pagesection/HeroSection";
-import ProductsServicesSection from "./pagesection/ProductsServicesSection";
-import { CAPABILITIES, CAPABILITIES_CTA } from "./pagesection/machinery";
+import AboutHero from "@/app/(frontend)/about/pagesection/AboutHero";
+import { QualityCred } from "@/app/(frontend)/about/pagesection/QualitySection";
+import { QUALITY } from "@/app/(frontend)/about/pagesection/about";
+import ProcessSection from "@/app/(frontend)/automotive/pagesection/ProcessSection";
+import FeaturedSection from "./pagesection/FeaturedSection";
+import PortfolioSection from "./pagesection/PortfolioSection";
+import {
+  CAPABILITIES,
+  CAPABILITIES_CLOSING,
+  CAPABILITIES_COPY,
+  HERO,
+  PROCESS,
+  STAGES,
+} from "./pagesection/machinery";
 
 export const metadata: Metadata = {
   title: "Industrial Machinery — Thimark",
   description:
-    "Thimark designs and manufactures custom industrial machinery, hydraulic and water-management equipment, material handling and filtration systems, from Kadawatha, Sri Lanka to the Kilgharrah 600 for KenGen in Kenya.",
+    "Thimark engineers and manufactures custom machinery and industrial systems for water and hydropower infrastructure, industrial processing, and material handling, including the KILGARRAH 600 for KenGen.",
 };
 
 const CREAM = "relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]";
@@ -21,25 +30,30 @@ export default function IndustrialMachineryPage() {
   return (
     <main className="content-plate pt-14 md:ml-sidebar md:pt-0">
       <div className={CREAM}>
-        <HeroSection />
+        <AboutHero
+          id="hero"
+          copy={HERO}
+        />
         <SectionBreak tone="page" />
-        <ProductsServicesSection />
+        <PortfolioSection />
+        <SectionBreak tone="page" />
+        <ProcessSection id="process" copy={PROCESS} stages={STAGES} pace={0.75} />
       </div>
       <div className={STEEL}>
         <SectionBreak tone="page" />
-        <FeaturedProjectSection />
+        <FeaturedSection />
       </div>
       <div className={CREAM}>
         <SectionBreak tone="page" />
-        <ApproachSection />
-      </div>
-      <div className={STEEL}>
-        <SectionBreak tone="page" />
-        <ExportsSection />
-      </div>
-      <div className={CREAM}>
-        <SectionBreak tone="page" />
-        <CapabilitiesSection id="capabilities" items={CAPABILITIES} cta={CAPABILITIES_CTA} />
+        <CapabilitiesSection
+          id="capabilities"
+          items={CAPABILITIES}
+          copy={CAPABILITIES_COPY}
+          progressLabel="Capabilities"
+          foot={<Copy variant="title" size="sm" className="ps-statement im-caps-close">{CAPABILITIES_CLOSING}</Copy>}
+          cta={null}
+          aside={<QualityCred {...QUALITY.cred} />}
+        />
       </div>
     </main>
   );

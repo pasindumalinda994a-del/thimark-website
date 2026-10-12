@@ -15,14 +15,15 @@ import HomeProgress, {
 import PlusMark from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import {
-  HOME_SECTIONS,
   NAV_ITEMS,
+  PAGE_SECTIONS,
   PATH_ACTIVE_IDS,
   RAQ_LINK,
   divisionSectionTargets,
   normalizePath,
   pathLabel,
   pathSection,
+  type HomeSection,
   type NavItem,
   type NavLink,
 } from "@/app/(frontend)/components/nav";
@@ -94,11 +95,15 @@ function StationMark({ active }: { active: boolean }) {
 function PlateRule({
   edge,
   branch = false,
+  closed = false,
 }: {
   edge: "top" | "bottom";
   branch?: boolean;
+  /** No rail continues below this rule, so the pluses omit the down arm. */
+  closed?: boolean;
 }) {
   const at = edge === "top" ? "top-0" : "at-bottom";
+  const down = !closed;
   return (
     <>
       <GridLine
@@ -108,18 +113,27 @@ function PlateRule({
         data-sb-rule
         className={`${branch ? "sb-h-seg-branch" : "sb-h-seg"} ${at}`}
       />
-      <PlusMark tone="dark" className={`sb-rail-l ${at}`} />
-      <PlusMark tone="dark" className={`sb-rail-r ${at}`} />
+      <PlusMark
+        tone="dark"
+        arms={{ up: true, down, left: false, right: true }}
+        className={`sb-rail-l ${at}`}
+      />
+      <PlusMark
+        tone="dark"
+        arms={{ up: true, down, left: true, right: false }}
+        className={`sb-rail-r ${at}`}
+      />
     </>
   );
 }
 
-/** Dashed vertical rails inset from both edges, stopping short of the rules. */
-function PlateRails() {
+/** Dashed vertical rails. Open at the plate top; between pluses everywhere else. */
+function PlateRails({ edge }: { edge: "open" | "between" }) {
+  const rail = edge === "open" ? "hero-v-above-plus" : "hero-v-between-pluses";
   return (
     <>
-      <GridLine axis="v" unstyled tone="dark" className="sb-rail-l sb-rail" />
-      <GridLine axis="v" unstyled tone="dark" className="sb-rail-r sb-rail" />
+      <GridLine axis="v" unstyled tone="dark" className={`sb-rail-l ${rail}`} />
+      <GridLine axis="v" unstyled tone="dark" className={`sb-rail-r ${rail}`} />
     </>
   );
 }
@@ -289,7 +303,7 @@ function NavGroup({
 
 function NavShell({
   activeId,
-  isHome,
+  sections,
   section,
   pageName,
   pathname,
@@ -300,7 +314,7 @@ function NavShell({
   variant = "sidebar",
 }: {
   activeId: string;
-  isHome: boolean;
+  sections?: readonly HomeSection[];
   section: number;
   pageName: string;
   pathname: string;
@@ -333,7 +347,7 @@ function NavShell({
     <div className={`sidebar-plate${isDrawer ? " sb-drawer-plate" : ""} ${className}`}>
       {isDrawer ? null : (
         <div className="sb-block sb-block-logo h-rows-2">
-          <PlateRails />
+          <PlateRails edge="open" />
           <div className="sb-logo-lockup">
             <BrandLogo
               className="sb-logo"
@@ -347,7 +361,7 @@ function NavShell({
 
       {/* Navigation */}
       <nav aria-label="Dashboard" className="sb-block sb-block-nav">
-        <PlateRails />
+        <PlateRails edge={isDrawer ? "open" : "between"} />
         <div data-sb-item className="sb-nav-head">
           <span className="sidebar-group font-heading leading-none font-medium text-steel uppercase">
             Dashboard
@@ -386,15 +400,20 @@ function NavShell({
             ) : null,
           )}
         </div>
-        <PlateRule edge="bottom" />
+        <PlateRule edge="bottom" closed={isDrawer} />
       </nav>
 
-      {/* Homepage progress rail / page readout */}
+      {/* Section index / page readout */}
       {isDrawer ? null : (
       <div className="sb-block sb-block-progress h-rows-3">
-        <PlateRails />
-        {isHome ? (
-          <HomeProgress active={section} onNavigate={onNavigate} />
+        <PlateRails edge="between" />
+        {sections ? (
+          <HomeProgress
+            sections={sections}
+            pathname={pathname}
+            active={section}
+            onNavigate={onNavigate}
+          />
         ) : (
           <div className="sb-panel" data-sb-item>
             <dl className="sb-spec">
@@ -433,7 +452,7 @@ function NavShell({
             </dl>
           </div>
         )}
-        <PlateRule edge="bottom" />
+        <PlateRule edge="bottom" closed />
       </div>
       )}
 
@@ -648,18 +667,18 @@ function MobileSheet({
 
 export default function Sidebar() {
   const pathname = normalizePath(usePathname() ?? "/");
-  const isHome = pathname === "/";
-  const section = useHomeSection(isHome);
+  const sections = PAGE_SECTIONS[pathname];
+  const section = useHomeSection(sections);
   const divisionTargets = useMemo(
     () => divisionSectionTargets(pathname),
     [pathname],
   );
   const divisionNavId = useMidlineNavId(
     divisionTargets,
-    !isHome && divisionTargets.length > 0,
+    !sections && divisionTargets.length > 0,
   );
-  const activeId = isHome
-    ? (HOME_SECTIONS[section]?.navId ?? "")
+  const activeId = sections
+    ? (sections[section]?.navId ?? PATH_ACTIVE_IDS[pathname] ?? "")
     : (divisionNavId ?? PATH_ACTIVE_IDS[pathname] ?? "");
   const pageName = pathLabel(pathname);
 
@@ -790,7 +809,7 @@ export default function Sidebar() {
       >
         <NavShell
           activeId={activeId}
-          isHome={isHome}
+          sections={sections}
           section={section}
           pageName={pageName}
           pathname={pathname}
@@ -799,7 +818,7 @@ export default function Sidebar() {
         />
       </aside>
 
-      <header className="content-plate fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream md:hidden">
+      <header className="content-plate mn-header fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream md:hidden">
         <BrandLogo className="px-4" imageClassName="h-7" priority />
         <button
           type="button"
@@ -813,7 +832,11 @@ export default function Sidebar() {
             Menu
           </span>
           <span className="mn-toggle-rule" aria-hidden>
-            <PlusMark tone="dark" className="mn-toggle-plus" />
+            <PlusMark
+              tone="dark"
+              arms={{ up: true, down: false, left: true, right: true }}
+              className="mn-toggle-plus"
+            />
           </span>
           <span className="mn-toggle-mark">
             <span aria-hidden className="relative block h-2 w-4.5">
@@ -828,9 +851,18 @@ export default function Sidebar() {
             </span>
           </span>
         </button>
-        <GridLine axis="h" unstyled tone="dark" className="h-seg-0-12 at-bottom" />
-        <PlusMark tone="dark" className="v-g1-0 at-bottom" />
-        <PlusMark tone="dark" className="v-g1-12 at-bottom" />
+        <GridLine axis="h" unstyled tone="dark" className="mn-header-rule-l at-bottom" />
+        <GridLine axis="h" unstyled tone="dark" className="mn-header-rule-r at-bottom" />
+        <PlusMark
+          tone="dark"
+          arms={{ up: false, down: false, left: false, right: true }}
+          className="v-g1-0 at-bottom"
+        />
+        <PlusMark
+          tone="dark"
+          arms={{ up: false, down: false, left: true, right: false }}
+          className="v-g1-12 at-bottom"
+        />
       </header>
 
       <div
@@ -855,10 +887,26 @@ export default function Sidebar() {
           <GridLine axis="v" unstyled tone="dark" className="mn-rail mn-rail-l" />
           <GridLine axis="v" unstyled tone="dark" className="mn-rail mn-rail-r" />
           <GridLine axis="h" unstyled tone="dark" className="mn-rule" />
-          <PlusMark tone="dark" className="mn-plus-tl" />
-          <PlusMark tone="dark" className="mn-plus-tr" />
-          <PlusMark tone="dark" className="mn-plus-bl" />
-          <PlusMark tone="dark" className="mn-plus-br" />
+          <PlusMark
+            tone="dark"
+            arms={{ up: false, down: true, left: false, right: false }}
+            className="mn-plus-tl"
+          />
+          <PlusMark
+            tone="dark"
+            arms={{ up: false, down: true, left: false, right: false }}
+            className="mn-plus-tr"
+          />
+          <PlusMark
+            tone="dark"
+            arms={{ up: true, down: false, left: false, right: true }}
+            className="mn-plus-bl"
+          />
+          <PlusMark
+            tone="dark"
+            arms={{ up: true, down: false, left: true, right: false }}
+            className="mn-plus-br"
+          />
         </div>
       </div>
     </>

@@ -5,7 +5,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import { RAQ_LINK } from "@/app/(frontend)/components/nav";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
 import HeroProvenance from "@/app/(frontend)/components/HeroProvenance";
 import HeroReel from "@/app/(frontend)/components/HeroReel";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
@@ -161,29 +162,25 @@ export default function HeroSection() {
           Engineering <span aria-hidden>·</span> Manufacturing{" "}
           <span aria-hidden>·</span> Innovation
         </p>
-        <MaskRevealHeading
-          as="h1"
-          id="hero-heading"
-          waitForPreload
-          className="hero-heading font-heading text-[clamp(30px,8vw,34px)] leading-[0.92] font-medium tracking-[-0.01em] uppercase md:text-[clamp(40px,3.5vw,64px)] md:leading-[0.89]"
-        >
+        <H1Heading id="hero-heading" waitForPreload className="hero-heading">
           Engineering What Moves
           <span className="ab-statement-muted">Industry Forward.</span>
-        </MaskRevealHeading>
+        </H1Heading>
       </div>
 
       <div className="hero-lede">
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
-        <p
+        <Copy
           data-hero-item
-          className="hero-body font-heading text-left text-[12px] leading-snug font-medium uppercase md:text-justify md:text-[clamp(12px,1vw,16px)] md:leading-none"
+          variant="lede"
+          className="hero-body"
         >
           From precision-engineered motorcycle components to custom industrial
           machinery, Thimark combines engineering expertise, advanced
           manufacturing and local capability to create solutions built for the
           real world.
-        </p>
+        </Copy>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
         <PlusMark tone="light" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />

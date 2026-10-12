@@ -18,16 +18,22 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Automotive Components",
     children: [
       {
+        id: "automotive-range",
+        label: "Component Range",
+        fullLabel: "Automotive Component Range",
+        href: "/automotive#product-range",
+      },
+      {
+        id: "automotive-oem",
+        label: "OEM Partnerships",
+        fullLabel: "Automotive OEM Partnerships",
+        href: "/automotive#oem-partnerships",
+      },
+      {
         id: "automotive-manufacturing",
         label: "Manufacturing",
         fullLabel: "Automotive Components Manufacturing",
-        href: "/automotive#manufacturing",
-      },
-      {
-        id: "automotive-value",
-        label: "Local Value Addition",
-        fullLabel: "Automotive Local Value Addition",
-        href: "/automotive#local-value-addition",
+        href: "/automotive#process",
       },
     ],
   },
@@ -35,12 +41,6 @@ export const NAV_ITEMS: NavItem[] = [
     id: "engineering",
     label: "Engineering & Services",
     children: [
-      {
-        id: "engineering-powder-coating",
-        label: "Powder Coating",
-        fullLabel: "Powder Coating",
-        href: "/engineering-services#powder-coating",
-      },
       {
         id: "engineering-npd",
         label: "New Product Development",
@@ -53,6 +53,12 @@ export const NAV_ITEMS: NavItem[] = [
         fullLabel: "Reverse Engineering",
         href: "/engineering-services#reverse-engineering",
       },
+      {
+        id: "engineering-surface",
+        label: "Surface Finishing",
+        fullLabel: "Surface Finishing",
+        href: "/engineering-services#surface-finishing",
+      },
     ],
   },
   {
@@ -60,16 +66,22 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Industrial Machinery",
     children: [
       {
-        id: "machinery-products-services",
-        label: "Product & Services",
-        fullLabel: "Industrial Machinery Product & Services",
-        href: "/industrial-machinery#products-services",
+        id: "machinery-custom",
+        label: "Custom Machinery",
+        fullLabel: "Custom Industrial Machinery",
+        href: "/industrial-machinery#portfolio",
+      },
+      {
+        id: "machinery-fabrication",
+        label: "Heavy Fabrication",
+        fullLabel: "Industrial Heavy Fabrication",
+        href: "/industrial-machinery#capabilities",
       },
       {
         id: "machinery-exports",
-        label: "Exports",
-        fullLabel: "Industrial Machinery Exports",
-        href: "/industrial-machinery#exports",
+        label: "International Projects",
+        fullLabel: "Industrial Machinery International Projects",
+        href: "/industrial-machinery#kilgarrah",
       },
     ],
   },
@@ -94,7 +106,7 @@ export const RAQ_LINK = {
 } as const;
 
 export type HomeSection = {
-  /** DOM id of the homepage section (`<SectionGrid id=…>`). */
+  /** DOM id of the section the rail tracks (`<SectionGrid id=…>`). */
   id: string;
   /** Short readout label shown in the progress rail. */
   label: string;
@@ -104,7 +116,8 @@ export type HomeSection = {
 
 export const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "hero", label: "Overview", navId: null },
-  { id: "about", label: "Our Story", navId: "about" },
+  { id: "story", label: "Our Story", navId: "about" },
+  { id: "about", label: "Journey", navId: "about" },
   { id: "capabilities", label: "What We Do", navId: "capabilities" },
   { id: "products", label: "Solutions", navId: "capabilities" },
   { id: "manufacturing", label: "Advantage", navId: "capabilities" },
@@ -113,6 +126,55 @@ export const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "catalogue", label: "Catalogue", navId: "capabilities" },
   { id: "contact", label: "Contact", navId: null },
 ];
+
+const ABOUT_SECTIONS: readonly HomeSection[] = [
+  { id: "about-hero", label: "Overview", navId: null },
+  { id: "story", label: "Our Story", navId: null },
+  { id: "journey", label: "Journey", navId: null },
+  { id: "vision-mission", label: "Vision", navId: null },
+  { id: "quality", label: "Quality", navId: null },
+  { id: "how-we-work", label: "Practices", navId: null },
+  { id: "recognition", label: "Recognition", navId: null },
+  { id: "leadership", label: "Leadership", navId: null },
+  { id: "contact", label: "Contact", navId: null },
+];
+
+const AUTOMOTIVE_SECTIONS: readonly HomeSection[] = [
+  { id: "hero", label: "Overview", navId: null },
+  { id: "product-range", label: "Range", navId: "automotive-range" },
+  { id: "oem-partnerships", label: "Partnerships", navId: "automotive-oem" },
+  { id: "process", label: "Process", navId: "automotive-manufacturing" },
+  { id: "manufacturing", label: "Capabilities", navId: "automotive-manufacturing" },
+  { id: "contact", label: "Contact", navId: null },
+];
+
+const MACHINERY_SECTIONS: readonly HomeSection[] = [
+  { id: "hero", label: "Overview", navId: null },
+  { id: "portfolio", label: "Portfolio", navId: "machinery-custom" },
+  { id: "process", label: "Approach", navId: null },
+  { id: "kilgarrah", label: "Kilgarrah", navId: "machinery-exports" },
+  { id: "capabilities", label: "Capabilities", navId: "machinery-fabrication" },
+  { id: "contact", label: "Contact", navId: null },
+];
+
+const ENGINEERING_SECTIONS: readonly HomeSection[] = [
+  { id: "hero", label: "Overview", navId: null },
+  { id: "new-product-development", label: "Development", navId: "engineering-npd" },
+  { id: "reverse-engineering", label: "Reverse", navId: "engineering-reverse" },
+  { id: "surface-finishing", label: "Finishing", navId: "engineering-surface" },
+  { id: "engineering-quality", label: "Quality", navId: null },
+  { id: "capabilities", label: "Capabilities", navId: null },
+  { id: "contact", label: "Contact", navId: null },
+];
+
+/** Routes that show the scrolling section index instead of the page readout. */
+export const PAGE_SECTIONS: Record<string, readonly HomeSection[]> = {
+  "/": HOME_SECTIONS,
+  "/about": ABOUT_SECTIONS,
+  "/automotive": AUTOMOTIVE_SECTIONS,
+  "/industrial-machinery": MACHINERY_SECTIONS,
+  "/engineering-services": ENGINEERING_SECTIONS,
+};
 
 export function collectNavLinks(items: NavItem[]): NavLink[] {
   const links: NavLink[] = [];
@@ -151,7 +213,7 @@ export function hrefPath(href: string): string {
 
 for (const item of NAV_ITEMS) {
   const base = item.children?.[0] ? hrefPath(item.children[0].href) : "";
-  if (!base || PATH_LABELS[base]) continue;
+  if (!base) continue;
   if (item.children?.every((child) => hrefPath(child.href) === base)) {
     PATH_LABELS[base] = item.label;
   }

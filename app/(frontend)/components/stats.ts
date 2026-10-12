@@ -14,8 +14,8 @@ export const STATS: Stat[] = [
     value: 15000,
     unit: "sq. ft.",
   },
-  { id: "employees", label: "Skilled Employees", value: 95 },
-  { id: "engineers", label: "Qualified Engineers", value: 7, pad: 2 },
+  { id: "employees", label: "Employees", value: 95 },
+  { id: "engineers", label: "Qualified Engineers", value: 7 },
   { id: "projects", label: "Projects Completed", value: 120, suffix: "+" },
 ];
 

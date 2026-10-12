@@ -1,13 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import ScrollHint from "@/app/(frontend)/components/ScrollHint";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
+import H3Heading from "@/app/(frontend)/components/H3Heading";
 import IsoGlyph, { type IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
@@ -26,9 +28,24 @@ export type Capability = {
 
 type CapabilitiesCta = { label: string; href: string };
 
+export type CapabilitiesCopy = {
+  eyebrow: string;
+  heading: readonly [string, string];
+  lede: readonly string[];
+};
+
 const DEFAULT_CTA: CapabilitiesCta = {
   label: "Explore Our Capabilities",
   href: "/#catalogue",
+};
+
+const DEFAULT_COPY: CapabilitiesCopy = {
+  eyebrow: "The Thimark Advantage",
+  heading: ["Capability You", "Can Build On."],
+  lede: [
+    "Great engineering starts with good ideas — but reliable products require the capability to turn those ideas into reality.",
+    "Thimark combines manufacturing infrastructure, technical expertise and controlled production processes to support precision, consistency and dependable delivery.",
+  ],
 };
 
 const CAPABILITIES: Capability[] = [
@@ -43,35 +60,35 @@ const CAPABILITIES: Capability[] = [
     id: "engineering",
     tag: "Engineering",
     title: "Engineering & Design",
-    body: "Engineering expertise focused on developing practical solutions for automotive and industrial applications.",
+    body: "Practical engineering solutions developed around automotive and industrial requirements.",
     icon: "schema",
   },
   {
     id: "fabrication",
     tag: "Fabrication",
     title: "Heavy Steel Fabrication",
-    body: "Proven fabrication capability developed through years of mechanical engineering and industrial projects.",
+    body: "Proven fabrication capabilities built through years of mechanical engineering and industrial projects.",
     icon: "work",
   },
   {
     id: "oem",
     tag: "OEM",
     title: "OEM Manufacturing",
-    body: "Production of motorcycle components for established local assembly and manufacturing partners.",
+    body: "Precision motorcycle components manufactured for established local assembly and manufacturing partners.",
     icon: "factory",
   },
   {
     id: "machinery",
     tag: "Machinery",
     title: "Industrial Machinery",
-    body: "Design and manufacture of customized machinery and mechanical systems.",
+    body: "Custom-designed machinery and mechanical systems for demanding industrial applications.",
     icon: "forklift",
   },
   {
     id: "automation",
     tag: "Automation",
     title: "Automation & Custom Solutions",
-    body: "Integration of mechanical, hydraulic and control technologies to solve specialized industrial challenges.",
+    body: "Integration of mechanical, hydraulic and control technologies to address specialized industrial challenges.",
     icon: "electrical",
   },
 ];
@@ -97,12 +114,23 @@ export default function CapabilitiesSection({
   id = "manufacturing",
   items = CAPABILITIES,
   cta = DEFAULT_CTA,
+  copy = DEFAULT_COPY,
+  progressLabel = "Capabilities",
+  foot,
+  aside,
 }: {
   id?: string;
   items?: readonly Capability[];
-  cta?: CapabilitiesCta;
+  /** Pass null to seat `aside` in the button cell instead. */
+  cta?: CapabilitiesCta | null;
+  copy?: CapabilitiesCopy;
+  progressLabel?: string;
+  /** Replaces the stats band under the track. */
+  foot?: ReactNode;
+  aside?: ReactNode;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
+  const plain = foot != null;
 
   useGSAP(
     () => {
@@ -329,9 +357,13 @@ export default function CapabilitiesSection({
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-br4 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br4-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-br4-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br4-br2 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br4-br2 hidden md:block" />
+      {plain ? null : (
+        <>
+          <GridLine axis="v" unstyled tone="page" className="v-g1-3 v-seg-br4-br2 hidden md:block" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-6 v-seg-br4-br2 hidden md:block" />
+          <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br4-br2 hidden md:block" />
+        </>
+      )}
       <GridLine axis="v" unstyled tone="page" className="v-g1-9 v-seg-br2-end hidden md:block" />
 
       {/* Row 3 */}
@@ -340,25 +372,41 @@ export default function CapabilitiesSection({
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
       {/* Row 10 (stats top) */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-4 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-4 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-4 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-4 hidden md:block" />
+      {plain ? (
+        <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-br-4 hidden md:block" />
+      ) : (
+        <>
+          <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-4 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-4 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-4 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-4 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeDown} className="v-g1-3 at-br-4 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 at-br-4 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 at-br-4 hidden md:block" />
+        </>
+      )}
       <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-4 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-3 at-br-4 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-6 at-br-4 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 at-br-4 hidden md:block" />
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-4 hidden md:block" />
 
       {/* Row 12 (stats bottom / CTA top) */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-2 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-2 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-2 hidden md:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
+      {plain ? (
+        <>
+          <GridLine axis="h" unstyled tone="page" className="h-seg-0-9g at-br-2 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeDown} className="v-g1-9 at-br-2 hidden md:block" />
+        </>
+      ) : (
+        <>
+          <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-br-2 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-br-2 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-br-2 hidden md:block" />
+          <GridLine axis="h" unstyled tone="page" className="h-seg-9g-12 at-br-2 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeUp} className="v-g1-3 at-br-2 hidden md:block" />
+          <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-br-2 hidden md:block" />
+          <PlusMark tone="page" className="v-g1-9 at-br-2 hidden md:block" />
+        </>
+      )}
       <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-3 at-br-2 hidden md:block" />
-      <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-br-2 hidden md:block" />
-      <PlusMark tone="page" className="v-g1-9 at-br-2 hidden md:block" />
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Intro */}
@@ -366,25 +414,18 @@ export default function CapabilitiesSection({
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="caps-title">
-          <p className="eyebrow">The Thimark Advantage</p>
-          <MaskRevealHeading
-            id="caps-heading"
-            className="font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium text-left uppercase"
-          >
-            Capability You
-            <span className="ab-statement-muted">Can Build On.</span>
-          </MaskRevealHeading>
+          <p className="eyebrow">{copy.eyebrow}</p>
+          <H2Heading id="caps-heading" className="text-left">
+            {copy.heading[0]}
+            <span className="ab-statement-muted">{copy.heading[1]}</span>
+          </H2Heading>
         </div>
-        <div className="caps-lede font-heading text-[clamp(12px,1vw,16px)] leading-none font-medium text-left uppercase md:text-justify md:[text-align-last:left]">
-          <p>
-            Great engineering starts with good ideas — but reliable products
-            require the capability to turn those ideas into reality.
-          </p>
-          <p className="font-normal">
-            Thimark has developed its manufacturing infrastructure, technical
-            expertise and production systems to support precision, consistency
-            and dependable delivery.
-          </p>
+        <div className="caps-lede">
+          {copy.lede.map((paragraph, i) => (
+            <Copy key={paragraph} variant="lede" weight={i > 0 ? "normal" : "medium"}>
+              {paragraph}
+            </Copy>
+          ))}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
@@ -441,18 +482,16 @@ export default function CapabilitiesSection({
                 </div>
 
                 <div className="caps-card-base">
-                  <h3
-                    data-caps-title
-                    className="font-heading text-[clamp(16px,1.25vw,24px)] leading-none font-medium uppercase"
-                  >
+                  <H3Heading data-caps-title variant="title">
                     {item.title}
-                  </h3>
-                  <p
+                  </H3Heading>
+                  <Copy
                     data-caps-body
-                    className="font-heading text-[clamp(10px,0.85vw,12px)] leading-none font-normal uppercase md:text-justify md:[text-align-last:left]"
+                    variant="caption"
+                    className="md:text-justify md:[text-align-last:left]"
                   >
                     {item.body}
-                  </p>
+                  </Copy>
                 </div>
               </li>
             ))}
@@ -467,6 +506,9 @@ export default function CapabilitiesSection({
       <div className="relative flex flex-col md:contents">
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
+        {plain ? (
+          <div className="caps-foot min-h-rows-2">{foot}</div>
+        ) : (
         <dl data-caps-stats className="caps-stats min-h-rows-2 m-0">
         {STATS.map((stat, i) => (
           <div key={stat.id} className="caps-stat">
@@ -502,6 +544,7 @@ export default function CapabilitiesSection({
           </div>
         ))}
         </dl>
+        )}
 
         {/* Progress readout */}
         <div className="caps-progress" aria-hidden>
@@ -509,7 +552,7 @@ export default function CapabilitiesSection({
             <span className="flex items-center gap-1">
               <StationPlus />
               <StationDash />
-              <span>Capabilities</span>
+              <span>{progressLabel}</span>
             </span>
             <span className="tabular-nums">
               <span data-caps-count>{padIndex(VISIBLE_CARDS - 1)}</span>
@@ -522,13 +565,17 @@ export default function CapabilitiesSection({
           </div>
         </div>
 
-        <BrandButton
-          tone="steel"
-          href={cta.href}
-          className="caps-cta"
-        >
-          {cta.label}
-        </BrandButton>
+        {cta ? (
+          <BrandButton
+            tone="steel"
+            href={cta.href}
+            className="caps-cta"
+          >
+            {cta.label}
+          </BrandButton>
+        ) : aside ? (
+          <div className="caps-aside">{aside}</div>
+        ) : null}
       </div>
       <ScrollHint seat="col-9" />
     </SectionGrid>

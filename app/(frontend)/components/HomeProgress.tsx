@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
-import { HOME_SECTIONS } from "@/app/(frontend)/components/nav";
+import { type HomeSection } from "@/app/(frontend)/components/nav";
 
-const COUNT = HOME_SECTIONS.length;
+const EMPTY_SECTIONS: readonly HomeSection[] = [];
 
 export function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -18,21 +18,25 @@ type Snapshot = {
 
 let cache: { key: string; snap: Snapshot } | null = null;
 
+function sectionKey(sections: readonly HomeSection[]) {
+  return sections.map((section) => section.id).join("|");
+}
+
 /**
- * Reads the position of every homepage section relative to the viewport
- * midline. Results are memoised per scroll position so that several rails
- * (desktop aside + mobile overlay) share one set of layout reads per frame.
+ * Reads the position of every listed section relative to the viewport
+ * midline. Results are memoised per section list and scroll position so
+ * that the rail and the nav highlight share one set of layout reads per frame.
  */
-function snapshot(): Snapshot {
+function snapshot(sections: readonly HomeSection[]): Snapshot {
   const vh = window.innerHeight;
-  const key = `${Math.round(window.scrollY)}|${vh}`;
+  const key = `${sectionKey(sections)}|${Math.round(window.scrollY)}|${vh}`;
   if (cache && cache.key === key) return cache.snap;
 
   const mid = vh / 2;
   const progress: number[] = [];
   let active = 0;
 
-  HOME_SECTIONS.forEach((section, index) => {
+  sections.forEach((section, index) => {
     const el = document.getElementById(section.id);
     if (!el) {
       progress.push(0);
@@ -54,21 +58,28 @@ function snapshot(): Snapshot {
   return snap;
 }
 
-function useSectionFrame(enabled: boolean, onFrame: (snap: Snapshot) => void) {
+function useSectionFrame(
+  enabled: boolean,
+  sections: readonly HomeSection[],
+  onFrame: (snap: Snapshot) => void,
+) {
   const handler = useRef(onFrame);
+  const sectionsRef = useRef(sections);
+  const key = sectionKey(sections);
 
   useEffect(() => {
     handler.current = onFrame;
+    sectionsRef.current = sections;
   });
 
   useLenis(() => {
     if (!enabled) return;
-    handler.current(snapshot());
+    handler.current(snapshot(sectionsRef.current));
   });
 
   useEffect(() => {
     if (!enabled) return;
-    const run = () => handler.current(snapshot());
+    const run = () => handler.current(snapshot(sectionsRef.current));
     run();
     const timer = window.setTimeout(run, 400);
     window.addEventListener("resize", run);
@@ -80,16 +91,26 @@ function useSectionFrame(enabled: boolean, onFrame: (snap: Snapshot) => void) {
       window.removeEventListener("thimark:preload-done", run);
       ScrollTrigger.removeEventListener("refresh", run);
     };
-  }, [enabled]);
+  }, [enabled, key]);
 }
 
-/** Index of the homepage section currently spanning the viewport midline. */
-export function useHomeSection(enabled: boolean) {
+/** Index of the section currently spanning the viewport midline. */
+export function useHomeSection(sections: readonly HomeSection[] | undefined) {
+  const list = sections ?? EMPTY_SECTIONS;
+  const enabled = list.length > 0;
+  const key = sectionKey(list);
   const [active, setActive] = useState(0);
-  useSectionFrame(enabled, (snap) => {
+  const [seenKey, setSeenKey] = useState(key);
+
+  if (seenKey !== key) {
+    setSeenKey(key);
+    setActive(0);
+  }
+
+  useSectionFrame(enabled, list, (snap) => {
     setActive((current) => (current === snap.active ? current : snap.active));
   });
-  return enabled ? active : -1;
+  return enabled ? (seenKey === key ? active : 0) : -1;
 }
 
 function midlineNavId(
@@ -193,39 +214,49 @@ function Plus() {
   );
 }
 
+function sectionHref(pathname: string, id: string) {
+  const path = pathname === "/" ? "/" : pathname;
+  return `${path}#${id}`;
+}
+
 type HomeProgressProps = {
+  sections: readonly HomeSection[];
+  pathname: string;
   active: number;
   onNavigate?: () => void;
   className?: string;
 };
 
 export default function HomeProgress({
+  sections,
+  pathname,
   active,
   onNavigate,
   className = "",
 }: HomeProgressProps) {
   const meter = useRef<HTMLSpanElement>(null);
   const [focused, setFocused] = useState<number | null>(null);
+  const count = sections.length;
 
-  useSectionFrame(true, (snap) => {
+  useSectionFrame(count > 0, sections, (snap) => {
     const el = meter.current;
-    if (!el) return;
+    if (!el || count === 0) return;
     const at = snap.active;
-    const overall = (at + (snap.progress[at] ?? 0)) / COUNT;
+    const overall = (at + (snap.progress[at] ?? 0)) / count;
     el.style.transform = `scaleX(${overall.toFixed(4)})`;
   });
 
-  const current = Math.max(0, active);
+  const current = Math.min(Math.max(0, active), Math.max(0, count - 1));
   const shown = focused ?? current;
   const trackStyle = {
     "--sb-at": `${shown}`,
-    "--sb-count": `${COUNT}`,
+    "--sb-count": `${count}`,
   } as CSSProperties;
 
   return (
     <div
       className={`sb-panel ${className}`}
-      aria-label="Homepage sections"
+      aria-label="Page sections"
       role="navigation"
     >
       <div className="sb-panel-head">
@@ -234,7 +265,7 @@ export default function HomeProgress({
         </span>
         <span className="sb-panel-count index-tag" aria-live="polite">
           {padIndex(current)}
-          <span className="text-steel/50">/{padIndex(COUNT - 1)}</span>
+          <span className="text-steel/50">/{padIndex(count - 1)}</span>
         </span>
         <span aria-hidden className="sb-index-meter">
           <span ref={meter} className="sb-index-meter-fill" />
@@ -244,7 +275,7 @@ export default function HomeProgress({
       <div className="sb-progress">
         <div className="sb-index-window">
           <ol className="sb-index-track" style={trackStyle}>
-            {HOME_SECTIONS.map((item, index) => {
+            {sections.map((item, index) => {
               const isCurrent = index === current;
               return (
                 <li
@@ -252,7 +283,7 @@ export default function HomeProgress({
                   className={`sb-index-item ${isCurrent ? "is-current" : ""}`}
                 >
                   <a
-                    href={`/#${item.id}`}
+                    href={sectionHref(pathname, item.id)}
                     aria-current={isCurrent ? "true" : undefined}
                     className="sb-index-row"
                     onClick={onNavigate}

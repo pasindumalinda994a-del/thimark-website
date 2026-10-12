@@ -13,7 +13,8 @@ import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import Copy from "@/app/(frontend)/components/Copy";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import GalleryStrip, { type GalleryStripHandle } from "@/app/(frontend)/gallery/GalleryStrip";
@@ -327,22 +328,15 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
             <p data-gal-item className="eyebrow">
               Gallery
             </p>
-            <MaskRevealHeading
-              as="h1"
-              id="gallery-heading"
-              className="font-heading text-[clamp(28px,2.6vw,48px)] leading-[0.92] font-medium tracking-[-0.02em] uppercase"
-            >
+            <H1Heading id="gallery-heading">
               Seen where it is made.
-            </MaskRevealHeading>
+            </H1Heading>
           </div>
           <div className="gallery-head-aside">
-            <p
-              data-gal-item
-              className="font-heading text-[clamp(12px,1vw,16px)] leading-[1.35] font-medium uppercase md:text-justify md:[text-align-last:left]"
-            >
+            <Copy data-gal-item variant="lede">
               The Kadawatha workshop, Kilgharrah 600 in the field, and the
               evening the company was received.
-            </p>
+            </Copy>
           </div>
         </div>
 
@@ -427,12 +421,14 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                     {categoryById(shown.category).full}
                   </p>
                 </div>
-                <p className="gallery-reel-title" aria-live="polite">
+                <Copy variant="statement" className="gallery-reel-title" aria-live="polite">
                   {shown.title}
-                </p>
+                </Copy>
               </div>
               <div data-reel-copy className="gallery-title-note">
-                <p className="gallery-reel-note">{shown.note}</p>
+                <Copy variant="meta" className="gallery-reel-note">
+                  {shown.note}
+                </Copy>
                 <p className="index-tag font-normal">{shown.place}</p>
               </div>
             </div>
@@ -495,20 +491,17 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                       {pad2(viewer.index + 1)} / {pad2(viewer.ids.length)}
                     </span>
                   </p>
-                  <p
-                    id="gallery-viewer-title"
-                    className="font-heading text-[clamp(18px,1.6vw,28px)] leading-none font-medium uppercase"
-                  >
+                  <Copy id="gallery-viewer-title" variant="lead">
                     {current.title}
-                  </p>
+                  </Copy>
                   <p className="index-tag font-normal">
                     {categoryById(current.category).full}
                     <span aria-hidden> · </span>
                     {current.place}
                   </p>
-                  <p className="text-[14px] leading-[1.4] text-cream/75">
+                  <Copy variant="meta" className="text-cream/75">
                     {current.note}
-                  </p>
+                  </Copy>
                 </div>
                 <div className="gallery-viewer-steps">
                   <button

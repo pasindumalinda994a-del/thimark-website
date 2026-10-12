@@ -4,6 +4,9 @@ import { useEffect, useRef, useState, type DragEvent, type FormEvent, type Keybo
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import H1Heading from "@/app/(frontend)/components/H1Heading";
+import Copy from "@/app/(frontend)/components/Copy";
+import { FormHeading } from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { COMPANY } from "@/app/(frontend)/components/site";
@@ -490,21 +493,17 @@ export default function EnquireView({
             <p data-enquire-copy className="eyebrow">
               Enquiry
             </p>
-            <h1
-              id="enquire-heading"
-              data-enquire-copy
-              className="font-heading text-[clamp(40px,5.2vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
-            >
-              Enquire
-            </h1>
+            <H1Heading id="enquire-heading">Enquire</H1Heading>
           </div>
-          <p
+          <Copy
             data-enquire-copy
-            className="max-w-md font-heading text-[16px] leading-none font-normal uppercase"
+            variant="lede" size="fixed"
+            weight="normal"
+            className="max-w-md"
           >
             Tell us the requirement.
             <span className="block">We&rsquo;ll engineer what comes next.</span>
-          </p>
+          </Copy>
         </div>
       </div>
 
@@ -562,12 +561,7 @@ export default function EnquireView({
             onSubmit={onSubmit}
           >
             <div className="contact-form-title">
-              <p
-                data-enquire-copy
-                className="font-heading text-[clamp(18px,1.6vw,24px)] leading-none font-medium uppercase"
-              >
-                Send an enquiry
-              </p>
+              <FormHeading data-enquire-copy>Send an enquiry</FormHeading>
             </div>
 
             <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] h-px w-px overflow-hidden">
@@ -691,9 +685,9 @@ export default function EnquireView({
                 <span className="enquire-well-kicker index-tag">
                   {files.length ? "Add another" : "Optional"}
                 </span>
-                <span className="enquire-well-title">
+                <Copy as="span" variant="lead" className="enquire-well-title">
                   {files.length ? "Drop or choose a file" : "Drop drawings here"}
-                </span>
+                </Copy>
                 <span className="enquire-well-formats index-tag">{CORE_FORMATS.join(" · ")}</span>
                 <span className="enquire-drop-spec index-tag">
                   {MAX_FILES} files · {MAX_FILE_MB} MB each

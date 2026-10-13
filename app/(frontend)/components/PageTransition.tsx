@@ -270,8 +270,8 @@ export default function PageTransition() {
         settle();
         if (destinationHash) {
           settleTimers.current = [
-            window.setTimeout(settle, 80),
-            window.setTimeout(() => {
+            setTimeout(settle, 80),
+            setTimeout(() => {
               ScrollTrigger.refresh();
               settle();
             }, 220),

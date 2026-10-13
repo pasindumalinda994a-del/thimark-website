@@ -20,7 +20,7 @@ import {
 export const metadata: Metadata = {
   title: "Automotive Components — Thimark",
   description:
-    "Precision-engineered motorcycle component from Thimark Technocreations: stands, guards, handlebars, carriers and brackets manufactured in Sri Lanka for OEM and local assembly partners.",
+    "Precision-engineered motorcycle components from Thimark Technocreations: stands, guards, handlebars, carriers and brackets manufactured in Sri Lanka for OEM and local assembly partners.",
 };
 
 const CREAM = "relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]";

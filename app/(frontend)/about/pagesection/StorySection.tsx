@@ -35,7 +35,11 @@ const V: VLine[] = [
   [8, 11, 16],
 ];
 
-export default function StorySection() {
+export default function StorySection({
+  cta = STORY.cta,
+}: {
+  cta?: { label: string; href: string };
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -134,8 +138,13 @@ export default function StorySection() {
 
       <Cell at={[8, 12, 14, 16]} className="plate-cta">
         <MobileEdge />
-        <BrandButton href={STORY.cta.href} tone="steel" data-reveal>
-          {STORY.cta.label}
+        <BrandButton
+          href={cta.href}
+          direction={cta.href.includes("#") ? "down" : "right"}
+          tone="steel"
+          data-reveal
+        >
+          {cta.label}
         </BrandButton>
       </Cell>
     </SectionGrid>

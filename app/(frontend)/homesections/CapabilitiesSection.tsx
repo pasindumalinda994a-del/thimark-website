@@ -37,8 +37,8 @@ export type CapabilitiesCopy = {
 };
 
 const DEFAULT_CTA: CapabilitiesCta = {
-  label: "Explore Our Capabilities",
-  href: "/#catalogue",
+  label: "See Our Quality",
+  href: "/#quality",
 };
 
 const DEFAULT_COPY: CapabilitiesCopy = {
@@ -631,6 +631,7 @@ export default function CapabilitiesSection({
           <BrandButton
             tone="steel"
             href={cta.href}
+            direction="down"
             className="caps-cta"
           >
             {cta.label}

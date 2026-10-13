@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { ReactLenis, useLenis } from "lenis/react";
 import type { LenisOptions } from "lenis";
 import gsap from "gsap";
@@ -19,35 +19,81 @@ function LenisScrollTriggerSync() {
 
 const MOBILE_HASH_OFFSET = -64;
 
-function hashOffset() {
+export function hashOffset() {
   return window.matchMedia("(max-width: 1279px)").matches
     ? MOBILE_HASH_OFFSET
     : 0;
 }
 
-export default function SmoothScroll() {
-  const options = useMemo<LenisOptions>(
-    () => ({
-      autoRaf: true,
-      lerp: 0.1,
-      anchors: { offset: 0 },
-      stopInertiaOnNavigate: true,
-      respectReducedMotion: true,
-    }),
-    [],
-  );
+type SectionScroller = {
+  resize?: () => void;
+  scrollTo: (
+    target: number | HTMLElement,
+    options?: {
+      offset?: number;
+      immediate?: boolean;
+      duration?: number;
+      force?: boolean;
+    },
+  ) => void;
+};
 
-  useEffect(() => {
-    const anchors = options.anchors;
-    if (typeof anchors !== "object" || !anchors) return;
+function sectionId(hash: string) {
+  const raw = hash.startsWith("#") ? hash.slice(1) : hash;
+  if (!raw) return "";
+  try {
+    return decodeURIComponent(raw);
+  } catch {
+    return raw;
+  }
+}
 
-    const syncOffset = () => {
-      anchors.offset = hashOffset();
-    };
-    syncOffset();
-    window.addEventListener("resize", syncOffset);
-    return () => window.removeEventListener("resize", syncOffset);
-  }, [options]);
+/** Scroll to an in-page section. Returns false when the target is not in the document. */
+export function scrollToSection(
+  lenis: SectionScroller | null | undefined,
+  hash: string,
+  options?: { immediate?: boolean },
+) {
+  const id = sectionId(hash);
+  const target = id ? document.getElementById(id) : null;
+  if (!target) return false;
+
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const immediate = options?.immediate ?? reduced;
+  if (lenis) {
+    lenis.resize?.();
+    lenis.scrollTo(target, {
+      offset: hashOffset(),
+      immediate,
+      duration: immediate ? undefined : 1.1,
+      force: true,
+    });
+    return true;
+  }
+
+  const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY + hashOffset());
+  window.scrollTo({ top, behavior: immediate ? "auto" : "smooth" });
+  return true;
+}
+
+/** Return to the top of the current page and drop a section hash. */
+export function scrollToHero(lenis: SectionScroller | null | undefined) {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (lenis) {
+    lenis.scrollTo(0, { duration: reduced ? 0 : 1.1, force: true });
+  } else {
+    window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
+  }
+  const url = new URL(window.location.href);
+  if (url.hash) {
+    history.replaceState(null, "", `${url.pathname}${url.search}`);
+  }
+}
+
+function HashAnchorScroll() {
+  const lenis = useLenis();
+  const lenisRef = useRef(lenis);
+  lenisRef.current = lenis;
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -77,15 +123,48 @@ export default function SmoothScroll() {
       if (next !== here) {
         history.pushState(null, "", next);
       }
+
+      const hash = url.hash;
+      requestAnimationFrame(() => {
+        scrollToSection(lenisRef.current, hash);
+      });
     };
 
     document.addEventListener("click", onClick, true);
     return () => document.removeEventListener("click", onClick, true);
   }, []);
 
+  return null;
+}
+
+export default function SmoothScroll() {
+  const options = useMemo<LenisOptions>(
+    () => ({
+      autoRaf: true,
+      lerp: 0.1,
+      anchors: { offset: 0 },
+      stopInertiaOnNavigate: true,
+      respectReducedMotion: true,
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    const anchors = options.anchors;
+    if (typeof anchors !== "object" || !anchors) return;
+
+    const syncOffset = () => {
+      anchors.offset = hashOffset();
+    };
+    syncOffset();
+    window.addEventListener("resize", syncOffset);
+    return () => window.removeEventListener("resize", syncOffset);
+  }, [options]);
+
   return (
     <ReactLenis root options={options}>
       <LenisScrollTriggerSync />
+      <HashAnchorScroll />
     </ReactLenis>
   );
 }

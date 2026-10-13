@@ -1,7 +1,8 @@
 export const TOPICS = [
   { id: "automotive", label: "Automotive" },
+  { id: "engineering", label: "Engineering services" },
   { id: "industrial", label: "Industrial machinery" },
-  { id: "powder-coating", label: "Powder coating" },
+  { id: "finishing", label: "Surface finishing" },
   { id: "general", label: "General" },
 ] as const;
 
@@ -9,11 +10,14 @@ export type TopicId = (typeof TOPICS)[number]["id"];
 
 const TOPIC_ALIASES: Record<string, TopicId> = {
   automotive: "automotive",
+  engineering: "engineering",
   industrial: "industrial",
   machinery: "industrial",
-  "powder-coating": "powder-coating",
-  powder: "powder-coating",
-  coating: "powder-coating",
+  finishing: "finishing",
+  "surface-finishing": "finishing",
+  "powder-coating": "finishing",
+  powder: "finishing",
+  coating: "finishing",
   general: "general",
   inquiry: "general",
 };
@@ -23,8 +27,11 @@ export function parseTopic(raw: string | undefined | null): TopicId | null {
   return TOPIC_ALIASES[raw.toLowerCase().trim()] ?? null;
 }
 
-export function topicLabel(id: TopicId | "") {
-  return TOPICS.find((topic) => topic.id === id)?.label ?? "";
+export function topicLabel(id: TopicId | "" | string) {
+  if (!id) return "";
+  const resolved = parseTopic(id);
+  if (!resolved) return "";
+  return TOPICS.find((topic) => topic.id === resolved)?.label ?? "";
 }
 
 export const CORE_FORMATS = ["DWG", "STEP", "PDF"] as const;

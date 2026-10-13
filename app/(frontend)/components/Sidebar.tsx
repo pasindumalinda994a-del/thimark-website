@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,12 +14,14 @@ import HomeProgress, {
 } from "@/app/(frontend)/components/HomeProgress";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { scrollToHero } from "@/app/(frontend)/components/SmoothScroll";
 import {
   NAV_ITEMS,
   PAGE_SECTIONS,
   PATH_ACTIVE_IDS,
   RAQ_LINK,
   divisionSectionTargets,
+  hrefPath,
   normalizePath,
   pathLabel,
   pathSection,
@@ -32,6 +34,80 @@ gsap.registerPlugin(useGSAP);
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+const OPEN_DELAY = 80;
+const CLOSE_DELAY = 140;
+
+function useDivisionPreview() {
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const previewIdRef = useRef<string | null>(null);
+  const pendingId = useRef<string | null>(null);
+  const openTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
+  useEffect(() => {
+    return () => {
+      window.clearTimeout(openTimer.current);
+      window.clearTimeout(closeTimer.current);
+    };
+  }, []);
+
+  const preview = (id: string, immediate = false) => {
+    window.clearTimeout(closeTimer.current);
+    pendingId.current = id;
+    if (previewIdRef.current === id) {
+      window.clearTimeout(openTimer.current);
+      return;
+    }
+    window.clearTimeout(openTimer.current);
+    const apply = () => {
+      if (pendingId.current !== id) return;
+      previewIdRef.current = id;
+      setPreviewId(id);
+    };
+    if (immediate || prefersReducedMotion()) {
+      apply();
+      return;
+    }
+    openTimer.current = setTimeout(apply, OPEN_DELAY);
+  };
+
+  const endPreview = (id: string) => {
+    if (pendingId.current !== id) return;
+    window.clearTimeout(openTimer.current);
+    window.clearTimeout(closeTimer.current);
+    const delay = prefersReducedMotion() ? 0 : CLOSE_DELAY;
+    closeTimer.current = setTimeout(() => {
+      if (pendingId.current !== id) return;
+      pendingId.current = null;
+      previewIdRef.current = null;
+      setPreviewId(null);
+    }, delay);
+  };
+
+  return { previewId, preview, endPreview };
+}
+
+function onDivisionLinkClick(
+  event: MouseEvent<HTMLAnchorElement>,
+  href: string,
+  lenis: Parameters<typeof scrollToHero>[0],
+  onNavigate?: () => void,
+) {
+  if (
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return;
+  }
+  onNavigate?.();
+  if (normalizePath(window.location.pathname) !== hrefPath(href)) return;
+  event.preventDefault();
+  scrollToHero(lenis);
 }
 
 function padIndex(index: number) {
@@ -216,7 +292,9 @@ function NavGroup({
   activeId,
   open,
   showIndex = true,
-  onToggle,
+  onPreview,
+  onPreviewEnd,
+  onDivisionClick,
   onNavigate,
   idPrefix,
 }: {
@@ -225,24 +303,47 @@ function NavGroup({
   activeId: string;
   open: boolean;
   showIndex?: boolean;
-  onToggle: () => void;
+  onPreview: (id: string, immediate?: boolean) => void;
+  onPreviewEnd: (id: string) => void;
+  onDivisionClick: (event: MouseEvent<HTMLAnchorElement>, href: string) => void;
   onNavigate?: () => void;
   idPrefix: string;
 }) {
   const children = item.children ?? [];
+  const pageHref = item.href ?? (children[0] ? hrefPath(children[0].href) : "/");
   const groupActive =
     activeId === item.id || children.some((c) => c.id === activeId);
+  const pageCurrent = activeId === item.id;
   const panelId = `${idPrefix}-nav-drawer-${item.id}`;
 
   return (
-    <div className={`sb-nav-group ${open ? "is-open" : ""}`}>
-      <button
-        type="button"
+    <div
+      className={`sb-nav-group ${open ? "is-open" : ""}`}
+      onMouseEnter={() => onPreview(item.id)}
+      onMouseLeave={(event) => {
+        const next = event.relatedTarget;
+        if (next instanceof Node && event.currentTarget.contains(next)) return;
+        if (event.currentTarget.contains(document.activeElement)) return;
+        onPreviewEnd(item.id);
+      }}
+      onFocus={() => onPreview(item.id, true)}
+      onBlur={(event) => {
+        const next = event.relatedTarget;
+        if (next instanceof Node && event.currentTarget.contains(next)) return;
+        if (event.currentTarget.matches(":hover")) return;
+        onPreviewEnd(item.id);
+      }}
+    >
+      <Link
+        href={pageHref}
         data-sb-item
-        className={`sb-nav-row sb-nav-toggle ${groupActive ? "is-active" : ""}`}
+        className={`sb-nav-row sb-nav-toggle ${pageCurrent ? "is-active" : ""} ${
+          groupActive ? "is-group" : ""
+        }`}
         aria-expanded={open}
         aria-controls={panelId}
-        onClick={onToggle}
+        aria-current={pageCurrent ? "page" : undefined}
+        onClick={(event) => onDivisionClick(event, pageHref)}
       >
         <StationMark active={groupActive} />
         <span aria-hidden className="sb-nav-leader" />
@@ -269,7 +370,7 @@ function NavGroup({
             [{padIndex(index)}]
           </span>
         ) : null}
-      </button>
+      </Link>
       <div
         id={panelId}
         className="sb-drawer"
@@ -325,9 +426,11 @@ function NavShell({
   variant?: "sidebar" | "drawer";
 }) {
   const isDrawer = variant === "drawer";
+  const lenis = useLenis();
   const sectionName = pathSection(pathname);
   const linkCount = NAV_ITEMS.reduce(
-    (n, item) => n + (item.href ? 1 : 0) + (item.children?.length ?? 0),
+    (n, item) =>
+      n + (item.children?.length ? item.children.length : item.href ? 1 : 0),
     0,
   );
   const routeGroup =
@@ -337,11 +440,8 @@ function NavShell({
         (item.id === activeId ||
           item.children?.some((child) => child.id === activeId)),
     )?.id ?? null;
-  const [openId, setOpenId] = useState<string | null>(routeGroup);
-
-  useEffect(() => {
-    setOpenId(routeGroup);
-  }, [pathname, routeGroup]);
+  const { previewId, preview, endPreview } = useDivisionPreview();
+  const openId = previewId ?? routeGroup;
 
   return (
     <div className={`sidebar-plate${isDrawer ? " sb-drawer-plate" : ""} ${className}`}>
@@ -382,8 +482,10 @@ function NavShell({
                 activeId={activeId}
                 open={openId === item.id}
                 showIndex={!isDrawer}
-                onToggle={() =>
-                  setOpenId((current) => (current === item.id ? null : item.id))
+                onPreview={preview}
+                onPreviewEnd={endPreview}
+                onDivisionClick={(event, href) =>
+                  onDivisionLinkClick(event, href, lenis, onNavigate)
                 }
                 onNavigate={onNavigate}
                 idPrefix={idPrefix}
@@ -543,30 +645,42 @@ function MobileGroup({
   onToggle: () => void;
   onNavigate?: () => void;
 }) {
+  const lenis = useLenis();
   const children = item.children ?? [];
+  const pageHref = item.href ?? (children[0] ? hrefPath(children[0].href) : "/");
   const groupActive =
     activeId === item.id || children.some((child) => child.id === activeId);
+  const pageCurrent = activeId === item.id;
   const panelId = `menu-nav-${item.id}`;
 
   return (
     <div className={`mn-group ${open ? "is-open" : ""}`}>
-      <button
-        type="button"
-        data-sb-item
-        className={`mn-row ${groupActive ? "is-active" : ""}`}
-        aria-expanded={open}
-        aria-controls={panelId}
-        onClick={onToggle}
-      >
-        <span aria-hidden className="mn-index index-tag">
-          {padIndex(index)}
-        </span>
-        <StationMark active={groupActive} />
-        <span className="mn-label font-heading font-medium tracking-[0.04em] uppercase">
-          {item.label}
-        </span>
-        <SheetChevron />
-      </button>
+      <div data-sb-item className={`mn-split ${groupActive ? "is-active" : ""}`}>
+        <Link
+          href={pageHref}
+          className="mn-row-link"
+          aria-current={pageCurrent ? "page" : undefined}
+          onClick={(event) => onDivisionLinkClick(event, pageHref, lenis, onNavigate)}
+        >
+          <span aria-hidden className="mn-index index-tag">
+            {padIndex(index)}
+          </span>
+          <StationMark active={groupActive} />
+          <span className="mn-label font-heading font-medium tracking-[0.04em] uppercase">
+            {item.label}
+          </span>
+        </Link>
+        <button
+          type="button"
+          className="mn-expand"
+          aria-expanded={open}
+          aria-controls={panelId}
+          aria-label={`${open ? "Hide" : "Show"} ${item.label} sections`}
+          onClick={onToggle}
+        >
+          <SheetChevron />
+        </button>
+      </div>
       <div id={panelId} className="mn-sub" role="region" aria-label={item.label} aria-hidden={!open} inert={!open}>
         <div className="mn-sub-clip">
           <div className="mn-branch">

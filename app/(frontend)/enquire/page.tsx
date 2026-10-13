@@ -3,8 +3,8 @@ import EnquireView from "@/app/(frontend)/enquire/EnquireView";
 import { parseTopic } from "@/app/(frontend)/enquire/enquire";
 
 export const metadata: Metadata = {
-  title: "Enquire — Thimark",
-  description: "Send Thimark a requirement. Add a drawing if you have one.",
+  title: "Contact — Thimark",
+  description: "Request a quote, or talk to the team. Add a drawing if you have one.",
 };
 
 type EnquirePageProps = {

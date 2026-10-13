@@ -210,12 +210,13 @@ export default function HeroSection() {
           {RAQ_LINK.label}
         </BrandButton>
         <BrandButton
-          href="/#manufacturing"
+          href="/#capabilities"
+          direction="down"
           tone="outline"
           data-hero-item
           className="hero-cta-secondary w-full md:w-auto"
         >
-          Explore Our Capabilities
+          See What We Do
         </BrandButton>
       </div>
     </SectionGrid>

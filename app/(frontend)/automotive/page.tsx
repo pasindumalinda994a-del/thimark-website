@@ -5,6 +5,7 @@ import CapabilitiesSection from "@/app/(frontend)/homesections/CapabilitiesSecti
 import AboutHero from "@/app/(frontend)/about/pagesection/AboutHero";
 import { QualityCred } from "@/app/(frontend)/about/pagesection/QualitySection";
 import { QUALITY } from "@/app/(frontend)/about/pagesection/about";
+import LocalValueSection from "./pagesection/LocalValueSection";
 import OemSection from "./pagesection/OemSection";
 import ProcessSection from "./pagesection/ProcessSection";
 import RangeSection from "./pagesection/RangeSection";
@@ -13,6 +14,7 @@ import {
   CAPABILITIES_COPY,
   CLOSING_PHRASES,
   HERO,
+  PROCESS_CTA,
 } from "./pagesection/automotive";
 
 export const metadata: Metadata = {
@@ -39,10 +41,12 @@ export default function AutomotivePage() {
       <div className={STEEL}>
         <SectionBreak tone="page" />
         <OemSection />
+        <SectionBreak tone="page" />
+        <LocalValueSection />
       </div>
       <div className={CREAM}>
         <SectionBreak tone="page" />
-        <ProcessSection />
+        <ProcessSection cta={PROCESS_CTA} />
         <SectionBreak tone="page" />
         <CapabilitiesSection
           id="manufacturing"

@@ -20,7 +20,7 @@ export default function Home() {
         >
           <HeroSection />
           <SectionBreak tone="dark" />
-          <StorySection />
+          <StorySection cta={{ label: "See the Journey", href: "/#about" }} />
           <SectionBreak tone="dark" />
           <AboutSection figures showTitles />
           <SectionBreak tone="dark" />

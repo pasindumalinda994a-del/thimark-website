@@ -67,7 +67,7 @@ const DEFAULT_COPY: QuoteCopy = {
   heading: ["Let\u2019s Turn Your Requirement", "Into a Solution."],
   lede: "Whether you need a reliable OEM manufacturing partner, precision components or custom industrial machinery, our engineering team is ready to understand your requirements and explore the right solution.",
   closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
-  primary: { label: RAQ_LINK.label, href: RAQ_LINK.href },
+  primary: { label: "Request a Quote", href: RAQ_LINK.href },
   secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
 };
 

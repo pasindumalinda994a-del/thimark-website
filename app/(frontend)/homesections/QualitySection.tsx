@@ -468,7 +468,7 @@ export default function QualitySection() {
         ))}
       </div>
 
-      <BrandButton href="/#contact" className="quality-cta">
+      <BrandButton href="/about#quality" className="quality-cta">
         Our Approach to Quality
       </BrandButton>
       </div>

@@ -1,7 +1,9 @@
 type DirectionStack = "pair" | "trio";
 
+export type MarkDirection = "down" | "up" | "right" | "left";
+
 type DirectionMarkProps = {
-  direction?: "down" | "up" | "right";
+  direction?: MarkDirection;
   /** Pair is the two-corner link mark. Trio is the scroll hint. */
   stack?: DirectionStack;
   /** One corner, rear first. Omit to draw the whole stack. */

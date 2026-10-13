@@ -223,7 +223,7 @@ export default function RangeSection() {
 
         <Cell at={[8, 12, 16, 18]} className="plate-cta">
           <MobileEdge />
-          <BrandButton href={RANGE.cta.href} tone="steel" data-reveal>
+          <BrandButton href={RANGE.cta.href} direction="down" tone="steel" data-reveal>
             {RANGE.cta.label}
           </BrandButton>
         </Cell>

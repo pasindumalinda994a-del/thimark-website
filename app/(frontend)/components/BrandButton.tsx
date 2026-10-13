@@ -11,6 +11,7 @@ import {
 } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import DirectionMark, { type MarkDirection } from "@/app/(frontend)/components/DirectionMark";
 
 gsap.registerPlugin(useGSAP);
 
@@ -25,6 +26,8 @@ type BrandButtonShared = {
   children: string;
   font?: "heading" | "sans";
   tone?: "brand" | "steel" | "outline";
+  /** Points the way the button goes. Right is a forward link or action. */
+  direction?: MarkDirection;
   className?: string;
   onClick?: () => void;
   "aria-label"?: string;
@@ -83,6 +86,7 @@ export default function BrandButton({
   href = "#",
   font = "heading",
   tone = "brand",
+  direction = "right",
   className = "",
   onClick,
   type,
@@ -231,11 +235,14 @@ export default function BrandButton({
       ) : null}
       <span
         ref={label}
-        className={`relative z-3 flex h-full w-full items-center justify-center text-[12px] leading-none font-normal text-white uppercase group-hover:text-steel! group-focus-visible:text-steel! ${
+        className={`relative z-3 flex h-full w-full items-center justify-center gap-2 text-[12px] leading-none font-normal text-white uppercase group-hover:text-steel! group-focus-visible:text-steel! ${
           font === "sans" ? "font-sans" : "font-heading"
         }`}
       >
-        {children}
+        <span className="min-w-0 text-center">{children}</span>
+        <span className="brand-button-arrow" data-direction={direction}>
+          <DirectionMark direction={direction} className="brand-button-mark" />
+        </span>
       </span>
     </>
   );

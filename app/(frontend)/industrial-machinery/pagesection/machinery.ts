@@ -26,8 +26,8 @@ export const HERO: HeroCopy = {
     "Built for the application.",
     "Made to perform.",
   ],
-  cta: { label: "Discuss Your Project", href: ENQUIRE },
-  secondary: { label: "Explore Our Machinery", href: "#portfolio" },
+  cta: { label: "Discuss a Machinery Project", href: ENQUIRE },
+  secondary: { label: "See Our Machinery", href: "#portfolio" },
   image: {
     src: "/home-images/two-core-machinery.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
@@ -272,7 +272,7 @@ export const FEATURED = {
       value: "Design and manufacture, with commissioning to be stated according to verified project records",
     },
   ],
-  cta: { label: "Discuss a Custom Machinery Project", href: ENQUIRE } satisfies Link,
+  cta: { label: "Discuss a Machinery Project", href: ENQUIRE } satisfies Link,
 };
 
 /* ---- 04 Capabilities ----------------------------------------------- */

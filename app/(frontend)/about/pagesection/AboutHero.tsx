@@ -131,12 +131,22 @@ export default function AboutHero({
         <div className="ah-ctas relative md:contents">
           <MobileEdge />
           <Cell at={[barEnd, primaryCol, 12, 14]} className="plate-cta">
-            <BrandButton href={secondary.href} tone="steel" data-reveal>
+            <BrandButton
+              href={secondary.href}
+              direction={secondary.href.startsWith("#") ? "down" : "right"}
+              tone="steel"
+              data-reveal
+            >
               {secondary.label}
             </BrandButton>
           </Cell>
           <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
-            <BrandButton href={copy.cta.href} font="sans" data-reveal>
+            <BrandButton
+              href={copy.cta.href}
+              direction={copy.cta.href.startsWith("#") ? "down" : "right"}
+              font="sans"
+              data-reveal
+            >
               {copy.cta.label}
             </BrandButton>
           </Cell>
@@ -144,7 +154,12 @@ export default function AboutHero({
       ) : (
         <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
           <MobileEdge />
-          <BrandButton href={copy.cta.href} font="sans" data-reveal>
+          <BrandButton
+            href={copy.cta.href}
+            direction={copy.cta.href.startsWith("#") ? "down" : "right"}
+            font="sans"
+            data-reveal
+          >
             {copy.cta.label}
           </BrandButton>
         </Cell>

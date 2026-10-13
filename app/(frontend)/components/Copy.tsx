@@ -4,10 +4,10 @@ const JUSTIFY = "text-left xl:text-justify xl:[text-align-last:left]";
 
 const SCALE = {
   caption: "font-heading text-[clamp(9px,0.75vw,12px)] font-normal leading-[1.25] uppercase",
-  body: "font-heading text-[clamp(11px,0.8vw,14px)] font-normal leading-[1.35] uppercase",
+  body: "font-heading text-[clamp(11px,0.7vw,14px)] font-normal leading-[1.35] uppercase",
   lede: {
     sm: `font-heading text-[clamp(10px,0.85vw,14px)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
-    md: `font-heading text-[clamp(11px,0.9vw,16px)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
+    md: `font-heading text-[clamp(11px,0.8vw,16px)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
     fixed: "font-heading text-[16px] leading-none uppercase",
   },
   title: {

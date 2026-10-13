@@ -139,7 +139,7 @@ export interface UserAuthOperations {
  */
 export interface Enquiry {
   id: string;
-  topic: 'automotive' | 'industrial' | 'powder-coating' | 'general';
+  topic: 'automotive' | 'engineering' | 'industrial' | 'finishing' | 'general';
   name: string;
   company?: string | null;
   email: string;

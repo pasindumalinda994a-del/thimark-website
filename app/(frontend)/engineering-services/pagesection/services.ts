@@ -24,8 +24,8 @@ export const HERO: HeroCopy = {
     "Practical solutions.",
     "Manufacturing built around your needs.",
   ],
-  cta: { label: "Discuss Your Project", href: "/enquire" },
-  secondary: { label: "Explore Our Services", href: "#new-product-development" },
+  cta: { label: "Discuss an Engineering Project", href: "/enquire?service=engineering" },
+  secondary: { label: "See Our Services", href: "#new-product-development" },
   image: {
     src: "/home-images/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
@@ -51,8 +51,8 @@ export const NPD: ProcessCopy = {
 };
 
 export const NPD_CTA: Link = {
-  label: "Start Your Product Development Project",
-  href: "/enquire",
+  label: "Start a Development Project",
+  href: "/enquire?service=engineering",
 };
 
 // Step photography is provisional until dedicated engineering shots are available.
@@ -171,7 +171,7 @@ export const REVERSE = {
   capabilitiesLabel: "Our Reverse Engineering Capabilities",
   closing:
     "It connects physical products with the engineering information needed to understand, modify, and manufacture them.",
-  cta: { label: "Discuss a Reverse Engineering Requirement", href: "/enquire" } satisfies Link,
+  cta: { label: "Discuss Reverse Engineering", href: "/enquire?service=engineering" } satisfies Link,
 } as const;
 
 export const REVERSE_CAPABILITIES: readonly {
@@ -226,7 +226,7 @@ export const FINISHING = {
   processLabel: "Process & Environment",
   statement:
     "The appropriate finish and process should be selected according to the component material, intended use, customer specifications, and applicable performance requirements.",
-  cta: { label: "Enquire About Surface Finishing", href: "/enquire" } satisfies Link,
+  cta: { label: "Enquire About Finishing", href: "/enquire?service=finishing" } satisfies Link,
 } as const;
 
 export type Finish = {

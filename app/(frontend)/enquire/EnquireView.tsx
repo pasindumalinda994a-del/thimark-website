@@ -491,9 +491,9 @@ export default function EnquireView({
   };
 
   const status = reference
-    ? `Enquiry received. Reference ${reference}.`
+    ? `Request received. Reference ${reference}.`
     : sending
-      ? `${progress || "Sending"} your enquiry.`
+      ? `${progress || "Sending"} your request.`
       : submitError
         ? submitError
         : Object.keys(errors).length > 0
@@ -584,9 +584,9 @@ export default function EnquireView({
         <div className="contact-intro">
           <div className="contact-title">
             <p data-enquire-copy className="eyebrow">
-              Enquiry
+              Get in touch
             </p>
-            <H1Heading id="enquire-heading">Enquire</H1Heading>
+            <H1Heading id="enquire-heading">Contact</H1Heading>
           </div>
           <Copy
             data-enquire-copy
@@ -594,8 +594,7 @@ export default function EnquireView({
             weight="normal"
             className="max-w-md"
           >
-            Tell us the requirement.
-            <span className="block">We&rsquo;ll engineer what comes next.</span>
+            Request a quote, or talk to the team.
           </Copy>
         </div>
       </Band>
@@ -673,7 +672,7 @@ export default function EnquireView({
           >
             <Band>
               <div className="contact-form-title">
-                <FormHeading data-enquire-copy>Send an enquiry</FormHeading>
+                <FormHeading data-enquire-copy>Request a quote</FormHeading>
               </div>
             </Band>
 
@@ -839,7 +838,7 @@ export default function EnquireView({
               <Band edge="end">
                 <div className="contact-submit-wrap">
                   <BrandButton type="submit" className="contact-submit" disabled={sending}>
-                    {sending ? progress || "Sending" : "Enquire"}
+                    {sending ? progress || "Sending" : "Send request"}
                   </BrandButton>
                 </div>
               </Band>

@@ -43,11 +43,10 @@ const GRID_H: HLine[] = [
   [9, 0, 12],
 ];
 const GRID_V: VLine[] = [
-  [0, 0, 12],
-  [12, 0, 12],
+  [0, 0, 9],
+  [12, 0, 9],
   [4, 1, 9],
   [8, 1, 9],
-  [3, 9, 12],
 ];
 const GRID_JOINS: Join[] = [
   [0, 0, { up: true }],
@@ -154,7 +153,7 @@ export default function OemSection() {
         </article>
       </div>
 
-      <PlateBlock rows={12}>
+      <PlateBlock rows={9}>
         <Frame h={GRID_H} v={GRID_V} joins={GRID_JOINS} />
 
         <Cell at={[0, 12, 0, 1]} className="ab-head index-tag">
@@ -213,19 +212,6 @@ export default function OemSection() {
             </div>
           );
         })}
-
-        <Cell at={[0, 3, 9, 12]} className="plate-lede rc-close-label">
-          <MobileEdge open />
-          <p data-reveal className="index-tag flex items-center gap-2">
-            <span aria-hidden className="ab-marker" />
-            {OEM.closingLabel}
-          </p>
-        </Cell>
-
-        <Cell at={[3, 12, 9, 12]} as="blockquote" className="st-closing m-0">
-          <MobileEdge />
-          <Copy data-reveal variant="statement">{OEM.closing}</Copy>
-        </Cell>
       </PlateBlock>
     </SectionGrid>
   );

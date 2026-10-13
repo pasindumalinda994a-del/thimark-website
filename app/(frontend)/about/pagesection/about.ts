@@ -50,7 +50,7 @@ export const STORY = {
   ],
   closing:
     "Our journey is driven by a simple belief: when engineering expertise meets innovation, quality and determination, challenges become opportunities to build something better.",
-  cta: { label: "Explore Our Capabilities", href: "/#manufacturing" } satisfies Link,
+  cta: { label: "See the Journey", href: "#journey" } satisfies Link,
 } as const;
 
 /* ---- 01b Our Journey ----------------------------------------------- */

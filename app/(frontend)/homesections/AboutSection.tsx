@@ -48,7 +48,7 @@ const HOME_COPY: StoryCopy = {
     { text: "to turn engineering challenges into dependable solutions", strong: true },
     { text: "." },
   ],
-  cta: { label: "Discover Our Story", href: "/#manufacturing" },
+  cta: { label: "See What We Do", href: "/#capabilities" },
 };
 
 type Parts = {
@@ -701,7 +701,7 @@ export default function AboutSection({
         </Copy>
       </div>
 
-      <BrandButton tone="steel" href={copy.cta.href} className="about-cta">
+      <BrandButton tone="steel" href={copy.cta.href} direction="down" className="about-cta">
         {copy.cta.label}
       </BrandButton>
       </div>

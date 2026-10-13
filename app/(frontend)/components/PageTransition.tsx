@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLenis } from "lenis/react";
 import { normalizePath } from "@/app/(frontend)/components/nav";
 import { MASK_MOTION as MASK } from "@/app/(frontend)/components/maskMotion";
+import { scrollToSection } from "@/app/(frontend)/components/SmoothScroll";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -66,6 +67,8 @@ export default function PageTransition() {
   const root = useRef<HTMLDivElement>(null);
   const phase = useRef<Phase>("idle");
   const pendingPath = useRef<string | null>(null);
+  const pendingHash = useRef("");
+  const settleTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const navTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const playClose = useRef<(onClosed: () => void) => void>(() => {});
   const playReveal = useRef<() => void>(() => {});
@@ -84,6 +87,10 @@ export default function PageTransition() {
     if (phase.current !== "closing") return;
     phase.current = "waiting";
     pendingPath.current = nextPath;
+    const hashAt = href.indexOf("#");
+    pendingHash.current = hashAt === -1 ? "" : href.slice(hashAt);
+    for (const timer of settleTimers.current) window.clearTimeout(timer);
+    settleTimers.current = [];
     routerRef.current.push(href);
     window.clearTimeout(navTimer.current);
     navTimer.current = setTimeout(() => {
@@ -237,8 +244,39 @@ export default function PageTransition() {
 
         const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         geo = layout();
-        lenisRef.current?.scrollTo(0, { immediate: true });
-        window.scrollTo(0, 0);
+        const destinationHash = pendingHash.current;
+        pendingHash.current = "";
+        for (const timer of settleTimers.current) window.clearTimeout(timer);
+        settleTimers.current = [];
+        let landed = !destinationHash;
+        const settle = () => {
+          if (!destinationHash) {
+            lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+            window.scrollTo(0, 0);
+            return;
+          }
+          if (
+            scrollToSection(lenisRef.current, destinationHash, {
+              immediate: true,
+            })
+          ) {
+            landed = true;
+            return;
+          }
+          if (landed) return;
+          lenisRef.current?.scrollTo(0, { immediate: true, force: true });
+          window.scrollTo(0, 0);
+        };
+        settle();
+        if (destinationHash) {
+          settleTimers.current = [
+            window.setTimeout(settle, 80),
+            window.setTimeout(() => {
+              ScrollTrigger.refresh();
+              settle();
+            }, 220),
+          ];
+        }
 
         const finish = () => {
           resetIdle();

@@ -678,6 +678,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
           >
             <BrandButton
               type="button"
+              direction="left"
               tone="steel"
               className="gallery-reel-corner gallery-reel-corner-prev"
               onClick={() => stepReel(-1)}

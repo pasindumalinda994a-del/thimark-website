@@ -17,7 +17,8 @@ export const HERO: HeroCopy = {
     "We manufacture precision-engineered motorcycle components for modern vehicle assembly \u2014 stands, brackets, guards, handlebars and carriers, built with practical engineering and dependable quality.",
   body: "With Sri Lankan manufacturers and assembly partners, we turn engineering requirements into production-ready components that support local value addition.",
   supporting: ["Practical Engineering.", "Consistent Manufacturing.", "Dependable Quality."],
-  cta: { label: "Enquire About Automotive Components", href: "/enquire" },
+  cta: { label: "Request a Component Quote", href: "/enquire?service=automotive" },
+  secondary: { label: "See the Component Range", href: "#product-range" },
   image: {
     src: "/home-images/two-core-automotive.jpeg",
     alt: "Engineers assembling a motorcycle frame on the production line",
@@ -47,7 +48,7 @@ export const RANGE = {
   rangeLabel: "Our Component Range",
   closing:
     "From individual parts to coordinated ranges, we manufacture components that fit their application and support vehicle assembly.",
-  cta: { label: "Explore Our Production Process", href: "#process" } satisfies Link,
+  cta: { label: "See the Production Process", href: "#process" } satisfies Link,
 } as const;
 
 export type ComponentGroup = {
@@ -117,9 +118,6 @@ export const OEM = {
   },
   partnersLabel: "Supporting Motorcycle Assembly in Sri Lanka",
   modelsLabel: "Components associated with",
-  closingLabel: "Local Value Addition",
-  closing:
-    "Through these manufacturing relationships, Thimark contributes to the development of local automotive production capability and supports greater value addition within Sri Lanka.",
 } as const;
 
 export type OemPartner = {
@@ -147,10 +145,31 @@ export const OEM_PARTNERS: readonly OemPartner[] = [
   },
 ];
 
-/* ---- 03 Production Process ----------------------------------------- */
+/* ---- 03 Local Value Addition --------------------------------------- */
+
+export const VALUE = {
+  index: "03",
+  eyebrow: "Made in Sri Lanka",
+  heading: ["Supporting Local", "Value Addition."],
+  lede: "Through these manufacturing relationships, Thimark contributes to the development of local automotive production capability and supports greater value addition within Sri Lanka.",
+  figure: "30%",
+  figureLabel: "Local value addition",
+  lines: [
+    "Metallic components made in Sri Lanka.",
+    "Supplied for local motorcycle assembly.",
+    "Value kept in the local supply chain.",
+  ],
+} as const;
+
+/* ---- 04 Production Process ----------------------------------------- */
+
+export const PROCESS_CTA = {
+  label: "Request a Component Quote",
+  href: "/enquire?service=automotive",
+} satisfies Link;
 
 export const PROCESS = {
-  index: "03",
+  index: "04",
   eyebrow: "From Material to Component",
   heading: ["Precision at Every Stage", "of Production."],
   lede: [

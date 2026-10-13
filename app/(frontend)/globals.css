@@ -1040,9 +1040,63 @@ button.mn-row {
   transform: scale(1);
 }
 
-.mn-row:focus-visible {
+.mn-row:focus-visible,
+.mn-row-link:focus-visible,
+.mn-expand:focus-visible {
   outline: var(--stroke) solid currentColor;
   outline-offset: -4px;
+}
+
+.mn-split {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid color-mix(in srgb, var(--steel) 22%, transparent);
+  color: var(--steel);
+}
+
+.mn-split.is-active,
+.mn-split.is-active .mn-index,
+.mn-split.is-active .mn-label {
+  color: var(--brand);
+}
+
+.mn-split.is-active .sb-mark-plus {
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.mn-split.is-active .sb-mark-square {
+  background: var(--brand);
+  transform: scale(1);
+}
+
+.mn-row-link {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 4px 10px 26px;
+  color: inherit;
+  text-decoration: none;
+  outline: none;
+}
+
+.mn-expand {
+  display: flex;
+  width: 48px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.mn-expand .mn-chevron {
+  margin-left: 0;
 }
 
 .mn-chevron {
@@ -1208,19 +1262,19 @@ button.mn-row {
   transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-:is(a, button).sb-nav-row:not(.is-active):hover::before,
-:is(a, button).sb-nav-row:not(.is-active):focus-visible::before {
+:is(a, button).sb-nav-row:not(.is-active, .is-group):hover::before,
+:is(a, button).sb-nav-row:not(.is-active, .is-group):focus-visible::before {
   transform: scaleX(1);
 }
 
-:is(a, button).sb-nav-row:not(.is-active):hover,
-:is(a, button).sb-nav-row:not(.is-active):focus-visible {
+:is(a, button).sb-nav-row:not(.is-active, .is-group):hover,
+:is(a, button).sb-nav-row:not(.is-active, .is-group):focus-visible {
   background-color: transparent;
   color: var(--cream);
 }
 
-:is(a, button).sb-nav-row:not(.is-active):hover .sb-nav-index,
-:is(a, button).sb-nav-row:not(.is-active):focus-visible .sb-nav-index {
+:is(a, button).sb-nav-row:not(.is-active, .is-group):hover .sb-nav-index,
+:is(a, button).sb-nav-row:not(.is-active, .is-group):focus-visible .sb-nav-index {
   border-left-color: color-mix(in srgb, var(--cream) 35%, transparent);
   color: var(--cream);
 }
@@ -1352,12 +1406,25 @@ a.sb-nav-row.is-active .sb-nav-index {
   transform: scale(1);
 }
 
-button.sb-nav-toggle {
+.sb-nav-toggle {
   width: 100%;
   cursor: pointer;
   background: transparent;
   font: inherit;
   text-align: inherit;
+}
+
+.sb-nav-row.is-group {
+  color: var(--brand);
+}
+
+.sb-nav-row.is-group .sb-mark-plus {
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.sb-nav-row.is-group .sb-mark-square {
+  transform: scale(1);
 }
 
 .sb-nav-chevron {
@@ -3304,6 +3371,43 @@ button.sb-nav-toggle {
 
 .direction-mark-right {
   transform: rotate(225deg);
+}
+
+.direction-mark-left {
+  transform: rotate(45deg);
+}
+
+.brand-button-arrow {
+  display: inline-flex;
+  flex-shrink: 0;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.brand-button-mark {
+  width: 14px;
+  height: 14px;
+}
+
+.group:is(:hover, :focus-visible) .brand-button-arrow[data-direction="right"] {
+  transform: translateX(3px);
+}
+
+.group:is(:hover, :focus-visible) .brand-button-arrow[data-direction="left"] {
+  transform: translateX(-3px);
+}
+
+.group:is(:hover, :focus-visible) .brand-button-arrow[data-direction="down"] {
+  transform: translateY(3px);
+}
+
+.group:is(:hover, :focus-visible) .brand-button-arrow[data-direction="up"] {
+  transform: translateY(-3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-button-arrow {
+    transition: none;
+  }
 }
 
 .direction-pulse {
@@ -9223,16 +9327,43 @@ a.contact-channel-value:focus-visible {
     white-space: nowrap;
   }
 
-  .oem-section .rc-close-label {
-    padding: 20px 16px 0;
-  }
+}
 
-  .oem-section .st-closing {
-    padding-top: 12px;
+/* 03 Local Value Addition — one figure, three lines */
+.lva-figure,
+.lva-lines {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 16px 24px;
+}
+
+.lva-figure-value {
+  font-family: var(--font-heading);
+  font-size: clamp(40px, 5.2vw, 64px);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 767px) {
+  .lva-section.content-plate {
+    height: auto;
+    min-height: 0;
   }
 }
 
-/* 03 Production Process — stage cards that stack while the plate is pinned */
+@media (min-width: 768px) {
+  .lva-figure,
+  .lva-lines {
+    height: 100%;
+    padding: 24px;
+  }
+}
+
+/* 04 Production Process — stage cards that stack while the plate is pinned */
 .ps-stack {
   position: relative;
   z-index: 5;

@@ -16,6 +16,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "automotive",
     label: "Automotive Components",
+    href: "/automotive",
     children: [
       {
         id: "automotive-range",
@@ -30,6 +31,12 @@ export const NAV_ITEMS: NavItem[] = [
         href: "/automotive#oem-partnerships",
       },
       {
+        id: "automotive-value",
+        label: "Local Value Addition",
+        fullLabel: "Automotive Local Value Addition",
+        href: "/automotive#local-value-addition",
+      },
+      {
         id: "automotive-manufacturing",
         label: "Manufacturing",
         fullLabel: "Automotive Components Manufacturing",
@@ -40,6 +47,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "engineering",
     label: "Engineering & Services",
+    href: "/engineering-services",
     children: [
       {
         id: "engineering-npd",
@@ -64,6 +72,7 @@ export const NAV_ITEMS: NavItem[] = [
   {
     id: "machinery",
     label: "Industrial Machinery",
+    href: "/industrial-machinery",
     children: [
       {
         id: "machinery-custom",
@@ -73,9 +82,9 @@ export const NAV_ITEMS: NavItem[] = [
       },
       {
         id: "machinery-fabrication",
-        label: "Heavy Fabrication",
-        fullLabel: "Industrial Heavy Fabrication",
-        href: "/industrial-machinery#capabilities",
+        label: "Engineering Approach",
+        fullLabel: "Industrial Machinery Engineering Approach",
+        href: "/industrial-machinery#process",
       },
       {
         id: "machinery-exports",
@@ -100,9 +109,9 @@ export const PATH_ACTIVE_IDS: Record<string, string> = {
 
 export const RAQ_LINK = {
   id: "enquire",
-  label: "Enquire",
+  label: "Contact",
   href: "/enquire",
-  ariaLabel: "Enquire with Thimark",
+  ariaLabel: "Contact Thimark",
 } as const;
 
 export type HomeSection = {
@@ -123,7 +132,6 @@ export const HOME_SECTIONS: readonly HomeSection[] = [
   { id: "manufacturing", label: "Advantage", navId: "capabilities" },
   { id: "quality", label: "Quality", navId: null },
   { id: "partners", label: "Partners", navId: null },
-  { id: "catalogue", label: "Catalogue", navId: "capabilities" },
   { id: "contact", label: "Contact", navId: null },
 ];
 
@@ -143,6 +151,7 @@ const AUTOMOTIVE_SECTIONS: readonly HomeSection[] = [
   { id: "hero", label: "Overview", navId: null },
   { id: "product-range", label: "Range", navId: "automotive-range" },
   { id: "oem-partnerships", label: "Partnerships", navId: "automotive-oem" },
+  { id: "local-value-addition", label: "Local Value", navId: "automotive-value" },
   { id: "process", label: "Process", navId: "automotive-manufacturing" },
   { id: "manufacturing", label: "Capabilities", navId: "automotive-manufacturing" },
   { id: "contact", label: "Contact", navId: null },
@@ -151,9 +160,9 @@ const AUTOMOTIVE_SECTIONS: readonly HomeSection[] = [
 const MACHINERY_SECTIONS: readonly HomeSection[] = [
   { id: "hero", label: "Overview", navId: null },
   { id: "portfolio", label: "Portfolio", navId: "machinery-custom" },
-  { id: "process", label: "Approach", navId: null },
+  { id: "process", label: "Approach", navId: "machinery-fabrication" },
   { id: "kilgarrah", label: "Kilgarrah", navId: "machinery-exports" },
-  { id: "capabilities", label: "Capabilities", navId: "machinery-fabrication" },
+  { id: "capabilities", label: "Capabilities", navId: null },
   { id: "contact", label: "Contact", navId: null },
 ];
 
@@ -179,11 +188,12 @@ export const PAGE_SECTIONS: Record<string, readonly HomeSection[]> = {
 export function collectNavLinks(items: NavItem[]): NavLink[] {
   const links: NavLink[] = [];
   for (const item of items) {
+    if (item.children?.length) {
+      links.push(...item.children);
+      continue;
+    }
     if (item.href) {
       links.push({ id: item.id, label: item.label, href: item.href });
-    }
-    if (item.children) {
-      links.push(...item.children);
     }
   }
   return links;
@@ -191,7 +201,7 @@ export function collectNavLinks(items: NavItem[]): NavLink[] {
 
 const PATH_LABELS: Record<string, string> = {
   "/": "Home",
-  "/enquire": "Enquire",
+  "/enquire": "Contact",
 };
 
 for (const link of collectNavLinks(NAV_ITEMS)) {

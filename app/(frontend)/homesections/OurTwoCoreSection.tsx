@@ -34,7 +34,7 @@ const COLUMNS = [
     areas: [
       { index: "01", label: "Component Range", href: "/automotive#product-range" },
       { index: "02", label: "OEM Partnerships", href: "/automotive#oem-partnerships" },
-      { index: "03", label: "Manufacturing", href: "/automotive#process" },
+      { index: "03", label: "Local Value Addition", href: "/automotive#local-value-addition" },
     ],
   },
   {
@@ -81,11 +81,6 @@ const COLUMNS = [
       },
       {
         index: "02",
-        label: "Engineering Approach",
-        href: "/industrial-machinery#process",
-      },
-      {
-        index: "03",
         label: "International Projects",
         href: "/industrial-machinery#kilgarrah",
       },

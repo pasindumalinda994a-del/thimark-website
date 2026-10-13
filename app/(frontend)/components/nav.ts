@@ -36,12 +36,6 @@ export const NAV_ITEMS: NavItem[] = [
         fullLabel: "Automotive Local Value Addition",
         href: "/automotive#local-value-addition",
       },
-      {
-        id: "automotive-manufacturing",
-        label: "Manufacturing",
-        fullLabel: "Automotive Components Manufacturing",
-        href: "/automotive#process",
-      },
     ],
   },
   {
@@ -79,12 +73,6 @@ export const NAV_ITEMS: NavItem[] = [
         label: "Custom Machinery",
         fullLabel: "Custom Industrial Machinery",
         href: "/industrial-machinery#portfolio",
-      },
-      {
-        id: "machinery-fabrication",
-        label: "Engineering Approach",
-        fullLabel: "Industrial Machinery Engineering Approach",
-        href: "/industrial-machinery#process",
       },
       {
         id: "machinery-exports",
@@ -152,15 +140,15 @@ const AUTOMOTIVE_SECTIONS: readonly HomeSection[] = [
   { id: "product-range", label: "Range", navId: "automotive-range" },
   { id: "oem-partnerships", label: "Partnerships", navId: "automotive-oem" },
   { id: "local-value-addition", label: "Local Value", navId: "automotive-value" },
-  { id: "process", label: "Process", navId: "automotive-manufacturing" },
-  { id: "manufacturing", label: "Capabilities", navId: "automotive-manufacturing" },
+  { id: "process", label: "Process", navId: null },
+  { id: "manufacturing", label: "Capabilities", navId: null },
   { id: "contact", label: "Contact", navId: null },
 ];
 
 const MACHINERY_SECTIONS: readonly HomeSection[] = [
   { id: "hero", label: "Overview", navId: null },
   { id: "portfolio", label: "Portfolio", navId: "machinery-custom" },
-  { id: "process", label: "Approach", navId: "machinery-fabrication" },
+  { id: "process", label: "Approach", navId: null },
   { id: "kilgarrah", label: "Kilgarrah", navId: "machinery-exports" },
   { id: "capabilities", label: "Capabilities", navId: null },
   { id: "contact", label: "Contact", navId: null },

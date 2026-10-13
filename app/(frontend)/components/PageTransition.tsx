@@ -68,8 +68,8 @@ export default function PageTransition() {
   const phase = useRef<Phase>("idle");
   const pendingPath = useRef<string | null>(null);
   const pendingHash = useRef("");
-  const settleTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
-  const navTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const settleTimers = useRef<number[]>([]);
+  const navTimer = useRef<number | undefined>(undefined);
   const playClose = useRef<(onClosed: () => void) => void>(() => {});
   const playReveal = useRef<() => void>(() => {});
 
@@ -93,7 +93,7 @@ export default function PageTransition() {
     settleTimers.current = [];
     routerRef.current.push(href);
     window.clearTimeout(navTimer.current);
-    navTimer.current = setTimeout(() => {
+    navTimer.current = window.setTimeout(() => {
       if (phase.current !== "waiting") return;
       pendingPath.current = null;
       phase.current = "revealing";
@@ -270,8 +270,8 @@ export default function PageTransition() {
         settle();
         if (destinationHash) {
           settleTimers.current = [
-            setTimeout(settle, 80),
-            setTimeout(() => {
+            window.setTimeout(settle, 80),
+            window.setTimeout(() => {
               ScrollTrigger.refresh();
               settle();
             }, 220),

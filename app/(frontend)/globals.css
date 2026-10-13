@@ -7233,8 +7233,15 @@ a.contact-channel-value:focus-visible {
   .caps-cta,
   .quality-cta,
   .catalogue-cta,
-  .partner-statement-cta {
+  .partner-statement-cta,
+  .quote-cta-primary,
+  .quote-cta-secondary {
     height: 48px;
+  }
+
+  .quote-cta-primary,
+  .quote-cta-secondary {
+    width: 100%;
   }
 }
 

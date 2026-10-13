@@ -106,7 +106,7 @@ export default function QualitySection({
       rows={14}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={11}>
         <Frame h={H} v={V} />

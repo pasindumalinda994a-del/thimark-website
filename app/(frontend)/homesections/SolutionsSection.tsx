@@ -82,7 +82,7 @@ export default function SolutionsSection() {
             id={solution.id}
             data-image={solution.imageSide}
             aria-labelledby={`${solution.id}-title`}
-            className="solutions-band scroll-mt-16 md:scroll-mt-0"
+            className="solutions-band scroll-mt-16 xl:scroll-mt-0"
           >
             <GridLine axis="v" unstyled tone="page" className="v-g1-0 solutions-v hidden md:block" />
             <GridLine axis="v" unstyled tone="page" className="v-g1-6 solutions-v hidden md:block" />
@@ -96,6 +96,14 @@ export default function SolutionsSection() {
               className="v-g1-6 solutions-h hidden md:block"
             />
             <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 solutions-h hidden md:block" />
+            <MobileRails />
+
+            <p aria-hidden className="solutions-band-head index-tag md:hidden">
+              <span>Solution</span>
+              <span>
+                [{padIndex(index)} / {padIndex(SOLUTIONS.length - 1)}]
+              </span>
+            </p>
 
             <div className="solutions-plate">
               <div className="solutions-plate-shot">
@@ -117,7 +125,6 @@ export default function SolutionsSection() {
                 <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
                 <FigMark n={HOME_FIG.solutions + index} />
               </div>
-              <MobileRails />
             </div>
 
             <div className="solutions-note">
@@ -140,7 +147,6 @@ export default function SolutionsSection() {
                 {solution.cta}
                 <DirectionPulse direction="right" />
               </Link>
-              <MobileRails />
             </div>
           </article>
         );

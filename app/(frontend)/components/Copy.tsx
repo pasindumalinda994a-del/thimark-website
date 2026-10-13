@@ -1,6 +1,6 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-const JUSTIFY = "text-left md:text-justify md:[text-align-last:left]";
+const JUSTIFY = "text-left xl:text-justify xl:[text-align-last:left]";
 
 const SCALE = {
   caption: "font-heading text-[clamp(9px,0.75vw,12px)] font-normal leading-[1.25] uppercase",

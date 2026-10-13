@@ -49,7 +49,7 @@ const PRINCIPLE_V: VLine[] = [
 
 export default function VisionMissionSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref, { image: "rise" });
+  usePlateMotion(ref, { image: "rise", phoneNotes: true });
 
   return (
     <SectionGrid
@@ -59,7 +59,7 @@ export default function VisionMissionSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={3}>
         <Frame h={HEAD_H} v={HEAD_V} joins={HEAD_JOINS} />
@@ -94,7 +94,7 @@ export default function VisionMissionSection() {
             data-image={band.imageSide}
             data-drift-band=""
             aria-labelledby={`${band.id}-title`}
-            className="solutions-band scroll-mt-16 md:scroll-mt-0"
+            className="solutions-band scroll-mt-16 xl:scroll-mt-0"
           >
             <BandRails last={index === DRIVES.bands.length - 1} />
 

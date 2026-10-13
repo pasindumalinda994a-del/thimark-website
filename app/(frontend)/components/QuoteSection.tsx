@@ -9,7 +9,7 @@ import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import Copy from "@/app/(frontend)/components/Copy";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import { RAQ_LINK } from "@/app/(frontend)/components/nav";
-import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
+import H2Heading from "@/app/(frontend)/components/H2Heading";
 import MarkDrawing from "@/app/(frontend)/components/MarkDrawing";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
@@ -215,7 +215,7 @@ export default function QuoteSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-head-br5 hidden md:block" />
@@ -271,20 +271,12 @@ export default function QuoteSection({
           <p data-quote-copy className="eyebrow">
             {copy.eyebrow}
           </p>
-          <MaskRevealHeading
-            id="quote-heading"
-            className="font-heading text-[clamp(40px,5.2vw,64px)] leading-[0.89] font-medium tracking-[-0.01em] uppercase"
-          >
+          <H2Heading id="quote-heading">
             {copy.heading[0]}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
-          </MaskRevealHeading>
+          </H2Heading>
         </div>
-        <Copy
-          data-quote-copy
-          variant="lede" size="fixed"
-          weight="normal"
-          className="max-w-[560px] md:text-justify md:[text-align-last:left]"
-        >
+        <Copy data-quote-copy variant="lede" className="max-w-[560px]">
           {copy.lede}
         </Copy>
       </div>

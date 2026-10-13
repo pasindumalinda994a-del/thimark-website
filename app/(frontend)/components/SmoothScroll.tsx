@@ -8,6 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "lenis/dist/lenis.css";
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({ ignoreMobileResize: true });
 
 function LenisScrollTriggerSync() {
   useLenis(() => {
@@ -19,7 +20,7 @@ function LenisScrollTriggerSync() {
 const MOBILE_HASH_OFFSET = -64;
 
 function hashOffset() {
-  return window.matchMedia("(max-width: 767px)").matches
+  return window.matchMedia("(max-width: 1279px)").matches
     ? MOBILE_HASH_OFFSET
     : 0;
 }

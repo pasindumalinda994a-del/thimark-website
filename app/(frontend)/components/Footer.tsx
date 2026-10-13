@@ -204,7 +204,7 @@ export default function Footer() {
     <footer
       ref={root}
       aria-labelledby="footer-heading"
-      className="footer content-plate relative z-10 overflow-x-hidden bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] md:ml-sidebar"
+      className="footer content-plate relative z-10 overflow-x-hidden bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] xl:ml-sidebar"
     >
       <h2 id="footer-heading" className="sr-only">
         Site footer

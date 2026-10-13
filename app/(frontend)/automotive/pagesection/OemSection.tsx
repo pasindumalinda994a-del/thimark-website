@@ -1,7 +1,7 @@
 "use client";
 
 import Copy, { copyClass } from "@/app/(frontend)/components/Copy";
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -62,7 +62,7 @@ const ROSTER = OEM_PARTNERS.flatMap((entry) => {
 
 export default function OemSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref, { image: "rise" });
+  usePlateMotion(ref, { image: "rise", phoneNotes: true });
 
   const { band } = OEM;
 
@@ -74,7 +74,7 @@ export default function OemSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="oem-section plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={3}>
         <Frame h={HEAD_H} v={HEAD_V} joins={HEAD_JOINS} />
@@ -171,9 +171,9 @@ export default function OemSection() {
         {ROSTER.map(({ id, partner, lead, models }, i) => {
           const c = i * 4;
           return (
-            <Fragment key={id}>
+            <div key={id} className="oem-row md:contents">
+              <MobileEdge />
               <Cell at={[c, c + 4, 1, 6]} className="oem-mark-cell">
-                <MobileEdge open />
                 <div data-wipe className="oem-mark dot-field-soft">
                   <Corners />
                   <p className="oem-mark-head index-tag">
@@ -191,7 +191,6 @@ export default function OemSection() {
                 className="oem-models"
                 aria-labelledby={`oem-${id}`}
               >
-                <MobileEdge />
                 <div data-reveal className="flex flex-col gap-2">
                   <H3Heading id={`oem-${id}`} variant="title" size="sm">
                     {partner.legalName}
@@ -211,7 +210,7 @@ export default function OemSection() {
                   ))}
                 </ol>
               </Cell>
-            </Fragment>
+            </div>
           );
         })}
 

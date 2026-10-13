@@ -2,9 +2,12 @@
 
 import {
   useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
@@ -12,16 +15,21 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import CarouselControls from "@/app/(frontend)/components/CarouselControls";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import Copy from "@/app/(frontend)/components/Copy";
 import H1Heading from "@/app/(frontend)/components/H1Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
+import { Corners, MobileEdge } from "@/app/(frontend)/components/plate";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import GalleryStrip, { type GalleryStripHandle } from "@/app/(frontend)/gallery/GalleryStrip";
 import {
+  GALLERY_CATEGORIES,
   categoryById,
   frameSrc,
   pad2,
+  type GalleryCategoryId,
   type GalleryFrame,
 } from "@/app/(frontend)/gallery/records";
 
@@ -34,6 +42,8 @@ const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false
 const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
 const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
+type GalleryFilter = "all" | GalleryCategoryId;
+
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
@@ -41,13 +51,23 @@ function prefersReducedMotion() {
 export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
   const heroRef = useRef<HTMLElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
+  const phoneReelRef = useRef<HTMLDivElement>(null);
+  const phoneTrackRef = useRef<HTMLDivElement>(null);
+  const phoneCopyRef = useRef<HTMLDivElement>(null);
+  const phoneScrollRef = useRef(0);
+  const phonePointerRef = useRef({ x: 0, dragged: false });
   const frameRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<GalleryStripHandle>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
   const firstCopy = useRef(true);
+  const firstPhoneCopy = useRef(true);
+  const swipeRef = useRef<{ x: number; y: number } | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [phoneIndex, setPhoneIndex] = useState(0);
+  const [category, setCategory] = useState<GalleryFilter>("all");
+  const [wide, setWide] = useState(false);
   const [reduced, setReduced] = useState(false);
   const [viewer, setViewer] = useState<{ ids: string[]; index: number } | null>(
     null,
@@ -67,6 +87,41 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
     ? (frames.find((frame) => frame.id === viewer.ids[viewer.index]) ?? null)
     : null;
   const interactive = !reduced && frames.length > 1;
+  const categories = useMemo(
+    () =>
+      GALLERY_CATEGORIES.filter((item) =>
+        frames.some((frame) => frame.category === item.id),
+      ),
+    [frames],
+  );
+  const filters = useMemo<GalleryFilter[]>(
+    () => ["all", ...categories.map((item) => item.id)],
+    [categories],
+  );
+  const phoneFrames = useMemo(
+    () =>
+      category === "all"
+        ? frames
+        : frames.filter((frame) => frame.category === category),
+    [frames, category],
+  );
+  const phoneKey = phoneFrames.map((frame) => frame.id).join("|");
+  const phoneSafe =
+    phoneFrames.length === 0
+      ? 0
+      : Math.min(phoneIndex, phoneFrames.length - 1);
+  const phoneShown = phoneFrames[phoneSafe];
+  const phoneCatalogueIndex = phoneShown
+    ? frames.findIndex((frame) => frame.id === phoneShown.id)
+    : -1;
+
+  useLayoutEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const sync = () => setWide(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -82,7 +137,12 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
       const root = heroRef.current;
       if (!root) return;
       const items = gsap.utils.toArray<HTMLElement>("[data-gal-item]", root);
-      const rules = gsap.utils.toArray<HTMLElement>("[data-gal-rule]", root);
+      const rules = gsap.utils
+        .toArray<HTMLElement>(
+          "[data-gal-rule], .gallery-phone-band > .h-seg-0-12",
+          root,
+        )
+        .filter((rule) => getComputedStyle(rule).display !== "none");
       const media = gsap.utils.toArray<HTMLElement>("[data-gal-media]", root);
       const mm = gsap.matchMedia();
 
@@ -148,6 +208,49 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
     },
     { scope: slotRef, dependencies: [shown?.id] },
   );
+
+  useGSAP(
+    () => {
+      const root = phoneCopyRef.current;
+      if (!root || !phoneShown || wide) return;
+      const nodes = gsap.utils.toArray<HTMLElement>("[data-reel-copy]", root);
+      if (!nodes.length || prefersReducedMotion()) return;
+      if (firstPhoneCopy.current) {
+        firstPhoneCopy.current = false;
+        return;
+      }
+      gsap.fromTo(
+        nodes,
+        { autoAlpha: 0.72, y: 8 },
+        {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.34,
+          ease: "power2.out",
+          overwrite: "auto",
+        },
+      );
+    },
+    { scope: phoneCopyRef, dependencies: [phoneShown?.id, wide] },
+  );
+
+  useEffect(() => {
+    if (wide) return;
+    const root = phoneReelRef.current;
+    const track = phoneTrackRef.current;
+    if (!root || !track) return;
+    const slides = [...track.querySelectorAll<HTMLElement>("[data-gallery-slide]")];
+    if (!slides.length) return;
+    track.scrollLeft = 0;
+    const carousel = bindSnapCarousel({
+      track,
+      slides,
+      controls: root.querySelector<HTMLElement>("[data-carousel-controls]"),
+      reduced,
+      onChange: (index) => setPhoneIndex(index),
+    });
+    return () => carousel.destroy();
+  }, [wide, phoneKey, reduced]);
 
   useEffect(() => {
     if (!viewer) return;
@@ -274,6 +377,73 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
     );
   };
 
+  const selectCategory = (id: GalleryFilter) => {
+    setCategory(id);
+    setPhoneIndex(0);
+  };
+
+  const onTabKey = (event: ReactKeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (
+      event.key !== "ArrowRight" &&
+      event.key !== "ArrowLeft" &&
+      event.key !== "Home" &&
+      event.key !== "End"
+    ) {
+      return;
+    }
+    event.preventDefault();
+    let next = index;
+    if (event.key === "ArrowRight") next = (index + 1) % filters.length;
+    if (event.key === "ArrowLeft") next = (index - 1 + filters.length) % filters.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = filters.length - 1;
+    const id = filters[next];
+    selectCategory(id);
+    document.getElementById(`gallery-tab-${id}`)?.focus();
+  };
+
+  const onTrackPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    phoneScrollRef.current = phoneTrackRef.current?.scrollLeft ?? 0;
+    phonePointerRef.current = { x: event.clientX, dragged: false };
+  };
+
+  const onTrackPointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (Math.abs(event.clientX - phonePointerRef.current.x) > 8) {
+      phonePointerRef.current.dragged = true;
+    }
+  };
+
+  const openPhoneFrame = (id: string, trigger: HTMLElement) => {
+    const track = phoneTrackRef.current;
+    if (phonePointerRef.current.dragged) return;
+    if (track && Math.abs(track.scrollLeft - phoneScrollRef.current) > 6) return;
+    openFrame(
+      id,
+      phoneFrames.map((frame) => frame.id),
+      trigger,
+    );
+  };
+
+  const onViewerPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.pointerType === "mouse") return;
+    swipeRef.current = { x: event.clientX, y: event.clientY };
+    try {
+      event.currentTarget.setPointerCapture(event.pointerId);
+    } catch {
+      // A pointer can already be released. The swipe still resolves on pointerup.
+    }
+  };
+
+  const onViewerPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    const start = swipeRef.current;
+    swipeRef.current = null;
+    if (!start || event.pointerType === "mouse") return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    if (Math.abs(dx) < 48 || Math.abs(dx) <= Math.abs(dy)) return;
+    stepViewer(dx < 0 ? 1 : -1);
+  };
+
   return (
     <>
       <SectionGrid
@@ -285,9 +455,6 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
         outerV={false}
         className="gallery-stage flex flex-col bg-cream text-steel"
       >
-        <GridLine axis="v" tone="page" className="v-g1-0 md:hidden" />
-        <GridLine axis="v" tone="page" className="v-g1-12 md:hidden" />
-
         <PlusMark tone="page" arms={armDown} className="v-g1-0 gallery-plus-top hidden md:block" />
         <PlusMark tone="page" arms={armDown} className="v-g1-8 gallery-plus-top hidden md:block" />
         <PlusMark tone="page" arms={armDown} className="v-g1-12 gallery-plus-top hidden md:block" />
@@ -323,7 +490,8 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
         <PlusMark tone="page" arms={armUp} className="v-g1-10 at-bottom hidden md:block" />
         <PlusMark tone="page" arms={armUp} className="v-g1-12 at-bottom hidden md:block" />
 
-        <div className="gallery-stage-copy">
+        <div className="gallery-stage-copy gallery-phone-band">
+          <MobileEdge />
           <div className="gallery-head-title">
             <p data-gal-item className="eyebrow">
               Gallery
@@ -340,14 +508,48 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
           </div>
         </div>
 
-        <div className="gallery-reel-slot">
+        <div className="gallery-phone-band gallery-phone-cats relative md:hidden">
+          <MobileEdge />
+          <div
+            role="tablist"
+            aria-label="Gallery categories"
+            className="catalogue-tabs gallery-phone-tabs"
+          >
+            {filters.map((id, index) => {
+              const selected = id === category;
+              const label = id === "all" ? "All" : categoryById(id).label;
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="tab"
+                  id={`gallery-tab-${id}`}
+                  aria-selected={selected}
+                  aria-controls="gallery-phone-reel"
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => selectCategory(id)}
+                  onKeyDown={(event) => onTabKey(event, index)}
+                  className="catalogue-tab index-tag outline-none hover:text-brand focus-visible:text-brand"
+                >
+                  {index > 0 ? (
+                    <span aria-hidden className="catalogue-tab-divider" />
+                  ) : null}
+                  <span>{label}</span>
+                  <span aria-hidden data-tab-draw className="catalogue-tab-draw" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="gallery-reel-slot hidden md:block">
           <div
             ref={frameRef}
             data-gal-media
             className="gallery-reel-frame"
             {...(interactive ? { "data-lenis-prevent": "" } : {})}
           >
-            {shown && reduced ? (
+            {wide && shown && reduced ? (
               <button
                 type="button"
                 className="gallery-reel-still"
@@ -359,14 +561,14 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                   src={frameSrc(shown.image)}
                   alt={shown.alt}
                   fill
-                  sizes="(min-width: 768px) 80vw, 100vw"
+                  sizes="80vw"
                   priority
                   className={
                     shown.fit === "contain" ? "object-contain p-[12%]" : "object-cover"
                   }
                 />
               </button>
-            ) : (
+            ) : wide ? (
               <GalleryStrip
                 ref={stripRef}
                 frames={frames}
@@ -381,7 +583,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                   );
                 }}
               />
-            )}
+            ) : null}
           </div>
           {interactive ? (
             <div className="gallery-drag-cue" aria-hidden>
@@ -391,10 +593,87 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
           ) : null}
         </div>
 
+        <div
+          ref={phoneReelRef}
+          id="gallery-phone-reel"
+          role="tabpanel"
+          aria-labelledby={`gallery-tab-${category}`}
+          className="gallery-phone-band gallery-phone-reel relative md:hidden"
+        >
+          <MobileEdge />
+          <div
+            ref={phoneTrackRef}
+            data-gallery-track
+            role="region"
+            aria-roledescription="carousel"
+            aria-label="Gallery photographs"
+            className="gallery-phone-track"
+            onPointerDown={onTrackPointerDown}
+            onPointerMove={onTrackPointerMove}
+          >
+            {phoneFrames.map((frame, index) => (
+              <button
+                key={frame.id}
+                type="button"
+                data-gallery-slide=""
+                {...(index === 0 ? { "data-gal-media": "" } : {})}
+                className="gallery-phone-slide relative"
+                onClick={(event) => openPhoneFrame(frame.id, event.currentTarget)}
+                aria-label={`Open ${frame.title}, ${categoryById(frame.category).full}`}
+              >
+                <Image
+                  src={frameSrc(frame.image)}
+                  alt={frame.alt}
+                  fill
+                  sizes="86vw"
+                  priority={index === 0}
+                  className={
+                    frame.fit === "contain"
+                      ? "object-contain p-[12%]"
+                      : "object-cover"
+                  }
+                />
+                <Corners tone={frame.fit === "contain" ? "page" : "light"} />
+              </button>
+            ))}
+          </div>
+          {phoneFrames.length > 0 ? (
+            <CarouselControls label="Frames" count={phoneFrames.length} />
+          ) : null}
+          {phoneShown ? (
+            <div ref={phoneCopyRef} className="gallery-phone-caption">
+              <div data-reel-copy className="gallery-phone-kicker">
+                <p className="index-tag">
+                  <span>[{pad2(phoneCatalogueIndex + 1)}]</span>
+                  <span aria-hidden> · </span>
+                  <span>
+                    {pad2(phoneSafe + 1)} / {pad2(phoneFrames.length)}
+                  </span>
+                </p>
+                <p className="index-tag font-normal">
+                  <span>{categoryById(phoneShown.category).full}</span>
+                  {phoneShown.place ? (
+                    <>
+                      <span aria-hidden> · </span>
+                      <span>{phoneShown.place}</span>
+                    </>
+                  ) : null}
+                </p>
+              </div>
+              <div data-reel-copy className="gallery-phone-note">
+                <Copy variant="statement" className="gallery-phone-title" aria-live="polite">
+                  {phoneShown.title}
+                </Copy>
+                {phoneShown.note ? <Copy variant="meta">{phoneShown.note}</Copy> : null}
+              </div>
+            </div>
+          ) : null}
+        </div>
+
         {shown ? (
           <div
             ref={slotRef}
-            className="gallery-reel-detail"
+            className="gallery-reel-detail hidden md:block"
             onKeyDown={onSlotKey}
           >
             <BrandButton
@@ -461,7 +740,14 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                 aria-label="Close image"
                 onClick={closeViewer}
               />
-              <div className="gallery-viewer-frame">
+              <div
+                className="gallery-viewer-frame"
+                onPointerDown={onViewerPointerDown}
+                onPointerUp={onViewerPointerUp}
+                onPointerCancel={() => {
+                  swipeRef.current = null;
+                }}
+              >
                 <Image
                   key={current.id}
                   src={frameSrc(current.image)}
@@ -499,7 +785,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                     <span aria-hidden> · </span>
                     {current.place}
                   </p>
-                  <Copy variant="meta" className="text-cream/75">
+                  <Copy variant="meta" className="gallery-viewer-note text-cream/75">
                     {current.note}
                   </Copy>
                 </div>

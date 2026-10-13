@@ -70,7 +70,7 @@ export default function AboutHero({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)]"
+      className="ah-section flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)]"
     >
       <Frame h={H} v={V} />
 
@@ -105,7 +105,7 @@ export default function AboutHero({
             alt={copy.image.alt}
             fill
             priority
-            sizes="(min-width: 768px) calc(100vw - 260px), 100vw"
+            sizes="(min-width: 1280px) calc(100vw - 260px), 100vw"
             className="object-cover"
             style={{ objectPosition: copy.image.objectPosition }}
           />
@@ -127,20 +127,28 @@ export default function AboutHero({
       </Cell>
 
       {secondary ? (
-        <Cell at={[barEnd, primaryCol, 12, 14]} className="plate-cta">
+        // Phones seat both buttons on one row; from md up each cell keeps its grid seat.
+        <div className="ah-ctas relative md:contents">
           <MobileEdge />
-          <BrandButton href={secondary.href} tone="steel" data-reveal>
-            {secondary.label}
+          <Cell at={[barEnd, primaryCol, 12, 14]} className="plate-cta">
+            <BrandButton href={secondary.href} tone="steel" data-reveal>
+              {secondary.label}
+            </BrandButton>
+          </Cell>
+          <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
+            <BrandButton href={copy.cta.href} font="sans" data-reveal>
+              {copy.cta.label}
+            </BrandButton>
+          </Cell>
+        </div>
+      ) : (
+        <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
+          <MobileEdge />
+          <BrandButton href={copy.cta.href} font="sans" data-reveal>
+            {copy.cta.label}
           </BrandButton>
         </Cell>
-      ) : null}
-
-      <Cell at={[primaryCol, 12, 12, 14]} className="plate-cta">
-        <MobileEdge />
-        <BrandButton href={copy.cta.href} font="sans" data-reveal>
-          {copy.cta.label}
-        </BrandButton>
-      </Cell>
+      )}
     </SectionGrid>
   );
 }

@@ -6,6 +6,7 @@ import Link from "next/link";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLenis } from "lenis/react";
 import Copy from "@/app/(frontend)/components/Copy";
 import H1Heading from "@/app/(frontend)/components/H1Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -48,6 +49,10 @@ function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function isPhone() {
+  return window.matchMedia("(max-width: 767px)").matches;
+}
+
 function CornerPluses() {
   return (
     <>
@@ -62,7 +67,10 @@ function CornerPluses() {
 export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLUListElement>(null);
+  const barRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const lenis = useLenis();
   const [active, setActive] = useState(0);
   const pendingRef = useRef<number | null>(null);
   const firstPaint = useRef(true);
@@ -122,17 +130,31 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
           stagger: 0.06,
         },
       );
-      tl.fromTo(
-        media,
-        { clipPath: "inset(0% 0% 100% 0%)" },
-        {
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.06,
-        },
-        0.05,
-      );
+      // Phones: the lead shot rises in slower than the ledger thumbnails.
+      const [leadMedia, ...rowMedia] = media;
+      const phoneLead = isPhone() && leadMedia?.closest(".news-card-lead");
+      if (phoneLead) {
+        tl.fromTo(
+          leadMedia,
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: "power2.out" },
+          0.05,
+        );
+      }
+      const restMedia = phoneLead ? rowMedia : media;
+      if (restMedia.length) {
+        tl.fromTo(
+          restMedia,
+          { clipPath: "inset(0% 0% 100% 0%)" },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.06,
+          },
+          phoneLead ? 0.11 : 0.05,
+        );
+      }
 
       if (firstPaint.current) {
         firstPaint.current = false;
@@ -177,10 +199,35 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
     { scope: sectionRef },
   );
 
+  const revealTab = (index: number, reduced: boolean) => {
+    const strip = stripRef.current;
+    const chip = tabRefs.current[index];
+    if (!strip || !chip || strip.scrollWidth <= strip.clientWidth) return;
+    strip.scrollTo({
+      left: chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2,
+      behavior: reduced ? "auto" : "smooth",
+    });
+  };
+
+  // Phones: once the bar is stuck, bring the top of the list back up under it.
+  const settleList = (reduced: boolean) => {
+    const bar = barRef.current;
+    const grid = gridRef.current;
+    if (!bar || !grid || !isPhone()) return;
+    const delta = grid.getBoundingClientRect().top - bar.getBoundingClientRect().bottom;
+    if (delta >= -1) return;
+    const top = window.scrollY + delta;
+    if (lenis) lenis.scrollTo(top, { duration: 0.8, immediate: reduced });
+    else window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+  };
+
   const select = (next: number) => {
     if (next === active) return;
+    const reduced = prefersReducedMotion();
+    revealTab(next, reduced);
+    settleList(reduced);
     const grid = gridRef.current;
-    if (!grid || prefersReducedMotion()) {
+    if (!grid || reduced) {
       setActive(next);
       return;
     }
@@ -225,7 +272,7 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
       rows={20}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
@@ -282,8 +329,9 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="catalogue-title">
-          <p data-cat-header className="eyebrow">
-            Newsroom
+          <p data-cat-header className="eyebrow flex items-center justify-between gap-4">
+            <span>Newsroom</span>
+            <span className="index-tag md:hidden">[{pad2(records.length)}] Records</span>
           </p>
           <H1Heading id="newsroom-heading" className="text-left">
             On the record.
@@ -302,10 +350,15 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
         <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
-      <div className="relative md:contents">
+      <div ref={barRef} className="news-tabs-bar relative md:contents">
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
-        <div role="tablist" aria-label="News categories" className="catalogue-tabs">
+        <div
+          ref={stripRef}
+          role="tablist"
+          aria-label="News categories"
+          className="catalogue-tabs"
+        >
           {TABS.map((tabItem, i) => {
             const selected = i === active;
             const count =
@@ -353,46 +406,84 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
         aria-labelledby={`news-tab-${tab.id}`}
         className="catalogue-grid m-0 list-none p-0"
       >
-        {items.map((record, i) => (
-          <li key={record.slug} data-cat-card className="catalogue-card news-card">
-            <Link
-              href={`/newsroom/${record.slug}`}
-              className="flex min-h-0 flex-1 flex-col text-inherit no-underline"
+        {items.map((record, i) => {
+          const lead = i === 0;
+          const category = categoryById(record.category);
+          return (
+            <li
+              key={record.slug}
+              data-cat-card
+              className={`catalogue-card news-card${lead ? " news-card-lead" : ""}`}
             >
-              <div data-cat-media className="catalogue-card-media news-card-media has-photo">
-                <Image
-                  src={recordSrc(record.image)}
-                  alt={record.alt}
-                  fill
-                  sizes="(min-width: 768px) 22vw, 100vw"
-                  className="catalogue-card-photo news-card-photo"
-                />
-                <CornerPluses />
-                <span className="index-tag absolute top-[9px] left-7 z-10 flex items-center gap-2 bg-cream px-2 py-1.5 text-steel">
-                  <span aria-hidden>[{padIndex(i)}]</span>
-                  <span>{categoryById(record.category).label}</span>
-                </span>
-              </div>
-              <div className="catalogue-card-copy">
-                <p className="index-tag flex items-center justify-between gap-4 font-normal">
-                  <span>
-                    {categoryById(record.category).full} · {formatRecordDate(record.date)}
+              <Link
+                href={`/newsroom/${record.slug}`}
+                className="flex min-h-0 flex-1 flex-col text-inherit no-underline"
+              >
+                <div data-cat-media className="catalogue-card-media news-card-media has-photo">
+                  <Image
+                    src={recordSrc(record.image)}
+                    alt={record.alt}
+                    fill
+                    sizes={
+                      lead ? "(min-width: 768px) 22vw, 100vw" : "(min-width: 768px) 22vw, 128px"
+                    }
+                    loading={lead ? "eager" : undefined}
+                    className="catalogue-card-photo news-card-photo"
+                  />
+                  <CornerPluses />
+                  <span className="news-card-tag index-tag absolute top-[9px] left-7 z-10 flex items-center gap-2 bg-cream px-2 py-1.5 text-steel">
+                    <span aria-hidden>[{padIndex(i)}]</span>
+                    <span>{category.label}</span>
                   </span>
-                </p>
-                <H3Heading variant="title">{record.title}</H3Heading>
-                <Copy variant="meta" className="line-clamp-2 text-steel/75">
-                  {record.excerpt}
-                </Copy>
-              </div>
-            </Link>
+                </div>
+                <div className="catalogue-card-copy">
+                  <p className="news-card-kicker index-tag flex items-center justify-between gap-4 font-normal md:block">
+                    <span className="min-w-0">
+                      <span aria-hidden className="news-card-index md:hidden">
+                        [{padIndex(i)}]{" "}
+                      </span>
+                      {category.full}
+                    </span>
+                    <span aria-hidden className="hidden md:inline">
+                      {" · "}
+                    </span>
+                    <time dateTime={record.date} className="shrink-0">
+                      {formatRecordDate(record.date)}
+                    </time>
+                  </p>
+                  <H3Heading variant="title" className="news-card-title">
+                    {record.title}
+                  </H3Heading>
+                  <Copy variant="meta" className="news-card-excerpt line-clamp-2 text-steel/75">
+                    {record.excerpt}
+                  </Copy>
+                </div>
+              </Link>
+              <GridLine
+                axis="h"
+                unstyled
+                tone="page"
+                className="at-bottom left-(--line-stop) w-[calc(100%-2*var(--line-stop))] md:hidden"
+              />
+            </li>
+          );
+        })}
+        {items.length === 0 ? (
+          <li data-cat-card className="news-empty md:hidden">
+            <div className="news-empty-field dot-field-soft">
+              <CornerPluses />
+              <p className="index-tag relative z-10 bg-cream px-2 py-1.5">
+                {tab.id === "all" ? "No records yet." : `No records in ${tab.full} yet.`}
+              </p>
+            </div>
             <GridLine
               axis="h"
               unstyled
               tone="page"
-              className="at-bottom left-(--line-stop) w-[calc(100%-2*var(--line-stop))] md:hidden"
+              className="at-bottom left-(--line-stop) w-[calc(100%-2*var(--line-stop))]"
             />
           </li>
-        ))}
+        ) : null}
         {Array.from({ length: empties }, (_, i) => (
           <li
             key={`empty-${tab.id}-${i}`}
@@ -409,13 +500,26 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
 
       <div className="catalogue-foot min-h-rows-2">
         <div className="catalogue-readout index-tag">
-          <p className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <p className="hidden flex-wrap items-center gap-x-4 gap-y-2 md:flex">
             <span>{pad2(records.length)} Records</span>
             <span aria-hidden>·</span>
             <span>{pad2(NEWS_CATEGORIES.length)} Categories</span>
           </p>
           <p className="hidden font-normal md:block">
             Showing {tab.full} — {pad2(categoryRecords.length)} records
+          </p>
+          <p className="news-readout md:hidden">
+            <span className="news-readout-cell">
+              <span className="font-normal opacity-60">Showing</span>
+              <span>{tab.full}</span>
+            </span>
+            <span aria-hidden className="news-readout-divider" />
+            <span className="news-readout-cell items-end tabular-nums">
+              <span className="font-normal opacity-60">Records</span>
+              <span>
+                {pad2(categoryRecords.length)} / {pad2(records.length)}
+              </span>
+            </span>
           </p>
         </div>
       </div>

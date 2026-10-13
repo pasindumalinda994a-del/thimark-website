@@ -164,13 +164,13 @@ export const PRINCIPLES: readonly {
     id: "quality",
     title: "Quality Without Compromise",
     body: "Precision, controlled processes and consistent standards, so customers can depend on what we deliver.",
-    icon: "precision",
+    icon: "check",
   },
   {
     id: "innovation",
     title: "Innovation Through Engineering",
     body: "Technical knowledge, practical thinking and emerging technologies, applied to real-world problems.",
-    icon: "schema",
+    icon: "cognition",
   },
   {
     id: "integrity",
@@ -182,13 +182,13 @@ export const PRINCIPLES: readonly {
     id: "improvement",
     title: "Continuous Improvement",
     body: "We refine processes, reduce waste and strengthen our capabilities as requirements evolve.",
-    icon: "expand",
+    icon: "trending",
   },
   {
     id: "local",
     title: "Local Capability, Global Ambition",
     body: "Strengthening Sri Lankan manufacturing, with solutions for demanding applications beyond our borders.",
-    icon: "factory",
+    icon: "globe",
   },
 ];
 
@@ -235,14 +235,14 @@ export const PRACTICES: readonly Capability[] = [
     tag: "Lean Manufacturing",
     title: "Creating More Value",
     body: "Lean principles that cut unnecessary activity, improve workflow and make better use of resources.",
-    icon: "forklift",
+    icon: "conveyor",
   },
   {
     id: "5s",
     tag: "5S",
     title: "Building Better Workplaces",
     body: "Organization, cleanliness and standardized practice for safer, more efficient workplaces.",
-    icon: "factory",
+    icon: "stacks",
   },
   {
     id: "standard",
@@ -256,14 +256,14 @@ export const PRACTICES: readonly Capability[] = [
     tag: "Kaizen",
     title: "Progress Through Small Improvements",
     body: "Continual small improvements in how we work, solve problems and develop our capabilities.",
-    icon: "expand",
+    icon: "trending",
   },
   {
     id: "problem-solving",
     tag: "Problem-Solving",
     title: "Learning From Every Challenge",
     body: "Root Cause Analysis, 5 Whys, A3 and PDCA to find causes, guide action and keep improving.",
-    icon: "precision",
+    icon: "troubleshoot",
   },
 ];
 

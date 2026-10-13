@@ -20,6 +20,7 @@ import {
   type VLine,
 } from "@/app/(frontend)/components/plate";
 import { padIndex } from "@/app/(frontend)/homesections/StoryProgress";
+import MachineryList from "./MachineryList";
 import { BANDS, PORTFOLIO, type PortfolioBand } from "./machinery";
 
 const STORY_H: HLine[] = [
@@ -60,6 +61,12 @@ function PortfolioBandBlock({ band }: { band: PortfolioBand }) {
 
       <Cell at={imageAt as [number, number, number, number]} className="ah-media">
         <MobileEdge />
+        <p aria-hidden className="im-band-head index-tag md:hidden">
+          <span>Sector</span>
+          <span className="tabular-nums">
+            [{band.index} / {padIndex(BANDS.length - 1)}]
+          </span>
+        </p>
         <div data-wipe className="plate-media">
           <Image
             src={band.media.src}
@@ -114,6 +121,7 @@ function PortfolioBandBlock({ band }: { band: PortfolioBand }) {
               </li>
             ))}
           </ul>
+          <MachineryList id={band.id} items={band.items} />
           <Copy data-reveal variant="lede" className="im-cat-pull">
             {band.closing}
           </Copy>
@@ -136,7 +144,7 @@ export default function PortfolioSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={11}>
         <Frame h={STORY_H} v={STORY_V} />
@@ -169,7 +177,8 @@ export default function PortfolioSection() {
             {PORTFOLIO.headLabel}
           </span>
           <span className="tabular-nums">
-            {PORTFOLIO.headMeta} [{padIndex(0)}&ndash;{padIndex(PORTFOLIO.paragraphs.length - 1)}]
+            <span className="hidden md:inline">{PORTFOLIO.headMeta} </span>
+            [{padIndex(0)}&ndash;{padIndex(PORTFOLIO.paragraphs.length - 1)}]
           </span>
         </Cell>
 

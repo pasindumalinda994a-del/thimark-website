@@ -1,8 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState, type DragEvent, type FormEvent, type KeyboardEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type DragEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  type ReactNode,
+} from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import H1Heading from "@/app/(frontend)/components/H1Heading";
 import Copy from "@/app/(frontend)/components/Copy";
@@ -28,7 +37,7 @@ import {
 } from "@/app/(frontend)/enquire/enquire";
 import { submitEnquiry } from "@/app/(frontend)/enquire/submit";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
@@ -49,12 +58,46 @@ function MobileRails({ edge }: { edge: "start" | "mid" | "end" }) {
 
   return (
     <>
-      <GridLine axis="v" unstyled tone="page" className={`v-g1-0 ${vertical} md:hidden`} />
-      <GridLine axis="v" unstyled tone="page" className={`v-g1-12 ${vertical} md:hidden`} />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
-      <PlusMark tone="page" arms={leftArms} className="v-g1-0 at-bottom md:hidden" />
-      <PlusMark tone="page" arms={rightArms} className="v-g1-12 at-bottom md:hidden" />
+      <GridLine axis="v" unstyled tone="page" className={`enquire-rail v-g1-0 ${vertical} md:hidden`} />
+      <GridLine axis="v" unstyled tone="page" className={`enquire-rail v-g1-12 ${vertical} md:hidden`} />
+      <GridLine
+        data-enquire-band-rule
+        axis="h"
+        unstyled
+        tone="page"
+        className="enquire-rail h-seg-0-12 at-bottom md:hidden"
+      />
+      <PlusMark tone="page" arms={leftArms} className="enquire-rail v-g1-0 at-bottom md:hidden" />
+      <PlusMark tone="page" arms={rightArms} className="enquire-rail v-g1-12 at-bottom md:hidden" />
     </>
+  );
+}
+
+/** One phone band: its own rails and foot rule. From md up the wrapper is `contents`, so desktop grid placement is untouched. */
+function Band({
+  edge = "mid",
+  intro = false,
+  className = "",
+  children,
+}: {
+  edge?: "start" | "mid" | "end";
+  intro?: boolean;
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div data-enquire-band={intro ? "intro" : ""} className={`relative md:contents ${className}`}>
+      <MobileRails edge={edge} />
+      {children}
+    </div>
+  );
+}
+
+function ChannelArrow() {
+  return (
+    <svg aria-hidden className="contact-channel-arrow md:hidden" width={12} height={12} viewBox="0 0 12 12" fill="none">
+      <path d="M3 9 9 3M4 3h5v5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square" />
+    </svg>
   );
 }
 
@@ -205,6 +248,8 @@ function Field({
   inputMode,
   multiline = false,
   upper = false,
+  optional = false,
+  autoCapitalize,
 }: {
   id: string;
   label: string;
@@ -216,16 +261,22 @@ function Field({
   inputMode?: "email" | "tel" | "text";
   multiline?: boolean;
   upper?: boolean;
+  optional?: boolean;
+  autoCapitalize?: "none" | "words" | "sentences";
 }) {
   const errorId = `${id}-error`;
+  const hintId = `${id}-hint`;
+  const describedBy = [error ? errorId : "", optional ? hintId : ""].filter(Boolean).join(" ");
   const shared = {
     id,
     name: id,
     value,
     autoComplete,
+    autoCapitalize,
+    "aria-required": optional ? undefined : true,
     "aria-invalid": error ? true : undefined,
     "aria-labelledby": `${id}-label`,
-    "aria-describedby": error ? errorId : undefined,
+    "aria-describedby": describedBy || undefined,
     onChange: (event: { target: { value: string } }) => onChange(event.target.value),
     className: `contact-control${upper ? " is-upper" : ""}`,
   };
@@ -240,10 +291,15 @@ function Field({
           {error}
         </span>
       ) : null}
+      {optional ? (
+        <span id={hintId} className="contact-field-hint index-tag" hidden={Boolean(value)}>
+          Optional
+        </span>
+      ) : null}
       {multiline ? (
         <textarea {...shared} rows={4} />
       ) : (
-        <input {...shared} type={type} inputMode={inputMode} />
+        <input {...shared} type={type} inputMode={inputMode} enterKeyHint="next" />
       )}
     </label>
   );
@@ -282,9 +338,10 @@ export default function EnquireView({
 
       const copy = gsap.utils.toArray<HTMLElement>("[data-enquire-copy]", root);
       const rules = gsap.utils.toArray<HTMLElement>("[data-enquire-rule]", root);
+      const bands = gsap.utils.toArray<HTMLElement>("[data-enquire-band]", root);
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: no-preference)", () => {
         gsap.set(copy, { autoAlpha: 0, y: 12 });
         gsap.set(rules, { scaleX: 0, yPercent: -50, transformOrigin: "left center" });
 
@@ -300,6 +357,43 @@ export default function EnquireView({
           { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 },
           0.12,
         );
+      });
+
+      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+        const ruleOf = (band: HTMLElement) =>
+          band.querySelector<HTMLElement>(":scope > [data-enquire-band-rule]");
+        // Opacity only, never visibility: fields below the fold must stay reachable by Tab.
+        const itemsOf = (band: HTMLElement) =>
+          band.dataset.enquireBand === "intro"
+            ? gsap.utils.toArray<HTMLElement>("[data-enquire-copy]", band)
+            : gsap.utils.toArray<HTMLElement>(":scope > :not(.enquire-rail)", band);
+
+        const reveal = (band: HTMLElement, delay = 0) => {
+          const tl = gsap.timeline({ delay });
+          const rule = ruleOf(band);
+          if (rule) tl.to(rule, { scaleX: 1, duration: 0.8, ease: "power3.inOut" }, 0);
+          tl.to(
+            itemsOf(band),
+            { opacity: 1, y: 0, duration: 0.6, ease: "power2.out", stagger: 0.08 },
+            0.12,
+          );
+          return tl;
+        };
+
+        bands.forEach((band) => {
+          const rule = ruleOf(band);
+          if (rule) gsap.set(rule, { scaleX: 0, yPercent: -50, transformOrigin: "left center" });
+          gsap.set(itemsOf(band), { opacity: 0, y: 10 });
+        });
+
+        const [intro, ...rest] = bands;
+        if (intro) reveal(intro);
+        ScrollTrigger.batch(rest, {
+          start: "top 92%",
+          once: true,
+          onEnter: (batch) =>
+            batch.forEach((band, index) => reveal(band as HTMLElement, index * 0.08)),
+        });
       });
 
       return () => mm.revert();
@@ -486,8 +580,7 @@ export default function EnquireView({
       <PlusMark tone="page" arms={joinTeeUp} className="v-g1-6 at-bottom hidden md:block" />
       <PlusMark tone="page" arms={joinFootRight} className="v-g1-12 at-bottom hidden md:block" />
 
-      <div className="relative md:contents">
-        <MobileRails edge="start" />
+      <Band edge="start" intro>
         <div className="contact-intro">
           <div className="contact-title">
             <p data-enquire-copy className="eyebrow">
@@ -505,12 +598,11 @@ export default function EnquireView({
             <span className="block">We&rsquo;ll engineer what comes next.</span>
           </Copy>
         </div>
-      </div>
+      </Band>
 
-      <div className="relative md:contents">
-        <MobileRails edge="mid" />
-        <address className="contact-channels not-italic">
-          <div data-enquire-copy className="contact-channel">
+      <address className="contact-channels not-italic">
+        <Band className="contact-strip">
+          <div data-enquire-copy className="contact-channel is-quick">
             <p className="index-tag opacity-80">New business</p>
             <a
               href={`${COMPANY.email.href}?subject=${encodeURIComponent("New business")}`}
@@ -518,14 +610,18 @@ export default function EnquireView({
             >
               {COMPANY.email.label}
             </a>
+            <ChannelArrow />
           </div>
-          <div data-enquire-copy className="contact-channel">
+          <div data-enquire-copy className="contact-channel is-quick">
             <p className="index-tag opacity-80">Direct line</p>
             <a href={COMPANY.phone.href} className="contact-channel-value">
               {COMPANY.phone.label}
             </a>
+            <ChannelArrow />
           </div>
-          <div data-enquire-copy className="contact-channel">
+        </Band>
+        <Band>
+          <div data-enquire-copy className="contact-channel is-works">
             <p className="index-tag opacity-80">Works</p>
             <p className="contact-channel-value">
               {COMPANY.addressLines.map((line) => (
@@ -534,24 +630,39 @@ export default function EnquireView({
                 </span>
               ))}
             </p>
-            <p className="index-tag opacity-60">{COMPANY.coordinates}</p>
+            <div className="contact-works-meta">
+              <p className="index-tag opacity-60">{COMPANY.coordinates}</p>
+              <a
+                href={COMPANY.mapHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="contact-directions index-tag"
+              >
+                Directions
+                <svg aria-hidden width={10} height={10} viewBox="0 0 12 12" fill="none">
+                  <path d="M3 9 9 3M4 3h5v5" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square" />
+                </svg>
+                <span className="sr-only"> (opens Google Maps in a new tab)</span>
+              </a>
+            </div>
           </div>
-        </address>
-      </div>
+        </Band>
+      </address>
 
-      <div className="relative md:contents">
-        <MobileRails edge="end" />
+      <div className="md:contents">
         {reference ? (
-          <div ref={confirmRef} className="contact-form contact-confirm" role="status">
-            <p data-enquire-copy className="eyebrow">
-              Received
-            </p>
-            <p className="contact-confirm-ref">{reference}</p>
-            <p className="contact-note">We&rsquo;ll review the requirement and reply.</p>
-            <BrandButton type="button" onClick={reset} className="contact-submit">
-              Send another
-            </BrandButton>
-          </div>
+          <Band edge="end">
+            <div ref={confirmRef} className="contact-form contact-confirm" role="status">
+              <p data-enquire-copy className="eyebrow">
+                Received
+              </p>
+              <p className="contact-confirm-ref">{reference}</p>
+              <p className="contact-note">We&rsquo;ll review the requirement and reply.</p>
+              <BrandButton type="button" onClick={reset} className="contact-submit">
+                Send another
+              </BrandButton>
+            </div>
+          </Band>
         ) : (
           <form
             ref={formRef}
@@ -560,9 +671,11 @@ export default function EnquireView({
             aria-busy={sending || undefined}
             onSubmit={onSubmit}
           >
-            <div className="contact-form-title">
-              <FormHeading data-enquire-copy>Send an enquiry</FormHeading>
-            </div>
+            <Band>
+              <div className="contact-form-title">
+                <FormHeading data-enquire-copy>Send an enquiry</FormHeading>
+              </div>
+            </Band>
 
             <div aria-hidden="true" className="pointer-events-none absolute -left-[9999px] h-px w-px overflow-hidden">
               <input
@@ -574,52 +687,69 @@ export default function EnquireView({
               />
             </div>
 
-            <TopicField value={fields.topic} error={errors.topic} onChange={setField("topic")} />
-            <Field
-              id="enquire-name"
-              label="Name"
-              value={fields.name}
-              error={errors.name}
-              autoComplete="name"
-              upper
-              onChange={setField("name")}
-            />
-            <Field
-              id="enquire-company"
-              label="Company"
-              value={fields.company}
-              autoComplete="organization"
-              upper
-              onChange={setField("company")}
-            />
-            <Field
-              id="enquire-email"
-              label="Email"
-              type="email"
-              inputMode="email"
-              value={fields.email}
-              error={errors.email}
-              autoComplete="email"
-              onChange={setField("email")}
-            />
-            <Field
-              id="enquire-phone"
-              label="Phone"
-              type="tel"
-              inputMode="tel"
-              value={fields.phone}
-              error={errors.phone}
-              autoComplete="tel"
-              onChange={setField("phone")}
-            />
-            <Field
-              id="enquire-message"
-              label="Message"
-              value={fields.message}
-              error={errors.message}
-              multiline
-              onChange={setField("message")}
-            />
+            <Band>
+              <TopicField value={fields.topic} error={errors.topic} onChange={setField("topic")} />
+            </Band>
+            <Band>
+              <Field
+                id="enquire-name"
+                label="Name"
+                value={fields.name}
+                error={errors.name}
+                autoComplete="name"
+                autoCapitalize="words"
+                upper
+                onChange={setField("name")}
+              />
+            </Band>
+            <Band>
+              <Field
+                id="enquire-company"
+                label="Company"
+                value={fields.company}
+                autoComplete="organization"
+                autoCapitalize="words"
+                upper
+                optional
+                onChange={setField("company")}
+              />
+            </Band>
+            <Band>
+              <Field
+                id="enquire-email"
+                label="Email"
+                type="email"
+                inputMode="email"
+                value={fields.email}
+                error={errors.email}
+                autoComplete="email"
+                autoCapitalize="none"
+                onChange={setField("email")}
+              />
+            </Band>
+            <Band>
+              <Field
+                id="enquire-phone"
+                label="Phone"
+                type="tel"
+                inputMode="tel"
+                value={fields.phone}
+                error={errors.phone}
+                autoComplete="tel"
+                onChange={setField("phone")}
+              />
+            </Band>
+            <Band>
+              <Field
+                id="enquire-message"
+                label="Message"
+                value={fields.message}
+                error={errors.message}
+                autoCapitalize="sentences"
+                multiline
+                onChange={setField("message")}
+              />
+            </Band>
 
             <div
               className={`enquire-drop${over ? " is-over" : ""}${files.length ? " has-files" : ""}`}
@@ -640,70 +770,79 @@ export default function EnquireView({
                   event.target.value = "";
                 }}
               />
-              <div className="enquire-drop-head" data-enquire-copy>
-                <div>
-                  <p className="index-tag opacity-60">Drawings</p>
-                  <p className="enquire-drop-title">Files</p>
+              <Band className="enquire-drop-band">
+                <div className="enquire-drop-head" data-enquire-copy>
+                  <div>
+                    <p className="index-tag opacity-60">Drawings</p>
+                    <p className="enquire-drop-title">Files</p>
+                  </div>
+                  <p className="enquire-drop-count index-tag">{pad2(files.length)}</p>
                 </div>
-                <p className="enquire-drop-count index-tag">{pad2(files.length)}</p>
-              </div>
-              {files.length > 0 ? (
-                <ul className="enquire-file-list">
-                  {files.map((file, index) => (
-                    <li key={`${file.name}-${file.size}-${index}`} className="enquire-file-row">
-                      <span className="index-tag opacity-60">{pad2(index + 1)}</span>
-                      <span className="enquire-file-name">
-                        <span className="enquire-file-ext index-tag">{fileExt(file.name) || "FILE"}</span>
-                        {file.name}
-                      </span>
-                      <span className="enquire-file-size index-tag">{formatBytes(file.size)}</span>
-                      <button
-                        type="button"
-                        className="enquire-file-remove"
-                        aria-label={`Remove ${file.name}`}
-                        onClick={() => removeFile(index)}
-                      >
-                        Remove
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              <button
-                type="button"
-                className="enquire-well"
-                aria-label="Add a drawing or document"
-                onClick={() => fileRef.current?.click()}
-              >
-                <svg className="enquire-well-frame" aria-hidden>
-                  <rect x="0.5" y="0.5" width="100%" height="100%" />
-                </svg>
-                <PlusMark tone="page" className="enquire-plus enquire-plus-tl" />
-                <PlusMark tone="page" className="enquire-plus enquire-plus-tr" />
-                <PlusMark tone="page" className="enquire-plus enquire-plus-bl" />
-                <PlusMark tone="page" className="enquire-plus enquire-plus-br" />
-                <span className="enquire-well-kicker index-tag">
-                  {files.length ? "Add another" : "Optional"}
-                </span>
-                <Copy as="span" variant="lead" className="enquire-well-title">
-                  {files.length ? "Drop or choose a file" : "Drop drawings here"}
-                </Copy>
-                <span className="enquire-well-formats index-tag">{CORE_FORMATS.join(" · ")}</span>
-                <span className="enquire-drop-spec index-tag">
-                  {MAX_FILES} files · {MAX_FILE_MB} MB each
-                </span>
-              </button>
-              {fileError ? <p className="enquire-drop-error index-tag">{fileError}</p> : null}
-              {submitError ? (
-                <p className="enquire-drop-error index-tag" role="alert">
-                  {submitError}
-                </p>
-              ) : null}
-              <div className="contact-submit-wrap">
-                <BrandButton type="submit" className="contact-submit" disabled={sending}>
-                  {sending ? progress || "Sending" : "Enquire"}
-                </BrandButton>
-              </div>
+                {files.length > 0 ? (
+                  <ul className="enquire-file-list">
+                    {files.map((file, index) => (
+                      <li key={`${file.name}-${file.size}-${index}`} className="enquire-file-row">
+                        <span className="enquire-file-index index-tag opacity-60">{pad2(index + 1)}</span>
+                        <span className="enquire-file-name">
+                          <span className="enquire-file-ext index-tag">{fileExt(file.name) || "FILE"}</span>
+                          {file.name}
+                        </span>
+                        <span className="enquire-file-size index-tag">{formatBytes(file.size)}</span>
+                        <button
+                          type="button"
+                          className="enquire-file-remove"
+                          aria-label={`Remove ${file.name}`}
+                          onClick={() => removeFile(index)}
+                        >
+                          Remove
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <button
+                  type="button"
+                  className="enquire-well"
+                  aria-label="Add a drawing or document"
+                  onClick={() => fileRef.current?.click()}
+                >
+                  <svg className="enquire-well-frame" aria-hidden>
+                    <rect x="0.5" y="0.5" width="100%" height="100%" />
+                  </svg>
+                  <PlusMark tone="page" className="enquire-plus enquire-plus-tl" />
+                  <PlusMark tone="page" className="enquire-plus enquire-plus-tr" />
+                  <PlusMark tone="page" className="enquire-plus enquire-plus-bl" />
+                  <PlusMark tone="page" className="enquire-plus enquire-plus-br" />
+                  <span className="enquire-well-kicker index-tag">
+                    {files.length ? "Add another" : "Optional"}
+                  </span>
+                  <Copy as="span" variant="lead" className="enquire-well-title">
+                    <span className="enquire-copy-fine">
+                      {files.length ? "Drop or choose a file" : "Drop drawings here"}
+                    </span>
+                    <span className="enquire-copy-coarse">
+                      {files.length ? "Choose another file" : "Add drawings"}
+                    </span>
+                  </Copy>
+                  <span className="enquire-well-formats index-tag">{CORE_FORMATS.join(" · ")}</span>
+                  <span className="enquire-drop-spec index-tag">
+                    {MAX_FILES} files · {MAX_FILE_MB} MB each
+                  </span>
+                </button>
+                {fileError ? <p className="enquire-drop-error index-tag">{fileError}</p> : null}
+                {submitError ? (
+                  <p className="enquire-drop-error index-tag" role="alert">
+                    {submitError}
+                  </p>
+                ) : null}
+              </Band>
+              <Band edge="end">
+                <div className="contact-submit-wrap">
+                  <BrandButton type="submit" className="contact-submit" disabled={sending}>
+                    {sending ? progress || "Sending" : "Enquire"}
+                  </BrandButton>
+                </div>
+              </Band>
             </div>
           </form>
         )}

@@ -805,7 +805,7 @@ export default function Sidebar() {
     <>
       <aside
         ref={aside}
-        className="fixed inset-y-0 left-0 z-30 hidden w-sidebar md:block"
+        className="fixed inset-y-0 left-0 z-30 hidden w-sidebar xl:block"
       >
         <NavShell
           activeId={activeId}
@@ -818,7 +818,7 @@ export default function Sidebar() {
         />
       </aside>
 
-      <header className="content-plate mn-header fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream md:hidden">
+      <header className="content-plate mn-header fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream xl:hidden">
         <BrandLogo className="px-4" imageClassName="h-7" priority />
         <button
           type="button"
@@ -868,7 +868,7 @@ export default function Sidebar() {
       <div
         ref={overlay}
         id="mobile-nav"
-        className={`fixed inset-0 z-30 opacity-0 md:hidden ${
+        className={`fixed inset-0 z-30 opacity-0 xl:hidden ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
         aria-hidden={!menuOpen}

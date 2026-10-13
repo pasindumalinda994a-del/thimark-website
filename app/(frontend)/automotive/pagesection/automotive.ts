@@ -62,25 +62,25 @@ export const COMPONENTS: readonly ComponentGroup[] = [
     id: "stands",
     title: "Stands & Supports",
     items: ["Centre stands", "Side stands", "Engine hangers"],
-    icon: "car",
+    icon: "motorcycle",
   },
   {
     id: "guards",
     title: "Guards & Protection",
     items: ["Leg guards", "Saree guards", "Belly pans"],
-    icon: "verified",
+    icon: "shield",
   },
   {
     id: "handlebars",
     title: "Handlebars & Carriers",
     items: ["Handlebars", "Rear carriers", "Bar pillions"],
-    icon: "expand",
+    icon: "wheel",
   },
   {
     id: "brackets",
     title: "Brackets & Mounting Components",
     items: ["Speedometer brackets", "Battery brackets", "Seat latches", "Hooks"],
-    icon: "schema",
+    icon: "link",
   },
   {
     id: "tools",
@@ -89,7 +89,7 @@ export const COMPONENTS: readonly ComponentGroup[] = [
       "Flat spanners",
       "Other custom metallic components developed to meet specific manufacturing requirements",
     ],
-    icon: "work",
+    icon: "handyman",
   },
 ];
 
@@ -181,7 +181,7 @@ export const STAGES: readonly Stage[] = [
     title: "Laser & Profile Cutting",
     body: "Sheet metal, tubes and profiles are cut to the required shapes and dimensions, setting the foundation for forming and assembly.",
     operations: ["Sheet metal", "Tubes", "Profiles"],
-    icon: "precision",
+    icon: "laser",
     media: {
       src: "/home-images/about-industrial-automation.jpeg",
       alt: "Production machinery prepared for cutting operations at Thimark",
@@ -194,7 +194,7 @@ export const STAGES: readonly Stage[] = [
     title: "Forming & Bending",
     body: "Using press brakes, pipe-bending equipment and stamping processes, cut materials are shaped to meet component geometry and design requirements.",
     operations: ["Press brake", "Pipe bending", "Stamping"],
-    icon: "factory",
+    icon: "mitre",
     media: {
       src: "/home-images/quality-lean-production.jpeg",
       alt: "Operators forming parts on an organized production line",
@@ -207,7 +207,7 @@ export const STAGES: readonly Stage[] = [
     title: "Machining & Preparation",
     body: "Drilling, threading, countersinking, grinding and edge finishing prepare components for accurate fitting, joining and assembly.",
     operations: ["Drilling", "Threading", "Countersinking", "Grinding", "Edge finishing"],
-    icon: "schema",
+    icon: "precision",
     media: {
       src: "/home-images/about-iso-precision.jpeg",
       alt: "Engineer inspecting a precision-machined component",
@@ -220,7 +220,7 @@ export const STAGES: readonly Stage[] = [
     title: "Joining & Sub-Assembly",
     body: "Welding and suitable joining processes create functional components and sub-assemblies, including robotic and resistance spot welding where needed.",
     operations: ["Welding", "Robotic welding", "Resistance spot welding"],
-    icon: "work",
+    icon: "flame",
     media: {
       src: "/home-images/about-steel-fabrication.jpeg",
       alt: "Fabricators welding steel assemblies in the Thimark workshop",
@@ -253,7 +253,7 @@ export const CAPABILITIES: readonly Capability[] = [
     tag: "Welding",
     title: "Welding & Component Assembly",
     body: "Robotic and spot welding for functional parts and sub-assemblies.",
-    icon: "work",
+    icon: "flame",
   },
   {
     id: "engineering",
@@ -267,14 +267,14 @@ export const CAPABILITIES: readonly Capability[] = [
     tag: "OEM",
     title: "OEM-Focused Manufacturing",
     body: "Motorcycle components built with local manufacturers and assembly partners.",
-    icon: "car",
+    icon: "motorcycle",
   },
   {
     id: "improvement",
     tag: "Improvement",
     title: "Continuous Manufacturing Improvement",
     body: "Kanban, 5S and Kaizen for organized, improving production.",
-    icon: "expand",
+    icon: "cycle",
   },
   {
     id: "local",

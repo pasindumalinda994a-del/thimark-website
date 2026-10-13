@@ -12,7 +12,7 @@ export default async function GalleryPage() {
   const frames = await getGalleryFrames();
 
   return (
-    <main className="gallery content-plate relative z-10 bg-cream pt-14 text-steel md:ml-sidebar md:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
+    <main className="gallery content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       <GalleryView frames={frames} />
     </main>
   );

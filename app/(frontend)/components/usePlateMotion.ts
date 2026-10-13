@@ -43,6 +43,8 @@ function setCount(el: HTMLElement, n: number) {
 export type PlateMotionOptions = {
   /** Image open. "rise" matches the homepage bottom clip. Default opens from the centre. */
   image?: "center" | "rise";
+  /** Phones: [data-drift] notes rise in as their band's shot opens, like the homepage solution notes. */
+  phoneNotes?: boolean;
 };
 
 /**
@@ -54,13 +56,15 @@ export type PlateMotionOptions = {
  * [data-scrub-x] grows left-to-right with scroll and sets data-passed on
  * [data-scrub-stop="0.5"] markers once its progress reaches their value,
  * [data-drift] (a note centred on its [data-drift-band]) slides through the
- * band with scroll from md up, like the homepage solution notes.
+ * band with scroll from md up, like the homepage solution notes (and rises in
+ * on phones with `phoneNotes`).
  */
 export function usePlateMotion(
   scope: RefObject<HTMLElement | null>,
   options?: PlateMotionOptions,
 ) {
   const rise = options?.image === "rise";
+  const phoneNotes = options?.phoneNotes ?? false;
 
   useGSAP(
     () => {
@@ -104,6 +108,29 @@ export function usePlateMotion(
         });
       });
 
+      if (phoneNotes) {
+        mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+          drifts.forEach((note) => {
+            gsap.fromTo(
+              note,
+              { autoAlpha: 0, y: 24 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.6,
+                delay: 0.35,
+                ease: "power2.out",
+                scrollTrigger: {
+                  trigger: note.closest("[data-drift-band]") ?? note,
+                  start: "top 82%",
+                  once: true,
+                },
+              },
+            );
+          });
+        });
+      }
+
       mm.add("(prefers-reduced-motion: reduce)", () => {
         counts.forEach((el) => setCount(el, Number(el.dataset.count)));
         stops.forEach((el) => {
@@ -136,23 +163,32 @@ export function usePlateMotion(
         });
       });
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.set(reveals, { autoAlpha: 0, y: rise ? 10 : 12 });
-        ScrollTrigger.batch(reveals, {
-          // Measured after the y offset above; hero CTAs sit at rows 12–14 of the first viewport.
-          start: "top 92%",
-          once: true,
-          onEnter: (batch) =>
-            gsap.to(batch, {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.6,
-              ease: "power2.out",
-              stagger: 0.08,
-              overwrite: true,
-            }),
-        });
+      mm.add(
+        { phone: "(max-width: 767px)", motion: "(prefers-reduced-motion: no-preference)" },
+        (ctx) => {
+          const { phone, motion } = ctx.conditions ?? {};
+          if (!motion) return;
 
+          gsap.set(reveals, { autoAlpha: 0, y: rise ? 10 : 12 });
+          ScrollTrigger.batch(reveals, {
+            // Measured after the y offset above; hero CTAs sit at rows 12–14 of the first
+            // viewport, and at its very foot on phones.
+            start: phone ? "top 98%" : "top 92%",
+            once: true,
+            onEnter: (batch) =>
+              gsap.to(batch, {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: 0.08,
+                overwrite: true,
+              }),
+          });
+        },
+      );
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
         wipes.forEach((el) => {
           if (rise) {
             gsap.fromTo(
@@ -242,6 +278,6 @@ export function usePlateMotion(
 
       return () => mm.revert();
     },
-    { scope, dependencies: [rise], revertOnUpdate: true },
+    { scope, dependencies: [rise, phoneNotes], revertOnUpdate: true },
   );
 }

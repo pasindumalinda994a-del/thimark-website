@@ -1,7 +1,7 @@
 "use client";
 
 import Copy from "@/app/(frontend)/components/Copy";
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -56,7 +56,7 @@ export default function LeadershipSection() {
       rows={20}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={25}>
         <Frame h={H} v={V} />
@@ -93,63 +93,64 @@ export default function LeadershipSection() {
           </span>
         </Cell>
 
-        {leaders.map((person, i) => {
-          const c = i * 3;
-          return (
-            <Fragment key={person.id}>
-              <Cell at={[c, c + 3, 4, 9]} className="ld-portrait-cell">
-                <MobileEdge open />
-                <div data-wipe className="ld-portrait ld-roster ld-roster-light">
-                  <Corners />
-                  <span aria-hidden className="ld-portrait-marker" />
-                  <div className="ld-portrait-frame">
-                    {person.portrait ? (
-                      <Image
-                        src={person.portrait}
-                        alt={person.portraitAlt}
-                        fill
-                        sizes="(min-width: 768px) 22vw, 100vw"
-                        className="object-cover grayscale"
-                      />
-                    ) : (
-                      <div className="ld-monogram dot-field" role="img" aria-label={person.name}>
-                        <span aria-hidden className="ld-monogram-text ab-outline">
-                          {person.initials}
-                        </span>
-                      </div>
-                    )}
+        <div className="ld-grid md:contents">
+          {leaders.map((person, i) => {
+            const c = i * 3;
+            return (
+              <div key={person.id} className="ld-card md:contents">
+                <Cell at={[c, c + 3, 4, 9]} className="ld-portrait-cell">
+                  <div data-wipe className="ld-portrait ld-roster ld-roster-light">
+                    <Corners />
+                    <span aria-hidden className="ld-portrait-marker" />
+                    <div className="ld-portrait-frame">
+                      {person.portrait ? (
+                        <Image
+                          src={person.portrait}
+                          alt={person.portraitAlt}
+                          fill
+                          sizes="(min-width: 768px) 22vw, 100vw"
+                          className="object-cover grayscale"
+                        />
+                      ) : (
+                        <div className="ld-monogram dot-field" role="img" aria-label={person.name}>
+                          <span aria-hidden className="ld-monogram-text ab-outline">
+                            {person.initials}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <p aria-hidden className="ld-portrait-caption index-tag">
+                      <span className="tabular-nums">[{padIndex(i)}]</span>
+                      <span>Leadership</span>
+                    </p>
                   </div>
-                  <p aria-hidden className="ld-portrait-caption index-tag">
-                    <span className="tabular-nums">[{padIndex(i)}]</span>
-                    <span>Leadership</span>
-                  </p>
-                </div>
-              </Cell>
-              <Cell
-                at={[c, c + 3, 9, 13]}
-                as="article"
-                className="ld-name ld-bio"
-                aria-labelledby={`leader-${person.id}`}
-              >
-                <MobileEdge />
-                <div className="flex flex-col gap-2">
-                  <H3Heading id={`leader-${person.id}`} data-reveal variant="title" size="sm">
-                    {person.honorific} {person.name}
-                    {person.credential ? (
-                      <span className="ld-credential"> ({person.credential})</span>
-                    ) : null}
-                  </H3Heading>
-                  <p data-reveal className="index-tag leading-[1.2] opacity-70">
-                    {person.role}
-                  </p>
-                </div>
-                <Copy data-reveal variant="body" className="ld-bio-copy">
-                  {person.bio}
-                </Copy>
-              </Cell>
-            </Fragment>
-          );
-        })}
+                </Cell>
+                <Cell
+                  at={[c, c + 3, 9, 13]}
+                  as="article"
+                  className="ld-name ld-bio"
+                  aria-labelledby={`leader-${person.id}`}
+                >
+                  <div className="flex flex-col gap-2">
+                    <H3Heading id={`leader-${person.id}`} data-reveal variant="title" size="sm">
+                      {person.honorific} {person.name}
+                      {person.credential ? (
+                        <span className="ld-credential"> ({person.credential})</span>
+                      ) : null}
+                    </H3Heading>
+                    <p data-reveal className="index-tag leading-[1.2] opacity-70">
+                      {person.role}
+                    </p>
+                  </div>
+                  <Copy data-reveal variant="body" className="ld-bio-copy">
+                    {person.bio}
+                  </Copy>
+                </Cell>
+              </div>
+            );
+          })}
+          <MobileEdge />
+        </div>
 
         <Cell at={[0, 12, 13, 14]} className="ab-head index-tag">
           <MobileEdge open />

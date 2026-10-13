@@ -22,7 +22,7 @@ const STEEL = "relative z-10 bg-steel [--page-bg:var(--steel)] [--page-ink:var(-
 
 export default function AboutPage() {
   return (
-    <main className="about-page content-plate pt-14 md:ml-sidebar md:pt-0">
+    <main className="about-page content-plate pt-14 xl:ml-sidebar xl:pt-0">
       <div className={CREAM}>
         <AboutHero />
         <SectionBreak tone="page" />

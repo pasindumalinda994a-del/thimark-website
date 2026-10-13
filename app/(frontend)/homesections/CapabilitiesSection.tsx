@@ -6,7 +6,9 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import CarouselControls from "@/app/(frontend)/components/CarouselControls";
 import ScrollHint from "@/app/(frontend)/components/ScrollHint";
+import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import Copy from "@/app/(frontend)/components/Copy";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -300,11 +302,68 @@ export default function CapabilitiesSection({
         },
       );
 
+      // Phone: a native swipe track. Each glyph draws once, when its card settles.
       mm.add(
-        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          drawGlyphs(clip, "top 80%");
-          countStats(root.querySelector("[data-caps-stats]") ?? root, "top 85%");
+        { phone: "(max-width: 767px)", reduce: "(prefers-reduced-motion: reduce)" },
+        (ctx) => {
+          const { phone, reduce } = ctx.conditions ?? {};
+          if (!phone) return;
+
+          const drawn = new Set<number>();
+          let revealed = Boolean(reduce);
+          let active = 0;
+
+          const drawCard = (index: number) => {
+            const card = cards[index];
+            if (reduce || !card || drawn.has(index)) return;
+            drawn.add(index);
+            drawCardGlyph(card);
+          };
+
+          if (!reduce) {
+            cards.forEach((card) => {
+              gsap.set(visibleStrokes(card), { drawSVG: "0%" });
+              gsap.set(hiddenStrokes(card), { autoAlpha: 0 });
+            });
+
+            const copy = gsap.timeline({
+              scrollTrigger: {
+                trigger: clip,
+                start: "top 80%",
+                once: true,
+                onEnter: () => {
+                  revealed = true;
+                  drawCard(active);
+                },
+              },
+            });
+            cards.forEach((card, i) => {
+              const lines = card.querySelectorAll("[data-caps-title], [data-caps-body]");
+              copy.fromTo(
+                lines,
+                { autoAlpha: 0, y: 6 },
+                { autoAlpha: 1, y: 0, duration: 0.4, ease: "power2.out", stagger: 0.12 },
+                i * 0.06,
+              );
+            });
+
+            countStats(root.querySelector("[data-caps-stats]") ?? root, "top 85%");
+          }
+
+          const carousel = bindSnapCarousel({
+            track: clip,
+            slides: cards,
+            controls: root.querySelector<HTMLElement>("[data-carousel-controls]"),
+            reduced: Boolean(reduce),
+            onChange: (index) => {
+              active = index;
+            },
+            onSettle: (index) => {
+              if (revealed) drawCard(index);
+            },
+          });
+
+          return () => carousel.destroy();
         },
       );
 
@@ -346,7 +405,7 @@ export default function CapabilitiesSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="home-phone flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
@@ -438,6 +497,8 @@ export default function CapabilitiesSection({
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div
           data-caps-clip
+          role="region"
+          aria-roledescription="carousel"
           className="caps-track-clip"
           aria-label="Capability cards"
         >
@@ -497,6 +558,7 @@ export default function CapabilitiesSection({
             ))}
           </ol>
         </div>
+        <CarouselControls label={progressLabel} count={items.length} className="md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />

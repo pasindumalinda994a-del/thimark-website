@@ -1,7 +1,7 @@
 "use client";
 
 import Copy from "@/app/(frontend)/components/Copy";
-import { Fragment, useRef } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -55,7 +55,7 @@ const GRID_JOINS: Join[] = [
 
 export default function RecognitionSection() {
   const ref = useRef<HTMLElement>(null);
-  usePlateMotion(ref, { image: "rise" });
+  usePlateMotion(ref, { image: "rise", phoneNotes: true });
 
   const { band } = RECOGNITION;
 
@@ -67,7 +67,7 @@ export default function RecognitionSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="plate-auto flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={3}>
         <Frame h={HEAD_H} v={HEAD_V} joins={HEAD_JOINS} />
@@ -160,9 +160,9 @@ export default function RecognitionSection() {
           const c = (i % 2) * 6;
           const r = Math.floor(i / 2) * 6;
           return (
-            <Fragment key={award.id}>
+            <div key={award.id} className="rc-row md:contents">
+              <MobileEdge />
               <Cell at={[c, c + 3, r, r + 6]} className="rc-seal-cell" data-redraw="">
-                <MobileEdge open />
                 <div data-draw className="rc-seal dot-field-soft">
                   <Corners />
                   <AwardSeal
@@ -180,7 +180,6 @@ export default function RecognitionSection() {
                 className="rc-award"
                 aria-labelledby={`award-${award.id}`}
               >
-                <MobileEdge />
                 <div data-reveal className="rc-award-title">
                   <p className="index-tag flex items-center justify-between gap-3 opacity-80">
                     <span>{award.org}</span>
@@ -203,7 +202,7 @@ export default function RecognitionSection() {
                   {award.year}
                 </span>
               </Cell>
-            </Fragment>
+            </div>
           );
         })}
 

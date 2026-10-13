@@ -94,7 +94,7 @@ export default function HeroReel() {
 
     gsap.set(layers[0], { autoAlpha: 1 });
     gsap.set(layers.slice(1), { autoAlpha: 0 });
-    gsap.set(fills, { scaleY: 0, transformOrigin: "center top" });
+    gsap.set(fills, { "--fill": 0 });
 
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduced = reducedQuery.matches;
@@ -110,9 +110,9 @@ export default function HeroReel() {
     const setFills = (index: number, currentScale: number) => {
       fills.forEach((fill, i) => {
         if (!fill) return;
-        if (i < index) gsap.set(fill, { scaleY: 1 });
-        else if (i === index) gsap.set(fill, { scaleY: currentScale });
-        else gsap.set(fill, { scaleY: 0 });
+        if (i < index) gsap.set(fill, { "--fill": 1 });
+        else if (i === index) gsap.set(fill, { "--fill": currentScale });
+        else gsap.set(fill, { "--fill": 0 });
       });
     };
 
@@ -132,9 +132,9 @@ export default function HeroReel() {
       progressTween?.kill();
       progressTween = gsap.fromTo(
         fill,
-        { scaleY: 0 },
+        { "--fill": 0 },
         {
-          scaleY: 1,
+          "--fill": 1,
           duration: HERO_CLIP_DURATION,
           ease: "none",
           onComplete: () => goTo(index + 1),
@@ -154,7 +154,7 @@ export default function HeroReel() {
         const onTimeUpdate = () => {
           const duration = video.duration;
           if (!duration || !Number.isFinite(duration)) return;
-          gsap.set(fill, { scaleY: video.currentTime / duration });
+          gsap.set(fill, { "--fill": video.currentTime / duration });
         };
         const onEnded = () => {
           goTo(index + 1);
@@ -369,12 +369,12 @@ export default function HeroReel() {
                     )}
                   </span>
                   <span className="hero-reel-rail">
-                    <span className="relative h-full w-[1.5px] overflow-hidden bg-cream/50">
+                    <span className="hero-reel-track relative h-full w-[1.5px] overflow-hidden bg-cream/50">
                       <span
                         ref={(node) => {
                           fillsRef.current[index] = node;
                         }}
-                        className="absolute inset-0 origin-top scale-y-0 bg-cream"
+                        className="hero-reel-fill absolute inset-0 bg-cream"
                       />
                     </span>
                   </span>

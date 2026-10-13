@@ -16,7 +16,7 @@ export default async function EnquirePage({ searchParams }: EnquirePageProps) {
   const initial = parseTopic(Array.isArray(service) ? service[0] : service);
 
   return (
-    <main className="enquire content-plate relative z-10 bg-cream pt-14 text-steel md:ml-sidebar md:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
+    <main className="enquire content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       <EnquireView
         key={initial ?? "none"}
         initialTopic={initial}

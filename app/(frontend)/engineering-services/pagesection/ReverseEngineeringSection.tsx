@@ -79,7 +79,7 @@ export default function ReverseEngineeringSection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="re-section plate-auto flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <PlateBlock rows={11}>
         <Frame h={STORY_H} v={STORY_V} joins={STORY_JOINS} />
@@ -175,7 +175,7 @@ export default function ReverseEngineeringSection() {
               key={capability.id}
               at={[c, c + 4, r, r + 7]}
               as="article"
-              className="vm-principle im-tile-short"
+              className="vm-principle im-tile-short im-tile-invert re-tile"
               data-redraw=""
               tabIndex={0}
               aria-labelledby={`reverse-${capability.id}`}

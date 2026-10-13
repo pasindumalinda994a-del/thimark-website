@@ -48,7 +48,7 @@ export default function StorySection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <Frame h={H} v={V} />
 

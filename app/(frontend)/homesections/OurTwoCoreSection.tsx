@@ -8,6 +8,7 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import Copy from "@/app/(frontend)/components/Copy";
+import DirectionMark from "@/app/(frontend)/components/DirectionMark";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
@@ -93,6 +94,7 @@ const COLUMNS = [
 ] as const;
 
 const COL_CLASS = ["two-core-col-0", "two-core-col-1", "two-core-col-2"] as const;
+const COLUMN_TOTAL = String(COLUMNS.length).padStart(2, "0");
 
 type ColumnNodes = {
   head: HTMLElement | null;
@@ -189,7 +191,7 @@ export default function OurTwoCoreSection() {
         });
       };
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const revealHeader = (start: string, once: boolean) => {
         gsap.fromTo(
           header,
           { autoAlpha: 0, y: 10 },
@@ -199,18 +201,17 @@ export default function OurTwoCoreSection() {
             duration: 0.6,
             ease: "power2.out",
             stagger: 0.1,
-            scrollTrigger: {
-              trigger: root,
-              start: "top 70%",
-              toggleActions: "play none none reverse",
-            },
+            scrollTrigger: once
+              ? { trigger: root, start, once: true }
+              : { trigger: root, start, toggleActions: "play none none reverse" },
           },
         );
-      });
+      };
 
       mm.add(
-        "(min-width: 1024px) and (prefers-reduced-motion: no-preference)",
+        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
         () => {
+          revealHeader("top 70%", false);
           hide();
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -224,16 +225,17 @@ export default function OurTwoCoreSection() {
       );
 
       mm.add(
-        "(max-width: 1023px) and (prefers-reduced-motion: no-preference)",
+        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
         () => {
+          revealHeader("top 80%", true);
           hide();
           columns.forEach((nodes) => {
             if (!nodes.image) return;
             const tl = gsap.timeline({
               scrollTrigger: {
                 trigger: nodes.image,
-                start: "top 82%",
-                toggleActions: "play none none reverse",
+                start: "top 85%",
+                once: true,
               },
             });
             revealColumn(tl, nodes, 0);
@@ -254,36 +256,36 @@ export default function OurTwoCoreSection() {
       rows={17}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="home-phone flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-top-3 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-3 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-3-4 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-3-4 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-4 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-11 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-4-11 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-4-11 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-11 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-11-br2 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-11-br2 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-11-br2 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-11-br2 hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-br2-end hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-br2-end hidden lg:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden lg:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-top-3 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-top-3 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-3-4 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-3-4 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-3-4 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-3-4 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-4-11 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-4 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-8 v-seg-br2-end hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-12 v-seg-br2-end hidden md:block" />
 
       {/* Row 3 — intro base */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 top-rows-3 hidden lg:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden lg:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden lg:block" />
-      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-3 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-3 hidden lg:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-8 top-rows-3 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinTeeDown} className="v-g1-4 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-3 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-3 hidden md:block" />
 
       {/* Row 4 — plate numbers */}
       <GridLine
@@ -291,44 +293,44 @@ export default function OurTwoCoreSection() {
         unstyled
         tone="page"
         data-core-rule="0"
-        className="h-seg-0-4 top-rows-4 hidden lg:block"
+        className="h-seg-0-4 top-rows-4 hidden md:block"
       />
       <GridLine
         axis="h"
         unstyled
         tone="page"
         data-core-rule="1"
-        className="h-seg-4-8 top-rows-4 hidden lg:block"
+        className="h-seg-4-8 top-rows-4 hidden md:block"
       />
       <GridLine
         axis="h"
         unstyled
         tone="page"
         data-core-rule="2"
-        className="h-seg-8-12 top-rows-4 hidden lg:block"
+        className="h-seg-8-12 top-rows-4 hidden md:block"
       />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden lg:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden lg:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-4 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-4 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-4 hidden md:block" />
 
       {/* Row 9 — media base */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-11 hidden lg:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-11 hidden lg:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-11 hidden lg:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-11 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-4 top-rows-11 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-8 top-rows-11 hidden lg:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-11 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 top-rows-11 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 top-rows-11 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-4 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-8 top-rows-11 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 top-rows-11 hidden md:block" />
 
       {/* CTA band */}
-      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-2 hidden lg:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-2 hidden lg:block" />
-      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden lg:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-4 at-br-2 hidden lg:block" />
-      <PlusMark tone="page" className="v-g1-8 at-br-2 hidden lg:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden lg:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-0-4 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-4-8 at-br-2 hidden md:block" />
+      <GridLine axis="h" unstyled tone="page" className="h-seg-8-12 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-br-2 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-4 at-br-2 hidden md:block" />
+      <PlusMark tone="page" className="v-g1-8 at-br-2 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-br-2 hidden md:block" />
 
       {/* Intro */}
       <div className="two-core-intro min-h-rows-3">
@@ -346,11 +348,11 @@ export default function OurTwoCoreSection() {
           expertise and manufacturing capability to deliver practical solutions
           for automotive and industrial applications.
         </Copy>
-        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus lg:hidden" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus lg:hidden" />
-        <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom lg:hidden" />
-        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom lg:hidden" />
-        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom lg:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
+        <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+        <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
       </div>
 
       {/* Cards */}
@@ -359,15 +361,19 @@ export default function OurTwoCoreSection() {
           <article
             key={col.id}
             id={col.id}
-            className={`two-core-card ${COL_CLASS[i]} scroll-mt-16 lg:scroll-mt-0`}
+            className={`two-core-card ${COL_CLASS[i]} scroll-mt-16 xl:scroll-mt-0`}
           >
             <div
               data-core-label={i}
               className="two-core-card-head index-tag"
             >
-              <span>{col.title}</span>
+              <span>
+                <span className="md:hidden">Discipline</span>
+                <span className="hidden md:inline">{col.title}</span>
+              </span>
               <span aria-hidden className="shrink-0">
-                [{col.index}]
+                [{col.index}
+                <span className="md:hidden"> / {COLUMN_TOTAL}</span>]
               </span>
             </div>
             <Link
@@ -381,13 +387,16 @@ export default function OurTwoCoreSection() {
                 src={col.image}
                 alt={col.alt}
                 fill
-                sizes="(min-width: 1024px) 30vw, 100vw"
+                sizes="(min-width: 768px) 30vw, 100vw"
                 className="object-cover"
               />
               <PlusMark tone="light" className="top-4 left-4 z-10" />
               <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />
               <PlusMark tone="light" className="bottom-4 left-4 z-10" />
               <PlusMark tone="light" className="bottom-4 left-[calc(100%-16px)] z-10" />
+              <span aria-hidden data-core-numeral={i} className="two-core-numeral md:hidden">
+                {col.index}
+              </span>
               <FigMark n={HOME_FIG.core + i} />
             </Link>
             <div className="two-core-card-base">
@@ -405,6 +414,7 @@ export default function OurTwoCoreSection() {
                         <span className="two-core-area-index">[{area.index}]</span>
                         <span className="two-core-area-rule" aria-hidden />
                         <span className="two-core-area-name">{area.label}</span>
+                        <DirectionMark direction="right" className="two-core-area-go md:hidden" />
                       </Link>
                     </li>
                   ))}
@@ -422,11 +432,11 @@ export default function OurTwoCoreSection() {
                 {col.cta}
               </BrandButton>
             </div>
-            <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses lg:hidden" />
-            <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses lg:hidden" />
-            <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom lg:hidden" />
-            <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom lg:hidden" />
-            <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom lg:hidden" />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+            <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
+            <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
+            <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+            <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
           </article>
         ))}
       </div>

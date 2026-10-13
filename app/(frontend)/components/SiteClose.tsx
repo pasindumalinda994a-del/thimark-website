@@ -57,7 +57,7 @@ export default function SiteClose() {
   return (
     <>
       {showQuote ? (
-        <div className="content-plate relative z-10 bg-steel md:ml-sidebar [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
+        <div className="content-plate relative z-10 bg-steel xl:ml-sidebar [--page-bg:var(--steel)] [--page-ink:var(--cream)]">
           <SectionBreak tone="page" />
           <QuoteSection copy={QUOTE_COPY[path]} />
         </div>

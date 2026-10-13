@@ -8,7 +8,9 @@ import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import CarouselControls from "@/app/(frontend)/components/CarouselControls";
 import ScrollHint from "@/app/(frontend)/components/ScrollHint";
+import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import Copy from "@/app/(frontend)/components/Copy";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
@@ -184,28 +186,6 @@ function applyChapter(parts: Parts, progress: number) {
   return index;
 }
 
-function StoryArrow({ direction }: { direction: "prev" | "next" }) {
-  const prev = direction === "prev";
-
-  return (
-    <button
-      type="button"
-      className={`about-story-arrow about-story-${direction} md:hidden`}
-      data-story-step={prev ? -1 : 1}
-      aria-label={prev ? "Previous chapter" : "Next chapter"}
-    >
-      <svg aria-hidden width={14} height={14} viewBox="0 0 14 14" fill="none">
-        <path
-          d={prev ? "M9 2.5 4.5 7 9 11.5" : "M5 2.5 9.5 7 5 11.5"}
-          stroke="currentColor"
-          strokeWidth="1.25"
-          strokeLinecap="square"
-        />
-      </svg>
-    </button>
-  );
-}
-
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
@@ -262,30 +242,29 @@ export default function AboutSection({
         glyphTl = drawChapterGlyph(glyph);
       };
 
-      const syncArrows = (index: number) => {
-        const prev = root.querySelector<HTMLButtonElement>("[data-story-step='-1']");
-        const next = root.querySelector<HTMLButtonElement>("[data-story-step='1']");
-        if (prev) prev.disabled = index <= 0;
-        if (next) next.disabled = index >= parts.stations.length - 1;
+      const markStation = (index: number) => {
+        parts.stations.forEach((station, i) => {
+          const current = i === index;
+          station.setAttribute("aria-selected", current ? "true" : "false");
+          if (current) station.setAttribute("aria-current", "true");
+          else station.removeAttribute("aria-current");
+        });
       };
 
       const mm = gsap.matchMedia();
 
       // Without the scrub the tabs are the only way through the story.
-      mm.add("(prefers-reduced-motion: reduce)", () => {
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: reduce)", () => {
         const select = (index: number) => {
           parts.washes.forEach((wash, i) => {
             setStoryWash(wash, i === index ? 1 : 0);
           });
-          parts.stations.forEach((station, i) => {
-            station.setAttribute("aria-selected", i === index ? "true" : "false");
-          });
+          markStation(index);
           parts.slides.forEach((slide, i) => {
             setStorySlide(slide, i === 0 || i <= index ? 1 : 0);
           });
           showChapter(parts, index, false);
           activeChapter = index;
-          syncArrows(index);
         };
 
         const handlers = parts.stations.map((station, i) => {
@@ -293,22 +272,12 @@ export default function AboutSection({
           station.addEventListener("click", onClick);
           return onClick;
         });
-        const onStep = (event: Event) => {
-          const btn = event.currentTarget;
-          if (!(btn instanceof HTMLButtonElement)) return;
-          const index = activeChapter + Number(btn.dataset.storyStep);
-          if (index < 0 || index >= parts.stations.length) return;
-          select(index);
-        };
-        const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
-        arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
         select(0);
 
         return () => {
           parts.stations.forEach((station, i) => {
             station.removeEventListener("click", handlers[i]);
           });
-          arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
         };
       });
 
@@ -409,93 +378,83 @@ export default function AboutSection({
         },
       );
 
+      // Phone: the reel is a native swipe track; tabs, copy and glyph follow it.
       mm.add(
-        "(max-width: 767px) and (prefers-reduced-motion: no-preference)",
-        () => {
-          gsap.fromTo(
-            header,
-            { autoAlpha: 0, y: 10 },
-            {
-              autoAlpha: 1,
-              y: 0,
-              duration: 0.6,
-              ease: "power2.out",
-              stagger: 0.1,
-              scrollTrigger: { trigger: root, start: "top 80%", once: true },
-            },
-          );
+        { phone: "(max-width: 767px)", reduce: "(prefers-reduced-motion: reduce)" },
+        (ctx) => {
+          const { phone, reduce } = ctx.conditions ?? {};
+          if (!phone) return;
+          const track = root.querySelector<HTMLElement>("[data-story-track]");
+          if (!track) return;
 
-          const selectChapter = (index: number, animate: boolean) => {
+          if (!reduce) {
+            gsap.fromTo(
+              header,
+              { autoAlpha: 0, y: 10 },
+              {
+                autoAlpha: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power2.out",
+                stagger: 0.1,
+                scrollTrigger: { trigger: root, start: "top 80%", once: true },
+              },
+            );
+          }
+
+          const select = (index: number, animate: boolean) => {
             parts.washes.forEach((wash, i) => {
               setStoryWash(wash, i === index ? 1 : 0);
             });
-            parts.stations.forEach((station, i) => {
-              const current = i === index;
-              station.setAttribute("aria-selected", current ? "true" : "false");
-              if (current) station.setAttribute("aria-current", "true");
-              else station.removeAttribute("aria-current");
-            });
-            parts.slides.forEach((slide, i) => {
-              const open = i === 0 || i <= index;
-              if (animate && i === index && i > 0) {
-                gsap.fromTo(
-                  slide,
-                  { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" },
-                  {
-                    autoAlpha: 1,
-                    clipPath: "inset(0 0% 0 0)",
-                    duration: 0.45,
-                    ease: "power2.inOut",
-                    overwrite: "auto",
-                  },
-                );
-              } else {
-                setStorySlide(slide, open ? 1 : 0);
-              }
-            });
+            markStation(index);
             showChapter(parts, index, animate);
             activeChapter = index;
-            syncArrows(index);
-            if (animate) playGlyph(index);
           };
 
-          selectChapter(0, false);
+          select(0, false);
 
-          const reveal = ScrollTrigger.create({
-            trigger: root,
-            start: "top 80%",
-            once: true,
-            onEnter: () => playGlyph(activeChapter),
+          let revealed = Boolean(reduce);
+          const reveal = reduce
+            ? undefined
+            : ScrollTrigger.create({
+                trigger: track,
+                start: "top 80%",
+                once: true,
+                onEnter: () => {
+                  revealed = true;
+                  playGlyph(activeChapter);
+                },
+              });
+
+          const carousel = bindSnapCarousel({
+            track,
+            slides: parts.slides,
+            controls: root.querySelector<HTMLElement>(".about-media [data-carousel-controls]"),
+            reduced: Boolean(reduce),
+            onChange: (index) => select(index, !reduce),
+            onSettle: (index) => {
+              if (!reduce && revealed) playGlyph(index);
+            },
           });
 
           const onClick = (event: Event) => {
             const btn = event.currentTarget;
             if (!(btn instanceof HTMLElement)) return;
             const index = parts.stations.indexOf(btn);
-            if (index < 0 || index === activeChapter) return;
-            selectChapter(index, true);
+            if (index >= 0) carousel.goTo(index);
           };
 
           parts.stations.forEach((station) => {
             station.addEventListener("click", onClick);
           });
-          const onStep = (event: Event) => {
-            const btn = event.currentTarget;
-            if (!(btn instanceof HTMLButtonElement)) return;
-            const index = activeChapter + Number(btn.dataset.storyStep);
-            if (index < 0 || index >= parts.stations.length || index === activeChapter) return;
-            selectChapter(index, true);
-          };
-          const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
-          arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
 
           return () => {
             parts.stations.forEach((station) => {
               station.removeEventListener("click", onClick);
             });
-            arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
+            carousel.destroy();
             glyphTl?.kill();
-            reveal.kill();
+            reveal?.kill();
           };
         },
       );
@@ -531,7 +490,7 @@ export default function AboutSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="story-carousel home-phone flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-3 hidden md:block" />
@@ -643,7 +602,6 @@ export default function AboutSection({
           <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
           <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
           <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
-          <StoryArrow direction="prev" />
           <div className="about-chapter-texts">
           {items.map((item, i) => (
             <div key={item.id} data-chapter-text={i} className="about-chapter-text">
@@ -658,39 +616,56 @@ export default function AboutSection({
             </div>
           ))}
           </div>
-          <StoryArrow direction="next" />
         </div>
       </div>
 
       {/* Story reel */}
       <div className="about-media relative md:contents">
-        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
-        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses md:hidden" />
+        <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses md:hidden" />
         <div className="about-reel">
-          {items.map((item, index) => (
-            <Image
-              key={item.id}
-              data-story-slide=""
-              src={item.image}
-              alt={item.alt}
-              fill
-              sizes="(min-width: 768px) 50vw, 100vw"
-              priority={index === 0}
-              loading={index === 0 ? undefined : "eager"}
-              className="object-cover"
-              style={{ zIndex: index, objectPosition: item.objectPosition }}
-            />
-          ))}
-          <PlusMark tone="light" className="top-4 left-4 z-10" />
-          <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />
-          <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10" />
-          <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10" />
+          <div
+            data-story-track
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={copy.readoutLabel}
+            className="about-reel-track"
+          >
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                data-story-slide=""
+                className="about-reel-slide"
+                style={{ zIndex: index }}
+              >
+                <Image
+                  src={item.image}
+                  alt={item.alt}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 86vw"
+                  priority={index === 0}
+                  loading={index === 0 ? undefined : "eager"}
+                  className="object-cover"
+                  style={{ objectPosition: item.objectPosition }}
+                />
+                <PlusMark tone="light" className="top-4 left-4 z-10 md:hidden" />
+                <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10 md:hidden" />
+                <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10 md:hidden" />
+                <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10 md:hidden" />
+              </div>
+            ))}
+          </div>
+          <PlusMark tone="light" className="top-4 left-4 z-10 hidden md:block" />
+          <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10 hidden md:block" />
+          <PlusMark tone="light" className="top-[calc(100%-16px)] left-4 z-10 hidden md:block" />
+          <PlusMark tone="light" className="top-[calc(100%-16px)] left-[calc(100%-16px)] z-10 hidden md:block" />
           {figures ? (
             <p aria-hidden data-story-fig className="fig-mark index-tag">
               {figLabel(1)}
             </p>
           ) : null}
         </div>
+        <CarouselControls label={copy.readoutLabel} count={items.length} className="md:hidden" />
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
         <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />

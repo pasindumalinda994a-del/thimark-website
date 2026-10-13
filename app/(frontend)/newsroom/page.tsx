@@ -12,7 +12,7 @@ export default async function NewsroomPage() {
   const records = await getNewsRecords();
 
   return (
-    <main className="newsroom content-plate relative z-10 bg-cream pt-14 text-steel md:ml-sidebar md:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
+    <main className="newsroom content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       <NewsroomIndex records={records} />
     </main>
   );

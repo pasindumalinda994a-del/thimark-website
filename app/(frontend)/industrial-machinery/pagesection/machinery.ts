@@ -180,7 +180,7 @@ export const STAGES: readonly Stage[] = [
     title: "Reverse Engineering & 3D Scanning",
     body: "Where existing equipment or samples are available, reverse engineering and 3D scanning capture geometry as a digital starting point for design.",
     operations: ["Geometry", "Physical samples", "Digital starting point"],
-    icon: "schema",
+    icon: "scan",
     media: {
       src: "/home-images/about-iso-precision.jpeg",
       alt: "Engineers checking a gear assembly against its technical drawings",
@@ -193,7 +193,7 @@ export const STAGES: readonly Stage[] = [
     title: "CAD Design & Virtual Prototyping",
     body: "Engineering models and virtual design methods help define component geometry, evaluate arrangements, and explore how the proposed machinery will fit its intended application.",
     operations: ["Component geometry", "Arrangements", "Application fit"],
-    icon: "precision",
+    icon: "model3d",
     media: {
       src: "/home-images/about-international-engineering.jpeg",
       alt: "Engineers reviewing an installed system on site to understand its application",
@@ -308,14 +308,14 @@ export const CAPABILITIES: readonly Capability[] = [
     tag: "Welding",
     title: "Welding & Structural Assembly",
     body: "Welding and joining for structures and custom components.",
-    icon: "factory",
+    icon: "flame",
   },
   {
     id: "hydraulic",
     tag: "Systems",
     title: "Mechanical & Hydraulic Systems",
     body: "Mechanical and hydraulic systems defined for each operation.",
-    icon: "forklift",
+    icon: "fluid",
   },
   {
     id: "design",

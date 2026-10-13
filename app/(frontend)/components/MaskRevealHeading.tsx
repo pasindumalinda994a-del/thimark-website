@@ -65,6 +65,8 @@ export default function MaskRevealHeading({
         const split = SplitText.create(el, {
           type: "lines",
           mask: "lines",
+          // Sliced per line, a wrapping muted span breaks after every word.
+          deepSlice: false,
           autoSplit: true,
           tag: "span",
           onSplit(self) {

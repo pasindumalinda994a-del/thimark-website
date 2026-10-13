@@ -351,7 +351,7 @@ export default function PageTransition() {
   return (
     <div
       ref={root}
-      className={`pointer-events-none fixed top-14 right-0 bottom-0 left-0 z-35 overflow-hidden md:top-0 md:left-sidebar ${
+      className={`pointer-events-none fixed top-14 right-0 bottom-0 left-0 z-35 overflow-hidden xl:top-0 xl:left-sidebar ${
         busy ? "" : "invisible opacity-0"
       }`}
       role="status"

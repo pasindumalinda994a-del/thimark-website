@@ -99,11 +99,25 @@ export default function QualitySection() {
 
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const conditions = {
+        motion: "(prefers-reduced-motion: no-preference)",
+        phone: "(max-width: 767px)",
+      };
+
+      mm.add(conditions, (ctx) => {
+        const { motion, phone } = ctx.conditions ?? {};
+        if (!motion) return;
+        // Phones reveal once; the bar's dividers run across the stacked rows.
+        const toggleActions = phone ? "play none none none" : "play none none reverse";
+        const railAxis = phone ? "scaleX" : "scaleY";
+
         gsap.set(header, { autoAlpha: 0, y: 10 });
         if (bar) gsap.set(bar, { clipPath: "inset(0% 100% 0% 0%)" });
         gsap.set(phrases, { autoAlpha: 0, x: -8 });
-        gsap.set(rails, { scaleY: 0, transformOrigin: "center top" });
+        gsap.set(rails, {
+          [railAxis]: 0,
+          transformOrigin: phone ? "left center" : "center top",
+        });
         gsap.set(pillars, { autoAlpha: 0, y: 12 });
         gsap.set(creds, { autoAlpha: 0, x: -8 });
         gsap.set(credRails, { scaleY: 0, transformOrigin: "center top" });
@@ -117,8 +131,8 @@ export default function QualitySection() {
           stagger: 0.1,
           scrollTrigger: {
             trigger: root,
-            start: "top 70%",
-            toggleActions: "play none none reverse",
+            start: phone ? "top 80%" : "top 70%",
+            toggleActions,
           },
         });
 
@@ -127,7 +141,7 @@ export default function QualitySection() {
             scrollTrigger: {
               trigger: bar,
               start: "top 82%",
-              toggleActions: "play none none reverse",
+              toggleActions,
             },
           });
           barTl.to(bar, {
@@ -137,7 +151,7 @@ export default function QualitySection() {
           });
           barTl.to(
             rails,
-            { scaleY: 1, duration: 0.4, ease: "power2.out", stagger: 0.12 },
+            { [railAxis]: 1, duration: 0.4, ease: "power2.out", stagger: 0.12 },
             0.35,
           );
           barTl.to(
@@ -153,24 +167,37 @@ export default function QualitySection() {
           );
         }
 
-        gsap.to(pillars, {
-          autoAlpha: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: pillars[0] ?? root,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          },
-        });
+        if (phone) {
+          // Stacked pillars each reveal as they arrive.
+          pillars.forEach((pillar) => {
+            gsap.to(pillar, {
+              autoAlpha: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power2.out",
+              scrollTrigger: { trigger: pillar, start: "top 85%", once: true },
+            });
+          });
+        } else {
+          gsap.to(pillars, {
+            autoAlpha: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power2.out",
+            stagger: 0.12,
+            scrollTrigger: {
+              trigger: pillars[0] ?? root,
+              start: "top 80%",
+              toggleActions,
+            },
+          });
+        }
 
         const credTl = gsap.timeline({
           scrollTrigger: {
             trigger: creds[0] ?? root,
-            start: "top 98%",
-            toggleActions: "play none none reverse",
+            start: phone ? "top 92%" : "top 98%",
+            toggleActions,
           },
         });
         credTl.to(credRails, {
@@ -215,7 +242,7 @@ export default function QualitySection() {
       rows={16}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="home-phone flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-6 hidden md:block" />
@@ -370,19 +397,21 @@ export default function QualitySection() {
               <span>{figLabel(HOME_FIG.quality + i)}</span>
               <span aria-hidden>[{padIndex(i)}]</span>
             </p>
-            <div className="quality-pillar-media">
-              <Image
-                src={pillar.image}
-                alt={pillar.alt}
-                fill
-                sizes="(min-width: 768px) 33vw, 100vw"
-                className="object-cover"
-                style={{ objectPosition: pillar.objectPosition }}
-              />
+            <div className="quality-pillar-figure md:contents">
+              <div className="quality-pillar-media">
+                <Image
+                  src={pillar.image}
+                  alt={pillar.alt}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 100vw"
+                  className="object-cover"
+                  style={{ objectPosition: pillar.objectPosition }}
+                />
+              </div>
+              <span aria-hidden className="quality-pillar-numeral">
+                {padIndex(i)}
+              </span>
             </div>
-            <span aria-hidden className="quality-pillar-numeral">
-              {padIndex(i)}
-            </span>
             <div className="quality-pillar-copy">
               <H3Heading variant="title">{pillar.title}</H3Heading>
               <Copy variant="caption" className="md:text-justify md:[text-align-last:left]">

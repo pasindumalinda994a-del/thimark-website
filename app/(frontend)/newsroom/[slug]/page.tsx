@@ -9,6 +9,8 @@ import H3Heading, { ArticleHeading } from "@/app/(frontend)/components/H3Heading
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import ArticleContents from "@/app/(frontend)/newsroom/ArticleContents";
+import ArticleGallery from "@/app/(frontend)/newsroom/ArticleGallery";
 import ArticleShare from "@/app/(frontend)/newsroom/ArticleShare";
 import PreviewBar from "@/app/(frontend)/newsroom/PreviewBar";
 import {
@@ -52,6 +54,19 @@ function relatedNote(records: NewsRecord[]) {
     return `More from ${categoryById(records[0].category).full}.`;
   }
   return "From the register.";
+}
+
+function Chevron({ direction }: { direction: "back" | "forward" }) {
+  return (
+    <svg aria-hidden width={12} height={12} viewBox="0 0 14 14" fill="none" className="shrink-0">
+      <path
+        d={direction === "back" ? "M9 2.5 4.5 7 9 11.5" : "M5 2.5 9.5 7 5 11.5"}
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinecap="square"
+      />
+    </svg>
+  );
 }
 
 function RelatedFrame({ record }: { record: NewsRecord }) {
@@ -102,7 +117,7 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
   const continues = related.length > 0;
 
   return (
-    <main className="newsroom news-article content-plate relative z-10 bg-cream pt-14 text-steel md:ml-sidebar md:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
+    <main className="newsroom news-article content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       {draft ? <PreviewBar path={`/newsroom/${record.slug}`} /> : null}
       <header className="news-article-head">
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus" />
@@ -110,9 +125,13 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
         <GridLine axis="v" unstyled tone="page" className="v-g1-8 hero-v-above-plus hidden md:block" />
 
         <div className="news-article-copy">
-          <p className="news-meta index-tag">
+          <Link href="/newsroom" className="news-back index-tag md:hidden">
+            <Chevron direction="back" />
+            <span>Newsroom</span>
+          </Link>
+          <p className="news-meta news-article-meta index-tag">
             <span>{category.full}</span>
-            <span aria-hidden> | </span>
+            <span aria-hidden className="hidden md:inline"> | </span>
             <time dateTime={record.date}>{formatRecordDate(record.date)}</time>
           </p>
           <H1Heading className="news-article-title">{record.title}</H1Heading>
@@ -167,28 +186,21 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses" />
         <div className="news-article-toc-rail">
           <div className="news-article-toc-stick">
-            <nav className="news-article-toc" aria-label="Contents">
-              <p className="news-meta index-tag">Contents</p>
-              <ol>
-                {record.body.map((section, i) => (
-                  <li key={sectionId(i)}>
-                    <a href={`#${sectionId(i)}`}>
-                      <span aria-hidden className="news-toc-leader" />
-                      <span className="news-toc-label">{section.heading}</span>
-                      <span aria-hidden className="news-toc-index">
-                        [{padIndex(i)}]
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <ArticleContents
+              items={record.body.map((section, i) => ({
+                id: sectionId(i),
+                heading: section.heading,
+              }))}
+            />
             <ArticleShare title={record.title} />
           </div>
         </div>
         <div className="news-article-prose">
           {record.body.map((section, i) => (
             <section key={sectionId(i)} id={sectionId(i)} className="news-article-section">
+              <p aria-hidden className="news-section-index news-meta index-tag md:hidden">
+                [{padIndex(i)}]
+              </p>
               <ArticleHeading className="news-section-label">{section.heading}</ArticleHeading>
               <Copy variant="prose">{section.text}</Copy>
               {section.href ? (
@@ -204,19 +216,7 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
             </section>
           ))}
           {record.images.length > 1 ? (
-            <ul className="news-gallery">
-              {record.images.slice(1).map((src, i) => (
-                <li key={src}>
-                  <Image
-                    src={recordSrc(src)}
-                    alt={`${record.alt}, photograph ${i + 2}`}
-                    fill
-                    sizes="(min-width: 768px) 18vw, 50vw"
-                    className="object-cover"
-                  />
-                </li>
-              ))}
-            </ul>
+            <ArticleGallery images={record.images.slice(1)} alt={record.alt} />
           ) : null}
         </div>
         <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom md:hidden" />
@@ -314,54 +314,54 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
               tone="page"
               className="v-g1-12 hero-v-between-pluses hidden md:block"
             />
-            {related.map((item, i) => {
-              const last = i === related.length - 1;
-              return (
-                <li key={item.slug} className="news-related-item">
-                  <Link href={`/newsroom/${item.slug}`} className="news-related-link">
-                    <RelatedFrame record={item} />
-                    <span className="news-related-entry">
-                      <p className="news-related-kicker index-tag news-meta">
-                        <span>
-                          <span aria-hidden>[{padIndex(i)}]</span>{" "}
-                          <span>{categoryById(item.category).label}</span>
-                        </span>
-                        <time dateTime={item.date}>{formatRecordDate(item.date)}</time>
-                      </p>
-                      <H3Heading variant="title" className="tracking-[-0.02em]">{item.title}</H3Heading>
-                    </span>
-                  </Link>
-                  <GridLine
-                    axis="v"
-                    unstyled
-                    tone="page"
-                    className="v-g1-0 hero-v-between-pluses md:hidden"
-                  />
-                  <GridLine
-                    axis="v"
-                    unstyled
-                    tone="page"
-                    className="v-g1-12 hero-v-between-pluses md:hidden"
-                  />
-                  <GridLine
-                    axis="h"
-                    unstyled
-                    tone="page"
-                    className="h-seg-0-12 at-bottom md:hidden"
-                  />
-                  <PlusMark
-                    tone="page"
-                    arms={last ? joinFootLeft : joinLeftEdge}
-                    className="v-g1-0 at-bottom md:hidden"
-                  />
-                  <PlusMark
-                    tone="page"
-                    arms={last ? joinFootRight : joinRightEdge}
-                    className="v-g1-12 at-bottom md:hidden"
-                  />
-                </li>
-              );
-            })}
+            {related.map((item, i) => (
+              <li key={item.slug} className="news-related-item">
+                <Link href={`/newsroom/${item.slug}`} className="news-related-link">
+                  <RelatedFrame record={item} />
+                  <span className="news-related-entry">
+                    <p className="news-related-kicker index-tag news-meta">
+                      <span>
+                        <span aria-hidden>[{padIndex(i)}]</span>{" "}
+                        <span>{categoryById(item.category).label}</span>
+                      </span>
+                      <time dateTime={item.date}>{formatRecordDate(item.date)}</time>
+                    </p>
+                    <H3Heading variant="title" className="tracking-[-0.02em]">{item.title}</H3Heading>
+                  </span>
+                </Link>
+                <GridLine
+                  axis="v"
+                  unstyled
+                  tone="page"
+                  className="v-g1-0 hero-v-between-pluses md:hidden"
+                />
+                <GridLine
+                  axis="v"
+                  unstyled
+                  tone="page"
+                  className="v-g1-12 hero-v-between-pluses md:hidden"
+                />
+                <GridLine
+                  axis="h"
+                  unstyled
+                  tone="page"
+                  className="h-seg-0-12 at-bottom md:hidden"
+                />
+                <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
+                <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 at-bottom md:hidden" />
+              </li>
+            ))}
+            <li className="news-related-item news-related-more md:hidden">
+              <Link href="/newsroom" className="news-related-all index-tag">
+                <span>All records</span>
+                <Chevron direction="forward" />
+              </Link>
+              <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-between-pluses" />
+              <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-between-pluses" />
+              <GridLine axis="h" unstyled tone="page" className="h-seg-0-12 at-bottom" />
+              <PlusMark tone="page" arms={joinFootLeft} className="v-g1-0 at-bottom" />
+              <PlusMark tone="page" arms={joinFootRight} className="v-g1-12 at-bottom" />
+            </li>
             <GridLine axis="h" unstyled tone="page" className="h-seg-0-3 at-bottom hidden md:block" />
             <GridLine axis="h" unstyled tone="page" className="h-seg-3-6 at-bottom hidden md:block" />
             <GridLine axis="h" unstyled tone="page" className="h-seg-6-9 at-bottom hidden md:block" />

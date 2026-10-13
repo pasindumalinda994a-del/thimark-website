@@ -48,7 +48,7 @@ export default function FeaturedSection() {
       rows={18}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 md:scroll-mt-0"
+      className="flex flex-col bg-steel text-cream [--page-bg:var(--steel)] [--page-ink:var(--cream)] scroll-mt-16 xl:scroll-mt-0"
     >
       <Frame h={H} v={V} />
 
@@ -130,8 +130,9 @@ export default function FeaturedSection() {
             <li key={fact.label} data-reveal className="vm-legend-item index-tag">
               <span className="tabular-nums opacity-60">[{padIndex(i)}]</span>
               <span className="vm-legend-rule" aria-hidden />
-              <span>
-                <span className="opacity-60">{fact.label}</span> {fact.value}
+              <span className="im-glance-fact">
+                <span className="opacity-60">{fact.label}</span>{" "}
+                <span className="im-glance-value">{fact.value}</span>
               </span>
             </li>
           ))}

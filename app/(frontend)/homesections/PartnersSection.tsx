@@ -62,7 +62,16 @@ export default function PartnersSection({
 
       const mm = gsap.matchMedia();
 
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
+      const conditions = {
+        motion: "(prefers-reduced-motion: no-preference)",
+        phone: "(max-width: 767px)",
+      };
+
+      mm.add(conditions, (ctx) => {
+        const { motion, phone } = ctx.conditions ?? {};
+        if (!motion) return;
+        const toggleActions = phone ? "play none none none" : "play none none reverse";
+
         gsap.set(header, { autoAlpha: 0, y: 10 });
         gsap.set(cells, { autoAlpha: 0 });
         gsap.set(marks, { clipPath: "inset(0% 0% 100% 0%)" });
@@ -75,16 +84,16 @@ export default function PartnersSection({
           stagger: 0.1,
           scrollTrigger: {
             trigger: root,
-            start: "top 70%",
-            toggleActions: "play none none reverse",
+            start: phone ? "top 80%" : "top 70%",
+            toggleActions,
           },
         });
 
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: cells[0] ?? root,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
+            start: phone ? "top 85%" : "top 80%",
+            toggleActions,
           },
         });
         tl.to(cells, {
@@ -118,7 +127,7 @@ export default function PartnersSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="home-phone flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Desktop rails */}
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 v-seg-top-4 hidden md:block" />
@@ -175,31 +184,51 @@ export default function PartnersSection({
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-below-plus md:hidden" />
         <ul className="partners-grid h-rows-10 m-0 min-h-0 list-none p-0">
-        {PARTNERS.map((partner, i) => (
-          <li
-            key={partner.id}
-            data-p-cell
-            data-cursor="interactive"
-            tabIndex={0}
-            className="partner-cell outline-none"
-            aria-label={`${partner.brand} — ${partner.legalName}, ${partner.sector}`}
-          >
-            <p className="index-tag flex items-center justify-between gap-4">
-              <span>{partner.sector}</span>
-              <span aria-hidden>[{padIndex(i)}]</span>
-            </p>
-            <div data-p-mark className={`partner-wordmark ${copyClass("display")}`}>
-              <PartnerWordmark partner={partner} />
-            </div>
-            <Copy variant="caption">{partner.legalName}</Copy>
-            <GridLine
-              axis="h"
-              unstyled
-              tone="page"
-              className="partner-cell-rule at-bottom md:hidden"
-            />
-          </li>
-        ))}
+        {PARTNERS.map((partner, i) => {
+          // Phones run two columns; an odd last partner spans both.
+          const wide = PARTNERS.length % 2 === 1 && i === PARTNERS.length - 1;
+          const leftColumn = !wide && i % 2 === 0;
+
+          return (
+            <li
+              key={partner.id}
+              data-p-cell
+              data-cursor="interactive"
+              tabIndex={0}
+              className={`partner-cell${wide ? " partner-cell-wide" : ""} outline-none`}
+              aria-label={`${partner.brand} — ${partner.legalName}, ${partner.sector}`}
+            >
+              <p className="index-tag flex items-center justify-between gap-4">
+                <span className="partner-sector">{partner.sector}</span>
+                <span aria-hidden className="partner-index">[{padIndex(i)}]</span>
+              </p>
+              <div data-p-mark className={`partner-wordmark ${copyClass("display")}`}>
+                <PartnerWordmark partner={partner} />
+              </div>
+              <Copy variant="caption">{partner.legalName}</Copy>
+              <GridLine
+                axis="h"
+                unstyled
+                tone="page"
+                className="partner-cell-rule at-bottom md:hidden"
+              />
+              {leftColumn ? (
+                <>
+                  <GridLine
+                    axis="v"
+                    unstyled
+                    tone="page"
+                    className="partner-cell-divider md:hidden"
+                  />
+                  <PlusMark
+                    tone="page"
+                    className="partner-cell-join left-full at-bottom md:hidden"
+                  />
+                </>
+              ) : null}
+            </li>
+          );
+        })}
         <li
           data-p-cell
           className={`partner-statement dot-field-soft${copy.cta ? " partner-statement-stack" : ""}`}

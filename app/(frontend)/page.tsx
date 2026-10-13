@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <PreLoading />
-      <main className="content-plate md:ml-sidebar">
+      <main className="content-plate pt-14 xl:ml-sidebar xl:pt-0">
         <div
           id="foreground-plate"
           className="relative z-10 bg-steel [--page-bg:var(--steel)] [--page-ink:var(--cream)]"

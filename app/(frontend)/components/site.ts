@@ -1,18 +1,23 @@
 import { NAV_ITEMS, collectNavLinks, type NavLink } from "@/app/(frontend)/components/nav";
 
+const ADDRESS_LINES = ["No. 379/D, Maharanugegoda,", "Kadawatha, Sri Lanka"] as const;
+
 export const COMPANY = {
   name: "Thimark Technocreations (Pvt) Ltd",
   shortName: "Thimark",
   statement: "Engineering what moves industry forward.",
   description:
     "From precision automotive components to purpose-built industrial machinery, Thimark turns engineering challenges into dependable solutions — designed, manufactured, and built in Sri Lanka.",
-  addressLines: ["No. 379/D, Maharanugegoda,", "Kadawatha, Sri Lanka"],
+  addressLines: ADDRESS_LINES,
   locality: "Kadawatha, Sri Lanka",
   /** Approximate coordinates for Kadawatha, used as a technical stamp only. */
   coordinates: "07°00'N 79°57'E",
   timeZone: "Asia/Colombo",
   phone: { label: "+94 112 051 944", href: "tel:+94112051944" },
   email: { label: "info@thimark.com", href: "mailto:info@thimark.com" },
+  mapHref: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    ["Thimark", ...ADDRESS_LINES].join(" "),
+  )}`,
 } as const;
 
 export type ExternalLink = {

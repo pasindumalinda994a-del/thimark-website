@@ -84,7 +84,7 @@ export default function HeroSection() {
       rows={14}
       tone="light"
       outerV={false}
-      className="flex flex-col text-white max-md:h-dvh max-md:overflow-hidden"
+      className="flex flex-col text-white max-md:h-svh max-md:overflow-hidden"
     >
       <div className="hero-stage relative min-h-0 flex-1 md:contents">
         <HeroReel />

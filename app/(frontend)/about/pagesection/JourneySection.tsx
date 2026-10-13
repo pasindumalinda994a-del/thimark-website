@@ -8,6 +8,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { DrawSVGPlugin } from "gsap/DrawSVGPlugin";
+import CarouselControls from "@/app/(frontend)/components/CarouselControls";
+import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
@@ -62,14 +64,15 @@ type Parts = {
   glyphs: HTMLElement[];
   texts: HTMLElement[];
   marks: HTMLElement[];
-  numeral: HTMLElement | null;
+  numerals: HTMLElement[];
   fig: HTMLElement | null;
   count: HTMLElement | null;
   fill: HTMLElement | null;
+  tabs: HTMLElement | null;
 };
 
 function showChapter(parts: Parts, index: number, animate: boolean) {
-  const { glyphs, texts, numeral, fig, count } = parts;
+  const { glyphs, texts, numerals, fig, count, tabs, stations } = parts;
   const duration = animate ? 0.32 : 0;
 
   glyphs.forEach((glyph, i) => {
@@ -91,12 +94,32 @@ function showChapter(parts: Parts, index: number, animate: boolean) {
     });
   });
 
-  if (numeral) numeral.textContent = parts.years[index] ?? "";
+  numerals.forEach((numeral) => {
+    numeral.textContent = parts.years[index] ?? "";
+  });
   if (fig) fig.textContent = figLabel(index + 1);
   if (count) count.textContent = padIndex(index);
 
   parts.marks.forEach((mark, i) => {
     mark.dataset.passed = i <= index ? "true" : "false";
+  });
+
+  // Keep the active station in view when the tab strip scrolls (mobile).
+  const station = stations[index];
+  if (tabs && station && tabs.scrollWidth > tabs.clientWidth) {
+    tabs.scrollTo({
+      left: station.offsetLeft - (tabs.clientWidth - station.offsetWidth) / 2,
+      behavior: animate ? "smooth" : "auto",
+    });
+  }
+}
+
+function markStation(stations: HTMLElement[], index: number) {
+  stations.forEach((station, i) => {
+    const current = i === index;
+    station.setAttribute("aria-selected", current ? "true" : "false");
+    if (current) station.setAttribute("aria-current", "true");
+    else station.removeAttribute("aria-current");
   });
 }
 
@@ -151,13 +174,7 @@ function applyChapter(parts: Parts, progress: number) {
   const atEnd = progress >= 1;
 
   washes.forEach((wash, i) => setWash(wash, chapterScale(i, index, local, atEnd)));
-
-  stations.forEach((station, i) => {
-    const current = i === index;
-    station.setAttribute("aria-selected", current ? "true" : "false");
-    if (current) station.setAttribute("aria-current", "true");
-    else station.removeAttribute("aria-current");
-  });
+  markStation(stations, index);
 
   slides.forEach((slide, i) => {
     // First image stays open as the base; later slides wipe in over it.
@@ -166,28 +183,6 @@ function applyChapter(parts: Parts, progress: number) {
 
   setAxis(parts, index, atEnd ? 1 : local);
   return index;
-}
-
-function StoryArrow({ direction }: { direction: "prev" | "next" }) {
-  const prev = direction === "prev";
-
-  return (
-    <button
-      type="button"
-      className={`about-story-arrow about-story-${direction} md:hidden`}
-      data-story-step={prev ? -1 : 1}
-      aria-label={prev ? "Previous milestone" : "Next milestone"}
-    >
-      <svg aria-hidden width={14} height={14} viewBox="0 0 14 14" fill="none">
-        <path
-          d={prev ? "M9 2.5 4.5 7 9 11.5" : "M5 2.5 9.5 7 5 11.5"}
-          stroke="currentColor"
-          strokeWidth="1.25"
-          strokeLinecap="square"
-        />
-      </svg>
-    </button>
-  );
 }
 
 export default function JourneySection({
@@ -220,10 +215,11 @@ export default function JourneySection({
         glyphs: gsap.utils.toArray<HTMLElement>("[data-chapter-glyph]", root),
         texts: gsap.utils.toArray<HTMLElement>("[data-chapter-text]", root),
         marks: gsap.utils.toArray<HTMLElement>("[data-jr-stop]", root),
-        numeral: root.querySelector<HTMLElement>("[data-chapter-numeral]"),
+        numerals: gsap.utils.toArray<HTMLElement>("[data-chapter-numeral]", root),
         fig: root.querySelector<HTMLElement>("[data-story-fig]"),
         count: root.querySelector<HTMLElement>("[data-story-count]"),
         fill: root.querySelector<HTMLElement>("[data-jr-fill]"),
+        tabs: root.querySelector<HTMLElement>(".about-tabs"),
       };
 
       const header = gsap.utils.toArray<HTMLElement>("[data-jr-header]", root);
@@ -236,13 +232,6 @@ export default function JourneySection({
         if (!glyph) return;
         glyphTl?.kill();
         glyphTl = drawChapterGlyph(glyph);
-      };
-
-      const syncArrows = (index: number) => {
-        const prev = root.querySelector<HTMLButtonElement>("[data-story-step='-1']");
-        const next = root.querySelector<HTMLButtonElement>("[data-story-step='1']");
-        if (prev) prev.disabled = index <= 0;
-        if (next) next.disabled = index >= parts.stations.length - 1;
       };
 
       const revealHeader = (start: string) => {
@@ -262,18 +251,15 @@ export default function JourneySection({
 
       const mm = gsap.matchMedia();
 
-      // Without the scrub the tabs and arrows are the only way through the journey.
-      mm.add("(prefers-reduced-motion: reduce)", () => {
+      // Without the scrub the tabs are the only way through the journey.
+      mm.add("(min-width: 768px) and (prefers-reduced-motion: reduce)", () => {
         const select = (index: number) => {
           parts.washes.forEach((wash, i) => setWash(wash, i === index ? 1 : 0));
-          parts.stations.forEach((station, i) => {
-            station.setAttribute("aria-selected", i === index ? "true" : "false");
-          });
+          markStation(parts.stations, index);
           parts.slides.forEach((slide, i) => setSlide(slide, i === 0 || i <= index ? 1 : 0));
           setAxis(parts, index, 0);
           showChapter(parts, index, false);
           activeChapter = index;
-          syncArrows(index);
         };
 
         const handlers = parts.stations.map((station, i) => {
@@ -281,22 +267,12 @@ export default function JourneySection({
           station.addEventListener("click", onClick);
           return onClick;
         });
-        const onStep = (event: Event) => {
-          const btn = event.currentTarget;
-          if (!(btn instanceof HTMLButtonElement)) return;
-          const index = activeChapter + Number(btn.dataset.storyStep);
-          if (index < 0 || index >= parts.stations.length) return;
-          select(index);
-        };
-        const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
-        arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
         select(0);
 
         return () => {
           parts.stations.forEach((station, i) => {
             station.removeEventListener("click", handlers[i]);
           });
-          arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
         };
       });
 
@@ -355,59 +331,66 @@ export default function JourneySection({
         };
       });
 
-      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
-        revealHeader("top 80%");
+      // Phone: the reel is a native swipe track; chips, glyph strip and copy follow it.
+      mm.add(
+        { phone: "(max-width: 767px)", reduce: "(prefers-reduced-motion: reduce)" },
+        (ctx) => {
+          const { phone, reduce } = ctx.conditions ?? {};
+          if (!phone) return;
+          const track = root.querySelector<HTMLElement>("[data-story-track]");
+          if (!track) return;
 
-        const selectChapter = (index: number, animate: boolean) => {
-          parts.slides.forEach((slide, i) => {
-            const open = i === 0 || i <= index;
-            if (animate && i === index && i > 0) {
-              gsap.fromTo(
-                slide,
-                { autoAlpha: 1, clipPath: "inset(0 100% 0 0)" },
-                {
-                  autoAlpha: 1,
-                  clipPath: "inset(0 0% 0 0)",
-                  duration: 0.45,
-                  ease: "power2.inOut",
-                  overwrite: "auto",
-                },
-              );
-            } else {
-              setSlide(slide, open ? 1 : 0);
-            }
+          const select = (index: number, animate: boolean) => {
+            parts.washes.forEach((wash, i) => setWash(wash, i === index ? 1 : 0));
+            markStation(parts.stations, index);
+            showChapter(parts, index, animate);
+            activeChapter = index;
+          };
+
+          select(0, false);
+
+          let reveal: ScrollTrigger | undefined;
+          if (!reduce) {
+            revealHeader("top 80%");
+            parts.glyphs.forEach((glyph) => {
+              gsap.set(glyph.querySelectorAll('[data-glyph-stroke="visible"]'), { drawSVG: "0%" });
+              gsap.set(glyph.querySelectorAll('[data-glyph-stroke="hidden"]'), { autoAlpha: 0 });
+            });
+            reveal = ScrollTrigger.create({
+              trigger: track,
+              start: "top 80%",
+              once: true,
+              onEnter: () => playGlyph(activeChapter),
+            });
+          }
+
+          const carousel = bindSnapCarousel({
+            track,
+            slides: parts.slides,
+            controls: root.querySelector<HTMLElement>(".jr-reel-cell [data-carousel-controls]"),
+            reduced: Boolean(reduce),
+            onChange: (index) => select(index, !reduce),
+            onSettle: (index) => {
+              if (!reduce) playGlyph(index);
+            },
           });
-          showChapter(parts, index, animate);
-          activeChapter = index;
-          syncArrows(index);
-          if (animate) playGlyph(index);
-        };
 
-        selectChapter(0, false);
+          const onClick = (event: Event) => {
+            const btn = event.currentTarget;
+            if (!(btn instanceof HTMLElement)) return;
+            const index = parts.stations.indexOf(btn);
+            if (index >= 0) carousel.goTo(index);
+          };
+          parts.stations.forEach((station) => station.addEventListener("click", onClick));
 
-        const reveal = ScrollTrigger.create({
-          trigger: root,
-          start: "top 80%",
-          once: true,
-          onEnter: () => playGlyph(activeChapter),
-        });
-
-        const onStep = (event: Event) => {
-          const btn = event.currentTarget;
-          if (!(btn instanceof HTMLButtonElement)) return;
-          const index = activeChapter + Number(btn.dataset.storyStep);
-          if (index < 0 || index >= parts.stations.length || index === activeChapter) return;
-          selectChapter(index, true);
-        };
-        const arrows = root.querySelectorAll<HTMLButtonElement>("[data-story-step]");
-        arrows.forEach((arrow) => arrow.addEventListener("click", onStep));
-
-        return () => {
-          arrows.forEach((arrow) => arrow.removeEventListener("click", onStep));
-          glyphTl?.kill();
-          reveal.kill();
-        };
-      });
+          return () => {
+            parts.stations.forEach((station) => station.removeEventListener("click", onClick));
+            carousel.destroy();
+            glyphTl?.kill();
+            reveal?.kill();
+          };
+        },
+      );
 
       mm.add("(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)", () => {
         const field = root.querySelector<HTMLElement>(".jr-glyph .about-chapter-glyph");
@@ -437,7 +420,7 @@ export default function JourneySection({
       rows={14}
       tone="page"
       outerV={false}
-      className="flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="story-carousel flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <Frame h={H} v={V} />
 
@@ -471,33 +454,61 @@ export default function JourneySection({
         </span>
       </Cell>
 
-      <Cell at={[0, 12, 3, 4]} className="jr-tabs hidden md:block">
+      <Cell at={[0, 12, 3, 4]} className="jr-tabs">
+        <MobileEdge />
         <StoryProgress items={items} />
       </Cell>
 
       <Cell at={[0, 7, 4, 12]} className="jr-reel-cell">
         <MobileEdge />
         <div className="jr-reel">
-          {items.map((item, index) => (
-            <Image
-              key={item.id}
-              data-story-slide=""
-              src={item.image}
-              alt={item.alt}
-              fill
-              sizes="(min-width: 768px) 55vw, 100vw"
-              loading="eager"
-              className="object-cover"
-              style={{ zIndex: index, objectPosition: item.objectPosition }}
-            />
-          ))}
-          <span aria-hidden className="ah-media-scrim" style={{ zIndex: items.length }} />
-          <Corners tone="light" />
+          <div
+            data-story-track
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={JOURNEY_COPY.eyebrow}
+            className="jr-reel-track"
+          >
+            {items.map((item, index) => (
+              <div
+                key={item.id}
+                data-story-slide=""
+                className="jr-reel-slide"
+                style={{ zIndex: index }}
+              >
+                <Image
+                  src={item.image}
+                  alt={item.alt}
+                  fill
+                  sizes="(min-width: 768px) 55vw, 86vw"
+                  loading="eager"
+                  className="object-cover"
+                  style={{ objectPosition: item.objectPosition }}
+                />
+                <span className="contents md:hidden">
+                  <Corners tone="light" />
+                </span>
+              </div>
+            ))}
+          </div>
+          <span
+            aria-hidden
+            className="ah-media-scrim hidden md:block"
+            style={{ zIndex: items.length }}
+          />
+          <span className="hidden md:contents">
+            <Corners tone="light" />
+          </span>
           <p aria-hidden className="jr-reel-caption index-tag">
             <span data-story-fig>{figLabel(1)}</span>
             <span>Thimark &middot; {JOURNEY_COPY.eyebrow}</span>
           </p>
         </div>
+        <CarouselControls
+          label={JOURNEY_COPY.readoutLabel}
+          count={items.length}
+          className="md:hidden"
+        />
       </Cell>
 
       <Cell at={[7, 12, 4, 8]} className="jr-glyph">
@@ -512,13 +523,15 @@ export default function JourneySection({
               <IsoGlyph kind={item.icon} className="about-chapter-mark" />
             </span>
           ))}
+          <span aria-hidden data-chapter-numeral className="about-chapter-numeral md:hidden">
+            {items[0]?.year}
+          </span>
         </div>
       </Cell>
 
       <Cell at={[7, 12, 8, 12]} className="jr-copy">
         <MobileEdge />
         <div className="about-chapter-copy">
-          <StoryArrow direction="prev" />
           <div className="about-chapter-texts">
             {items.map((item, i) => (
               <article
@@ -546,7 +559,6 @@ export default function JourneySection({
               </article>
             ))}
           </div>
-          <StoryArrow direction="next" />
         </div>
       </Cell>
 

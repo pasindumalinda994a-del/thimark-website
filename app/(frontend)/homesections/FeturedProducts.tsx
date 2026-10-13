@@ -72,6 +72,48 @@ export default function FeturedProducts() {
         });
       });
 
+      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+        const bands = gsap.utils.toArray<HTMLElement>(".solutions-band", root);
+
+        bands.forEach((band) => {
+          const shot = band.querySelector<HTMLElement>(".solutions-plate-shot");
+          const note = band.querySelector<HTMLElement>(".solutions-note");
+          if (!shot || !note) return;
+
+          const tl = gsap.timeline({
+            scrollTrigger: { trigger: shot, start: "top 85%", once: true },
+          });
+          tl.fromTo(
+            shot,
+            { clipPath: "inset(0% 0% 100% 0%)" },
+            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: "power2.out" },
+          );
+          tl.fromTo(
+            note,
+            { autoAlpha: 0, y: 24 },
+            { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
+            0.35,
+          );
+
+          const image = shot.querySelector<HTMLElement>("img");
+          if (!image) return;
+          gsap.fromTo(
+            image,
+            { scale: 1.06 },
+            {
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: shot,
+                start: "top bottom",
+                end: "bottom center",
+                scrub: true,
+              },
+            },
+          );
+        });
+      });
+
       return () => mm.revert();
     },
     { scope: sectionRef },
@@ -85,7 +127,7 @@ export default function FeturedProducts() {
       rows={14}
       tone="page"
       outerV={false}
-      className="relative z-10 flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="home-phone relative z-10 flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       {/* Intro */}
       <div className="featured-intro min-h-rows-3">

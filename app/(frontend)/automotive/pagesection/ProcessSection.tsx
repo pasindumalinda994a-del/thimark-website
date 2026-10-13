@@ -8,6 +8,8 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import CarouselControls from "@/app/(frontend)/components/CarouselControls";
+import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
@@ -284,30 +286,111 @@ export default function ProcessSection({
         };
       });
 
-      mm.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
-        parts.cards.forEach((card, i) => {
-          const tl = gsap.timeline({
-            scrollTrigger: { trigger: card, start: "top 80%", once: true },
-          });
-          if (media[i]) {
-            tl.fromTo(
-              media[i],
+      // Phone: a native swipe track. Chips follow the active card; each glyph
+      // draws once, when its card settles.
+      mm.add(
+        { phone: "(max-width: 767px)", reduce: "(prefers-reduced-motion: reduce)" },
+        (ctx) => {
+          const { phone, reduce } = ctx.conditions ?? {};
+          if (!phone) return;
+          const track = root.querySelector<HTMLElement>("[data-ps-track]");
+          if (!track) return;
+          const tabs = root.querySelector<HTMLElement>(".about-tabs");
+
+          const drawn = new Set<number>();
+          const draws: gsap.core.Timeline[] = [];
+          let revealed = Boolean(reduce);
+          let active = 0;
+
+          const drawCard = (index: number) => {
+            const glyph = parts.glyphs[index];
+            if (reduce || !glyph || drawn.has(index)) return;
+            drawn.add(index);
+            draws.push(drawStrokes(glyph));
+          };
+
+          const select = (index: number, animate: boolean) => {
+            parts.washes.forEach((wash, i) => setWash(wash, i === index ? 1 : 0));
+            markStation(parts, index);
+            const station = parts.stations[index];
+            if (tabs && station && tabs.scrollWidth > tabs.clientWidth) {
+              tabs.scrollTo({
+                left: station.offsetLeft - (tabs.clientWidth - station.offsetWidth) / 2,
+                behavior: animate ? "smooth" : "auto",
+              });
+            }
+          };
+          select(0, false);
+
+          let reveal: gsap.core.Timeline | undefined;
+          if (!reduce) {
+            parts.glyphs.forEach((glyph) => {
+              gsap.set(glyph.querySelectorAll("[data-glyph-stroke], [data-seal-stroke]"), {
+                drawSVG: "0%",
+              });
+            });
+
+            reveal = gsap.timeline({
+              scrollTrigger: {
+                trigger: track,
+                start: "top 80%",
+                once: true,
+                onEnter: () => {
+                  revealed = true;
+                  drawCard(active);
+                },
+              },
+            });
+            reveal.fromTo(
+              media,
               { clipPath: "inset(0% 0% 100% 0%)" },
-              { clipPath: "inset(0% 0% 0% 0%)", duration: 0.9, ease: "power2.out" },
+              {
+                clipPath: "inset(0% 0% 0% 0%)",
+                duration: 0.9,
+                ease: "power2.out",
+                stagger: 0.08,
+              },
             );
+            copies.forEach((copyEl, i) => {
+              reveal?.fromTo(
+                copyEl.children,
+                { autoAlpha: 0, y: 10 },
+                { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.08 },
+                0.3 + i * 0.04,
+              );
+            });
           }
-          if (copies[i]) {
-            tl.fromTo(
-              copies[i].children,
-              { autoAlpha: 0, y: 10 },
-              { autoAlpha: 1, y: 0, duration: 0.5, ease: "power2.out", stagger: 0.08 },
-              0.3,
-            );
-          }
-          const glyph = parts.glyphs[i];
-          if (glyph) tl.add(drawStrokes(glyph), 0.2);
-        });
-      });
+
+          const carousel = bindSnapCarousel({
+            track,
+            slides: parts.cards,
+            controls: root.querySelector<HTMLElement>("[data-carousel-controls]"),
+            reduced: Boolean(reduce),
+            onChange: (index) => {
+              active = index;
+              select(index, !reduce);
+            },
+            onSettle: (index) => {
+              if (revealed) drawCard(index);
+            },
+          });
+
+          const onClick = (event: Event) => {
+            const btn = event.currentTarget;
+            if (!(btn instanceof HTMLElement)) return;
+            const index = parts.stations.indexOf(btn);
+            if (index >= 0) carousel.goTo(index);
+          };
+          parts.stations.forEach((station) => station.addEventListener("click", onClick));
+
+          return () => {
+            parts.stations.forEach((station) => station.removeEventListener("click", onClick));
+            carousel.destroy();
+            draws.forEach((tl) => tl.kill());
+            reveal?.kill();
+          };
+        },
+      );
 
       return () => {
         glyphTl?.kill();
@@ -325,7 +408,7 @@ export default function ProcessSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="ps-section flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 md:scroll-mt-0"
+      className="ps-section flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
     >
       <Frame h={H} v={[...V, ...(cta ? FOOT_CTA_V : FOOT_V)]} />
 
@@ -353,82 +436,94 @@ export default function ProcessSection({
         ))}
       </Cell>
 
-      <Cell at={[0, 12, 3, 4]} className="jr-tabs hidden md:block">
+      <Cell at={[0, 12, 3, 4]} className="jr-tabs ps-tabs">
+        <MobileEdge />
         <StoryProgress items={stations} label={copy.tabsLabel ?? "Production stages"} />
       </Cell>
 
-      <div className="ps-stack">
-        {stages.map((stage, i) => (
-          <article
-            key={stage.id}
-            data-ps-card=""
-            className="ps-card"
-            style={{ zIndex: i + 1 }}
-            aria-labelledby={`${id}-stage-${stage.id}`}
-          >
-            <Frame h={CARD_H} v={CARD_V} joins={CARD_JOINS} />
+      <div className="ps-reel relative md:contents">
+        <MobileEdge />
+        <div
+          data-ps-track=""
+          role="region"
+          aria-roledescription="carousel"
+          aria-label={copy.eyebrow}
+          className="ps-stack"
+        >
+          {stages.map((stage, i) => (
+            <article
+              key={stage.id}
+              data-ps-card=""
+              className="ps-card"
+              style={{ zIndex: i + 1 }}
+              aria-labelledby={`${id}-stage-${stage.id}`}
+            >
+              <Frame h={CARD_H} v={CARD_V} joins={CARD_JOINS} />
 
-            <Cell at={[0, 7, 0, 8]} className="ps-media">
-              <MobileEdge />
-              <div data-ps-media="" className="plate-media">
-                <Image
-                  src={stage.media.src}
-                  alt={stage.media.alt}
-                  fill
-                  sizes="(min-width: 768px) 55vw, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: stage.media.objectPosition }}
-                />
-                <span aria-hidden className="ah-media-scrim" />
-                <Corners tone="light" />
-                <p aria-hidden className="ah-media-caption index-tag">
-                  <span>{figLabel(i + 2)}</span>
-                  <span>{stage.title}</span>
-                </p>
-              </div>
-            </Cell>
+              <Cell at={[0, 7, 0, 8]} className="ps-media">
+                <div data-ps-media="" className="plate-media">
+                  <Image
+                    src={stage.media.src}
+                    alt={stage.media.alt}
+                    fill
+                    sizes="(min-width: 768px) 55vw, 84vw"
+                    className="object-cover"
+                    style={{ objectPosition: stage.media.objectPosition }}
+                  />
+                  <span aria-hidden className="ah-media-scrim" />
+                  <Corners tone="light" />
+                  <p aria-hidden className="ah-media-caption index-tag">
+                    <span>{figLabel(i + 2)}</span>
+                    <span>{stage.title}</span>
+                  </p>
+                </div>
+              </Cell>
 
-            <Cell at={[7, 12, 0, 4]} className="ps-glyph">
-              <MobileEdge />
-              <div data-ps-glyph="" className="ps-glyph-field dot-field-mark">
-                <PlusMark tone="page" className="plus-at-tl z-10" />
-                <PlusMark tone="page" className="plus-at-tr z-10" />
-                <PlusMark tone="page" className="plus-at-bl z-10" />
-                <PlusMark tone="page" className="plus-at-br z-10" />
-                <IsoGlyph kind={stage.icon} className="ps-glyph-mark" />
-                <span aria-hidden className="ps-numeral ab-outline">
-                  {padIndex(i)}
-                </span>
-              </div>
-            </Cell>
-
-            <Cell at={[7, 12, 4, 8]} className="ps-copy">
-              <MobileEdge />
-              <div data-ps-copy="" className="ps-copy-inner">
-                <p className="index-tag flex items-center justify-between gap-4">
-                  <span className="flex items-center gap-2">
-                    <span aria-hidden className="ab-marker" />
-                    {copy.readoutLabel} [{padIndex(i)}]
+              <Cell at={[7, 12, 0, 4]} className="ps-glyph">
+                <div data-ps-glyph="" className="ps-glyph-field dot-field-mark">
+                  <PlusMark tone="page" className="plus-at-tl z-10" />
+                  <PlusMark tone="page" className="plus-at-tr z-10" />
+                  <PlusMark tone="page" className="plus-at-bl z-10" />
+                  <PlusMark tone="page" className="plus-at-br z-10" />
+                  <IsoGlyph kind={stage.icon} className="ps-glyph-mark" />
+                  <span aria-hidden className="ps-numeral ab-outline">
+                    {padIndex(i)}
                   </span>
-                  <span className="tabular-nums opacity-60">
-                    {padIndex(i)} / {padIndex(LAST)}
-                  </span>
-                </p>
-                <H3Heading id={`${id}-stage-${stage.id}`} variant="title">
-                  {stage.title}
-                </H3Heading>
-                <Copy variant="body" className="ab-copy">{stage.body}</Copy>
-                <ul className="im-credit-tags index-tag" aria-label="Operations">
-                  {stage.operations.map((operation) => (
-                    <li key={operation}>{operation}</li>
-                  ))}
-                </ul>
-              </div>
-            </Cell>
+                </div>
+              </Cell>
 
-            <span aria-hidden data-ps-shade="" className="ps-card-shade" />
-          </article>
-        ))}
+              <Cell at={[7, 12, 4, 8]} className="ps-copy">
+                <div data-ps-copy="" className="ps-copy-inner">
+                  <p className="index-tag flex items-center justify-between gap-4">
+                    <span className="flex items-center gap-2">
+                      <span aria-hidden className="ab-marker" />
+                      {copy.readoutLabel} [{padIndex(i)}]
+                    </span>
+                    <span className="tabular-nums opacity-60">
+                      {padIndex(i)} / {padIndex(LAST)}
+                    </span>
+                  </p>
+                  <H3Heading id={`${id}-stage-${stage.id}`} variant="title">
+                    {stage.title}
+                  </H3Heading>
+                  <Copy variant="body" className="ab-copy">{stage.body}</Copy>
+                  <ul className="im-credit-tags index-tag" aria-label="Operations">
+                    {stage.operations.map((operation) => (
+                      <li key={operation}>{operation}</li>
+                    ))}
+                  </ul>
+                </div>
+              </Cell>
+
+              <span aria-hidden data-ps-shade="" className="ps-card-shade" />
+            </article>
+          ))}
+        </div>
+        <CarouselControls
+          label={copy.readoutLabel}
+          count={stages.length}
+          className="md:hidden"
+        />
       </div>
 
       <Cell at={[0, cta ? 6 : 8, 12, 14]} className="plate-statement">

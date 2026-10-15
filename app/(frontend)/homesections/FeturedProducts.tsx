@@ -136,7 +136,7 @@ export default function FeturedProducts() {
             Engineered for the Real World
           </p>
           <H2Heading id="featured-heading" className="text-left">
-            When the Challenge Is Complex,
+            When the Challenge Is Complex,{" "}
             <span className="ab-statement-muted">Engineering Has to Be Smarter.</span>
           </H2Heading>
         </div>

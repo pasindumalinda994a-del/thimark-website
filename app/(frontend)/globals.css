@@ -44,6 +44,10 @@ body {
   font-family: var(--font-onest), sans-serif;
 }
 
+html[data-preloaded="true"] [data-preloader] {
+  display: none;
+}
+
 .h-rows-14,
 .min-h-rows-14 {
   min-height: 100dvh;
@@ -7235,7 +7239,8 @@ a.contact-channel-value:focus-visible {
   .catalogue-cta,
   .partner-statement-cta,
   .quote-cta-primary,
-  .quote-cta-secondary {
+  .quote-cta-secondary,
+  .footer-cta {
     height: 48px;
   }
 

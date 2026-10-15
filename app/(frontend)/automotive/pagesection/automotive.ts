@@ -11,10 +11,10 @@ type Media = { src: string; alt: string; objectPosition: string };
 /* ---- Hero ---------------------------------------------------------- */
 
 export const HERO: HeroCopy = {
-  eyebrow: "Automotive Components \u00b7 OEM Manufacturing",
-  heading: ["Precision Components.", "Built for Production."],
+  eyebrow: "Automotive Component Manufacturer \u00b7 Sri Lanka",
+  heading: ["Precision Motorcycle Components.", "Built for OEM Production."],
   intro:
-    "We manufacture precision-engineered motorcycle components for modern vehicle assembly \u2014 stands, brackets, guards, handlebars and carriers, built with practical engineering and dependable quality.",
+    "As an OEM motorcycle parts manufacturer in Sri Lanka, we make precision-engineered components for vehicle assembly \u2014 stands, brackets, guards, handlebars and carriers, built with practical engineering and dependable quality.",
   body: "With Sri Lankan manufacturers and assembly partners, we turn engineering requirements into production-ready components that support local value addition.",
   supporting: ["Practical Engineering.", "Consistent Manufacturing.", "Dependable Quality."],
   cta: { label: "Request a Component Quote", href: "/enquire?service=automotive" },
@@ -42,7 +42,7 @@ export const RANGE = {
   ],
   media: {
     src: "/home-images/two-core-automotive.png",
-    alt: "Precision motorcycle components laid out on a workshop bench",
+    alt: "Precision OEM motorcycle components laid out on a Thimark workshop bench",
     objectPosition: "50% 50%",
   } satisfies Media,
   rangeLabel: "Our Component Range",
@@ -192,7 +192,6 @@ export type Stage = {
   media: Media;
 };
 
-// Stage photography is provisional until dedicated process shots are available.
 export const STAGES: readonly Stage[] = [
   {
     id: "cutting",

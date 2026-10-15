@@ -155,7 +155,7 @@ export default function PortfolioSection() {
             {PORTFOLIO.eyebrow}
           </Eyebrow>
           <H2Heading id="portfolio-heading">
-            {PORTFOLIO.heading[0]}
+            {PORTFOLIO.heading[0]}{" "}
             <span className="ab-statement-muted">{PORTFOLIO.heading[1]}</span>
           </H2Heading>
         </Cell>

@@ -12,11 +12,13 @@ import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import Copy from "@/app/(frontend)/components/Copy";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
-import IsoGlyph, { type IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
+import type { IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { STATS, formatStat } from "@/app/(frontend)/components/stats";
 import { StationDash, StationPlus } from "@/app/(frontend)/homesections/StoryProgress";
+import { HOME_CAPABILITIES } from "@/app/(frontend)/homesections/capabilities";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
@@ -50,51 +52,6 @@ const DEFAULT_COPY: CapabilitiesCopy = {
   ],
 };
 
-const CAPABILITIES: Capability[] = [
-  {
-    id: "precision",
-    tag: "Precision",
-    title: "Precision Manufacturing",
-    body: "Quality-controlled production processes designed for accuracy, reliability and consistency.",
-    icon: "precision",
-  },
-  {
-    id: "engineering",
-    tag: "Engineering",
-    title: "Engineering & Design",
-    body: "Practical engineering solutions developed around automotive and industrial requirements.",
-    icon: "schema",
-  },
-  {
-    id: "fabrication",
-    tag: "Fabrication",
-    title: "Heavy Steel Fabrication",
-    body: "Proven fabrication capabilities built through years of mechanical engineering and industrial projects.",
-    icon: "work",
-  },
-  {
-    id: "oem",
-    tag: "OEM",
-    title: "OEM Manufacturing",
-    body: "Precision motorcycle components manufactured for established local assembly and manufacturing partners.",
-    icon: "factory",
-  },
-  {
-    id: "machinery",
-    tag: "Machinery",
-    title: "Industrial Machinery",
-    body: "Custom-designed machinery and mechanical systems for demanding industrial applications.",
-    icon: "forklift",
-  },
-  {
-    id: "automation",
-    tag: "Automation",
-    title: "Automation & Custom Solutions",
-    body: "Integration of mechanical, hydraulic and control technologies to address specialized industrial challenges.",
-    icon: "electrical",
-  },
-];
-
 const VISIBLE_CARDS = 4;
 const SCRUB_STRETCH = 1.6;
 
@@ -114,7 +71,8 @@ function CornerPlus({ className }: { className: string }) {
 
 export default function CapabilitiesSection({
   id = "manufacturing",
-  items = CAPABILITIES,
+  items = HOME_CAPABILITIES,
+  glyphs,
   cta = DEFAULT_CTA,
   copy = DEFAULT_COPY,
   progressLabel = "Capabilities",
@@ -123,6 +81,8 @@ export default function CapabilitiesSection({
 }: {
   id?: string;
   items?: readonly Capability[];
+  /** Server-rendered with `isoGlyphs(items, "caps-glyph")`. */
+  glyphs: GlyphSet;
   /** Pass null to seat `aside` in the button cell instead. */
   cta?: CapabilitiesCta | null;
   copy?: CapabilitiesCopy;
@@ -475,7 +435,7 @@ export default function CapabilitiesSection({
         <div className="caps-title">
           <p className="eyebrow">{copy.eyebrow}</p>
           <H2Heading id="caps-heading" className="text-left">
-            {copy.heading[0]}
+            {copy.heading[0]}{" "}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
           </H2Heading>
         </div>
@@ -539,7 +499,7 @@ export default function CapabilitiesSection({
                   <CornerPlus className="plus-at-tr" />
                   <CornerPlus className="plus-at-bl" />
                   <CornerPlus className="plus-at-br" />
-                  <IsoGlyph kind={item.icon} className="caps-glyph" />
+                  {glyphs[item.icon]}
                 </div>
 
                 <div className="caps-card-base">

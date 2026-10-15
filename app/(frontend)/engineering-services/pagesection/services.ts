@@ -14,11 +14,11 @@ type Media = { src: string; alt: string; objectPosition: string };
 /* ---- Hero ---------------------------------------------------------- */
 
 export const HERO: HeroCopy = {
-  eyebrow: "Engineering \u00b7 Reverse Engineering \u00b7 Surface Finishing",
+  eyebrow: "Product Development \u00b7 Reverse Engineering \u00b7 Powder Coating",
   heading: ["From Concept to", "Production-Ready Solutions."],
   intro:
     "Every great product begins with a requirement. Turning that requirement into a manufacturable, reliable solution takes engineering knowledge, practical design, and the right production capabilities.",
-  body: "Through product development, reverse engineering and surface finishing, we help turn a new idea, an existing component or a required finish into something ready to manufacture.",
+  body: "Through product development, reverse engineering, metal fabrication and powder coating, we help turn a new idea, an existing component or a required finish into something ready to manufacture.",
   supporting: [
     "Engineering expertise.",
     "Practical solutions.",
@@ -31,7 +31,7 @@ export const HERO: HeroCopy = {
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 42%",
   },
-  caption: ["Fig. 01", "Thimark Workshop \u00b7 Kadawatha"],
+  caption: ["Fig. 01", "Thimark Engineering \u00b7 Kadawatha"],
 };
 
 /* ---- 01 New Product Development ------------------------------------ */
@@ -55,7 +55,6 @@ export const NPD_CTA: Link = {
   href: "/enquire?service=engineering",
 };
 
-// Step photography is provisional until dedicated engineering shots are available.
 export const NPD_STEPS: readonly Stage[] = [
   {
     id: "research",
@@ -247,7 +246,7 @@ export const FINISHES: readonly Finish[] = [
     imageSide: "right",
     media: {
       src: "/products/Rear Plate.png",
-      alt: "Black coated steel rear plate with a textured, uniform finish",
+      alt: "Powder-coated steel motorcycle rear plate with a textured, uniform black finish, made by Thimark",
       objectPosition: "50% 50%",
     },
     lead: "A durable, uniform coating for metallic components where appearance and finish matter.",
@@ -259,7 +258,7 @@ export const FINISHES: readonly Finish[] = [
     imageSide: "left",
     media: {
       src: "/products/Battery Bracket.png",
-      alt: "Welded steel battery bracket with an even black coating",
+      alt: "Welded steel motorcycle battery bracket with an even black coating, manufactured by Thimark",
       objectPosition: "50% 50%",
     },
     lead: "An electrodeposition process that coats suitable components to the required specification.",
@@ -271,7 +270,7 @@ export const FINISHES: readonly Finish[] = [
     imageSide: "right",
     media: {
       src: "/products/Pillion Bracket.png",
-      alt: "Formed steel pillion bracket with a black finish",
+      alt: "Formed steel motorcycle pillion bracket with a black finish, manufactured by Thimark",
       objectPosition: "50% 50%",
     },
     lead: "An electroplated black finish, specified where appearance and corrosion protection are required.",
@@ -283,7 +282,7 @@ export const FINISHES: readonly Finish[] = [
     imageSide: "left",
     media: {
       src: "/products/Bar Pillion LH & RH.png",
-      alt: "Machined pillion bar component with a finished surface",
+      alt: "Machined motorcycle bar pillion components, left and right, with a finished surface",
       objectPosition: "50% 50%",
     },
     lead: "A chromium finish for applications that call for specified surface properties and a hard chromium surface.",

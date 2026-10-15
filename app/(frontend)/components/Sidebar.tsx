@@ -217,11 +217,11 @@ function PlateRails({ edge }: { edge: "open" | "between" }) {
 function BrandLogo({
   className = "",
   imageClassName = "h-6",
-  priority = false,
+  eager = false,
 }: {
   className?: string;
   imageClassName?: string;
-  priority?: boolean;
+  eager?: boolean;
 }) {
   return (
     <Link
@@ -235,7 +235,7 @@ function BrandLogo({
         width={231}
         height={41}
         className={`w-auto ${imageClassName}`}
-        priority={priority}
+        loading={eager ? "eager" : undefined}
       />
     </Link>
   );
@@ -409,7 +409,7 @@ function NavShell({
   pageName,
   pathname,
   onNavigate,
-  logoPriority = false,
+  eagerLogo = false,
   className = "",
   idPrefix,
   variant = "sidebar",
@@ -420,7 +420,7 @@ function NavShell({
   pageName: string;
   pathname: string;
   onNavigate?: () => void;
-  logoPriority?: boolean;
+  eagerLogo?: boolean;
   className?: string;
   idPrefix: string;
   variant?: "sidebar" | "drawer";
@@ -452,7 +452,7 @@ function NavShell({
             <BrandLogo
               className="sb-logo"
               imageClassName="h-7"
-              priority={logoPriority}
+              eager={eagerLogo}
             />
           </div>
           <PlateRule edge="bottom" />
@@ -927,13 +927,13 @@ export default function Sidebar() {
           section={section}
           pageName={pageName}
           pathname={pathname}
-          logoPriority
+          eagerLogo
           idPrefix="desk"
         />
       </aside>
 
       <header className="content-plate mn-header fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream xl:hidden">
-        <BrandLogo className="px-4" imageClassName="h-7" priority />
+        <BrandLogo className="px-4" imageClassName="h-7" eager />
         <button
           type="button"
           className="mn-toggle relative z-10 text-steel"

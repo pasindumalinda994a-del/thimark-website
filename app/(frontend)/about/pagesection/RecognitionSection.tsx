@@ -78,7 +78,7 @@ export default function RecognitionSection() {
             {RECOGNITION.eyebrow}
           </Eyebrow>
           <H2Heading id="recognition-heading">
-            {RECOGNITION.heading[0]}
+            {RECOGNITION.heading[0]}{" "}
             <span className="ab-statement-muted">{RECOGNITION.heading[1]}</span>
           </H2Heading>
         </Cell>

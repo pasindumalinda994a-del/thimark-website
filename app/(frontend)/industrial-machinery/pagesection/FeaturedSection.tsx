@@ -58,7 +58,7 @@ export default function FeaturedSection() {
           {FEATURED.eyebrow}
         </Eyebrow>
         <H2Heading id="kilgarrah-heading">
-          {FEATURED.heading[0]}
+          {FEATURED.heading[0]}{" "}
           <span className="ab-statement-muted">{FEATURED.heading[1]}</span>
         </H2Heading>
       </Cell>

@@ -20,6 +20,7 @@ async function revalidate(req: PayloadRequest, targets: Target[]) {
 const NEWS_TARGETS: Target[] = [
   { path: "/newsroom" },
   { path: "/newsroom/[slug]", type: "page" },
+  { path: "/sitemap.xml" },
 ];
 
 const GALLERY_TARGETS: Target[] = [{ path: "/gallery" }];

@@ -334,7 +334,7 @@ export default function OurTwoCoreSection() {
             What We Do
           </p>
           <H2Heading id="two-core-heading" className="text-left">
-            Three Disciplines.
+            Three Disciplines.{" "}
             <span className="ab-statement-muted">One Engineering Mindset.</span>
           </H2Heading>
         </div>

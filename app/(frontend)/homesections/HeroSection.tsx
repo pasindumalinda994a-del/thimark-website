@@ -163,7 +163,7 @@ export default function HeroSection() {
           <span aria-hidden>·</span> Innovation
         </p>
         <H1Heading id="hero-heading" waitForPreload className="hero-heading">
-          Engineering What Moves
+          Engineering What Moves{" "}
           <span className="ab-statement-muted">Industry Forward.</span>
         </H1Heading>
       </div>
@@ -177,9 +177,9 @@ export default function HeroSection() {
           className="hero-body"
         >
           From precision-engineered motorcycle components to custom industrial
-          machinery, Thimark combines engineering expertise, advanced
-          manufacturing and local capability to create solutions built for the
-          real world.
+          machinery, Thimark is an ISO 9001:2015 certified engineering and
+          manufacturing company in Sri Lanka, building solutions for the real
+          world.
         </Copy>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />

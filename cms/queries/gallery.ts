@@ -9,6 +9,7 @@ function toFrame(doc: Gallery): GalleryFrame {
     category: doc.category,
     note: doc.note ?? "",
     image: mediaUrl(doc.image, "hero"),
+    texture: mediaUrl(doc.image, "card") || mediaUrl(doc.image, "hero"),
     alt: mediaAlt(doc.image) || doc.title,
     fit: doc.fit,
     place: doc.place ?? "",

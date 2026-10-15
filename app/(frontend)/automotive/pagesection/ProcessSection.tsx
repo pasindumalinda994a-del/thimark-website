@@ -12,7 +12,7 @@ import CarouselControls from "@/app/(frontend)/components/CarouselControls";
 import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { figLabel } from "@/app/(frontend)/components/FigMark";
@@ -103,12 +103,15 @@ export default function ProcessSection({
   id = "process",
   copy = PROCESS,
   stages = STAGES,
+  glyphs,
   cta,
   pace = 1,
 }: {
   id?: string;
   copy?: ProcessCopy;
   stages?: readonly Stage[];
+  /** Server-rendered with `isoGlyphs(stages, "ps-glyph-mark")`. */
+  glyphs: GlyphSet;
   cta?: { label: string; href: string };
   /** Viewport heights of scroll per card change; below 1 tightens long stacks. */
   pace?: number;
@@ -418,7 +421,7 @@ export default function ProcessSection({
           {copy.eyebrow}
         </Eyebrow>
         <H2Heading id={`${id}-heading`}>
-          {copy.heading[0]}
+          {copy.heading[0]}{" "}
           <span className="ab-statement-muted">{copy.heading[1]}</span>
         </H2Heading>
       </Cell>
@@ -485,7 +488,7 @@ export default function ProcessSection({
                   <PlusMark tone="page" className="plus-at-tr z-10" />
                   <PlusMark tone="page" className="plus-at-bl z-10" />
                   <PlusMark tone="page" className="plus-at-br z-10" />
-                  <IsoGlyph kind={stage.icon} className="ps-glyph-mark" />
+                  {glyphs[stage.icon]}
                   <span aria-hidden className="ps-numeral ab-outline">
                     {padIndex(i)}
                   </span>

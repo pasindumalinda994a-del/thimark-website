@@ -29,8 +29,12 @@ export type NewsRecord = {
   excerpt: string;
   body: NewsSection[];
   image: string;
+  /** Smaller rendition for listing cards and thumbnails. */
+  card: string;
   images: string[];
   alt: string;
+  updatedAt?: string;
+  seo?: { title?: string; description?: string; image?: string };
 };
 
 const MONTHS = [
@@ -63,14 +67,6 @@ export function byNewest(a: NewsRecord, b: NewsRecord) {
 
 export function recordsIn(records: NewsRecord[], category: NewsCategoryId) {
   return records.filter((record) => record.category === category).sort(byNewest);
-}
-
-export function relatedRecords(records: NewsRecord[], current: NewsRecord, count = 4) {
-  if (count < 1) return [];
-  const rest = records.filter((record) => record.slug !== current.slug);
-  const same = rest.filter((record) => record.category === current.category).sort(byNewest);
-  const other = rest.filter((record) => record.category !== current.category).sort(byNewest);
-  return [...same, ...other].slice(0, count);
 }
 
 export function recordSrc(path: string) {

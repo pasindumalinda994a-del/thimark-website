@@ -117,7 +117,7 @@ export default function QualitySection({
             {copy.eyebrow}
           </Eyebrow>
           <H2Heading id={`${id}-heading`}>
-            {copy.heading[0]}
+            {copy.heading[0]}{" "}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
           </H2Heading>
         </Cell>

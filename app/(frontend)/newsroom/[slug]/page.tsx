@@ -12,15 +12,17 @@ import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import ArticleContents from "@/app/(frontend)/newsroom/ArticleContents";
 import ArticleGallery from "@/app/(frontend)/newsroom/ArticleGallery";
 import ArticleShare from "@/app/(frontend)/newsroom/ArticleShare";
-import PreviewBar from "@/app/(frontend)/newsroom/PreviewBar";
+import PreviewBarLoader from "@/app/(frontend)/newsroom/PreviewBarLoader";
 import {
   categoryById,
   formatRecordDate,
   recordSrc,
-  relatedRecords,
   type NewsRecord,
 } from "@/app/(frontend)/newsroom/records";
-import { getNewsRecord, getNewsRecords, getNewsSlugs } from "@/cms/queries/news";
+import JsonLd from "@/app/(frontend)/seo/JsonLd";
+import { pageMetadata } from "@/app/(frontend)/seo/metadata";
+import { breadcrumbNode, graph, newsArticleNode } from "@/app/(frontend)/seo/schema";
+import { getNewsRecord, getNewsSlugs, getRelatedNews } from "@/cms/queries/news";
 
 type ArticleProps = {
   params: Promise<{ slug: string }>;
@@ -73,7 +75,7 @@ function RelatedFrame({ record }: { record: NewsRecord }) {
   return (
     <span className="news-related-frame relative">
       <Image
-        src={recordSrc(record.image)}
+        src={recordSrc(record.card)}
         alt=""
         fill
         sizes="(min-width: 768px) 22vw, 96px"
@@ -92,18 +94,28 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
+function articlePath(slug: string) {
+  return `/newsroom/${slug}`;
+}
+
 export async function generateMetadata({ params }: ArticleProps): Promise<Metadata> {
   const { slug } = await params;
   const { isEnabled: draft } = await draftMode();
   const record = await getNewsRecord(slug, { draft });
-  if (!record) return { title: "Newsroom — Thimark" };
-  return {
-    title: `${record.title} — Thimark`,
-    description: record.excerpt,
-    openGraph: record.image
-      ? { title: record.title, description: record.excerpt, images: [record.image] }
-      : undefined,
-  };
+  if (!record) return { title: "Newsroom" };
+  const image = record.seo?.image || record.image;
+  return pageMetadata({
+    title: record.seo?.title || record.title,
+    description: record.seo?.description || record.excerpt,
+    path: articlePath(record.slug),
+    image: image ? { url: recordSrc(image), alt: record.alt } : undefined,
+    noindex: draft,
+    article: {
+      publishedTime: record.date,
+      modifiedTime: record.updatedAt,
+      section: categoryById(record.category).full,
+    },
+  });
 }
 
 export default async function NewsArticlePage({ params }: ArticleProps) {
@@ -113,12 +125,29 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
   if (!record) notFound();
 
   const category = categoryById(record.category);
-  const related = relatedRecords(await getNewsRecords(), record);
+  const related = await getRelatedNews(record);
   const continues = related.length > 0;
+  const path = articlePath(record.slug);
+  const schema = graph(
+    newsArticleNode({
+      path,
+      headline: record.title,
+      description: record.seo?.description || record.excerpt,
+      image: recordSrc(record.seo?.image || record.image),
+      datePublished: record.date,
+      dateModified: record.updatedAt,
+      section: category.full,
+    }),
+    breadcrumbNode([
+      { name: "Newsroom", path: "/newsroom" },
+      { name: record.title, path },
+    ]),
+  );
 
   return (
     <main className="newsroom news-article content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
-      {draft ? <PreviewBar path={`/newsroom/${record.slug}`} /> : null}
+      <JsonLd data={schema} />
+      {draft ? <PreviewBarLoader path={path} /> : null}
       <header className="news-article-head">
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus" />
@@ -158,7 +187,7 @@ export default async function NewsArticlePage({ params }: ArticleProps) {
               src={recordSrc(record.image)}
               alt={record.alt}
               fill
-              priority
+              preload
               sizes="(min-width: 768px) 70vw, 100vw"
               className="object-cover"
             />

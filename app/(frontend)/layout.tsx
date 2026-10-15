@@ -1,11 +1,25 @@
-import type { Metadata } from "next";
-import { Montserrat, Onest, Oswald, Oxanium, Saira, Space_Grotesk } from "next/font/google";
-import CustomCursor from "@/app/(frontend)/components/CustomCursor";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import type { Metadata, Viewport } from "next";
+import { Onest, Space_Grotesk } from "next/font/google";
+import CustomCursorLoader from "@/app/(frontend)/components/CustomCursorLoader";
 import PageTransition from "@/app/(frontend)/components/PageTransition";
+import { PRELOAD_SKIP_SCRIPT } from "@/app/(frontend)/components/preloadSession";
 import Sidebar from "@/app/(frontend)/components/Sidebar";
 import SiteClose from "@/app/(frontend)/components/SiteClose";
 import SmoothScroll from "@/app/(frontend)/components/SmoothScroll";
-import { SERVER_URL } from "@/cms/preview";
+import { COMPANY } from "@/app/(frontend)/components/site";
+import JsonLd from "@/app/(frontend)/seo/JsonLd";
+import { siteSchema } from "@/app/(frontend)/seo/schema";
+import {
+  DEFAULT_DESCRIPTION,
+  INDEXABLE,
+  OG_SIZE,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_URL,
+  TITLE_TEMPLATE,
+  ogImagePath,
+} from "@/app/(frontend)/seo/metadata";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,51 +34,73 @@ const onest = Onest({
   weight: "400",
 });
 
-const oxanium = Oxanium({
-  variable: "--font-oxanium",
-  subsets: ["latin"],
-  weight: "700",
-});
+const DEFAULT_TITLE = "Engineering & Manufacturing Company in Sri Lanka | Thimark";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: "700",
-});
-
-const saira = Saira({
-  variable: "--font-saira",
-  subsets: ["latin"],
-  weight: "800",
-  style: "italic",
-});
-
-const oswald = Oswald({
-  variable: "--font-oswald",
-  subsets: ["latin"],
-  weight: "600",
-});
+const verificationOther: Record<string, string> = {};
+if (process.env.BING_SITE_VERIFICATION) {
+  verificationOther["msvalidate.01"] = process.env.BING_SITE_VERIFICATION;
+}
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SERVER_URL),
-  title: "Thimark — We Engineer What Moves Industry Forward",
-  description:
-    "From precision automotive components to purpose-built industrial machinery, Thimark turns engineering challenges into dependable solutions — designed, manufactured, and built in Sri Lanka.",
+  metadataBase: new URL(SITE_URL),
+  title: { default: DEFAULT_TITLE, template: TITLE_TEMPLATE },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: SITE_NAME,
+  authors: [{ name: COMPANY.name, url: SITE_URL }],
+  creator: COMPANY.name,
+  publisher: COMPANY.name,
+  category: "Engineering and manufacturing",
+  formatDetection: { telephone: false, address: false, email: false },
+  robots: INDEXABLE
+    ? {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+          "max-video-preview": -1,
+        },
+      }
+    : { index: false, follow: false },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: verificationOther,
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: SITE_LOCALE,
+    url: "/",
+    images: [{ url: ogImagePath(), alt: DEFAULT_TITLE, ...OG_SIZE }],
+  },
+  twitter: { card: "summary_large_image" },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#575757",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${spaceGrotesk.variable} ${onest.variable} ${oxanium.variable} ${montserrat.variable} ${saira.variable} ${oswald.variable} antialiased`}
+      className={`${spaceGrotesk.variable} ${onest.variable} antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: PRELOAD_SKIP_SCRIPT }} />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
+        <JsonLd data={siteSchema()} />
         <SmoothScroll />
         <Sidebar />
         <PageTransition />
-        <CustomCursor />
+        <CustomCursorLoader />
         {children}
         <SiteClose />
+        <SpeedInsights />
       </body>
     </html>
   );

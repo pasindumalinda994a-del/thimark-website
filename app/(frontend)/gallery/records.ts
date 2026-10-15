@@ -12,6 +12,8 @@ export type GalleryFrame = {
   category: GalleryCategoryId;
   note: string;
   image: string;
+  /** Smaller rendition loaded as a WebGL texture by the desktop strip. */
+  texture: string;
   alt: string;
   fit: GalleryFit;
   place: string;

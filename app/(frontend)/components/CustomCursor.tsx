@@ -58,8 +58,7 @@ function luminanceOf(bg: string) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-function plateFromPoint(x: number, y: number): Plate {
-  const hits = document.elementsFromPoint(x, y);
+function plateOf(hits: Element[]): Plate {
   for (const hit of hits) {
     if (!(hit instanceof Element)) continue;
     if (hit.closest("[data-custom-cursor]")) continue;
@@ -87,8 +86,7 @@ function plateFromPoint(x: number, y: number): Plate {
   return "dark";
 }
 
-function kindAt(x: number, y: number): Kind {
-  const hits = document.elementsFromPoint(x, y);
+function kindOf(hits: Element[]): Kind {
   for (const hit of hits) {
     if (!(hit instanceof Element)) continue;
     if (hit.closest("[data-custom-cursor]")) continue;
@@ -101,8 +99,7 @@ function kindAt(x: number, y: number): Kind {
   return "idle";
 }
 
-function isTextFieldAt(x: number, y: number) {
-  const hits = document.elementsFromPoint(x, y);
+function isTextField(hits: Element[]) {
   for (const hit of hits) {
     if (!(hit instanceof Element)) continue;
     if (hit.closest("[data-custom-cursor]")) continue;
@@ -374,33 +371,49 @@ export default function CustomCursor() {
         else exploreTl.reverse();
       };
 
-      const onMove = contextSafe((event: PointerEvent) => {
-        const x = event.clientX;
-        const y = event.clientY;
+      const track = (x: number, y: number) => {
+        if (!snapped) {
+          snapped = true;
+          gsap.set(head, { x, y });
+        }
+        xTo(x);
+        yTo(y);
+        show();
+      };
 
-        if (isTextFieldAt(x, y)) {
+      let lastX = 0;
+      let lastY = 0;
+      let probeFrame = 0;
+
+      // Hit-testing forces style recalculation, so it runs at most once per frame.
+      const probe = contextSafe(() => {
+        probeFrame = 0;
+        const hits = document.elementsFromPoint(lastX, lastY);
+
+        if (isTextField(hits)) {
           overText = true;
           hide();
           return;
         }
 
-        overText = false;
-
-        if (!snapped) {
-          snapped = true;
-          gsap.set(head, { x, y });
+        if (overText) {
+          overText = false;
+          track(lastX, lastY);
         }
 
-        xTo(x);
-        yTo(y);
-        show();
-
-        const nextPlate = plateFromPoint(x, y);
-        const nextKind = kindAt(x, y);
+        const nextPlate = plateOf(hits);
+        const nextKind = kindOf(hits);
         if (nextPlate === plate && nextKind === kind) return;
         plate = nextPlate;
         kind = nextKind;
         paint(plate, kind);
+      });
+
+      const onMove = contextSafe((event: PointerEvent) => {
+        lastX = event.clientX;
+        lastY = event.clientY;
+        if (!overText) track(lastX, lastY);
+        if (!probeFrame) probeFrame = requestAnimationFrame(probe);
       });
 
       const onLeave = contextSafe(() => {
@@ -433,6 +446,7 @@ export default function CustomCursor() {
       document.documentElement.addEventListener("pointerleave", onLeave);
 
       return () => {
+        cancelAnimationFrame(probeFrame);
         exploreTl.kill();
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("pointerdown", onDown);

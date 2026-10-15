@@ -1,6 +1,11 @@
+export type HeroVideo = {
+  webm: string;
+  mp4: string;
+};
+
 export type HeroClip = {
   id: string;
-  src: string;
+  src: HeroVideo | null;
   poster: string;
   label: string;
   detail: string;
@@ -10,7 +15,10 @@ export type HeroClip = {
 export const HERO_CLIP_DURATION = 6;
 
 /** Two source files, reused across the five reel stations. */
-const HERO_VIDEOS = ["/vedios/0920.mp4", "/vedios/0920(1).mp4"] as const;
+const HERO_VIDEOS = [
+  { webm: "/videos/hero-1.webm", mp4: "/videos/hero-1.mp4" },
+  { webm: "/videos/hero-2.webm", mp4: "/videos/hero-2.mp4" },
+] as const satisfies readonly HeroVideo[];
 
 export const HERO_CLIPS: HeroClip[] = [
   {

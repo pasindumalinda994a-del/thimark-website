@@ -67,7 +67,7 @@ export default function GalleryStrip({
     let cleanup = () => {};
 
     void (async () => {
-      const THREE = await import("three");
+      const THREE = await import("@/app/(frontend)/gallery/three");
       if (disposed) return;
 
       const pinned = slides.length < 2;
@@ -151,7 +151,7 @@ export default function GalleryStrip({
         };
 
         const fit = slides[index].fit;
-        const source = frameSrc(slides[index].image);
+        const source = frameSrc(slides[index].texture);
         loader.load(source, (texture) => {
           if (disposed) {
             texture.dispose();
@@ -177,6 +177,7 @@ export default function GalleryStrip({
           material.map = texture;
           material.color.set(0xffffff);
           material.needsUpdate = true;
+          wake();
         });
 
         scene.add(mesh);
@@ -283,6 +284,7 @@ export default function GalleryStrip({
         isScrolling = true;
         burst(0.22);
         armScrollEnd(900);
+        wake();
       };
 
       const onWheel = (event: WheelEvent) => {
@@ -299,6 +301,7 @@ export default function GalleryStrip({
         scrollTarget += clamped * config.wheelSpeed;
         isScrolling = true;
         armScrollEnd(520);
+        wake();
       };
 
       let dragging = false;
@@ -344,6 +347,7 @@ export default function GalleryStrip({
         burst(Math.abs(deltaX) * (touch ? 0.02 : 0.015));
         scrollTarget -= deltaX * (touch ? config.touchSpeed : config.dragSpeed);
         isScrolling = true;
+        wake();
       };
 
       const onPointerUp = (event: PointerEvent) => {
@@ -376,6 +380,7 @@ export default function GalleryStrip({
           burst(Math.abs(dragDelta) * (touch ? 0.02 : 0.004));
           isScrolling = true;
           armScrollEnd(1100);
+          wake();
         }
       };
 
@@ -390,13 +395,25 @@ export default function GalleryStrip({
       canvas.addEventListener("pointercancel", onPointerUp);
       canvas.addEventListener("touchmove", onTouchMove, { passive: false });
 
-      const observer = new ResizeObserver(resize);
+      const observer = new ResizeObserver(() => {
+        resize();
+        wake();
+      });
       if (canvas.parentElement) observer.observe(canvas.parentElement);
       resize();
 
       let raf = 0;
-      const animate = (time: number) => {
+      let onScreen = true;
+
+      // The loop sleeps once the strip settles and wakes on input, resize or texture load.
+      const wake = () => {
+        if (raf || !onScreen || disposed) return;
+        lastFrameTime = 0;
         raf = requestAnimationFrame(animate);
+      };
+
+      const animate = (time: number) => {
+        raf = 0;
         const deltaTime = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016;
         lastFrameTime = time;
         const previous = scrollPosition;
@@ -448,15 +465,33 @@ export default function GalleryStrip({
           : config.distortionStrength * distortionAmount * scrollDirection;
         place(strength);
         renderer.render(scene, camera);
+
+        const settled =
+          !isScrolling &&
+          Math.abs(scrollTarget - scrollPosition) < 0.0001 &&
+          distortionAmount < 0.0005 &&
+          distortionTarget < 0.0005;
+        if (!settled && onScreen) raf = requestAnimationFrame(animate);
       };
 
+      const visibility = new IntersectionObserver(([entry]) => {
+        onScreen = entry?.isIntersecting ?? true;
+        if (onScreen) wake();
+        else {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+      });
+      visibility.observe(canvas);
+
       onActiveRef.current(0);
-      raf = requestAnimationFrame(animate);
+      wake();
 
       cleanup = () => {
         cancelAnimationFrame(raf);
         window.clearTimeout(scrollTimeout);
         observer.disconnect();
+        visibility.disconnect();
         canvas.removeEventListener("wheel", onWheel);
         canvas.removeEventListener("pointerdown", onPointerDown);
         canvas.removeEventListener("pointermove", onPointerMove);

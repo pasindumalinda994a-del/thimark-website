@@ -80,7 +80,7 @@ export default function AboutHero({
           {copy.eyebrow}
         </p>
         <H1Heading id={`${id}-heading`}>
-          {copy.heading[0]}
+          {copy.heading[0]}{" "}
           <span className="ab-statement-muted">{copy.heading[1]}</span>
         </H1Heading>
       </Cell>
@@ -104,7 +104,7 @@ export default function AboutHero({
             src={copy.image.src}
             alt={copy.image.alt}
             fill
-            priority
+            preload
             sizes="(min-width: 1280px) calc(100vw - 260px), 100vw"
             className="object-cover"
             style={{ objectPosition: copy.image.objectPosition }}

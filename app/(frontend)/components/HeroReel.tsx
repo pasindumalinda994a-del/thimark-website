@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type CSSProperties } from "react";
+import { preload } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -51,6 +52,8 @@ function StationPlus() {
 }
 
 export default function HeroReel() {
+  preload(HERO_CLIPS[0].poster, { as: "image", fetchPriority: "high" });
+
   const mediaRef = useRef<HTMLDivElement>(null);
   const captionRef = useRef<HTMLSpanElement>(null);
   const layersRef = useRef<(HTMLDivElement | null)[]>([]);
@@ -100,12 +103,15 @@ export default function HeroReel() {
     let reduced = reducedQuery.matches;
     let visible = true;
     let pageHidden = document.hidden;
+    let behindPreloader =
+      document.documentElement.dataset.preloaded !== "true" &&
+      document.querySelector("[data-preloader]") !== null;
     let progressTween: gsap.core.Tween | undefined;
     let detachMedia: (() => void) | undefined;
     const activeIndex = { n: 0 };
     let goTo: (index: number) => void = () => {};
 
-    const canRun = () => visible && !pageHidden && !reduced;
+    const canRun = () => visible && !pageHidden && !reduced && !behindPreloader;
 
     const setFills = (index: number, currentScale: number) => {
       fills.forEach((fill, i) => {
@@ -185,7 +191,7 @@ export default function HeroReel() {
       const next = (index + 1) % HERO_CLIPS.length;
       videosRef.current.forEach((video, i) => {
         if (!video) return;
-        video.preload = i === index || i === next ? "auto" : "metadata";
+        video.preload = i === index || i === next ? "auto" : "none";
       });
     };
 
@@ -268,6 +274,13 @@ export default function HeroReel() {
     if (reduced) setFills(0, 1);
     else startProgress(0);
 
+    const onPreloadDone = () => {
+      if (!behindPreloader) return;
+      behindPreloader = false;
+      if (!reduced) startProgress(activeIndex.n);
+    };
+    window.addEventListener("thimark:preload-done", onPreloadDone);
+
     const media = mediaRef.current;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -284,6 +297,7 @@ export default function HeroReel() {
 
     return () => {
       observer.disconnect();
+      window.removeEventListener("thimark:preload-done", onPreloadDone);
       document.removeEventListener("visibilitychange", onVisibility);
       reducedQuery.removeEventListener("change", syncMotion);
       stopClip();
@@ -306,14 +320,16 @@ export default function HeroReel() {
                 ref={(node) => {
                   videosRef.current[index] = node;
                 }}
-                src={item.src}
                 poster={item.poster}
                 muted
                 playsInline
-                preload={index === 0 ? "auto" : "metadata"}
+                preload={index === 0 ? "auto" : "none"}
                 aria-label={item.alt}
                 className="h-full w-full object-cover"
-              />
+              >
+                <source src={item.src.webm} type="video/webm" />
+                <source src={item.src.mp4} type="video/mp4" />
+              </video>
             ) : (
               <Image
                 src={item.poster}

@@ -36,6 +36,8 @@ export const Media: CollectionConfig = {
       { name: "thumb", width: 400, height: 300, position: "centre", formatOptions: { format: "webp", options: { quality: 80 } } },
       { name: "card", width: 960, formatOptions: { format: "webp", options: { quality: 82 } } },
       { name: "hero", width: 1920, formatOptions: { format: "webp", options: { quality: 84 } } },
+      // Social share cards; LinkedIn and some messengers do not render WebP previews.
+      { name: "og", width: 1200, height: 630, position: "centre", formatOptions: { format: "jpeg", options: { quality: 82 } } },
     ],
   },
   fields: [

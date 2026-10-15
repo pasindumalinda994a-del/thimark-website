@@ -69,7 +69,7 @@ export default function SurfaceFinishingSection() {
             {FINISHING.eyebrow}
           </Eyebrow>
           <H2Heading id="surface-finishing-heading">
-            {FINISHING.heading[0]}
+            {FINISHING.heading[0]}{" "}
             <span className="ab-statement-muted">{FINISHING.heading[1]}</span>
           </H2Heading>
         </Cell>

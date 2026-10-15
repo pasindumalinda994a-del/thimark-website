@@ -13,6 +13,7 @@ import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionBreak from "@/app/(frontend)/components/SectionBreak";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { RAQ_LINK } from "@/app/(frontend)/components/nav";
+import { scheduleScrollRefresh } from "@/app/(frontend)/components/refreshScroll";
 import {
   COMPANY,
   FOOTER_NAV,
@@ -182,10 +183,9 @@ export default function Footer() {
       });
 
       // The footer stays mounted across routes, so measure this page's layout.
-      const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      scheduleScrollRefresh();
 
       return () => {
-        cancelAnimationFrame(frame);
         mm.revert();
       };
     },
@@ -291,7 +291,7 @@ export default function Footer() {
                 href={RAQ_LINK.href}
                 tone="steel"
                 aria-label={RAQ_LINK.ariaLabel}
-                className="w-full"
+                className="footer-cta w-full"
               >
                 {RAQ_LINK.label}
               </BrandButton>

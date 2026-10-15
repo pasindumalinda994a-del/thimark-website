@@ -167,7 +167,7 @@ export default function PartnersSection({
           {copy.eyebrow}
         </p>
         <H2Heading id={headingId}>
-          {copy.heading[0]}
+          {copy.heading[0]}{" "}
           <span className="ab-statement-muted">{copy.heading[1]}</span>
         </H2Heading>
         <Copy data-p-header variant="lede" weight="normal" className="max-w-[720px]">

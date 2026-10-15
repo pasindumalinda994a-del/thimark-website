@@ -421,13 +421,14 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
               >
                 <div data-cat-media className="catalogue-card-media news-card-media has-photo">
                   <Image
-                    src={recordSrc(record.image)}
+                    src={recordSrc(record.card)}
                     alt={record.alt}
                     fill
                     sizes={
                       lead ? "(min-width: 768px) 22vw, 100vw" : "(min-width: 768px) 22vw, 128px"
                     }
                     loading={lead ? "eager" : undefined}
+                    fetchPriority={lead ? "high" : undefined}
                     className="catalogue-card-photo news-card-photo"
                   />
                   <CornerPluses />

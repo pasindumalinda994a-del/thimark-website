@@ -3,7 +3,7 @@
 import Copy from "@/app/(frontend)/components/Copy";
 import { useRef } from "react";
 import Image from "next/image";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
@@ -47,7 +47,12 @@ const PRINCIPLE_V: VLine[] = [
   [8, 1, 15],
 ];
 
-export default function VisionMissionSection() {
+export default function VisionMissionSection({
+  glyphs,
+}: {
+  /** Server-rendered with `isoGlyphs(PRINCIPLES, "vm-principle-mark")`. */
+  glyphs: GlyphSet;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise", phoneNotes: true });
 
@@ -70,7 +75,7 @@ export default function VisionMissionSection() {
             {DRIVES.eyebrow}
           </Eyebrow>
           <H2Heading id="vision-mission-heading">
-            {DRIVES.heading[0]}
+            {DRIVES.heading[0]}{" "}
             <span className="ab-statement-muted">{DRIVES.heading[1]}</span>
           </H2Heading>
         </Cell>
@@ -198,7 +203,7 @@ export default function VisionMissionSection() {
                 <PlusMark tone="page" className="plus-at-tr z-10" />
                 <PlusMark tone="page" className="plus-at-bl z-10" />
                 <PlusMark tone="page" className="plus-at-br z-10" />
-                <IsoGlyph kind={principle.icon} className="vm-principle-mark" />
+                {glyphs[principle.icon]}
               </div>
               <div className="vm-principle-copy">
                 <H3Heading id={`principle-${principle.id}`} data-reveal variant="title" size="sm">

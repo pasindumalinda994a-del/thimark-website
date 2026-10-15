@@ -24,7 +24,7 @@ const SOLUTIONS = [
     image: "/home-images/featured-kilgharrah.png",
     alt: "Kilgharrah 600 trash-rack cleaner operating at a hydropower intake",
     href: "/industrial-machinery#kilgarrah",
-    cta: "View the Kilgarrah 600",
+    cta: "View the Kilgharrah 600",
     imageSide: "right",
     body: "Thimark designed and manufactured the Kilgharrah 600 for KenGen, delivering a custom-engineered hydraulic trash-rack cleaning solution for hydropower infrastructure.",
   },

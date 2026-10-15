@@ -17,6 +17,7 @@ const MARK_W = 78;
 const MARK_H = 100;
 const NAV_TIMEOUT_MS = 2500;
 const CLOSE_WATCHDOG_MS = 1800;
+const REVEAL_HOLD_MS = 300;
 
 type Edges = { l: number; r: number; t: number; b: number };
 
@@ -70,6 +71,8 @@ export default function PageTransition() {
   const pendingHash = useRef("");
   const settleTimers = useRef<number[]>([]);
   const navTimer = useRef<number | undefined>(undefined);
+  const revealTimer = useRef<number | undefined>(undefined);
+  const closedAt = useRef(0);
   const playClose = useRef<(onClosed: () => void) => void>(() => {});
   const playReveal = useRef<() => void>(() => {});
 
@@ -86,6 +89,7 @@ export default function PageTransition() {
   const beginNav = useRef((nextPath: string, href: string) => {
     if (phase.current !== "closing") return;
     phase.current = "waiting";
+    closedAt.current = performance.now();
     pendingPath.current = nextPath;
     const hashAt = href.indexOf("#");
     pendingHash.current = hashAt === -1 ? "" : href.slice(hashAt);
@@ -335,8 +339,15 @@ export default function PageTransition() {
     window.clearTimeout(navTimer.current);
     pendingPath.current = null;
     phase.current = "revealing";
-    playReveal.current();
+    const held = performance.now() - closedAt.current;
+    window.clearTimeout(revealTimer.current);
+    revealTimer.current = window.setTimeout(
+      () => playReveal.current(),
+      Math.max(0, REVEAL_HOLD_MS - held),
+    );
   }, [pathname]);
+
+  useEffect(() => () => window.clearTimeout(revealTimer.current), []);
 
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
@@ -368,6 +379,7 @@ export default function PageTransition() {
 
       setBusy(true);
       phase.current = "closing";
+      window.clearTimeout(revealTimer.current);
 
       const href = `${url.pathname}${url.search}${url.hash}`;
       const closeWatchdog = window.setTimeout(

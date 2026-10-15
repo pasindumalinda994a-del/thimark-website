@@ -14,7 +14,7 @@ import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import Copy from "@/app/(frontend)/components/Copy";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { figLabel } from "@/app/(frontend)/components/FigMark";
@@ -195,12 +195,15 @@ export default function AboutSection({
   id = "about",
   copy = HOME_COPY,
   items = STORY,
+  glyphs,
   showTitles = false,
   figures = false,
 }: {
   id?: string;
   copy?: StoryCopy;
   items?: StoryItem[];
+  /** Server-rendered with `isoGlyphs(items, "about-chapter-mark")`. */
+  glyphs: GlyphSet;
   showTitles?: boolean;
   figures?: boolean;
 }) {
@@ -545,7 +548,7 @@ export default function AboutSection({
             {copy.eyebrow}
           </p>
           <H2Heading id={`${id}-heading`} className="text-left">
-            {copy.heading[0]}
+            {copy.heading[0]}{" "}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
           </H2Heading>
         </div>
@@ -588,7 +591,7 @@ export default function AboutSection({
               data-chapter-glyph={i}
               className="about-chapter-panel"
             >
-              <IsoGlyph kind={item.icon} className="about-chapter-mark" />
+              {glyphs[item.icon]}
             </span>
           ))}
           <span aria-hidden data-chapter-numeral className="about-chapter-numeral">
@@ -643,8 +646,6 @@ export default function AboutSection({
                   alt={item.alt}
                   fill
                   sizes="(min-width: 768px) 50vw, 86vw"
-                  priority={index === 0}
-                  loading={index === 0 ? undefined : "eager"}
                   className="object-cover"
                   style={{ objectPosition: item.objectPosition }}
                 />

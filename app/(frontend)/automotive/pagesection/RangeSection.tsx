@@ -5,7 +5,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
@@ -60,7 +60,12 @@ const RANGE_JOINS: Join[] = [
   [12, 0, { up: true }],
 ];
 
-export default function RangeSection() {
+export default function RangeSection({
+  glyphs,
+}: {
+  /** Server-rendered with `isoGlyphs(COMPONENTS, "vm-principle-mark")`. */
+  glyphs: GlyphSet;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -84,7 +89,7 @@ export default function RangeSection() {
             {RANGE.eyebrow}
           </Eyebrow>
           <H2Heading id="product-range-heading">
-            {RANGE.heading[0]}
+            {RANGE.heading[0]}{" "}
             <span className="ab-statement-muted">{RANGE.heading[1]}</span>
           </H2Heading>
         </Cell>
@@ -189,7 +194,7 @@ export default function RangeSection() {
                 <PlusMark tone="page" className="plus-at-tr z-10" />
                 <PlusMark tone="page" className="plus-at-bl z-10" />
                 <PlusMark tone="page" className="plus-at-br z-10" />
-                <IsoGlyph kind={group.icon} className="vm-principle-mark" />
+                {glyphs[group.icon]}
               </div>
               <div className="vm-principle-copy">
                 <H3Heading id={`range-${group.id}`} data-reveal variant="title" size="sm">

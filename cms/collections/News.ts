@@ -150,6 +150,42 @@ export const News: CollectionConfig = {
             },
           ],
         },
+        {
+          name: "seo",
+          label: "SEO",
+          description:
+            "Optional overrides for search results and social shares. Left blank, the title, excerpt and cover image are used.",
+          fields: [
+            {
+              name: "metaTitle",
+              label: "Search title",
+              type: "text",
+              maxLength: 60,
+              admin: {
+                description: "Shown as the Google result title, followed by \u201c| Thimark\u201d.",
+                components: counter(60),
+              },
+            },
+            {
+              name: "metaDescription",
+              label: "Search description",
+              type: "textarea",
+              maxLength: 160,
+              admin: {
+                rows: 3,
+                description: "The snippet under the result title. Aim for 120\u2013155 characters.",
+                components: counter(160),
+              },
+            },
+            {
+              name: "ogImage",
+              label: "Share image",
+              type: "upload",
+              relationTo: "media",
+              admin: { description: "Shown when the story is shared on social media. Landscape, ideally 1200\u00d7630." },
+            },
+          ],
+        },
       ],
     },
     {

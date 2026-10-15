@@ -68,7 +68,7 @@ export default function LocalValueSection() {
             {VALUE.eyebrow}
           </Eyebrow>
           <H2Heading id="lva-heading">
-            {VALUE.heading[0]}
+            {VALUE.heading[0]}{" "}
             <span className="ab-statement-muted">{VALUE.heading[1]}</span>
           </H2Heading>
         </Cell>

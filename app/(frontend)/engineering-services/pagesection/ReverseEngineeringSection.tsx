@@ -4,7 +4,7 @@ import Copy from "@/app/(frontend)/components/Copy";
 import { useRef } from "react";
 import Image from "next/image";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
@@ -66,7 +66,12 @@ const CLOSE_V: VLine[] = [
   [8, 0, 2],
 ];
 
-export default function ReverseEngineeringSection() {
+export default function ReverseEngineeringSection({
+  glyphs,
+}: {
+  /** Server-rendered with `isoGlyphs(REVERSE_CAPABILITIES, "vm-principle-mark")`. */
+  glyphs: GlyphSet;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -90,7 +95,7 @@ export default function ReverseEngineeringSection() {
             {REVERSE.eyebrow}
           </Eyebrow>
           <H2Heading id="reverse-engineering-heading">
-            {REVERSE.heading[0]}
+            {REVERSE.heading[0]}{" "}
             <span className="ab-statement-muted">{REVERSE.heading[1]}</span>
           </H2Heading>
         </Cell>
@@ -190,7 +195,7 @@ export default function ReverseEngineeringSection() {
                 <PlusMark tone="page" className="plus-at-tr z-10" />
                 <PlusMark tone="page" className="plus-at-bl z-10" />
                 <PlusMark tone="page" className="plus-at-br z-10" />
-                <IsoGlyph kind={capability.icon} className="vm-principle-mark" />
+                {glyphs[capability.icon]}
               </div>
               <div className="vm-principle-copy">
                 <H3Heading id={`reverse-${capability.id}`} data-reveal variant="title" size="sm">

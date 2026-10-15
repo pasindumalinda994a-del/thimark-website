@@ -226,6 +226,20 @@ export interface News {
     id?: string | null;
   }[];
   images?: (string | Media)[] | null;
+  seo?: {
+    /**
+     * Shown as the Google result title, followed by “| Thimark”.
+     */
+    metaTitle?: string | null;
+    /**
+     * The snippet under the result title. Aim for 120–155 characters.
+     */
+    metaDescription?: string | null;
+    /**
+     * Shown when the story is shared on social media. Landscape, ideally 1200×630.
+     */
+    ogImage?: (string | null) | Media;
+  };
   /**
    * URL: /newsroom/<slug>. Generated from the title when left blank.
    */
@@ -278,6 +292,14 @@ export interface Media {
       filename?: string | null;
     };
     hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    og?: {
       url?: string | null;
       width?: number | null;
       height?: number | null;
@@ -530,6 +552,13 @@ export interface NewsSelect<T extends boolean = true> {
         id?: T;
       };
   images?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        ogImage?: T;
+      };
   slug?: T;
   category?: T;
   date?: T;
@@ -594,6 +623,16 @@ export interface MediaSelect<T extends boolean = true> {
               filename?: T;
             };
         hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        og?:
           | T
           | {
               url?: T;

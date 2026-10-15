@@ -62,7 +62,7 @@ export default function StorySection({
           {STORY.eyebrow}
         </Eyebrow>
         <H2Heading id="story-heading">
-          {STORY.heading[0]}
+          {STORY.heading[0]}{" "}
           <span className="ab-statement-muted">{STORY.heading[1]}</span>
         </H2Heading>
       </Cell>

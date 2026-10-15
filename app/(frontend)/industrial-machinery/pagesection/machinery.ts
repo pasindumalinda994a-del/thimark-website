@@ -16,11 +16,11 @@ const KILGARRAH_PHOTO = "/Gallery Images/Kilgharrah600-H4eS3WLBj1Hf5xwZhFBNSw.jp
 /* ---- Hero ---------------------------------------------------------- */
 
 export const HERO: HeroCopy = {
-  eyebrow: "Industrial Machinery \u00b7 Engineering \u00b7 Manufacturing",
-  heading: ["Custom Machinery.", "Engineered for Real-World Challenges."],
+  eyebrow: "Industrial Machinery Manufacturer \u00b7 Sri Lanka",
+  heading: ["Custom Industrial Machinery.", "Engineered for Real-World Challenges."],
   intro:
     "Complex industrial challenges demand more than standard equipment. They require practical engineering, dependable manufacturing, and machinery designed around the realities of the application.",
-  body: "We engineer and manufacture custom machinery and industrial systems for water and hydropower, industrial processing and material handling \u2014 from heavy steel structures to specialized mechanical systems.",
+  body: "From our works in Sri Lanka, we design and manufacture custom industrial machinery for water and hydropower, industrial processing and material handling \u2014 from trash rack cleaners and conveyors to heavy steel structures.",
   supporting: [
     "Engineered around the challenge.",
     "Built for the application.",
@@ -85,7 +85,7 @@ export const BANDS: readonly PortfolioBand[] = [
       "Our water and hydropower-related solutions include specialized equipment and fabricated systems intended for demanding water-management environments.",
     items: [
       {
-        name: "KILGARRAH 600 Hydraulic Trash Rack Cleaning Machine",
+        name: "KILGHARRAH 600 Hydraulic Trash Rack Cleaning Machine",
         body: "A movable hydraulic machine developed for cleaning trash racks at hydropower facilities.",
       },
       {
@@ -110,7 +110,7 @@ export const BANDS: readonly PortfolioBand[] = [
     imageSide: "right",
     media: {
       src: "/home-images/featured-kilgharrah.png",
-      alt: "The KILGARRAH 600 clearing debris from a hydropower trash rack as engineers supervise",
+      alt: "The KILGHARRAH 600 clearing debris from a hydropower trash rack as engineers supervise",
       objectPosition: "50% 45%",
     },
     caption: ["Fig. 02", "Water & Hydropower"],
@@ -149,7 +149,7 @@ export const BANDS: readonly PortfolioBand[] = [
     imageSide: "left",
     media: {
       src: "/home-images/about-industrial-automation.jpeg",
-      alt: "Engineers commissioning an automated material-handling line",
+      alt: "Engineers commissioning an automated conveyor and material-handling line",
       objectPosition: "50% 50%",
     },
     caption: ["Fig. 03", "Processing & Material Handling"],
@@ -172,7 +172,6 @@ export const PROCESS: ProcessCopy = {
     "One connected process. From engineering intent to machinery built around the job it needs to do.",
 };
 
-// Stage photography is provisional until dedicated process shots are available.
 export const STAGES: readonly Stage[] = [
   {
     id: "scanning",
@@ -241,30 +240,30 @@ export const STAGES: readonly Stage[] = [
   },
 ];
 
-/* ---- 03 Featured — KILGARRAH 600 ----------------------------------- */
+/* ---- 03 Featured — KILGHARRAH 600 ----------------------------------- */
 
 export const FEATURED = {
   index: "03",
   eyebrow: "Featured Engineering Project",
   heading: ["Engineering a Better Approach", "to Trash Rack Cleaning."] as const,
   lede: "Hydropower facilities depend on clear water intakes. Debris on trash racks can restrict flow, so effective rack cleaning is part of intake management.",
-  storyLabel: "KILGARRAH 600 \u00b7 KenGen",
+  storyLabel: "KILGHARRAH 600 \u00b7 KenGen",
   paragraphs: [
-    "Thimark designed and manufactured the KILGARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), with Varomatech Ltd, Kenya.",
+    "Thimark designed and manufactured the KILGHARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), with Varomatech Ltd, Kenya.",
     "Developed for a hydropower facility and designed around the site, it removes accumulated debris and supports water-intake operation.",
   ],
   media: {
     src: KILGARRAH_PHOTO,
-    alt: "The KILGARRAH 600 movable hydraulic trash rack cleaner, built by Thimark, on test at the Kadawatha works",
+    alt: "The KILGHARRAH 600 movable hydraulic trash rack cleaner, built by Thimark, on test at the Kadawatha works",
     objectPosition: "50% 45%",
   } satisfies Media,
-  caption: ["Fig. 04", "KILGARRAH 600 \u00b7 KenGen"] as const,
+  caption: ["Fig. 04", "KILGHARRAH 600 \u00b7 KenGen"] as const,
   closing:
-    "The KILGARRAH 600 stands as an example of Thimark\u2019s ability to take on specialized engineering requirements and develop machinery for demanding industrial and infrastructure applications.",
+    "The KILGHARRAH 600 stands as an example of Thimark\u2019s ability to take on specialized engineering requirements and develop machinery for demanding industrial and infrastructure applications.",
   glanceLabel: "Project at a glance",
   glance: [
     { label: "Client", value: "Kenya Electricity Generating Company PLC (KenGen)" },
-    { label: "Project", value: "KILGARRAH 600 movable hydraulic trash rack cleaning machine" },
+    { label: "Project", value: "KILGHARRAH 600 movable hydraulic trash rack cleaning machine" },
     { label: "Partner", value: "Varomatech Ltd, Kenya" },
     { label: "Application", value: "Hydropower infrastructure and trash rack cleaning" },
     {

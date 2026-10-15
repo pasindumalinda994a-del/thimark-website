@@ -67,7 +67,7 @@ export default function LeadershipSection() {
             {LEADERSHIP.eyebrow}
           </Eyebrow>
           <H2Heading id="leadership-heading">
-            {LEADERSHIP.heading[0]}
+            {LEADERSHIP.heading[0]}{" "}
             <span className="ab-statement-muted">{LEADERSHIP.heading[1]}</span>
           </H2Heading>
         </Cell>

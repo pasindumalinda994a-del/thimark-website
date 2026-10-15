@@ -26,8 +26,9 @@ export default function DirectionPulse({
 
   useGSAP(
     () => {
-      const parts = rootRef.current?.querySelectorAll("[data-direction-part]");
-      if (!parts?.length) return;
+      const root = rootRef.current;
+      const parts = root?.querySelectorAll("[data-direction-part]");
+      if (!root || !parts?.length) return;
 
       const axis = direction === "right" ? "x" : "y";
       const mm = gsap.matchMedia();
@@ -37,7 +38,7 @@ export default function DirectionPulse({
         const step = 0.22;
         const nudge = direction === "up" ? -2 : 2;
         const returnAt = (parts.length - 1) * step + travel - 0.18;
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.25 });
+        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.25, paused: true });
 
         parts.forEach((part, i) => {
           tl.fromTo(
@@ -60,6 +61,14 @@ export default function DirectionPulse({
             returnAt + i * step,
           );
         });
+
+        // The loop never ends, so only run it while the cue is on screen.
+        const observer = new IntersectionObserver(([entry]) => {
+          if (entry?.isIntersecting) tl.play();
+          else tl.pause();
+        });
+        observer.observe(root);
+        return () => observer.disconnect();
       });
 
       return () => mm.revert();

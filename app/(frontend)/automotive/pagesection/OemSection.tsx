@@ -84,7 +84,7 @@ export default function OemSection() {
             {OEM.eyebrow}
           </Eyebrow>
           <H2Heading id="oem-heading">
-            {OEM.heading[0]}
+            {OEM.heading[0]}{" "}
             <span className="ab-statement-muted">{OEM.heading[1]}</span>
           </H2Heading>
         </Cell>

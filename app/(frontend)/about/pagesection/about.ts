@@ -11,7 +11,7 @@ export const HERO = {
   eyebrow: "About Thimark",
   heading: ["Engineering Excellence.", "Delivering Trust."],
   intro:
-    "Thimark Technocreations (Pvt) Ltd is a Sri Lankan engineering and manufacturing company built on precision, innovation and quality. From automotive components to custom industrial machinery, we turn practical engineering into dependable solutions.",
+    "Thimark Technocreations (Pvt) Ltd is an ISO 9001:2015 certified Sri Lankan engineering and manufacturing company built on precision, innovation and quality. From automotive components and heavy steel fabrication to custom industrial machinery, we turn practical engineering into dependable solutions.",
   supporting: ["Proudly Sri Lankan.", "Driven by Engineering.", "Built on Trust."],
   cta: { label: "Discover Our Story", href: "#story" } satisfies Link,
   image: {

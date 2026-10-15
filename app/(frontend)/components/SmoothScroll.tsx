@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { ReactLenis, useLenis } from "lenis/react";
+import { ReactLenis, useLenis, type LenisRef } from "lenis/react";
 import type { LenisOptions } from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -138,9 +138,21 @@ function HashAnchorScroll() {
 }
 
 export default function SmoothScroll() {
+  const lenisRef = useRef<LenisRef>(null);
+
+  // One animation loop: Lenis is stepped by GSAP's ticker so pins and scrubs stay in sync.
+  useEffect(() => {
+    const update = (time: number) => {
+      lenisRef.current?.lenis?.raf(time * 1000);
+    };
+    gsap.ticker.add(update);
+    gsap.ticker.lagSmoothing(0);
+    return () => gsap.ticker.remove(update);
+  }, []);
+
   const options = useMemo<LenisOptions>(
     () => ({
-      autoRaf: true,
+      autoRaf: false,
       lerp: 0.1,
       anchors: { offset: 0 },
       stopInertiaOnNavigate: true,
@@ -162,7 +174,7 @@ export default function SmoothScroll() {
   }, [options]);
 
   return (
-    <ReactLenis root options={options}>
+    <ReactLenis root options={options} ref={lenisRef}>
       <LenisScrollTriggerSync />
       <HashAnchorScroll />
     </ReactLenis>

@@ -1,5 +1,7 @@
+import { montserrat, oswald, oxanium, saira } from "@/app/(frontend)/homesections/partnerFonts";
+
 export type PartnerMark = {
-  /** CSS font-family, usually a next/font variable. */
+  /** CSS font-family, usually from a next/font loader. */
   font: string;
   weight: number;
   italic?: boolean;
@@ -26,7 +28,7 @@ export const PARTNERS: Partner[] = [
     legalName: "David Pieris Motor Company Lanka Ltd.",
     sector: "OEM Manufacturing Partner",
     mark: {
-      font: "var(--font-oxanium)",
+      font: oxanium.style.fontFamily,
       weight: 700,
       tracking: "-0.04em",
     },
@@ -37,7 +39,7 @@ export const PARTNERS: Partner[] = [
     legalName: "Senaro Motor Company (Pvt) Ltd.",
     sector: "OEM Manufacturing Partner",
     mark: {
-      font: "var(--font-saira)",
+      font: saira.style.fontFamily,
       weight: 800,
       italic: true,
       tracking: "0.04em",
@@ -49,7 +51,7 @@ export const PARTNERS: Partner[] = [
     legalName: "Ranatunga Motors (Pvt) Ltd.",
     sector: "OEM Manufacturing Partner",
     mark: {
-      font: "var(--font-oswald)",
+      font: oswald.style.fontFamily,
       weight: 600,
       tracking: "0.06em",
     },
@@ -60,7 +62,7 @@ export const PARTNERS: Partner[] = [
     legalName: "Kenya Electricity Generating Company",
     sector: "International Engineering Project",
     mark: {
-      font: "var(--font-montserrat)",
+      font: montserrat.style.fontFamily,
       weight: 700,
       uppercase: false,
       tracking: "-0.03em",

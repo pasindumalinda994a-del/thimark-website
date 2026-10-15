@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
 import { MASK_MOTION as MASK } from "@/app/(frontend)/components/maskMotion";
+import { PRELOAD_SESSION_KEY } from "@/app/(frontend)/components/preloadSession";
 
 gsap.registerPlugin(useGSAP);
 
@@ -76,11 +77,18 @@ function alreadyPreloaded() {
   );
 }
 
+function rememberPreloaded() {
+  try {
+    sessionStorage.setItem(PRELOAD_SESSION_KEY, "1");
+  } catch {}
+}
+
 const PRELOAD_WATCHDOG_MS = 8000;
 
 export default function PreLoading() {
   const root = useRef<HTMLDivElement>(null);
-  const [done, setDone] = useState(alreadyPreloaded);
+  // Always start false so hydration matches the server HTML; the layout effect hides it before paint.
+  const [done, setDone] = useState(false);
   const lenis = useLenis();
 
   const finishRef = useRef(() => {});
@@ -90,6 +98,7 @@ export default function PreLoading() {
       return;
     }
     document.documentElement.dataset.preloaded = "true";
+    rememberPreloaded();
     window.dispatchEvent(new CustomEvent("thimark:preload-done"));
     setDone(true);
   };
@@ -191,7 +200,7 @@ export default function PreLoading() {
         attr: { "stroke-dashoffset": ((pos.vOuterL % dash) + dash) % dash },
       });
       gsap.set(cells, { autoAlpha: 0 });
-      gsap.set(titles, { yPercent: 100 });
+      gsap.set(titles, { yPercent: 100, autoAlpha: 0 });
 
       const prog = { n: 0 };
       const writeProg = () => {
@@ -220,70 +229,72 @@ export default function PreLoading() {
       });
 
       tl.addLabel("draw")
-        .to(vLines, { scaleY: 1, duration: 1.15 }, "draw")
-        .to(hLines, { scaleX: 1, duration: 0.8 }, "draw")
-        .to(prog, { n: 20, duration: 1.15, ease: "none", onUpdate: writeProg }, "draw");
+        .to(vLines, { scaleY: 1, duration: 0.85 }, "draw")
+        .to(hLines, { scaleX: 1, duration: 0.65 }, "draw")
+        .to(prog, { n: 30, duration: 0.85, ease: "none", onUpdate: writeProg }, "draw");
 
-      tl.addLabel("fill", ">-0.25").to(
+      tl.addLabel("fill", ">-0.15").to(
         cells,
-        { autoAlpha: 1, backgroundColor: COLORS.silver, duration: 0.25 },
+        { autoAlpha: 1, backgroundColor: COLORS.silver, duration: 0.3 },
         "fill",
       );
 
-      tl.addLabel("erase")
-        .to(vOuters, { scaleY: 0, duration: 0.45 }, "erase")
-        .to(hOuters, { scaleX: 0, duration: 0.45 }, "erase");
+      tl.addLabel("erase", "+=0.15")
+        .to(vOuters, { scaleY: 0, duration: 0.4 }, "erase")
+        .to(hOuters, { scaleX: 0, duration: 0.4 }, "erase");
 
       tl.addLabel("collapse")
         .to(
           vInnerL,
-          { x: xTo(pos.vInnerL, cx), autoAlpha: 0, duration: 0.6 },
+          { x: xTo(pos.vInnerL, cx), autoAlpha: 0, duration: 0.55 },
           "collapse",
         )
         .to(
           vInnerR,
-          { x: xTo(pos.vInnerR, cx), autoAlpha: 0, duration: 0.6 },
+          { x: xTo(pos.vInnerR, cx), autoAlpha: 0, duration: 0.55 },
           "collapse",
         )
         .to(
           hInnerT,
-          { y: xTo(pos.hInnerT, cy), autoAlpha: 0, duration: 0.6 },
+          { y: xTo(pos.hInnerT, cy), autoAlpha: 0, duration: 0.55 },
           "collapse",
         )
         .to(
           hInnerB,
-          { y: xTo(pos.hInnerB, cy), autoAlpha: 0, duration: 0.6 },
+          { y: xTo(pos.hInnerB, cy), autoAlpha: 0, duration: 0.55 },
           "collapse",
         )
-        .to(q("[data-cell='tl']"), { backgroundColor: COLORS.steel, duration: 0.6 }, "collapse")
-        .to(q("[data-cell='tr']"), { backgroundColor: COLORS.brand, duration: 0.6 }, "collapse")
-        .to(q("[data-cell='bl']"), { backgroundColor: COLORS.silver, duration: 0.6 }, "collapse")
-        .to(q("[data-cell='br']"), { backgroundColor: COLORS.steel, duration: 0.6 }, "collapse")
-        .to(prog, { n: 50, duration: 1.55, ease: "none", onUpdate: writeProg }, "erase");
+        .to(q("[data-cell='tl']"), { backgroundColor: COLORS.steel, duration: 0.55 }, "collapse")
+        .to(q("[data-cell='tr']"), { backgroundColor: COLORS.brand, duration: 0.55 }, "collapse")
+        .to(q("[data-cell='bl']"), { backgroundColor: COLORS.silver, duration: 0.55 }, "collapse")
+        .to(q("[data-cell='br']"), { backgroundColor: COLORS.steel, duration: 0.55 }, "collapse");
 
-      const slide = { duration: 0.55, ease: "power3.inOut" };
+      const slide = { duration: 0.45, ease: "power3.inOut" };
+      const slideIn = { yPercent: 0, autoAlpha: 1, ...slide };
+      const slideOut = { yPercent: -100, autoAlpha: 0, ...slide };
 
-      tl.addLabel("words").to(
+      // Words wait for the line animation to finish so the two never overlap.
+      tl.addLabel("words", "+=0.1").to(
         wordEng,
-        { yPercent: 0, duration: 0.55, ease: "power3.out" },
+        { yPercent: 0, autoAlpha: 1, duration: 0.45, ease: "power3.out" },
         "words",
       );
 
-      tl.addLabel("mfg", "+=0.25")
-        .to(wordEng, { yPercent: -100, ...slide }, "mfg")
-        .to(wordMfg, { yPercent: 0, ...slide }, "mfg");
+      tl.addLabel("mfg", "words+=0.8")
+        .to(wordEng, slideOut, "mfg")
+        .to(wordMfg, slideIn, "mfg");
 
-      tl.addLabel("inn", "+=0.25")
-        .to(wordMfg, { yPercent: -100, ...slide }, "inn")
-        .to(wordInn, { yPercent: 0, ...slide }, "inn")
-        .to(prog, { n: 85, duration: 1.6, ease: "none", onUpdate: writeProg }, "mfg");
+      tl.addLabel("inn", "mfg+=0.8")
+        .to(wordMfg, slideOut, "inn")
+        .to(wordInn, slideIn, "inn")
+        .to(prog, { n: 75, duration: 3.45, ease: "none", onUpdate: writeProg }, "erase");
 
-      tl.addLabel("brand", "+=0.25")
-        .to(wordInn, { yPercent: -100, ...slide }, "brand")
-        .to(brand, { yPercent: 0, ...slide }, "brand")
-        .to(prog, { n: 100, duration: 1.2, ease: "none", onUpdate: writeProg }, "brand");
+      tl.addLabel("brand", "inn+=0.8")
+        .to(wordInn, slideOut, "brand")
+        .to(brand, slideIn, "brand")
+        .to(prog, { n: 100, duration: 0.45, ease: "none", onUpdate: writeProg }, "brand");
 
-      tl.addLabel("hold").to({}, { duration: 0.4 });
+      tl.addLabel("hold", "brand+=0.45").to({}, { duration: 0.4 }, "hold");
 
       const mid = vh / 2;
 
@@ -315,6 +326,7 @@ export default function PreLoading() {
   return (
     <div
       ref={root}
+      data-preloader
       className="fixed inset-0 z-50 overflow-hidden"
       role="status"
       aria-busy="true"

@@ -562,7 +562,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                   alt={shown.alt}
                   fill
                   sizes="80vw"
-                  priority
+                  fetchPriority="high"
                   className={
                     shown.fit === "contain" ? "object-contain p-[12%]" : "object-cover"
                   }
@@ -626,7 +626,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                   alt={frame.alt}
                   fill
                   sizes="86vw"
-                  priority={index === 0}
+                  fetchPriority={index === 0 ? "high" : undefined}
                   className={
                     frame.fit === "contain"
                       ? "object-contain p-[12%]"
@@ -756,7 +756,8 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
                   fill
                   sizes="100vw"
                   className={`gallery-viewer-photo ${current.fit === "contain" ? "is-contain" : "is-cover"}`}
-                  priority
+                  loading="eager"
+                  fetchPriority="high"
                 />
               </div>
               <div className="gallery-viewer-bar">

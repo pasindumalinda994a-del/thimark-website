@@ -149,7 +149,7 @@ const MACHINERY_SECTIONS: readonly HomeSection[] = [
   { id: "hero", label: "Overview", navId: null },
   { id: "portfolio", label: "Portfolio", navId: "machinery-custom" },
   { id: "process", label: "Approach", navId: null },
-  { id: "kilgarrah", label: "Kilgarrah", navId: "machinery-exports" },
+  { id: "kilgarrah", label: "Kilgharrah", navId: "machinery-exports" },
   { id: "capabilities", label: "Capabilities", navId: null },
   { id: "contact", label: "Contact", navId: null },
 ];

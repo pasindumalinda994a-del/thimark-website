@@ -309,7 +309,7 @@ export default function QualitySection() {
             Quality by Design
           </p>
           <H2Heading id="quality-heading">
-            Precision Is Not a Promise.
+            Precision Is Not a Promise.{" "}
             <span className="ab-statement-muted">It&rsquo;s a Process.</span>
           </H2Heading>
           <div data-q-header className="quality-copy">

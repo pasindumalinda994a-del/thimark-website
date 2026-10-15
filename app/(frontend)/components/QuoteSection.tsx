@@ -12,6 +12,7 @@ import { RAQ_LINK } from "@/app/(frontend)/components/nav";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import MarkDrawing from "@/app/(frontend)/components/MarkDrawing";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
+import { scheduleScrollRefresh } from "@/app/(frontend)/components/refreshScroll";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
@@ -162,12 +163,22 @@ export default function QuoteSection({
             1.2,
           );
 
-          // Slow idle drift on the construction guides.
-          gsap.to(guides, {
+          // Slow idle drift on the construction guides, paused while off-screen.
+          const drift = gsap.to(guides, {
             strokeDashoffset: -40,
             duration: 12,
             ease: "none",
             repeat: -1,
+            paused: true,
+          });
+          ScrollTrigger.create({
+            trigger: drawing,
+            start: "top bottom",
+            end: "bottom top",
+            onToggle: (self) => {
+              if (self.isActive) drift.play();
+              else drift.pause();
+            },
           });
         }
 
@@ -197,10 +208,9 @@ export default function QuoteSection({
         });
       });
 
-      const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
+      scheduleScrollRefresh();
 
       return () => {
-        cancelAnimationFrame(frame);
         mm.revert();
       };
     },
@@ -272,7 +282,7 @@ export default function QuoteSection({
             {copy.eyebrow}
           </p>
           <H2Heading id="quote-heading">
-            {copy.heading[0]}
+            {copy.heading[0]}{" "}
             <span className="ab-statement-muted">{copy.heading[1]}</span>
           </H2Heading>
         </div>

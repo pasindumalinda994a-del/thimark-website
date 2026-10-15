@@ -12,7 +12,7 @@ import CarouselControls from "@/app/(frontend)/components/CarouselControls";
 import { bindSnapCarousel } from "@/app/(frontend)/components/snapCarousel";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
-import IsoGlyph from "@/app/(frontend)/components/IsoGlyph";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { figLabel } from "@/app/(frontend)/components/FigMark";
@@ -188,9 +188,12 @@ function applyChapter(parts: Parts, progress: number) {
 export default function JourneySection({
   id = "journey",
   items = JOURNEY,
+  glyphs,
 }: {
   id?: string;
   items?: JourneyItem[];
+  /** Server-rendered with `isoGlyphs(items, "about-chapter-mark")`. */
+  glyphs: GlyphSet;
 }) {
   const sectionRef = useRef<HTMLElement>(null);
   const lenis = useLenis();
@@ -430,7 +433,7 @@ export default function JourneySection({
           {JOURNEY_COPY.eyebrow}
         </p>
         <H2Heading id={`${id}-heading`}>
-          {JOURNEY_COPY.heading[0]}
+          {JOURNEY_COPY.heading[0]}{" "}
           <span className="ab-statement-muted">{JOURNEY_COPY.heading[1]}</span>
         </H2Heading>
       </Cell>
@@ -481,7 +484,6 @@ export default function JourneySection({
                   alt={item.alt}
                   fill
                   sizes="(min-width: 768px) 55vw, 86vw"
-                  loading="eager"
                   className="object-cover"
                   style={{ objectPosition: item.objectPosition }}
                 />
@@ -520,7 +522,7 @@ export default function JourneySection({
           <PlusMark tone="page" className="plus-at-br z-10" />
           {items.map((item, i) => (
             <span key={item.id} data-chapter-glyph={i} className="about-chapter-panel">
-              <IsoGlyph kind={item.icon} className="about-chapter-mark" />
+              {glyphs[item.icon]}
             </span>
           ))}
           <span aria-hidden data-chapter-numeral className="about-chapter-numeral md:hidden">

@@ -1,10 +1,12 @@
+import { cache } from "react";
+import type { Where } from "payload";
 import type { News } from "@/payload-types";
 import type { NewsRecord } from "@/app/(frontend)/newsroom/records";
 import { isoDay, mediaAlt, mediaUrl, payloadClient } from "./payload";
 
 function toRecord(doc: News): NewsRecord {
-  const cover = mediaUrl(doc.heroImage);
-  const photos = (doc.images ?? []).map((image) => mediaUrl(image)).filter(Boolean);
+  const cover = mediaUrl(doc.heroImage, "hero");
+  const photos = (doc.images ?? []).map((image) => mediaUrl(image, "hero")).filter(Boolean);
   return {
     slug: doc.slug,
     category: doc.category,
@@ -18,8 +20,15 @@ function toRecord(doc: News): NewsRecord {
       hrefLabel: section.hrefLabel || undefined,
     })),
     image: cover,
+    card: mediaUrl(doc.heroImage, "card") || cover,
     images: cover ? [cover, ...photos] : photos,
     alt: mediaAlt(doc.heroImage) || doc.title || "",
+    updatedAt: doc.updatedAt,
+    seo: {
+      title: doc.seo?.metaTitle || undefined,
+      description: doc.seo?.metaDescription || undefined,
+      image: mediaUrl(doc.seo?.ogImage, "og") || mediaUrl(doc.heroImage, "og") || undefined,
+    },
   };
 }
 
@@ -36,7 +45,8 @@ export async function getNewsRecords(): Promise<NewsRecord[]> {
   return result.docs.map(toRecord).filter((record) => record.image);
 }
 
-export async function getNewsRecord(slug: string, { draft = false } = {}): Promise<NewsRecord | null> {
+/** Shared by generateMetadata and the page within one request; cache() keys on primitive args only. */
+const findNewsRecord = cache(async (slug: string, draft: boolean): Promise<NewsRecord | null> => {
   const payload = await payloadClient();
   const result = await payload.find({
     collection: "news",
@@ -50,6 +60,51 @@ export async function getNewsRecord(slug: string, { draft = false } = {}): Promi
   });
   const doc = result.docs[0];
   return doc ? toRecord(doc) : null;
+});
+
+export function getNewsRecord(slug: string, { draft = false } = {}): Promise<NewsRecord | null> {
+  return findNewsRecord(slug, draft);
+}
+
+/** Newest published stories from the same category first, topped up from the rest of the register. */
+export async function getRelatedNews(current: NewsRecord, count = 4): Promise<NewsRecord[]> {
+  if (count < 1) return [];
+  const payload = await payloadClient();
+  const find = (category: Where, limit: number) =>
+    payload.find({
+      collection: "news",
+      where: {
+        and: [
+          { _status: { equals: "published" } },
+          { slug: { not_equals: current.slug } },
+          { heroImage: { exists: true } },
+          category,
+        ],
+      },
+      sort: "-date",
+      depth: 1,
+      limit,
+      pagination: false,
+    });
+
+  const same = (await find({ category: { equals: current.category } }, count)).docs.map(toRecord);
+  if (same.length >= count) return same;
+  const other = await find({ category: { not_equals: current.category } }, count - same.length);
+  return [...same, ...other.docs.map(toRecord)];
+}
+
+export async function getNewsSitemapEntries(): Promise<{ slug: string; updatedAt: string }[]> {
+  const payload = await payloadClient();
+  const result = await payload.find({
+    collection: "news",
+    where: { _status: { equals: "published" } },
+    select: { slug: true, updatedAt: true },
+    sort: "-date",
+    depth: 0,
+    limit: 1000,
+    pagination: false,
+  });
+  return result.docs.map((doc) => ({ slug: doc.slug, updatedAt: doc.updatedAt }));
 }
 
 export async function getNewsSlugs(): Promise<string[]> {

@@ -6,6 +6,7 @@ import Image from "next/image";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import { useLetterScrub } from "@/app/(frontend)/components/useLetterScrub";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
 import {
@@ -41,7 +42,12 @@ const V: VLine[] = [
   [8, 21, 25],
 ];
 
-export default function LeadershipSection() {
+export default function LeadershipSection({
+  glyphs,
+}: {
+  /** Server-rendered with `isoGlyphs(LEADERSHIP.leaders, "ld-glyph-mark")`. */
+  glyphs: GlyphSet;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -99,7 +105,11 @@ export default function LeadershipSection() {
             return (
               <div key={person.id} className="ld-card md:contents">
                 <Cell at={[c, c + 3, 4, 9]} className="ld-portrait-cell">
-                  <div data-wipe className="ld-portrait ld-roster ld-roster-light">
+                  <div
+                    data-wipe
+                    data-redraw={person.portrait ? undefined : ""}
+                    className="ld-portrait ld-roster ld-roster-light"
+                  >
                     <Corners />
                     <span aria-hidden className="ld-portrait-marker" />
                     <div className="ld-portrait-frame">
@@ -112,8 +122,14 @@ export default function LeadershipSection() {
                           className="object-cover grayscale"
                         />
                       ) : (
-                        <div className="ld-monogram dot-field" role="img" aria-label={person.name}>
-                          <span aria-hidden className="ld-monogram-text ab-outline">
+                        <div
+                          data-draw
+                          className="ld-monogram dot-field"
+                          role="img"
+                          aria-label={`${person.name}, ${person.role}`}
+                        >
+                          {glyphs[person.icon]}
+                          <span aria-hidden className="ld-glyph-tag index-tag">
                             {person.initials}
                           </span>
                         </div>

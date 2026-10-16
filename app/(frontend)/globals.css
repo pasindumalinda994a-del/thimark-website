@@ -7874,11 +7874,22 @@ a.contact-channel-value:focus-visible {
   );
 }
 
-.ld-monogram-text {
+.ld-glyph-mark {
   position: relative;
   z-index: 1;
-  font-size: clamp(88px, 9vw, 180px);
-  -webkit-text-stroke-color: color-mix(in srgb, var(--cream) 75%, transparent);
+  width: 56cqw;
+  height: auto;
+  max-height: 72%;
+  aspect-ratio: 1;
+}
+
+/* Top edge lines up with .ld-portrait-marker, seated top-left. */
+.ld-glyph-tag {
+  position: absolute;
+  z-index: 1;
+  top: 21px;
+  right: 24px;
+  opacity: 0.7;
 }
 
 .ld-portrait-caption {
@@ -7951,10 +7962,6 @@ a.contact-channel-value:focus-visible {
   container-type: inline-size;
 }
 
-.ld-roster .ld-monogram-text {
-  font-size: clamp(72px, 22cqw, 120px);
-}
-
 .ld-roster-light {
   --page-ink: var(--steel);
   background: var(--cream);
@@ -7983,10 +7990,6 @@ a.contact-channel-value:focus-visible {
     var(--page-ink) 0 4px,
     transparent 4px 8px
   );
-}
-
-.ld-roster-light .ld-monogram-text {
-  -webkit-text-stroke-color: color-mix(in srgb, var(--page-ink) 75%, transparent);
 }
 
 .ld-roster-light .ld-portrait-marker {
@@ -10690,8 +10693,15 @@ a.contact-channel-value:focus-visible {
     inset: 16px 16px 40px;
   }
 
-  .about-page .ld-roster .ld-monogram-text {
-    font-size: clamp(40px, 30cqw, 64px);
+  .about-page .ld-glyph-mark {
+    width: 52cqw;
+    max-height: 64%;
+  }
+
+  .about-page .ld-glyph-tag {
+    top: 10px;
+    right: 12px;
+    font-size: 10px;
   }
 
   /* Clear of the corner marks seated 16px in. */

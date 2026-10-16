@@ -1,15 +1,15 @@
 const VIEW = 400;
 const SCALE = 5;
 const OX = 120;
-const OY = 92;
+const OY = 90;
 
-// Geometry from /public/brand/logo-mark.svg (32 x 41 units)
-const COL_W = 14.7692;
-const COL_2 = 17.2308;
-const ROW_H = 19.27;
-const ROW_2 = 21.73;
+// Geometry from /public/brand/logo-mark.svg (32 x 42 units)
+const COL_W = 14.4;
+const COL_2 = 17.6;
+const ROW_H = 19.4;
+const ROW_2 = 22.6;
 const MARK_W = 32;
-const MARK_H = 41;
+const MARK_H = 42;
 
 const u = (v: number) => v * SCALE;
 
@@ -243,7 +243,7 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
         {...text}
         data-mark-label
       >
-        41
+        42
       </text>
 
       {/* Gap callout */}
@@ -287,7 +287,7 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
         {...text}
         data-mark-label
       >
-        2.46
+        3.2
       </text>
 
       {/* Title block */}
@@ -296,7 +296,7 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
           THIMARK — MARK
         </text>
         <text x={16} y={VIEW - 26} {...text} opacity="0.7">
-          SCALE 1:5 · REV 01
+          SCALE 1:5 · REV 02
         </text>
         <text x={16} y={VIEW - 12} {...text} opacity="0.7">
           ENGINEERING · MANUFACTURING · INNOVATION

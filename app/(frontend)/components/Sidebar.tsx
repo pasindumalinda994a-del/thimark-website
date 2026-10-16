@@ -214,15 +214,23 @@ function PlateRails({ edge }: { edge: "open" | "between" }) {
   );
 }
 
+const BRAND_LOGOS = {
+  full: { src: "/brand/logo-full.svg", width: 6987, height: 1812 },
+  horizontal: { src: "/brand/logo-horizontal.svg", width: 6987, height: 1248 },
+} as const;
+
 function BrandLogo({
+  variant = "horizontal",
   className = "",
   imageClassName = "h-6",
   eager = false,
 }: {
+  variant?: keyof typeof BRAND_LOGOS;
   className?: string;
   imageClassName?: string;
   eager?: boolean;
 }) {
+  const logo = BRAND_LOGOS[variant];
   return (
     <Link
       href="/"
@@ -230,10 +238,10 @@ function BrandLogo({
       aria-label="Thimark home"
     >
       <Image
-        src="/brand/logo-wordmark.png"
+        src={logo.src}
         alt="Thimark"
-        width={231}
-        height={41}
+        width={logo.width}
+        height={logo.height}
         className={`w-auto ${imageClassName}`}
         loading={eager ? "eager" : undefined}
       />
@@ -450,8 +458,9 @@ function NavShell({
           <PlateRails edge="open" />
           <div className="sb-logo-lockup">
             <BrandLogo
+              variant="full"
               className="sb-logo"
-              imageClassName="h-7"
+              imageClassName="h-13"
               eager={eagerLogo}
             />
           </div>
@@ -933,7 +942,7 @@ export default function Sidebar() {
       </aside>
 
       <header className="content-plate mn-header fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between bg-cream xl:hidden">
-        <BrandLogo className="px-4" imageClassName="h-7" eager />
+        <BrandLogo variant="horizontal" className="px-4" imageClassName="h-7" eager />
         <button
           type="button"
           className="mn-toggle relative z-10 text-steel"

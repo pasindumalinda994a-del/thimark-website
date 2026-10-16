@@ -12,7 +12,14 @@ import QualitySection, { QualityCred } from "./pagesection/QualitySection";
 import RecognitionSection from "./pagesection/RecognitionSection";
 import StorySection from "./pagesection/StorySection";
 import VisionMissionSection from "./pagesection/VisionMissionSection";
-import { HOW_WE_WORK, JOURNEY, PRACTICES, PRINCIPLES, QUALITY } from "./pagesection/about";
+import {
+  HOW_WE_WORK,
+  JOURNEY,
+  LEADERSHIP,
+  PRACTICES,
+  PRINCIPLES,
+  QUALITY,
+} from "./pagesection/about";
 
 const SEO = {
   title: "About Thimark | ISO 9001 Engineering Company, Sri Lanka",
@@ -79,7 +86,7 @@ export default function AboutPage() {
       </div>
       <div className={CREAM}>
         <SectionBreak tone="page" />
-        <LeadershipSection />
+        <LeadershipSection glyphs={isoGlyphs(LEADERSHIP.leaders, "ld-glyph-mark")} />
       </div>
     </main>
   );

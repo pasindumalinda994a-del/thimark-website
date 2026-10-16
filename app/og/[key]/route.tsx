@@ -40,7 +40,7 @@ const BRAND = "#8a151c";
 export async function GET(_request: Request, { params }: { params: Promise<{ key: string }> }) {
   const { key } = await params;
   const card = CARDS[key as OgKey] ?? CARDS.default;
-  const logo = await readFile(join(process.cwd(), "public/brand/logo-wordmark.png"));
+  const logo = await readFile(join(process.cwd(), "public/brand/logo-horizontal.png"));
   const logoSrc = `data:image/png;base64,${logo.toString("base64")}`;
 
   return new ImageResponse(

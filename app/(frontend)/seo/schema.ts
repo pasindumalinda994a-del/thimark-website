@@ -45,9 +45,9 @@ export function organizationNode(): Node {
     slogan: COMPANY.statement,
     logo: {
       "@type": "ImageObject",
-      url: absoluteUrl("/brand/logo-wordmark.png"),
-      width: 231,
-      height: 41,
+      url: absoluteUrl("/brand/logo-square.png"),
+      width: 512,
+      height: 512,
     },
     image: absoluteUrl("/home-images/about-workshop.png"),
     telephone: "+94112051944",

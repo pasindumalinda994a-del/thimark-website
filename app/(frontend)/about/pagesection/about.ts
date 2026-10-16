@@ -15,9 +15,9 @@ export const HERO = {
   supporting: ["Proudly Sri Lankan.", "Driven by Engineering.", "Built on Trust."],
   cta: { label: "Discover Our Story", href: "#story" } satisfies Link,
   image: {
-    src: "/home-images/hero-bg.png",
+    src: "/aboutimages/About Hero1.jpg",
     alt: "Thimark machinists and fabricators at work across the factory floor",
-    objectPosition: "50% 58%",
+    objectPosition: "50% 40%",
   } satisfies Media,
   caption: ["Fig. 01", "Thimark Technocreations (Pvt) Ltd"],
 } as const;
@@ -36,9 +36,9 @@ export const STORY = {
     "Today our work spans OEM motorcycle components, heavy steel fabrication, industrial machinery, engineering development and surface finishing, brought together to solve complex manufacturing challenges.",
   ],
   media: {
-    src: "/home-images/about-workshop.png",
+    src: "/aboutimages/About Hero2.jpg",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
-    objectPosition: "50% 42%",
+    objectPosition: "50% 50%",
   } satisfies Media,
   scopeLabel: "Our Work Today",
   scope: [
@@ -364,7 +364,8 @@ export const LEADERSHIP = {
       initials: "TM",
       role: "Chairman, Managing Director & Co-Founder",
       bio: "Providing engineering leadership and strategic direction, with a commitment to advancing Sri Lankan manufacturing and engineering capability.",
-      /** Set to a /public path to replace the monogram placeholder. */
+      icon: "man" as IsoIcon,
+      /** Set to a /public path to replace the role glyph. */
       portrait: "" as string,
       portraitAlt: "Portrait of Tharanga Marasinghe, Chairman, Managing Director and Co-Founder of Thimark",
     },
@@ -376,6 +377,7 @@ export const LEADERSHIP = {
       initials: "AI",
       role: "Director",
       bio: "Supporting the company\u2019s leadership and continued organizational development.",
+      icon: "woman" as IsoIcon,
       portrait: "" as string,
       portraitAlt: "Portrait of Achala Iroshini, Director of Thimark",
     },
@@ -387,6 +389,7 @@ export const LEADERSHIP = {
       initials: "TH",
       role: "Factory Manager",
       bio: "Overseeing factory operations and supporting efficient, coordinated manufacturing activities.",
+      icon: "man" as IsoIcon,
       portrait: "" as string,
       portraitAlt: "Portrait of Thushara Marasinghe, Factory Manager of Thimark",
     },
@@ -398,6 +401,7 @@ export const LEADERSHIP = {
       initials: "KR",
       role: "Production Manager",
       bio: "Supporting production planning and execution to maintain manufacturing consistency and meet operational requirements.",
+      icon: "man" as IsoIcon,
       portrait: "" as string,
       portraitAlt: "Portrait of Kadeesha Rathnayake, Production Manager of Thimark",
     },

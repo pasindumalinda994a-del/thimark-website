@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useLenis } from "lenis/react";
@@ -15,8 +16,8 @@ const COLORS = {
   silver: "#c0c0c0",
 } as const;
 
-const MARK_W = 78;
-const MARK_H = 100;
+const MARK_W = 80;
+const MARK_H = 104;
 const COPY_GAP = 32;
 
 function xTo(from: number, target: number) {
@@ -172,12 +173,12 @@ export default function PreLoading() {
       const pos = {
         vOuterL: mx - 1,
         vInnerL: mx + 36,
-        vInnerR: mx + 41,
-        vOuterR: mx + 78,
+        vInnerR: mx + 44,
+        vOuterR: mx + 80,
         hOuterT: my - 1,
-        hInnerT: my + 47,
-        hInnerB: my + 52,
-        hOuterB: my + 100,
+        hInnerT: my + 48,
+        hInnerB: my + 56,
+        hOuterB: my + 104,
       };
 
       gsap.set(mark, { left: mx, top: my, x: 0, y: 0, xPercent: 0, yPercent: 0 });
@@ -360,12 +361,12 @@ export default function PreLoading() {
 
       <div
         data-mark
-        className="absolute top-0 left-0 z-20 grid h-[100px] w-[78px] grid-cols-2 grid-rows-2 gap-[6px]"
+        className="absolute top-0 left-0 z-20 grid h-[104px] w-[80px] grid-cols-2 grid-rows-2 gap-[8px]"
       >
-        <span data-cell="tl" className="h-[47px] w-[36px] bg-silver opacity-0" />
-        <span data-cell="tr" className="h-[47px] w-[36px] bg-silver opacity-0" />
-        <span data-cell="bl" className="h-[47px] w-[36px] bg-silver opacity-0" />
-        <span data-cell="br" className="h-[47px] w-[36px] bg-silver opacity-0" />
+        <span data-cell="tl" className="h-[48px] w-[36px] bg-silver opacity-0" />
+        <span data-cell="tr" className="h-[48px] w-[36px] bg-silver opacity-0" />
+        <span data-cell="bl" className="h-[48px] w-[36px] bg-silver opacity-0" />
+        <span data-cell="br" className="h-[48px] w-[36px] bg-silver opacity-0" />
       </div>
 
       <div
@@ -381,9 +382,16 @@ export default function PreLoading() {
         <p data-word="innovation" className={WORD_CLASS}>
           INNOVATION
         </p>
-        <p data-brand className={WORD_CLASS}>
-          THIMARK
-        </p>
+        <div data-brand className="absolute inset-0 flex justify-center">
+          <Image
+            src="/brand/logo-wordmark.svg"
+            alt="Thimark"
+            width={5819}
+            height={936}
+            loading="eager"
+            className="h-full w-auto"
+          />
+        </div>
       </div>
 
       <p

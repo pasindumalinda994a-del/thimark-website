@@ -15,7 +15,7 @@ export const HERO = {
   supporting: ["Proudly Sri Lankan.", "Driven by Engineering.", "Built on Trust."],
   cta: { label: "Discover Our Story", href: "#story" } satisfies Link,
   image: {
-    src: "/pages/about/hero-1.jpg",
+    src: "/pages/about/about-hero.webp",
     alt: "Thimark machinists and fabricators at work across the factory floor",
     objectPosition: "50% 40%",
   } satisfies Media,

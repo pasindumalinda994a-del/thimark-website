@@ -12,7 +12,7 @@ import { scrollToSection } from "@/app/(frontend)/components/SmoothScroll";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-const STEEL = "#575757";
+const STEEL = "#3A3D42";
 const MARK_W = 78;
 const MARK_H = 100;
 const NAV_TIMEOUT_MS = 2500;

@@ -32,10 +32,10 @@ const CARDS: Record<OgKey, { kicker: string; title: string }> = {
   },
 };
 
-const CREAM = "#f4f4ed";
-const STEEL = "#575757";
-const SILVER = "#c0c0c0";
-const BRAND = "#8a151c";
+const CREAM = "#F1EDE3";
+const STEEL = "#3A3D42";
+const SILVER = "#A8ADB4";
+const BRAND = "#6E1218";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ key: string }> }) {
   const { key } = await params;

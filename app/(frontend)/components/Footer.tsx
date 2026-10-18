@@ -16,6 +16,7 @@ import { RAQ_LINK } from "@/app/(frontend)/components/nav";
 import { scheduleScrollRefresh } from "@/app/(frontend)/components/refreshScroll";
 import {
   COMPANY,
+  CRAFTED_BY,
   FOOTER_NAV,
   LEGAL_LINKS,
   RESOURCE_LINKS,
@@ -318,6 +319,18 @@ export default function Footer() {
 
         <p className="footer-legal-copy index-tag text-steel/70">
           © {year} {COMPANY.name} · All rights reserved
+          <span aria-hidden> · </span>
+          <span className="footer-legal-credit">
+            Crafted by{" "}
+            <a
+              href={CRAFTED_BY.href}
+              className="footer-legal-credit-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {CRAFTED_BY.label}
+            </a>
+          </span>
         </p>
         <p className="footer-legal-stamp index-tag text-steel/70">
           <span>{COMPANY.locality}</span>

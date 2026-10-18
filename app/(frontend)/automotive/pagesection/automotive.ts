@@ -20,7 +20,7 @@ export const HERO: HeroCopy = {
   cta: { label: "Request a Component Quote", href: "/enquire?service=automotive" },
   secondary: { label: "See the Component Range", href: "#product-range" },
   image: {
-    src: "/home-images/two-core-automotive.jpeg",
+    src: "/pages/automotive/two-core-automotive.jpeg",
     alt: "Engineers assembling a motorcycle frame on the production line",
     objectPosition: "50% 50%",
   },
@@ -41,7 +41,7 @@ export const RANGE = {
     "Our range covers structural supports, protective guards, mounting brackets and functional accessories, each made to its design, dimensions and assembly application.",
   ],
   media: {
-    src: "/home-images/two-core-automotive.png",
+    src: "/pages/automotive/two-core-automotive.png",
     alt: "Precision OEM motorcycle components laid out on a Thimark workshop bench",
     objectPosition: "50% 50%",
   } satisfies Media,
@@ -111,7 +111,7 @@ export const OEM = {
       "Our approach emphasizes dependable production, process consistency and collaboration with our partners to meet application-specific requirements.",
     ],
     media: {
-      src: "/home-images/about-automotive-manufacturing.jpeg",
+      src: "/pages/automotive/about-automotive-manufacturing.jpeg",
       alt: "Engineers assembling motorcycle components on the Thimark shop floor",
       objectPosition: "42% 40%",
     } satisfies Media,
@@ -201,7 +201,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Sheet metal", "Tubes", "Profiles"],
     icon: "laser",
     media: {
-      src: "/home-images/about-industrial-automation.jpeg",
+      src: "/pages/automotive/about-industrial-automation.jpeg",
       alt: "Production machinery prepared for cutting operations at Thimark",
       objectPosition: "38% 45%",
     },
@@ -214,7 +214,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Press brake", "Pipe bending", "Stamping"],
     icon: "mitre",
     media: {
-      src: "/home-images/quality-lean-production.jpeg",
+      src: "/pages/automotive/quality-lean-production.jpeg",
       alt: "Operators forming parts on an organized production line",
       objectPosition: "38% 42%",
     },
@@ -227,7 +227,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Drilling", "Threading", "Countersinking", "Grinding", "Edge finishing"],
     icon: "precision",
     media: {
-      src: "/home-images/about-iso-precision.jpeg",
+      src: "/pages/automotive/about-iso-precision.jpeg",
       alt: "Engineer inspecting a precision-machined component",
       objectPosition: "48% 40%",
     },
@@ -240,7 +240,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Welding", "Robotic welding", "Resistance spot welding"],
     icon: "flame",
     media: {
-      src: "/home-images/about-steel-fabrication.jpeg",
+      src: "/pages/automotive/about-steel-fabrication.jpeg",
       alt: "Fabricators welding steel assemblies in the Thimark workshop",
       objectPosition: "50% 45%",
     },

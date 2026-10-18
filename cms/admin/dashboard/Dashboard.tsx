@@ -69,39 +69,49 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
   const weekAgo = new Date(now - 7 * DAY).toISOString();
   const scoped = { overrideAccess: false, user: req.user, req } as const;
 
-  const [newEnquiries, weekEnquiries, published, drafts, photos, recentEnquiries, recentNews, recentPhotos] =
-    await Promise.all([
-      payload.count({ collection: "enquiries", where: { status: { equals: "new" } }, ...scoped }),
-      payload.count({ collection: "enquiries", where: { createdAt: { greater_than_equal: weekAgo } }, ...scoped }),
-      payload.count({ collection: "news", where: { _status: { equals: "published" } }, ...scoped }),
-      payload.count({ collection: "news", where: { _status: { equals: "draft" } }, ...scoped }),
-      payload.count({ collection: "gallery", ...scoped }),
-      payload.find({
-        collection: "enquiries",
-        sort: "-createdAt",
-        limit: 6,
-        depth: 0,
-        select: { reference: true, name: true, company: true, topic: true, status: true, createdAt: true },
-        ...scoped,
-      }),
-      payload.find({
-        collection: "news",
-        sort: "-updatedAt",
-        limit: 5,
-        depth: 0,
-        draft: true,
-        select: { title: true, updatedAt: true, _status: true },
-        ...scoped,
-      }),
-      payload.find({
-        collection: "gallery",
-        sort: "-updatedAt",
-        limit: 5,
-        depth: 0,
-        select: { title: true, updatedAt: true },
-        ...scoped,
-      }),
-    ]);
+  const [
+    newEnquiries,
+    weekEnquiries,
+    published,
+    drafts,
+    photos,
+    unlinked,
+    recentEnquiries,
+    recentNews,
+    recentPhotos,
+  ] = await Promise.all([
+    payload.count({ collection: "enquiries", where: { status: { equals: "new" } }, ...scoped }),
+    payload.count({ collection: "enquiries", where: { createdAt: { greater_than_equal: weekAgo } }, ...scoped }),
+    payload.count({ collection: "news", where: { _status: { equals: "published" } }, ...scoped }),
+    payload.count({ collection: "news", where: { _status: { equals: "draft" } }, ...scoped }),
+    payload.count({ collection: "gallery", ...scoped }),
+    payload.count({ collection: "gallery", where: { destination: { equals: "none" } }, ...scoped }),
+    payload.find({
+      collection: "enquiries",
+      sort: "-createdAt",
+      limit: 6,
+      depth: 0,
+      select: { reference: true, name: true, company: true, topic: true, status: true, createdAt: true },
+      ...scoped,
+    }),
+    payload.find({
+      collection: "news",
+      sort: "-updatedAt",
+      limit: 5,
+      depth: 0,
+      draft: true,
+      select: { title: true, updatedAt: true, _status: true },
+      ...scoped,
+    }),
+    payload.find({
+      collection: "gallery",
+      sort: "-updatedAt",
+      limit: 5,
+      depth: 0,
+      select: { title: true, updatedAt: true },
+      ...scoped,
+    }),
+  ]);
 
   const recent: RecentItem[] = [
     ...recentNews.docs.map((doc) => ({
@@ -132,10 +142,18 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
   }).format(new Date(now));
 
   const waiting = newEnquiries.totalDocs;
+  const unlinkedCount = unlinked.totalDocs;
   const lede =
     waiting === 0
-      ? "The inbox is clear. A good moment to share some news."
+      ? unlinkedCount
+        ? `Inbox is clear. ${unlinkedCount} gallery photo${unlinkedCount === 1 ? "" : "s"} still unlinked — add a page or story when you can.`
+        : "The inbox is clear. Publish news and it appears in the gallery automatically."
       : `${waiting} new ${waiting === 1 ? "enquiry is" : "enquiries are"} waiting for a reply.`;
+
+  const galleryHint =
+    unlinkedCount > 0
+      ? `${unlinkedCount} unlinked — add a page or story`
+      : "Linked to pages & news on /gallery";
 
   return (
     <div className="tm-dash gutter--left gutter--right">
@@ -153,7 +171,7 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
             Write news
           </Link>
           <Link href={`${admin}/collections/gallery/create`} className="tm-btn">
-            Add photo
+            Add gallery link
           </Link>
           <a href="/" target="_blank" rel="noreferrer" className="tm-btn tm-btn--ghost">
             View site ↗
@@ -184,8 +202,13 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
         <StatCard
           label="Gallery photos"
           value={photos.totalDocs}
-          hint="Shown on /gallery"
-          href={`${admin}/collections/gallery`}
+          hint={galleryHint}
+          href={
+            unlinkedCount
+              ? `${admin}/collections/gallery?where[destination][equals]=none`
+              : `${admin}/collections/gallery`
+          }
+          tone={unlinkedCount ? "brand" : undefined}
         />
       </section>
 

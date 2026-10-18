@@ -27,13 +27,14 @@ const GALLERY_TARGETS: Target[] = [{ path: "/gallery" }];
 
 export const revalidateNews: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
   if (doc?._status === "published" || previousDoc?._status === "published") {
-    await revalidate(req, NEWS_TARGETS);
+    // Covers may sync into Gallery; refresh both surfaces.
+    await revalidate(req, [...NEWS_TARGETS, ...GALLERY_TARGETS]);
   }
   return doc;
 };
 
 export const revalidateNewsDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
-  await revalidate(req, NEWS_TARGETS);
+  await revalidate(req, [...NEWS_TARGETS, ...GALLERY_TARGETS]);
   return doc;
 };
 

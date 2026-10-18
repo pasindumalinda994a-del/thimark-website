@@ -49,7 +49,7 @@ export function organizationNode(): Node {
       width: 512,
       height: 512,
     },
-    image: absoluteUrl("/home-images/about-workshop.png"),
+    image: absoluteUrl("/pages/home/about-workshop.png"),
     telephone: "+94112051944",
     email: COMPANY.email.label,
     address: {

@@ -110,129 +110,130 @@ function TopicField({
   error?: string;
   onChange: (value: string) => void;
 }) {
-  const rootRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(false);
+  const optionRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const selected = TOPICS.findIndex((item) => item.id === value);
-  const [active, setActive] = useState(selected < 0 ? 0 : selected);
+  const [tabStop, setTabStop] = useState(selected >= 0 ? selected : 0);
+  const [cols, setCols] = useState(1);
 
   useEffect(() => {
-    if (selected >= 0) setActive(selected);
+    setTabStop(selected >= 0 ? selected : 0);
   }, [selected]);
 
   useEffect(() => {
-    if (!open) return;
-    const onPointer = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-    window.addEventListener("pointerdown", onPointer);
-    return () => window.removeEventListener("pointerdown", onPointer);
-  }, [open]);
+    const query = window.matchMedia("(min-width: 768px)");
+    const sync = () => setCols(query.matches ? 2 : 1);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
 
   const choose = (id: TopicId) => {
     onChange(id);
-    setOpen(false);
-    triggerRef.current?.focus();
   };
 
-  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "Escape") {
-      setOpen(false);
+  const moveTo = (index: number) => {
+    const next = Math.max(0, Math.min(TOPICS.length - 1, index));
+    setTabStop(next);
+    optionRefs.current[next]?.focus();
+    choose(TOPICS[next].id);
+  };
+
+  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      moveTo(index + 1);
       return;
     }
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+    if (event.key === "ArrowLeft") {
       event.preventDefault();
-      const from = open ? active : selected;
-      const start = from < 0 ? 0 : from;
-      const next =
-        event.key === "ArrowDown"
-          ? (start + (open ? 1 : 0)) % TOPICS.length
-          : (start - (open ? 1 : 0) + TOPICS.length) % TOPICS.length;
-      setActive(open ? next : start);
-      setOpen(true);
+      moveTo(index - 1);
+      return;
+    }
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      moveTo(index + cols);
+      return;
+    }
+    if (event.key === "ArrowUp") {
+      event.preventDefault();
+      moveTo(index - cols);
       return;
     }
     if (event.key === "Home") {
       event.preventDefault();
-      setActive(0);
-      setOpen(true);
+      moveTo(0);
       return;
     }
     if (event.key === "End") {
       event.preventDefault();
-      setActive(TOPICS.length - 1);
-      setOpen(true);
+      moveTo(TOPICS.length - 1);
       return;
     }
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
-      if (!open) {
-        setActive(selected < 0 ? 0 : selected);
-        setOpen(true);
-      } else {
-        choose(TOPICS[active].id);
-      }
+      choose(TOPICS[index].id);
     }
   };
 
-  const mark = value ? pad2(selected + 1) : open ? pad2(active + 1) : "01–04";
-
   return (
-    <div
-      ref={rootRef}
-      className={`contact-field is-select${value || open ? " is-filled" : ""}${open ? " is-open" : ""}`}
-    >
-      <span id="enquire-topic-label" className="contact-field-label">
-        Topic
-      </span>
-      {error ? (
-        <span id="enquire-topic-error" className="contact-field-error index-tag">
-          {error}
+    <div className={`topic-matrix-wrap${value ? " is-filled" : ""}${error ? " is-invalid" : ""}`}>
+      <div className="topic-matrix-head">
+        <span id="enquire-topic-label" className="topic-matrix-label">
+          Topic
         </span>
-      ) : null}
-      <button
-        ref={triggerRef}
+        {error ? (
+          <span id="enquire-topic-error" className="topic-matrix-error index-tag">
+            {error}
+          </span>
+        ) : value ? (
+          <span className="topic-matrix-hint index-tag" aria-hidden>
+            {pad2(selected + 1)} / {pad2(TOPICS.length)}
+          </span>
+        ) : (
+          <span className="topic-matrix-hint index-tag" id="enquire-topic-hint">
+            Select one
+          </span>
+        )}
+      </div>
+      <div
         id="enquire-topic"
-        type="button"
-        className="contact-control is-upper topic-trigger"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls="enquire-topic-list"
+        role="radiogroup"
         aria-labelledby="enquire-topic-label"
+        aria-required
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? "enquire-topic-error" : undefined}
-        aria-activedescendant={open ? `enquire-topic-${TOPICS[active].id}` : undefined}
-        onClick={() => {
-          setActive(selected < 0 ? 0 : selected);
-          setOpen((current) => !current);
+        aria-describedby={error ? "enquire-topic-error" : !value ? "enquire-topic-hint" : undefined}
+        className="topic-matrix"
+        tabIndex={-1}
+        onFocus={(event) => {
+          if (event.target !== event.currentTarget) return;
+          optionRefs.current[tabStop]?.focus();
         }}
-        onKeyDown={onKeyDown}
       >
-        <span className="topic-value">{value ? TOPICS[selected]?.label : ""}</span>
-        <span className="topic-index index-tag">{mark}</span>
-      </button>
-      <ul id="enquire-topic-list" className="topic-menu" role="listbox" aria-labelledby="enquire-topic-label" hidden={!open}>
         {TOPICS.map((item, index) => {
           const isSelected = value === item.id;
           return (
-            <li key={item.id} role="presentation">
-              <button
-                id={`enquire-topic-${item.id}`}
-                type="button"
-                role="option"
-                aria-selected={isSelected}
-                tabIndex={-1}
-                className={`topic-option${index === active ? " is-active" : ""}${isSelected ? " is-selected" : ""}`}
-                onMouseEnter={() => setActive(index)}
-                onClick={() => choose(item.id)}
-              >
-                <span className="topic-option-index index-tag">{pad2(index + 1)}</span>
-                <span className="topic-option-label">{item.label}</span>
-              </button>
-            </li>
+            <button
+              key={item.id}
+              ref={(node) => {
+                optionRefs.current[index] = node;
+              }}
+              id={`enquire-topic-${item.id}`}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              tabIndex={index === tabStop ? 0 : -1}
+              className={`topic-cell${isSelected ? " is-selected" : ""}`}
+              onClick={() => choose(item.id)}
+              onFocus={() => setTabStop(index)}
+              onKeyDown={(event) => onKeyDown(event, index)}
+            >
+              <span className="topic-cell-mark" aria-hidden />
+              <span className="topic-cell-label">{item.label}</span>
+              <span className="topic-cell-index index-tag">{pad2(index + 1)}</span>
+            </button>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 }
@@ -512,20 +513,20 @@ export default function EnquireView({
     >
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-top hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-5-6 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-6-7 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-7-8 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-work hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-8-9 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-9-10 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-10-11 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-11-foot hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-11-12 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-0 contact-v-12-foot hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-top hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-5-6 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-6-7 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-7-8 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-work hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-8-9 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-9-10 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-10-11 hidden md:block" />
-      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-11-br2 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-11-12 hidden md:block" />
+      <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-12-br2 hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-6 contact-v-br2-foot hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 contact-v-top hidden md:block" />
       <GridLine axis="v" unstyled tone="page" className="v-g1-12 contact-v-5-6 hidden md:block" />
@@ -550,10 +551,6 @@ export default function EnquireView({
       <PlusMark tone="page" className="v-g1-6 contact-y-6 hidden md:block" />
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-12 contact-y-6 hidden md:block" />
 
-      <GridLine data-enquire-rule axis="h" unstyled tone="page" className="h-seg-0-mid contact-y-7 hidden md:block" />
-      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 contact-y-7 hidden md:block" />
-      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-6 contact-y-7 hidden md:block" />
-
       <GridLine data-enquire-rule axis="h" unstyled tone="page" className="h-seg-0-mid contact-y-8 hidden md:block" />
       <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 contact-y-8 hidden md:block" />
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-6 contact-y-8 hidden md:block" />
@@ -569,6 +566,10 @@ export default function EnquireView({
       <GridLine data-enquire-rule axis="h" unstyled tone="page" className="h-seg-0-mid contact-y-11 hidden md:block" />
       <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 contact-y-11 hidden md:block" />
       <PlusMark tone="page" arms={joinRightEdge} className="v-g1-6 contact-y-11 hidden md:block" />
+
+      <GridLine data-enquire-rule axis="h" unstyled tone="page" className="h-seg-0-mid contact-y-12 hidden md:block" />
+      <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-0 contact-y-12 hidden md:block" />
+      <PlusMark tone="page" arms={joinRightEdge} className="v-g1-6 contact-y-12 hidden md:block" />
 
       <GridLine data-enquire-rule axis="h" unstyled tone="page" className="h-seg-mid-12 at-br-2 hidden md:block" />
       <PlusMark tone="page" arms={joinLeftEdge} className="v-g1-6 at-br-2 hidden md:block" />

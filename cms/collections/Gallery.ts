@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { GALLERY_PAGE_OPTIONS } from "../../app/(frontend)/gallery/destinations";
 import { GALLERY_CATEGORIES } from "../../app/(frontend)/gallery/records";
 import { anyone, authenticated } from "../access";
 import { revalidateGallery, revalidateGalleryDelete } from "../hooks/revalidate";
@@ -10,9 +11,10 @@ export const Gallery: CollectionConfig = {
   admin: {
     group: "Content",
     useAsTitle: "title",
-    defaultColumns: ["image", "title", "category", "place", "updatedAt"],
+    defaultColumns: ["image", "title", "destination", "category", "updatedAt"],
     listSearchableFields: ["title", "note", "place"],
-    description: "Photos in the /gallery reel. Drag rows to change the order they appear in.",
+    description:
+      "Each photo on /gallery sends visitors to a site page or news story. Drag rows to change the order. Prefer linking over Unlinked when the photo belongs to content.",
     pagination: { defaultLimit: 50 },
   },
   access: {
@@ -70,6 +72,76 @@ export const Gallery: CollectionConfig = {
       defaultValue: "manufacturing",
       options: GALLERY_CATEGORIES.map((category) => ({ label: category.full, value: category.id })),
       admin: { position: "sidebar" },
+    },
+    {
+      name: "destination",
+      label: "Destination",
+      type: "radio",
+      required: true,
+      defaultValue: "none",
+      options: [
+        { label: "Site page", value: "page" },
+        { label: "News story", value: "news" },
+        { label: "Unlinked (no click-through)", value: "none" },
+      ],
+      admin: {
+        position: "sidebar",
+        layout: "vertical",
+        description:
+          "Where a click on /gallery should go. Unlinked photos stay in the reel but do not open a page.",
+      },
+    },
+    {
+      name: "page",
+      label: "Site page",
+      type: "select",
+      options: GALLERY_PAGE_OPTIONS,
+      admin: {
+        position: "sidebar",
+        condition: (_, siblingData) => siblingData?.destination === "page",
+      },
+      validate: (value: unknown, { siblingData }: { siblingData?: { destination?: string } }) => {
+        if (siblingData?.destination === "page" && !value) return "Pick a site page";
+        return true;
+      },
+    },
+    {
+      name: "news",
+      label: "News story",
+      type: "relationship",
+      relationTo: "news",
+      admin: {
+        position: "sidebar",
+        description: "Prefer a published story so the link works for visitors.",
+        condition: (_, siblingData) => siblingData?.destination === "news",
+      },
+      validate: (value: unknown, { siblingData }: { siblingData?: { destination?: string } }) => {
+        if (siblingData?.destination === "news" && !value) return "Pick a news story";
+        return true;
+      },
+    },
+    {
+      name: "sourceNews",
+      label: "Synced from news",
+      type: "relationship",
+      relationTo: "news",
+      index: true,
+      admin: {
+        position: "sidebar",
+        readOnly: true,
+        description: "Filled automatically when a news cover or story photo is published.",
+        condition: (_, siblingData) => Boolean(siblingData?.sourceNews),
+      },
+    },
+    {
+      name: "sourceKey",
+      type: "text",
+      unique: true,
+      index: true,
+      admin: {
+        hidden: true,
+        readOnly: true,
+      },
     },
   ],
 };

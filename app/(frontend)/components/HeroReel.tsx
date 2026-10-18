@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { preload } from "react-dom";
 import Image from "next/image";
 import gsap from "gsap";
@@ -8,12 +8,28 @@ import { useGSAP } from "@gsap/react";
 import {
   HERO_CLIP_DURATION,
   HERO_CLIPS,
+  type HeroVideo,
 } from "@/app/(frontend)/homesections/heroClips";
 
 gsap.registerPlugin(useGSAP);
 
 const CROSSFADE = 0.6;
 const CAPTION_SHIFT = 8;
+
+type NetworkInformationLike = {
+  saveData?: boolean;
+  effectiveType?: string;
+};
+
+function prefersPosterOnly() {
+  if (typeof navigator === "undefined") return false;
+  const connection = (navigator as Navigator & { connection?: NetworkInformationLike })
+    .connection;
+  if (!connection) return false;
+  if (connection.saveData) return true;
+  const type = connection.effectiveType;
+  return type === "slow-2g" || type === "2g";
+}
 
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -51,6 +67,20 @@ function StationPlus() {
   );
 }
 
+function ClipPoster({ src, priority }: { src: string; priority?: boolean }) {
+  return (
+    <Image
+      src={src}
+      alt=""
+      fill
+      priority={priority}
+      loading={priority ? "eager" : "lazy"}
+      sizes="100vw"
+      className="object-cover"
+    />
+  );
+}
+
 export default function HeroReel() {
   preload(HERO_CLIPS[0].poster, { as: "image", fetchPriority: "high" });
 
@@ -59,9 +89,21 @@ export default function HeroReel() {
   const layersRef = useRef<(HTMLDivElement | null)[]>([]);
   const fillsRef = useRef<(HTMLSpanElement | null)[]>([]);
   const videosRef = useRef<(HTMLVideoElement | null)[]>([]);
+  const postersRef = useRef<(HTMLDivElement | null)[]>([]);
   const goToRef = useRef<(index: number) => void>(() => {});
+  const beginVideoRef = useRef<() => void>(() => {});
+  const sourcesArmedRef = useRef(false);
   const skipCaption = useRef(true);
   const [active, setActive] = useState(0);
+  const [videoEnabled] = useState(() => !prefersPosterOnly());
+  /** Sources stay unmounted until the site preloader finishes so Blob video cannot race boot. */
+  const [sourcesArmed, setSourcesArmed] = useState(false);
+
+  useEffect(() => {
+    if (!sourcesArmed) return;
+    sourcesArmedRef.current = true;
+    beginVideoRef.current();
+  }, [sourcesArmed]);
 
   useGSAP(
     () => {
@@ -98,18 +140,29 @@ export default function HeroReel() {
     gsap.set(layers[0], { autoAlpha: 1 });
     gsap.set(layers.slice(1), { autoAlpha: 0 });
     gsap.set(fills, { "--fill": 0 });
+    postersRef.current.forEach((poster) => {
+      if (poster) gsap.set(poster, { autoAlpha: 1 });
+    });
 
     const reducedQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     let reduced = reducedQuery.matches;
+    const posterOnly = !videoEnabled;
     let visible = true;
     let pageHidden = document.hidden;
     let behindPreloader =
       document.documentElement.dataset.preloaded !== "true" &&
       document.querySelector("[data-preloader]") !== null;
+    /** Preloader finished — video network is allowed (sources may still be mounting). */
+    let networkAllowed = false;
     let progressTween: gsap.core.Tween | undefined;
     let detachMedia: (() => void) | undefined;
     const activeIndex = { n: 0 };
     let goTo: (index: number) => void = () => {};
+
+    const clipSrc = (index: number): HeroVideo | null => {
+      if (posterOnly || reduced) return null;
+      return HERO_CLIPS[index]?.src ?? null;
+    };
 
     const canRun = () => visible && !pageHidden && !reduced && !behindPreloader;
 
@@ -120,6 +173,16 @@ export default function HeroReel() {
         else if (i === index) gsap.set(fill, { "--fill": currentScale });
         else gsap.set(fill, { "--fill": 0 });
       });
+    };
+
+    const showPoster = (index: number) => {
+      const poster = postersRef.current[index];
+      if (poster) gsap.set(poster, { autoAlpha: 1 });
+    };
+
+    const hidePoster = (index: number) => {
+      const poster = postersRef.current[index];
+      if (poster) gsap.to(poster, { autoAlpha: 0, duration: 0.25, overwrite: "auto" });
     };
 
     const stopClip = () => {
@@ -135,6 +198,7 @@ export default function HeroReel() {
     const startTimer = (index: number) => {
       const fill = fills[index];
       if (!fill) return;
+      showPoster(index);
       progressTween?.kill();
       progressTween = gsap.fromTo(
         fill,
@@ -148,15 +212,31 @@ export default function HeroReel() {
       );
     };
 
+    const preloadAround = (index: number) => {
+      if (!networkAllowed || !sourcesArmedRef.current || posterOnly) return;
+      const next = (index + 1) % HERO_CLIPS.length;
+      videosRef.current.forEach((video, i) => {
+        if (!video || !clipSrc(i)) return;
+        const shouldLoad = i === index || i === next;
+        video.preload = shouldLoad ? "auto" : "none";
+        if (shouldLoad && video.readyState < HTMLMediaElement.HAVE_CURRENT_DATA) {
+          video.load();
+        }
+      });
+    };
+
     const startProgress = (index: number) => {
       const fill = fills[index];
       const video = videosRef.current[index];
-      const clip = HERO_CLIPS[index];
+      const src = clipSrc(index);
 
       setFills(index, 0);
+      showPoster(index);
       if (!canRun() || !fill) return;
 
-      if (clip.src && video) {
+      if (src && video && networkAllowed && sourcesArmedRef.current) {
+        preloadAround(index);
+
         const onTimeUpdate = () => {
           const duration = video.duration;
           if (!duration || !Number.isFinite(duration)) return;
@@ -165,21 +245,41 @@ export default function HeroReel() {
         const onEnded = () => {
           goTo(index + 1);
         };
-        video.currentTime = 0;
-        video.addEventListener("timeupdate", onTimeUpdate);
-        video.addEventListener("ended", onEnded);
-        detachMedia = () => {
-          video.removeEventListener("timeupdate", onTimeUpdate);
-          video.removeEventListener("ended", onEnded);
+        const onPlaying = () => {
+          if (activeIndex.n === index) hidePoster(index);
         };
-        const play = video.play();
-        if (play) {
-          play.catch(() => {
+        const onCanPlay = () => {
+          if (activeIndex.n !== index || !canRun()) return;
+          void video.play().catch(() => {
             if (activeIndex.n !== index) return;
             detachMedia?.();
             detachMedia = undefined;
             startTimer(index);
           });
+        };
+
+        detachMedia = () => {
+          video.removeEventListener("timeupdate", onTimeUpdate);
+          video.removeEventListener("ended", onEnded);
+          video.removeEventListener("playing", onPlaying);
+          video.removeEventListener("canplay", onCanPlay);
+        };
+
+        video.addEventListener("timeupdate", onTimeUpdate);
+        video.addEventListener("ended", onEnded);
+        video.addEventListener("playing", onPlaying);
+        video.addEventListener("canplay", onCanPlay);
+
+        try {
+          video.currentTime = 0;
+        } catch {
+          // Seeking before metadata is ready can throw; load() handles it.
+        }
+
+        if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+          onCanPlay();
+        } else {
+          video.load();
         }
         return;
       }
@@ -187,12 +287,23 @@ export default function HeroReel() {
       startTimer(index);
     };
 
-    const preloadAround = (index: number) => {
-      const next = (index + 1) % HERO_CLIPS.length;
-      videosRef.current.forEach((video, i) => {
-        if (!video) return;
-        video.preload = i === index || i === next ? "auto" : "none";
-      });
+    const beginVideo = () => {
+      if (!networkAllowed || reduced || posterOnly) return;
+      stopClip();
+      preloadAround(activeIndex.n);
+      if (canRun()) startProgress(activeIndex.n);
+    };
+    beginVideoRef.current = beginVideo;
+
+    /** Allow video network and mount <source> tags; playback starts after sources commit. */
+    const armNetwork = () => {
+      behindPreloader = false;
+      networkAllowed = true;
+      if (sourcesArmedRef.current) {
+        beginVideo();
+        return;
+      }
+      setSourcesArmed(true);
     };
 
     goTo = contextSafe((index: number) => {
@@ -204,7 +315,7 @@ export default function HeroReel() {
       const nextLayer = layers[next];
 
       stopClip();
-      preloadAround(next);
+      if (networkAllowed && sourcesArmedRef.current) preloadAround(next);
 
       if (!same && prevLayer && nextLayer) {
         gsap.to(prevLayer, {
@@ -226,6 +337,7 @@ export default function HeroReel() {
 
       if (reduced) {
         setFills(next, 1);
+        showPoster(next);
         return;
       }
 
@@ -246,7 +358,7 @@ export default function HeroReel() {
         return;
       }
       const video = videosRef.current[activeIndex.n];
-      if (HERO_CLIPS[activeIndex.n].src && video) {
+      if (clipSrc(activeIndex.n) && video && networkAllowed && sourcesArmedRef.current) {
         void video.play().catch(() => {});
         return;
       }
@@ -260,6 +372,7 @@ export default function HeroReel() {
         gsap.set(layers, { autoAlpha: 0 });
         gsap.set(layers[activeIndex.n], { autoAlpha: 1 });
         setFills(activeIndex.n, 1);
+        showPoster(activeIndex.n);
         return;
       }
       if (canRun()) resumePlayback();
@@ -271,15 +384,20 @@ export default function HeroReel() {
       else resumePlayback();
     };
 
-    if (reduced) setFills(0, 1);
-    else startProgress(0);
-
     const onPreloadDone = () => {
       if (!behindPreloader) return;
-      behindPreloader = false;
-      if (!reduced) startProgress(activeIndex.n);
+      armNetwork();
     };
     window.addEventListener("thimark:preload-done", onPreloadDone);
+
+    if (reduced) {
+      setFills(0, 1);
+    } else if (!behindPreloader) {
+      armNetwork();
+    } else {
+      // Poster-only timer while the site preloader owns the network.
+      startProgress(0);
+    }
 
     const media = mediaRef.current;
     const observer = new IntersectionObserver(
@@ -300,6 +418,7 @@ export default function HeroReel() {
       window.removeEventListener("thimark:preload-done", onPreloadDone);
       document.removeEventListener("visibilitychange", onVisibility);
       reducedQuery.removeEventListener("change", syncMotion);
+      beginVideoRef.current = () => {};
       stopClip();
     };
   });
@@ -307,41 +426,61 @@ export default function HeroReel() {
   return (
     <>
       <div ref={mediaRef} className="hero-reel-media">
-        {HERO_CLIPS.map((item, index) => (
-          <div
-            key={item.id}
-            ref={(node) => {
-              layersRef.current[index] = node;
-            }}
-            className={`absolute inset-0 ${index === 0 ? "opacity-100" : "opacity-0"}`}
-          >
-            {item.src ? (
-              <video
-                ref={(node) => {
-                  videosRef.current[index] = node;
-                }}
-                poster={item.poster}
-                muted
-                playsInline
-                preload={index === 0 ? "auto" : "none"}
-                aria-label={item.alt}
-                className="h-full w-full object-cover"
-              >
-                <source src={item.src.webm} type="video/webm" />
-                <source src={item.src.mp4} type="video/mp4" />
-              </video>
-            ) : (
-              <Image
-                src={item.poster}
-                alt=""
-                fill
-                loading="eager"
-                sizes="100vw"
-                className="object-cover"
-              />
-            )}
-          </div>
-        ))}
+        {HERO_CLIPS.map((item, index) => {
+          const useVideo = Boolean(item.src) && videoEnabled;
+
+          return (
+            <div
+              key={item.id}
+              ref={(node) => {
+                layersRef.current[index] = node;
+              }}
+              className={`absolute inset-0 ${index === 0 ? "opacity-100" : "opacity-0"}`}
+            >
+              {useVideo && item.src ? (
+                <>
+                  <video
+                    ref={(node) => {
+                      videosRef.current[index] = node;
+                    }}
+                    muted
+                    playsInline
+                    preload="none"
+                    aria-label={item.alt}
+                    className="h-full w-full object-cover"
+                  >
+                    {sourcesArmed ? (
+                      <>
+                        {item.src.webm ? (
+                          <source src={item.src.webm} type="video/webm" />
+                        ) : null}
+                        <source src={item.src.mp4} type="video/mp4" />
+                      </>
+                    ) : null}
+                  </video>
+                  <div
+                    ref={(node) => {
+                      postersRef.current[index] = node;
+                    }}
+                    className="absolute inset-0"
+                  >
+                    <ClipPoster src={item.poster} priority={index === 0} />
+                  </div>
+                </>
+              ) : (
+                <div
+                  ref={(node) => {
+                    postersRef.current[index] = node;
+                  }}
+                  className="absolute inset-0"
+                >
+                  <ClipPoster src={item.poster} priority={index === 0} />
+                </div>
+              )}
+            </div>
+          );
+        })}
+        <div className="hero-reel-veil" aria-hidden />
       </div>
 
       <div className="hero-reel-scrim" aria-hidden />

@@ -9,8 +9,7 @@ export type GalleryStripHandle = {
 };
 
 const HEIGHT = 1;
-const WIDTHS = [1, 1.35, 1.12, 1.48, 1.2];
-const ASPECT = 1.45;
+const WIDTH = 1.45;
 const GAP = 0.32;
 const CREAM = 0xf4f4ed;
 
@@ -72,9 +71,7 @@ export default function GalleryStrip({
 
       const pinned = slides.length < 2;
       const total = slides.length;
-      const widths = slides.map(
-        (_, index) => WIDTHS[index % WIDTHS.length] * ASPECT,
-      );
+      const widths = slides.map(() => WIDTH);
       const offsets: number[] = [];
       let stack = 0;
 
@@ -368,7 +365,9 @@ export default function GalleryStrip({
           raycaster.setFromCamera(pointer, camera);
           const hit = raycaster.intersectObjects(meshes)[0];
           const id = hit?.object.userData.id as string | undefined;
-          if (id) onOpenRef.current(id);
+          if (!id) return;
+          const frame = framesRef.current.find((item) => item.id === id);
+          if (frame?.href) onOpenRef.current(id);
           return;
         }
 
@@ -460,9 +459,10 @@ export default function GalleryStrip({
         distortionAmount +=
           (distortionTarget - distortionAmount) * config.distortionSmoothing;
 
+        // Same popdown (negative Z) for forward and reverse scroll.
         const strength = pinned
           ? 0
-          : config.distortionStrength * distortionAmount * scrollDirection;
+          : -config.distortionStrength * distortionAmount;
         place(strength);
         renderer.render(scene, camera);
 

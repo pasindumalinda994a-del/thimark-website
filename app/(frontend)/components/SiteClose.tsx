@@ -50,7 +50,7 @@ const QUOTE_COPY: Record<string, QuoteCopy> = {
 export default function SiteClose() {
   const pathname = usePathname() ?? "/";
   const path = pathname.length > 1 ? pathname.replace(/\/$/, "") : pathname;
-  if (path === "/gallery") return <Footer />;
+  if (path === "/gallery") return null;
 
   const showQuote = path !== "/enquire";
 

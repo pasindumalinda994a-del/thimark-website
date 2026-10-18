@@ -7,7 +7,7 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Public files keep stable names, so cache them for a day and refresh in the background.
 const PUBLIC_ASSET_CACHE = "public, max-age=86400, stale-while-revalidate=604800";
-const PUBLIC_ASSET_DIRS = ["brand", "news", "home-images", "products", "videos", "Gallery Images"];
+const PUBLIC_ASSET_DIRS = ["brand", "pages"];
 
 const nextConfig: NextConfig = {
   images: {

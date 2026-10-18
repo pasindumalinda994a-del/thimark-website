@@ -15,8 +15,8 @@ import DirectionMark, { type MarkDirection } from "@/app/(frontend)/components/D
 
 gsap.registerPlugin(useGSAP);
 
-const STEEL = "#575757";
-const CREAM = "#f4f4ed";
+const STEEL = "#3A3D42";
+const CREAM = "#F1EDE3";
 const TARGET_CELL_W = 14;
 const TARGET_CELL_H = 22;
 const MAX_CELLS = 120;

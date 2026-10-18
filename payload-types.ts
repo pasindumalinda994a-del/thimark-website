@@ -310,7 +310,7 @@ export interface Media {
   };
 }
 /**
- * Photos in the /gallery reel. Drag rows to change the order they appear in.
+ * Each photo on /gallery sends visitors to a site page or news story. Drag rows to change the order. Prefer linking over Unlinked when the photo belongs to content.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "gallery".
@@ -333,6 +333,20 @@ export interface Gallery {
   note?: string | null;
   fit: 'cover' | 'contain';
   category: 'manufacturing' | 'projects' | 'recognition' | 'people';
+  /**
+   * Where a click on /gallery should go. Unlinked photos stay in the reel but do not open a page.
+   */
+  destination: 'page' | 'news' | 'none';
+  page?: ('home' | 'about' | 'automotive' | 'industrial-machinery' | 'engineering-services' | 'enquire') | null;
+  /**
+   * Prefer a published story so the link works for visitors.
+   */
+  news?: (string | null) | News;
+  /**
+   * Filled automatically when a news cover or story photo is published.
+   */
+  sourceNews?: (string | null) | News;
+  sourceKey?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -578,6 +592,11 @@ export interface GallerySelect<T extends boolean = true> {
   note?: T;
   fit?: T;
   category?: T;
+  destination?: T;
+  page?: T;
+  news?: T;
+  sourceNews?: T;
+  sourceKey?: T;
   updatedAt?: T;
   createdAt?: T;
 }

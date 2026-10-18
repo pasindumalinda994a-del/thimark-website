@@ -32,7 +32,7 @@ const PILLARS = [
   {
     id: "quality",
     title: "Quality",
-    image: "/home-images/quality-inspection.jpeg",
+    image: "/pages/home/quality-quality1.webp",
     alt: "Engineer inspecting a machined metal component with a digital caliper",
     objectPosition: "62% 35%",
     body: "Controlled processes and attention to detail throughout manufacturing.",
@@ -40,7 +40,7 @@ const PILLARS = [
   {
     id: "lean",
     title: "Lean Thinking",
-    image: "/home-images/quality-lean-production.jpeg",
+    image: "/pages/home/quality-lean.webp",
     alt: "Operators working a lean production line with organized workstations",
     objectPosition: "38% 42%",
     body: "Improving efficiency, productivity and resource utilization while reducing unnecessary waste.",
@@ -48,7 +48,7 @@ const PILLARS = [
   {
     id: "improvement",
     title: "Continuous Improvement",
-    image: "/home-images/quality-continuous-improvement.jpeg",
+    image: "/pages/home/quality-continues.webp",
     alt: "Engineers reviewing a manufactured housing against production drawings",
     objectPosition: "48% 38%",
     body: "Learning, refining processes and adopting technologies that strengthen performance.",
@@ -356,7 +356,7 @@ export default function QualitySection() {
                       x2="0.5"
                       y1="0"
                       y2="100%"
-                      stroke="#f4f4ed"
+                      stroke="#F1EDE3"
                       strokeWidth="1"
                       strokeDasharray="8 8"
                     />

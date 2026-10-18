@@ -69,7 +69,7 @@ export default function PhraseBar({
                   x2="0.5"
                   y1="0"
                   y2="100%"
-                  stroke="#f4f4ed"
+                  stroke="#F1EDE3"
                   strokeWidth="1"
                   strokeDasharray="8 8"
                 />

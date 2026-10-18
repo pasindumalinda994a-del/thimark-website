@@ -5,6 +5,7 @@ import config from "../payload.config";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const publicFile = (...parts: string[]) => path.join(root, "public", ...parts);
+const seedAsset = (...parts: string[]) => path.join(root, "scripts", "seed-assets", ...parts);
 const context = { disableRevalidate: true, skipEnquiryEmail: true };
 
 type SeedNews = {
@@ -50,7 +51,7 @@ const NEWS: SeedNews[] = [
         text: "A big thank-you to everyone who contributed to making this project a success. Onward to even greater milestones.",
       },
     ],
-    photos: [1, 2, 3, 4].map((n) => publicFile("news", `awards-${pad(n)}.jpg`)),
+    photos: [1, 2, 3, 4].map((n) => seedAsset("news", `awards-${pad(n)}.jpg`)),
     alt: "Thimark receiving awards for the Kilgharrah 600 Kenya project",
   },
   {
@@ -68,12 +69,12 @@ const NEWS: SeedNews[] = [
         hrefLabel: "Event video",
       },
     ],
-    photos: Array.from({ length: 17 }, (_, i) => publicFile("news", `launch-${pad(i + 1)}.jpg`)),
+    photos: Array.from({ length: 17 }, (_, i) => seedAsset("news", `launch-${pad(i + 1)}.jpg`)),
     alt: "Kilgharrah 600 at the product launch",
   },
 ];
 
-const gallery = (file: string) => publicFile("Gallery Images", file);
+const gallery = (file: string) => seedAsset("gallery", file);
 const photo = (file: string) => publicFile("photos", file);
 
 const FRAMES: SeedFrame[] = [
@@ -435,6 +436,7 @@ async function seedGallery(payload: Payload) {
         image,
         fit: frame.fit,
         place: frame.place,
+        destination: "none",
       },
       context,
     });

@@ -5,7 +5,7 @@ export type GridTone = "light" | "dark" | "page";
 function toneStroke(tone: GridTone) {
   if (tone === "light") return "#FFFFFF";
   if (tone === "page") return "var(--page-ink)";
-  return "#575757";
+  return "#3A3D42";
 }
 
 type GridLineProps = {
@@ -56,6 +56,7 @@ type SectionGridProps = {
   className?: string;
   children: ReactNode;
   id?: string;
+  "aria-label"?: string;
   "aria-labelledby"?: string;
   outerV?: boolean;
   ref?: Ref<HTMLElement>;
@@ -67,6 +68,7 @@ export default function SectionGrid({
   className = "",
   children,
   id,
+  "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledby,
   outerV = true,
   ref,
@@ -86,6 +88,7 @@ export default function SectionGrid({
     <section
       ref={ref}
       id={id}
+      aria-label={ariaLabel}
       aria-labelledby={ariaLabelledby}
       className={`relative overflow-x-hidden content-plate ${plate} ${className}`}
     >

@@ -25,7 +25,7 @@ export default async function GalleryPage() {
   const frames = await getGalleryFrames();
 
   return (
-    <main className="gallery content-plate relative z-10 bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
+    <main className="gallery content-plate relative z-10 h-dvh overflow-hidden bg-cream pt-14 text-steel xl:ml-sidebar xl:pt-0 [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
       <JsonLd data={SCHEMA} />
       <GalleryView frames={frames} />
     </main>

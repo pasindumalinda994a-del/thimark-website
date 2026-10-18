@@ -11,7 +11,7 @@ type Media = { src: string; alt: string; objectPosition: string };
 
 export const ENQUIRE = "/enquire?service=industrial";
 
-const KILGARRAH_PHOTO = "/Gallery Images/Kilgharrah600-H4eS3WLBj1Hf5xwZhFBNSw.jpg";
+const KILGARRAH_PHOTO = "/pages/industrial-machinery/kilgharrah-600.jpg";
 
 /* ---- Hero ---------------------------------------------------------- */
 
@@ -29,7 +29,7 @@ export const HERO: HeroCopy = {
   cta: { label: "Discuss a Machinery Project", href: ENQUIRE },
   secondary: { label: "See Our Machinery", href: "#portfolio" },
   image: {
-    src: "/home-images/two-core-machinery.jpeg",
+    src: "/pages/industrial-machinery/two-core-machinery.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
     objectPosition: "50% 50%",
   },
@@ -50,7 +50,7 @@ export const PORTFOLIO = {
     "Our portfolio brings together mechanical engineering, steel fabrication, and manufacturing capabilities to support infrastructure and industrial applications.",
   ],
   media: {
-    src: "/home-images/about-workshop.png",
+    src: "/pages/industrial-machinery/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 42%",
   } satisfies Media,
@@ -109,7 +109,7 @@ export const BANDS: readonly PortfolioBand[] = [
       "Each project differs in arrangement, dimensions and integration, so we start with the application and engineer around its needs.",
     imageSide: "right",
     media: {
-      src: "/home-images/featured-kilgharrah.png",
+      src: "/pages/industrial-machinery/featured-kilgharrah.png",
       alt: "The KILGHARRAH 600 clearing debris from a hydropower trash rack as engineers supervise",
       objectPosition: "50% 45%",
     },
@@ -148,7 +148,7 @@ export const BANDS: readonly PortfolioBand[] = [
       "From individual fabricated assemblies to integrated machinery projects, our goal is to deliver practical solutions that respond to real operational requirements.",
     imageSide: "left",
     media: {
-      src: "/home-images/about-industrial-automation.jpeg",
+      src: "/pages/industrial-machinery/about-industrial-automation.jpeg",
       alt: "Engineers commissioning an automated conveyor and material-handling line",
       objectPosition: "50% 50%",
     },
@@ -181,7 +181,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Geometry", "Physical samples", "Digital starting point"],
     icon: "scan",
     media: {
-      src: "/home-images/about-iso-precision.jpeg",
+      src: "/pages/industrial-machinery/about-iso-precision.jpeg",
       alt: "Engineers checking a gear assembly against its technical drawings",
       objectPosition: "50% 45%",
     },
@@ -194,7 +194,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Component geometry", "Arrangements", "Application fit"],
     icon: "model3d",
     media: {
-      src: "/home-images/about-international-engineering.jpeg",
+      src: "/pages/industrial-machinery/about-international-engineering.jpeg",
       alt: "Engineers reviewing an installed system on site to understand its application",
       objectPosition: "55% 45%",
     },
@@ -207,7 +207,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Cutting", "Forming", "Welding"],
     icon: "work",
     media: {
-      src: "/home-images/about-steel-fabrication.jpeg",
+      src: "/pages/industrial-machinery/about-steel-fabrication.jpeg",
       alt: "Fabricators welding a heavy steel beam in the Thimark workshop",
       objectPosition: "50% 55%",
     },
@@ -220,7 +220,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Hydraulic systems", "PLC controls", "Integration"],
     icon: "electrical",
     media: {
-      src: "/home-images/about-industrial-automation.jpeg",
+      src: "/pages/industrial-machinery/about-industrial-automation.jpeg",
       alt: "Engineers commissioning an automated material-handling line",
       objectPosition: "42% 48%",
     },
@@ -233,7 +233,7 @@ export const STAGES: readonly Stage[] = [
     operations: ["Finishing", "Installation", "Commissioning"],
     icon: "verified",
     media: {
-      src: "/home-images/quality-inspection.jpeg",
+      src: "/pages/industrial-machinery/quality-inspection.jpeg",
       alt: "Engineer inspecting a machined metal component with a digital caliper",
       objectPosition: "50% 45%",
     },

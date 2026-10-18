@@ -115,7 +115,7 @@ export default function MarkDrawing({ className = "" }: { className?: string }) 
             y1="0"
             x2="0"
             y2="6"
-            stroke="#8a151c"
+            stroke="#6E1218"
             strokeWidth="1"
           />
         </pattern>

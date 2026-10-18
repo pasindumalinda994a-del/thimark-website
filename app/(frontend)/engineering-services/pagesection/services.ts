@@ -27,7 +27,7 @@ export const HERO: HeroCopy = {
   cta: { label: "Discuss an Engineering Project", href: "/enquire?service=engineering" },
   secondary: { label: "See Our Services", href: "#new-product-development" },
   image: {
-    src: "/home-images/about-workshop.png",
+    src: "/pages/engineering-services/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 42%",
   },
@@ -64,7 +64,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Requirement", "Application", "Design considerations"],
     icon: "research",
     media: {
-      src: "/home-images/about-international-engineering.jpeg",
+      src: "/pages/engineering-services/about-international-engineering.jpeg",
       alt: "Engineers reviewing an installed system on site to understand its application",
       objectPosition: "55% 45%",
     },
@@ -77,7 +77,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Geometry", "Dimensions", "Component relationships"],
     icon: "model3d",
     media: {
-      src: "/home-images/about-iso-precision.jpeg",
+      src: "/pages/engineering-services/about-iso-precision.jpeg",
       alt: "Engineers checking a gear assembly against its technical drawings",
       objectPosition: "50% 45%",
     },
@@ -90,7 +90,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Manufacturability", "Assembly", "Simplification"],
     icon: "conveyor",
     media: {
-      src: "/home-images/quality-lean-production.jpeg",
+      src: "/pages/engineering-services/quality-lean-production.jpeg",
       alt: "Operators assembling components along an organized assembly line",
       objectPosition: "40% 45%",
     },
@@ -103,7 +103,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Virtual evaluation", "Design behaviour", "Issue detection"],
     icon: "monitoring",
     media: {
-      src: "/home-images/about-industrial-automation.jpeg",
+      src: "/pages/engineering-services/about-industrial-automation.jpeg",
       alt: "Engineers evaluating machine behaviour on a tablet beside an automated line",
       objectPosition: "35% 50%",
     },
@@ -116,7 +116,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Tooling", "Jigs", "Fixtures"],
     icon: "handyman",
     media: {
-      src: "/home-images/about-steel-fabrication.jpeg",
+      src: "/pages/engineering-services/about-steel-fabrication.jpeg",
       alt: "Fabricators welding steel assemblies held in workshop fixtures",
       objectPosition: "50% 45%",
     },
@@ -129,7 +129,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Fit", "Form", "Function", "Feasibility"],
     icon: "precision",
     media: {
-      src: "/home-images/two-core-automotive.jpeg",
+      src: "/pages/engineering-services/two-core-automotive.jpeg",
       alt: "Engineers assembling a physical prototype frame on the workshop floor",
       objectPosition: "50% 50%",
     },
@@ -142,7 +142,7 @@ export const NPD_STEPS: readonly Stage[] = [
     operations: ["Specifications", "Conformity", "Production release"],
     icon: "verified",
     media: {
-      src: "/home-images/quality-inspection.jpeg",
+      src: "/pages/engineering-services/quality-inspection.jpeg",
       alt: "Engineer inspecting a machined metal component with a digital caliper",
       objectPosition: "62% 35%",
     },
@@ -163,7 +163,7 @@ export const REVERSE = {
     "Reverse engineering can help establish a digital reference for legacy components, support the recreation of parts, and provide a starting point for design improvements.",
   ],
   media: {
-    src: "/home-images/quality-continuous-improvement.jpeg",
+    src: "/pages/engineering-services/quality-continuous-improvement.jpeg",
     alt: "Engineers measuring an existing housing with calipers against its technical drawings",
     objectPosition: "45% 55%",
   } satisfies Media,
@@ -245,7 +245,7 @@ export const FINISHES: readonly Finish[] = [
     callout: ["Durable", "Uniform Finish"],
     imageSide: "right",
     media: {
-      src: "/products/Rear Plate.png",
+      src: "/pages/engineering-services/products/rear-plate.png",
       alt: "Powder-coated steel motorcycle rear plate with a textured, uniform black finish, made by Thimark",
       objectPosition: "50% 50%",
     },
@@ -257,7 +257,7 @@ export const FINISHES: readonly Finish[] = [
     callout: ["Electrodeposition", "Coating"],
     imageSide: "left",
     media: {
-      src: "/products/Battery Bracket.png",
+      src: "/pages/engineering-services/products/battery-bracket.png",
       alt: "Welded steel motorcycle battery bracket with an even black coating, manufactured by Thimark",
       objectPosition: "50% 50%",
     },
@@ -269,7 +269,7 @@ export const FINISHES: readonly Finish[] = [
     callout: ["Black Appearance", "Corrosion Protection"],
     imageSide: "right",
     media: {
-      src: "/products/Pillion Bracket.png",
+      src: "/pages/engineering-services/products/pillion-bracket.png",
       alt: "Formed steel motorcycle pillion bracket with a black finish, manufactured by Thimark",
       objectPosition: "50% 50%",
     },
@@ -281,7 +281,7 @@ export const FINISHES: readonly Finish[] = [
     callout: ["Functional", "Surface Properties"],
     imageSide: "left",
     media: {
-      src: "/products/Bar Pillion LH & RH.png",
+      src: "/pages/engineering-services/products/bar-pillion-lh-rh.png",
       alt: "Machined motorcycle bar pillion components, left and right, with a finished surface",
       objectPosition: "50% 50%",
     },
@@ -324,7 +324,7 @@ export const ENGINEERING: QualityCopy = {
     "Engineering, manufacturing and quality together give customers a clearer path from concept to production.",
   ],
   media: {
-    src: "/home-images/two-core-machinery.jpeg",
+    src: "/pages/engineering-services/two-core-machinery.jpeg",
     alt: "Engineers reviewing drawings beside custom machinery on the production floor",
     objectPosition: "70% 40%",
   },

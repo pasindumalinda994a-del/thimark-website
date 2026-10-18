@@ -20,6 +20,12 @@ export const COMPANY = {
   )}`,
 } as const;
 
+/** Site design credit shown in the footer legal strip. */
+export const CRAFTED_BY = {
+  label: "arc.malinda",
+  href: "https://www.instagram.com/arc.malinda",
+} as const;
+
 export type ExternalLink = {
   id: string;
   label: string;

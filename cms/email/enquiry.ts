@@ -11,10 +11,10 @@ export type EnquiryEmailData = {
   files?: (FileMeta & { url?: string })[] | null;
 };
 
-const BRAND = "#8a151c";
+const BRAND = "#6E1218";
 const INK = "#2f2f2f";
 const MUTED = "#757575";
-const CREAM = "#f4f4ed";
+const CREAM = "#F1EDE3";
 
 function escape(value: string) {
   return value

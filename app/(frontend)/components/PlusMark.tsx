@@ -31,10 +31,10 @@ export default function PlusMark({
     tone === "light"
       ? "#FFFFFF"
       : tone === "brand"
-        ? "#8A151C"
+        ? "#6E1218"
         : tone === "page"
           ? "var(--page-ink)"
-          : "#575757";
+          : "#3A3D42";
 
   const horizontal = axisSpan(arms?.left ?? true, arms?.right ?? true);
   const vertical = axisSpan(arms?.up ?? true, arms?.down ?? true);

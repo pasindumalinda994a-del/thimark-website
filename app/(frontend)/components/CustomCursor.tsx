@@ -6,9 +6,9 @@ import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);
 
-const CREAM = "#f4f4ed";
-const STEEL = "#575757";
-const BRAND = "#8a151c";
+const CREAM = "#F1EDE3";
+const STEEL = "#3A3D42";
+const BRAND = "#6E1218";
 const SIZE = 24;
 const CENTER = SIZE / 2;
 const PLUS = 13;
@@ -31,8 +31,8 @@ function isCreamToken(value: string) {
   const token = value.toLowerCase();
   return (
     token.includes("cream") ||
-    token.includes("#f4f4ed") ||
-    token.includes("244, 244, 237")
+    token.includes("#f1ede3") ||
+    token.includes("241, 237, 227")
   );
 }
 
@@ -40,8 +40,8 @@ function isSteelToken(value: string) {
   const token = value.toLowerCase();
   return (
     token.includes("steel") ||
-    token.includes("#575757") ||
-    token.includes("87, 87, 87")
+    token.includes("#3a3d42") ||
+    token.includes("58, 61, 66")
   );
 }
 

@@ -17,6 +17,10 @@ export type GalleryFrame = {
   alt: string;
   fit: GalleryFit;
   place: string;
+  /** Site path or news URL; null when the photo is unlinked. */
+  href: string | null;
+  /** Short label for aria / UI, e.g. "About" or "News". */
+  destinationLabel: string | null;
 };
 
 export type GalleryCategory = {

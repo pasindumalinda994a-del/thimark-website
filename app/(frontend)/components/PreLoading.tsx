@@ -11,9 +11,9 @@ import { PRELOAD_SESSION_KEY } from "@/app/(frontend)/components/preloadSession"
 gsap.registerPlugin(useGSAP);
 
 const COLORS = {
-  steel: "#575757",
-  brand: "#8a151c",
-  silver: "#c0c0c0",
+  steel: "#3A3D42",
+  brand: "#6E1218",
+  silver: "#A8ADB4",
 } as const;
 
 const MARK_W = 80;

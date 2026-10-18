@@ -2,6 +2,7 @@ import type { CollectionConfig, FieldHook } from "payload";
 import { NEWS_CATEGORIES } from "../../app/(frontend)/newsroom/records";
 import { authenticated, publishedOrAuthenticated } from "../access";
 import { revalidateNews, revalidateNewsDelete } from "../hooks/revalidate";
+import { syncNewsGallery, syncNewsGalleryDelete } from "../hooks/syncNewsGallery";
 import { previewPath } from "../preview";
 import { slugify } from "../slugify";
 
@@ -53,8 +54,8 @@ export const News: CollectionConfig = {
     },
   },
   hooks: {
-    afterChange: [revalidateNews],
-    afterDelete: [revalidateNewsDelete],
+    afterChange: [syncNewsGallery, revalidateNews],
+    afterDelete: [syncNewsGalleryDelete, revalidateNewsDelete],
   },
   fields: [
     {

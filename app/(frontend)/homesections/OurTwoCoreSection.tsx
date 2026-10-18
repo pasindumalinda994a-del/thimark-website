@@ -28,7 +28,7 @@ const COLUMNS = [
     title: "Automotive Components",
     href: "/automotive",
     cta: "View Automotive Components",
-    image: "/home-images/two-core-automotive.jpeg",
+    image: "/pages/home/two-core-automotive.jpeg",
     alt: "Engineers assembling a motorcycle frame on the production line",
     body: "We design, fabricate and supply motorcycle components for local assembly lines, supporting established manufacturers with consistent production and dependable quality. Over 30% local value addition.",
     areas: [
@@ -43,7 +43,7 @@ const COLUMNS = [
     title: "Engineering & Services",
     href: "/engineering-services",
     cta: "View Engineering Services",
-    image: "/home-images/about-workshop.png",
+    image: "/pages/home/about-workshop.png",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     body: "We take requirements from concept to finished part through new product development, reverse engineering and precision engineering.",
     areas: [
@@ -70,7 +70,7 @@ const COLUMNS = [
     title: "Industrial Machinery",
     href: "/industrial-machinery",
     cta: "View Industrial Machinery",
-    image: "/home-images/two-core-machinery.jpeg",
+    image: "/pages/home/two-core-machinery.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
     body: "We design and manufacture custom machinery and fabricated systems for hydropower, water management, construction and other demanding industrial environments.",
     areas: [

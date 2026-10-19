@@ -5,10 +5,8 @@ import { useRef } from "react";
 import Image from "next/image";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
-import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
-import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { useLetterScrub } from "@/app/(frontend)/components/useLetterScrub";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
@@ -60,12 +58,7 @@ const RANGE_JOINS: Join[] = [
   [12, 0, { up: true }],
 ];
 
-export default function RangeSection({
-  glyphs,
-}: {
-  /** Server-rendered with `isoGlyphs(COMPONENTS, "vm-principle-mark")`. */
-  glyphs: GlyphSet;
-}) {
+export default function RangeSection() {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -180,7 +173,6 @@ export default function RangeSection({
               at={[c, c + 4, r, r + 7]}
               as="article"
               className="vm-principle im-tile-short im-tile-invert rg-tile"
-              data-redraw=""
               tabIndex={0}
               aria-labelledby={`range-${group.id}`}
             >
@@ -189,12 +181,16 @@ export default function RangeSection({
                 <span>Range</span>
                 <span className="tabular-nums">[{padIndex(i)}]</span>
               </p>
-              <div data-draw className="vm-principle-glyph dot-field-mark">
-                <PlusMark tone="page" className="plus-at-tl z-10" />
-                <PlusMark tone="page" className="plus-at-tr z-10" />
-                <PlusMark tone="page" className="plus-at-bl z-10" />
-                <PlusMark tone="page" className="plus-at-br z-10" />
-                {glyphs[group.icon]}
+              <div data-wipe className="rg-tile-shot">
+                <Image
+                  src={group.media.src}
+                  alt={group.media.alt}
+                  fill
+                  sizes="(min-width: 768px) 25vw, 80vw"
+                  className={group.fit === "contain" ? "object-contain" : "object-cover"}
+                  style={{ objectPosition: group.media.objectPosition }}
+                />
+                <Corners tone="page" />
               </div>
               <div className="vm-principle-copy">
                 <H3Heading id={`range-${group.id}`} data-reveal variant="title" size="sm">

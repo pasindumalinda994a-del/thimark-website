@@ -63,11 +63,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Understand the requirement, intended application, and key design considerations to establish a clear foundation for development.",
     operations: ["Requirement", "Application", "Design considerations"],
     icon: "research",
-    media: {
-      src: "/pages/engineering-services/about-international-engineering.jpeg",
-      alt: "Engineers reviewing an installed system on site to understand its application",
-      objectPosition: "55% 45%",
-    },
   },
   {
     id: "modelling",
@@ -76,11 +71,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Translate concepts and specifications into three-dimensional models of geometry, dimensions and component relationships.",
     operations: ["Geometry", "Dimensions", "Component relationships"],
     icon: "model3d",
-    media: {
-      src: "/pages/engineering-services/about-iso-precision.jpeg",
-      alt: "Engineers checking a gear assembly against its technical drawings",
-      objectPosition: "50% 45%",
-    },
   },
   {
     id: "dfma",
@@ -89,11 +79,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Evaluate designs for manufacturing and assembly, to simplify production and support efficient assembly.",
     operations: ["Manufacturability", "Assembly", "Simplification"],
     icon: "conveyor",
-    media: {
-      src: "/pages/engineering-services/quality-lean-production.jpeg",
-      alt: "Operators assembling components along an organized assembly line",
-      objectPosition: "40% 45%",
-    },
   },
   {
     id: "simulation",
@@ -102,11 +87,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Use simulation, where applicable, to assess design behaviour and find issues before physical production.",
     operations: ["Virtual evaluation", "Design behaviour", "Issue detection"],
     icon: "monitoring",
-    media: {
-      src: "/pages/engineering-services/about-industrial-automation.jpeg",
-      alt: "Engineers evaluating machine behaviour on a tablet beside an automated line",
-      objectPosition: "35% 50%",
-    },
   },
   {
     id: "tooling",
@@ -115,11 +95,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Develop tooling, jigs, and fixtures to support accurate, repeatable manufacturing and assembly processes.",
     operations: ["Tooling", "Jigs", "Fixtures"],
     icon: "handyman",
-    media: {
-      src: "/pages/engineering-services/about-steel-fabrication.jpeg",
-      alt: "Fabricators welding steel assemblies held in workshop fixtures",
-      objectPosition: "50% 45%",
-    },
   },
   {
     id: "prototyping",
@@ -128,11 +103,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Move from digital design to physical prototypes to evaluate fit, form, function, and manufacturing feasibility.",
     operations: ["Fit", "Form", "Function", "Feasibility"],
     icon: "precision",
-    media: {
-      src: "/pages/engineering-services/two-core-automotive.jpeg",
-      alt: "Engineers assembling a physical prototype frame on the workshop floor",
-      objectPosition: "50% 50%",
-    },
   },
   {
     id: "inspection",
@@ -141,11 +111,6 @@ export const NPD_STEPS: readonly Stage[] = [
     body: "Inspect the first manufactured component against specifications before further production.",
     operations: ["Specifications", "Conformity", "Production release"],
     icon: "verified",
-    media: {
-      src: "/pages/engineering-services/quality-inspection.jpeg",
-      alt: "Engineer inspecting a machined metal component with a digital caliper",
-      objectPosition: "62% 35%",
-    },
   },
 ];
 
@@ -233,22 +198,17 @@ export type Finish = {
   label: string;
   callout: readonly [string, string];
   imageSide: "left" | "right";
-  media: Media;
+  icon: IsoIcon;
   lead: string;
 };
 
-// Finish photography is provisional until shots from the Ekala facility are available.
 export const FINISHES: readonly Finish[] = [
   {
     id: "powder-coating",
     label: "Powder Coating",
     callout: ["Durable", "Uniform Finish"],
     imageSide: "right",
-    media: {
-      src: "/pages/engineering-services/products/rear-plate.png",
-      alt: "Powder-coated steel motorcycle rear plate with a textured, uniform black finish, made by Thimark",
-      objectPosition: "50% 50%",
-    },
+    icon: "coating",
     lead: "A durable, uniform coating for metallic components where appearance and finish matter.",
   },
   {
@@ -256,11 +216,7 @@ export const FINISHES: readonly Finish[] = [
     label: "ED / E-Coating",
     callout: ["Electrodeposition", "Coating"],
     imageSide: "left",
-    media: {
-      src: "/pages/engineering-services/products/battery-bracket.png",
-      alt: "Welded steel motorcycle battery bracket with an even black coating, manufactured by Thimark",
-      objectPosition: "50% 50%",
-    },
+    icon: "fluid",
     lead: "An electrodeposition process that coats suitable components to the required specification.",
   },
   {
@@ -268,11 +224,7 @@ export const FINISHES: readonly Finish[] = [
     label: "Black Zinc Electroplating",
     callout: ["Black Appearance", "Corrosion Protection"],
     imageSide: "right",
-    media: {
-      src: "/pages/engineering-services/products/pillion-bracket.png",
-      alt: "Formed steel motorcycle pillion bracket with a black finish, manufactured by Thimark",
-      objectPosition: "50% 50%",
-    },
+    icon: "shield",
     lead: "An electroplated black finish, specified where appearance and corrosion protection are required.",
   },
   {
@@ -280,11 +232,7 @@ export const FINISHES: readonly Finish[] = [
     label: "Hard Chromium Electroplating",
     callout: ["Functional", "Surface Properties"],
     imageSide: "left",
-    media: {
-      src: "/pages/engineering-services/products/bar-pillion-lh-rh.png",
-      alt: "Machined motorcycle bar pillion components, left and right, with a finished surface",
-      objectPosition: "50% 50%",
-    },
+    icon: "precision",
     lead: "A chromium finish for applications that call for specified surface properties and a hard chromium surface.",
   },
 ];

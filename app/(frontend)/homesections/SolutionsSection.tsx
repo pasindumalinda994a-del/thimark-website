@@ -33,7 +33,7 @@ const SOLUTIONS = [
     name: "OEM Motorcycle Components",
     title: "Precision for Local Assembly",
     callout: ["DPMC / Bajaj", "Senaro", "Ranomoto"],
-    image: "/pages/home/two-core-automotive.png",
+    image: "/pages/home/solutions- oem.webp",
     alt: "Precision motorcycle components on a workshop bench",
     href: "/automotive#product-range",
     cta: "View the Component Range",

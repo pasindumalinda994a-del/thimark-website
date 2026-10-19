@@ -101,13 +101,14 @@ export default function EngineeringServicesPage() {
           glyphs={isoGlyphs(NPD_STEPS, "ps-glyph-mark")}
           cta={NPD_CTA}
           pace={0.75}
+          visual="glyph"
         />
         <SectionBreak tone="page" />
         <ReverseEngineeringSection glyphs={isoGlyphs(REVERSE_CAPABILITIES, "vm-principle-mark")} />
       </div>
       <div className={STEEL}>
         <SectionBreak tone="page" />
-        <SurfaceFinishingSection />
+        <SurfaceFinishingSection glyphs={isoGlyphs(FINISHES, "sf-finish-mark")} />
       </div>
       <div className={CREAM}>
         <SectionBreak tone="page" />

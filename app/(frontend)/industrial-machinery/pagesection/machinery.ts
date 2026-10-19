@@ -17,7 +17,7 @@ const KILGARRAH_PHOTO = "/pages/industrial-machinery/kilgharrah-600.jpg";
 
 export const HERO: HeroCopy = {
   eyebrow: "Industrial Machinery Manufacturer \u00b7 Sri Lanka",
-  heading: ["Custom Industrial Machinery.", "Engineered for Real-World Challenges."],
+  heading: ["Custom Industrial Machinery.", "Built for Real Challenges."],
   intro:
     "Complex industrial challenges demand more than standard equipment. They require practical engineering, dependable manufacturing, and machinery designed around the realities of the application.",
   body: "From our works in Sri Lanka, we design and manufacture custom industrial machinery for water and hydropower, industrial processing and material handling \u2014 from trash rack cleaners and conveyors to heavy steel structures.",
@@ -180,11 +180,6 @@ export const STAGES: readonly Stage[] = [
     body: "Where existing equipment or samples are available, reverse engineering and 3D scanning capture geometry as a digital starting point for design.",
     operations: ["Geometry", "Physical samples", "Digital starting point"],
     icon: "scan",
-    media: {
-      src: "/pages/industrial-machinery/about-iso-precision.jpeg",
-      alt: "Engineers checking a gear assembly against its technical drawings",
-      objectPosition: "50% 45%",
-    },
   },
   {
     id: "cad",
@@ -193,11 +188,6 @@ export const STAGES: readonly Stage[] = [
     body: "Engineering models and virtual design methods help define component geometry, evaluate arrangements, and explore how the proposed machinery will fit its intended application.",
     operations: ["Component geometry", "Arrangements", "Application fit"],
     icon: "model3d",
-    media: {
-      src: "/pages/industrial-machinery/about-international-engineering.jpeg",
-      alt: "Engineers reviewing an installed system on site to understand its application",
-      objectPosition: "55% 45%",
-    },
   },
   {
     id: "fabrication",
@@ -206,11 +196,6 @@ export const STAGES: readonly Stage[] = [
     body: "Cutting, forming, machining, welding and heavy steel fabrication bring the design into physical form, matched to the project\u2019s materials and specifications.",
     operations: ["Cutting", "Forming", "Welding"],
     icon: "work",
-    media: {
-      src: "/pages/industrial-machinery/about-steel-fabrication.jpeg",
-      alt: "Fabricators welding a heavy steel beam in the Thimark workshop",
-      objectPosition: "50% 55%",
-    },
   },
   {
     id: "controls",
@@ -219,11 +204,6 @@ export const STAGES: readonly Stage[] = [
     body: "Where the project requires it, automation, hydraulic systems and PLC controls support operation and integration with the wider process.",
     operations: ["Hydraulic systems", "PLC controls", "Integration"],
     icon: "electrical",
-    media: {
-      src: "/pages/industrial-machinery/about-industrial-automation.jpeg",
-      alt: "Engineers commissioning an automated material-handling line",
-      objectPosition: "42% 48%",
-    },
   },
   {
     id: "commissioning",
@@ -232,11 +212,6 @@ export const STAGES: readonly Stage[] = [
     body: "Finishing readies equipment for its environment. Where in scope, installation, commissioning and operational checks take it into service.",
     operations: ["Finishing", "Installation", "Commissioning"],
     icon: "verified",
-    media: {
-      src: "/pages/industrial-machinery/quality-inspection.jpeg",
-      alt: "Engineer inspecting a machined metal component with a digital caliper",
-      objectPosition: "50% 45%",
-    },
   },
 ];
 

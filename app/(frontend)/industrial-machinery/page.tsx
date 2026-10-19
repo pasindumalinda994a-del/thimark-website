@@ -85,6 +85,7 @@ export default function IndustrialMachineryPage() {
           stages={STAGES}
           glyphs={isoGlyphs(STAGES, "ps-glyph-mark")}
           pace={0.75}
+          visual="glyph"
         />
       </div>
       <div className={STEEL}>

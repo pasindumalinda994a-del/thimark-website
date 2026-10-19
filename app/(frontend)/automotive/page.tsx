@@ -73,7 +73,7 @@ export default function AutomotivePage() {
           ctaCol={8}
         />
         <SectionBreak tone="page" />
-        <RangeSection glyphs={isoGlyphs(COMPONENTS, "vm-principle-mark")} />
+        <RangeSection />
       </div>
       <div className={STEEL}>
         <SectionBreak tone="page" />
@@ -83,7 +83,11 @@ export default function AutomotivePage() {
       </div>
       <div className={CREAM}>
         <SectionBreak tone="page" />
-        <ProcessSection cta={PROCESS_CTA} glyphs={isoGlyphs(STAGES, "ps-glyph-mark")} />
+        <ProcessSection
+          cta={PROCESS_CTA}
+          glyphs={isoGlyphs(STAGES, "ps-glyph-mark")}
+          visual="glyph"
+        />
         <SectionBreak tone="page" />
         <CapabilitiesSection
           id="manufacturing"

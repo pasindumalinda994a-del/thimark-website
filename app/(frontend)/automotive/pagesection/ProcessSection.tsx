@@ -74,6 +74,16 @@ const CARD_JOINS: Join[] = [
   [7, 8, { left: true, right: true, up: true }],
 ];
 
+/** Glyph mode: single vertical split — mark plate | full-height copy. */
+const GLYPH_CARD_H: HLine[] = [];
+const GLYPH_CARD_V: VLine[] = [[7, 0, 8]];
+const GLYPH_CARD_JOINS: Join[] = [
+  [7, 0, { left: true, right: true, down: true }],
+  [7, 8, { left: true, right: true, up: true }],
+];
+
+export type ProcessVisual = "photo" | "glyph";
+
 type Parts = {
   cards: HTMLElement[];
   shades: HTMLElement[];
@@ -106,6 +116,7 @@ export default function ProcessSection({
   glyphs,
   cta,
   pace = 1,
+  visual = "photo",
 }: {
   id?: string;
   copy?: ProcessCopy;
@@ -115,8 +126,14 @@ export default function ProcessSection({
   cta?: { label: string; href: string };
   /** Viewport heights of scroll per card change; below 1 tightens long stacks. */
   pace?: number;
+  /** `glyph` replaces the photo with a technical mark plate (NPD). */
+  visual?: ProcessVisual;
 }) {
   const LAST = stages.length - 1;
+  const glyphVisual = visual === "glyph";
+  const cardH = glyphVisual ? GLYPH_CARD_H : CARD_H;
+  const cardV = glyphVisual ? GLYPH_CARD_V : CARD_V;
+  const cardJoins = glyphVisual ? GLYPH_CARD_JOINS : CARD_JOINS;
   const stations = stages.map((stage, i) => ({
     id: stage.id,
     label: stage.label,
@@ -411,7 +428,7 @@ export default function ProcessSection({
       rows={14}
       tone="page"
       outerV={false}
-      className="ps-section flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0"
+      className={`ps-section flex flex-col bg-cream text-steel [--page-bg:var(--cream)] [--page-ink:var(--steel)] scroll-mt-16 xl:scroll-mt-0${glyphVisual ? " ps-visual-glyph" : ""}`}
     >
       <Frame h={H} v={[...V, ...(cta ? FOOT_CTA_V : FOOT_V)]} />
 
@@ -461,41 +478,69 @@ export default function ProcessSection({
               style={{ zIndex: i + 1 }}
               aria-labelledby={`${id}-stage-${stage.id}`}
             >
-              <Frame h={CARD_H} v={CARD_V} joins={CARD_JOINS} />
+              <Frame h={cardH} v={cardV} joins={cardJoins} />
 
-              <Cell at={[0, 7, 0, 8]} className="ps-media">
-                <div data-ps-media="" className="plate-media">
-                  <Image
-                    src={stage.media.src}
-                    alt={stage.media.alt}
-                    fill
-                    sizes="(min-width: 768px) 55vw, 84vw"
-                    className="object-cover"
-                    style={{ objectPosition: stage.media.objectPosition }}
-                  />
-                  <span aria-hidden className="ah-media-scrim" />
-                  <Corners tone="light" />
-                  <p aria-hidden className="ah-media-caption index-tag">
-                    <span>{figLabel(i + 2)}</span>
-                    <span>{stage.title}</span>
-                  </p>
-                </div>
-              </Cell>
+              {glyphVisual ? (
+                <Cell at={[0, 7, 0, 8]} className="ps-media ps-mark-cell">
+                  <div data-ps-media="" className="ps-mark plate-media">
+                    <div data-ps-glyph="" className="ps-glyph-field ps-mark-field dot-field-mark">
+                      <PlusMark tone="page" className="plus-at-tl z-10" />
+                      <PlusMark tone="page" className="plus-at-tr z-10" />
+                      <PlusMark tone="page" className="plus-at-bl z-10" />
+                      <PlusMark tone="page" className="plus-at-br z-10" />
+                      {glyphs[stage.icon]}
+                      <span aria-hidden className="ps-numeral ab-outline">
+                        {padIndex(i)}
+                      </span>
+                    </div>
+                    <Corners tone="page" />
+                    <p aria-hidden className="ah-media-caption index-tag">
+                      <span>
+                        {copy.readoutLabel} [{padIndex(i)}]
+                      </span>
+                      <span>{stage.title}</span>
+                    </p>
+                  </div>
+                </Cell>
+              ) : (
+                <Cell at={[0, 7, 0, 8]} className="ps-media">
+                  <div data-ps-media="" className="plate-media">
+                    {stage.media ? (
+                      <Image
+                        src={stage.media.src}
+                        alt={stage.media.alt}
+                        fill
+                        sizes="(min-width: 768px) 55vw, 84vw"
+                        className="object-cover"
+                        style={{ objectPosition: stage.media.objectPosition }}
+                      />
+                    ) : null}
+                    <span aria-hidden className="ah-media-scrim" />
+                    <Corners tone="light" />
+                    <p aria-hidden className="ah-media-caption index-tag">
+                      <span>{figLabel(i + 2)}</span>
+                      <span>{stage.title}</span>
+                    </p>
+                  </div>
+                </Cell>
+              )}
 
-              <Cell at={[7, 12, 0, 4]} className="ps-glyph">
-                <div data-ps-glyph="" className="ps-glyph-field dot-field-mark">
-                  <PlusMark tone="page" className="plus-at-tl z-10" />
-                  <PlusMark tone="page" className="plus-at-tr z-10" />
-                  <PlusMark tone="page" className="plus-at-bl z-10" />
-                  <PlusMark tone="page" className="plus-at-br z-10" />
-                  {glyphs[stage.icon]}
-                  <span aria-hidden className="ps-numeral ab-outline">
-                    {padIndex(i)}
-                  </span>
-                </div>
-              </Cell>
+              {glyphVisual ? null : (
+                <Cell at={[7, 12, 0, 4]} className="ps-glyph">
+                  <div data-ps-glyph="" className="ps-glyph-field dot-field-mark">
+                    <PlusMark tone="page" className="plus-at-tl z-10" />
+                    <PlusMark tone="page" className="plus-at-tr z-10" />
+                    <PlusMark tone="page" className="plus-at-bl z-10" />
+                    <PlusMark tone="page" className="plus-at-br z-10" />
+                    {glyphs[stage.icon]}
+                    <span aria-hidden className="ps-numeral ab-outline">
+                      {padIndex(i)}
+                    </span>
+                  </div>
+                </Cell>
+              )}
 
-              <Cell at={[7, 12, 4, 8]} className="ps-copy">
+              <Cell at={glyphVisual ? [7, 12, 0, 8] : [7, 12, 4, 8]} className="ps-copy">
                 <div data-ps-copy="" className="ps-copy-inner">
                   <p className="index-tag flex items-center justify-between gap-4">
                     <span className="flex items-center gap-2">

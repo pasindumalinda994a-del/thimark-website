@@ -36,7 +36,7 @@ export const STORY = {
     "Today our work spans OEM motorcycle components, heavy steel fabrication, industrial machinery, engineering development and surface finishing, brought together to solve complex manufacturing challenges.",
   ],
   media: {
-    src: "/pages/about/hero-2.jpg",
+    src: "/pages/about/about-groundup.webp",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 50%",
   } satisfies Media,
@@ -127,7 +127,7 @@ export const DRIVES = {
       callout: ["Mobility", "Innovation"],
       imageSide: "right",
       media: {
-        src: "/pages/about/two-core-automotive.png",
+        src: "/pages/about/vision-vison.webp",
         alt: "Precision motorcycle components on a workshop bench",
         objectPosition: "50% 50%",
       },
@@ -140,7 +140,7 @@ export const DRIVES = {
       callout: ["Industry", "Infrastructure"],
       imageSide: "left",
       media: {
-        src: "/pages/about/featured-kilgharrah.png",
+        src: "/pages/about/vision-mission.webp",
         alt: "Kilgharrah 600 trash-rack cleaner built by Thimark operating at a hydropower intake",
         objectPosition: "50% 50%",
       },

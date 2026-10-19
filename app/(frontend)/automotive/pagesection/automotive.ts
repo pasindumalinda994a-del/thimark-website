@@ -41,7 +41,7 @@ export const RANGE = {
     "Our range covers structural supports, protective guards, mounting brackets and functional accessories, each made to its design, dimensions and assembly application.",
   ],
   media: {
-    src: "/pages/automotive/two-core-automotive.png",
+    src: "/pages/automotive/automotive-range1.webp",
     alt: "Precision OEM motorcycle components laid out on a Thimark workshop bench",
     objectPosition: "50% 50%",
   } satisfies Media,
@@ -55,7 +55,9 @@ export type ComponentGroup = {
   id: string;
   title: string;
   items: readonly string[];
-  icon: IsoIcon;
+  media: Media;
+  /** `contain` for product cutouts; `cover` for workshop/range plates. */
+  fit: "contain" | "cover";
 };
 
 export const COMPONENTS: readonly ComponentGroup[] = [
@@ -63,25 +65,45 @@ export const COMPONENTS: readonly ComponentGroup[] = [
     id: "stands",
     title: "Stands & Supports",
     items: ["Centre stands", "Side stands", "Engine hangers"],
-    icon: "motorcycle",
+    media: {
+      src: "/pages/automotive/automotive-range.webp",
+      alt: "Metallic motorcycle stands and support components from the Thimark range",
+      objectPosition: "50% 45%",
+    },
+    fit: "cover",
   },
   {
     id: "guards",
     title: "Guards & Protection",
     items: ["Leg guards", "Saree guards", "Belly pans"],
-    icon: "shield",
+    media: {
+      src: "/pages/engineering-services/products/rear-plate.png",
+      alt: "Powder-coated steel motorcycle rear plate, representative of protective components",
+      objectPosition: "50% 50%",
+    },
+    fit: "contain",
   },
   {
     id: "handlebars",
     title: "Handlebars & Carriers",
     items: ["Handlebars", "Rear carriers", "Bar pillions"],
-    icon: "wheel",
+    media: {
+      src: "/pages/engineering-services/products/bar-pillion-lh-rh.png",
+      alt: "Machined motorcycle bar pillion components, left and right",
+      objectPosition: "50% 50%",
+    },
+    fit: "contain",
   },
   {
     id: "brackets",
     title: "Brackets & Mounting Components",
     items: ["Speedometer brackets", "Battery brackets", "Seat latches", "Hooks"],
-    icon: "link",
+    media: {
+      src: "/pages/engineering-services/products/battery-bracket.png",
+      alt: "Welded steel motorcycle battery bracket manufactured by Thimark",
+      objectPosition: "50% 50%",
+    },
+    fit: "contain",
   },
   {
     id: "tools",
@@ -90,7 +112,12 @@ export const COMPONENTS: readonly ComponentGroup[] = [
       "Flat spanners",
       "Other custom metallic components developed to meet specific manufacturing requirements",
     ],
-    icon: "handyman",
+    media: {
+      src: "/pages/engineering-services/products/pillion-bracket.png",
+      alt: "Formed steel motorcycle pillion bracket, representative of custom metallic components",
+      objectPosition: "50% 50%",
+    },
+    fit: "contain",
   },
 ];
 
@@ -189,7 +216,8 @@ export type Stage = {
   body: string;
   operations: readonly string[];
   icon: IsoIcon;
-  media: Media;
+  /** Required for `visual="photo"`; omit for glyph-led stages (NPD). */
+  media?: Media;
 };
 
 export const STAGES: readonly Stage[] = [
@@ -200,11 +228,6 @@ export const STAGES: readonly Stage[] = [
     body: "Sheet metal, tubes and profiles are cut to the required shapes and dimensions, setting the foundation for forming and assembly.",
     operations: ["Sheet metal", "Tubes", "Profiles"],
     icon: "laser",
-    media: {
-      src: "/pages/automotive/about-industrial-automation.jpeg",
-      alt: "Production machinery prepared for cutting operations at Thimark",
-      objectPosition: "38% 45%",
-    },
   },
   {
     id: "forming",
@@ -213,11 +236,6 @@ export const STAGES: readonly Stage[] = [
     body: "Using press brakes, pipe-bending equipment and stamping processes, cut materials are shaped to meet component geometry and design requirements.",
     operations: ["Press brake", "Pipe bending", "Stamping"],
     icon: "mitre",
-    media: {
-      src: "/pages/automotive/quality-lean-production.jpeg",
-      alt: "Operators forming parts on an organized production line",
-      objectPosition: "38% 42%",
-    },
   },
   {
     id: "machining",
@@ -226,11 +244,6 @@ export const STAGES: readonly Stage[] = [
     body: "Drilling, threading, countersinking, grinding and edge finishing prepare components for accurate fitting, joining and assembly.",
     operations: ["Drilling", "Threading", "Countersinking", "Grinding", "Edge finishing"],
     icon: "precision",
-    media: {
-      src: "/pages/automotive/about-iso-precision.jpeg",
-      alt: "Engineer inspecting a precision-machined component",
-      objectPosition: "48% 40%",
-    },
   },
   {
     id: "joining",
@@ -239,11 +252,6 @@ export const STAGES: readonly Stage[] = [
     body: "Welding and suitable joining processes create functional components and sub-assemblies, including robotic and resistance spot welding where needed.",
     operations: ["Welding", "Robotic welding", "Resistance spot welding"],
     icon: "flame",
-    media: {
-      src: "/pages/automotive/about-steel-fabrication.jpeg",
-      alt: "Fabricators welding steel assemblies in the Thimark workshop",
-      objectPosition: "50% 45%",
-    },
   },
 ];
 

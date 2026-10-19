@@ -9041,10 +9041,46 @@ a.contact-channel-value:focus-visible {
   padding: 12px 16px;
 }
 
+/* Photo plate replaces the IsoGlyph slot on range tiles only */
+.rg-tile .rg-tile-shot {
+  position: relative;
+  display: block;
+  height: 16rem;
+  min-height: 16rem;
+  margin: 8px calc(var(--g1-offset) + 8px);
+  overflow: hidden;
+  background: var(--page-bg);
+}
+
+.rg-tile .rg-tile-shot img.object-contain {
+  padding: 16px 20px;
+}
+
+@media (min-width: 768px) {
+  .rg-tile.im-tile-short .rg-tile-shot {
+    height: calc(3 * var(--row) - 16px);
+    min-height: 0;
+    flex: none;
+    margin: 8px;
+  }
+}
+
 @media (max-width: 767px) {
   .rg-list {
     gap: 6px;
     margin-top: 2px;
+  }
+
+  .rg-section .rg-tile .rg-tile-shot {
+    grid-area: glyph;
+    width: 88px;
+    height: 88px;
+    min-height: 0;
+    margin: 0;
+  }
+
+  .rg-section .rg-tile .rg-tile-shot img.object-contain {
+    padding: 8px;
   }
 }
 
@@ -9446,6 +9482,88 @@ a.contact-channel-value:focus-visible {
   .ps-copy .ab-copy {
     text-align: left;
     text-align-last: auto;
+  }
+}
+
+/* Glyph visual — image-free mark plate (Engineering NPD) */
+.ps-visual-glyph .ps-mark {
+  display: flex;
+  color: var(--page-ink);
+  background: var(--page-bg);
+}
+
+.ps-visual-glyph .ps-mark .ah-media-caption {
+  color: var(--page-ink);
+  opacity: 0.72;
+}
+
+.ps-visual-glyph .ps-mark-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  height: auto;
+  margin: 0;
+  justify-content: center;
+  padding: 0;
+}
+
+.ps-visual-glyph .ps-mark-field .ps-glyph-mark {
+  width: min(48%, 180px);
+  max-width: 70%;
+  max-height: 58%;
+}
+
+.ps-visual-glyph .ps-mark-field .ps-numeral {
+  right: 28px;
+  bottom: 48px;
+  top: auto;
+  font-size: clamp(56px, 7vw, 112px);
+  transform: none;
+  line-height: 0.85;
+  opacity: 0.9;
+}
+
+@media (min-width: 768px) {
+  .ps-visual-glyph .ps-copy .ps-copy-inner {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .ps-visual-glyph .ps-mark-field .ps-numeral {
+    right: 32px;
+    bottom: 56px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ps-visual-glyph .ps-mark {
+    aspect-ratio: 4 / 3;
+    min-height: 0;
+  }
+
+  .ps-visual-glyph .ps-mark-field {
+    --mark-inset: 16px;
+    height: auto;
+    justify-content: center;
+    padding-left: 0;
+  }
+
+  .ps-visual-glyph .ps-mark-field .ps-glyph-mark {
+    width: min(42%, 140px);
+    height: auto;
+    max-height: 52%;
+  }
+
+  .ps-visual-glyph .ps-mark-field .ps-numeral {
+    right: 24px;
+    bottom: 44px;
+    top: auto;
+    font-size: clamp(48px, 18vw, 88px);
+    transform: none;
+  }
+
+  .ps-visual-glyph .ps-mark .ah-media-caption > span:last-child {
+    display: none;
   }
 }
 
@@ -10274,10 +10392,43 @@ a.contact-channel-value:focus-visible {
     padding: 12px 16px;
   }
 
-  /* Finish shots are square cutouts: show the whole part, clear of the note over the foot. */
-  .sf-section .dr-bands .solutions-plate-shot img {
-    padding: 16px 24px 44px;
-    object-fit: contain;
+}
+
+/* ---- Surface Finishing: image-free Isocon mark plates ------------------- */
+
+.sf-section .sf-finish-mark-plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--page-ink);
+  background: var(--page-bg);
+}
+
+.sf-section .sf-finish-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--page-ink);
+}
+
+.sf-section .sf-finish-field .sf-finish-mark {
+  width: min(48%, 180px);
+  max-width: 70%;
+  max-height: 58%;
+}
+
+.sf-section .sf-finish-mark-plate .solutions-callout {
+  z-index: 20;
+}
+
+@media (max-width: 767px) {
+  .sf-section .sf-finish-field .sf-finish-mark {
+    width: min(42%, 140px);
+    max-height: 52%;
   }
 }
 

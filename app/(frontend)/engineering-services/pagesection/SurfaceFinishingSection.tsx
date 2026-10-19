@@ -2,10 +2,11 @@
 
 import Copy from "@/app/(frontend)/components/Copy";
 import { useRef } from "react";
-import Image from "next/image";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
+import type { GlyphSet } from "@/app/(frontend)/components/isoGlyphs";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
+import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
 import {
@@ -46,7 +47,12 @@ const PROCESS_V: VLine[] = [
   [8, 8, 10],
 ];
 
-export default function SurfaceFinishingSection() {
+export default function SurfaceFinishingSection({
+  glyphs,
+}: {
+  /** Server-rendered with `isoGlyphs(FINISHES, "sf-finish-mark")`. */
+  glyphs: GlyphSet;
+}) {
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise", phoneNotes: true });
 
@@ -101,21 +107,20 @@ export default function SurfaceFinishingSection() {
             <BandRails last={index === FINISHES.length - 1} />
 
             <div className="solutions-plate">
-              <div data-wipe className="solutions-plate-shot">
-                <Image
-                  src={finish.media.src}
-                  alt={finish.media.alt}
-                  fill
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-cover"
-                  style={{ objectPosition: finish.media.objectPosition }}
-                />
+              <div data-wipe className="solutions-plate-shot sf-finish-mark-plate">
+                <div data-draw className="sf-finish-field dot-field-mark">
+                  <PlusMark tone="page" className="plus-at-tl z-10" />
+                  <PlusMark tone="page" className="plus-at-tr z-10" />
+                  <PlusMark tone="page" className="plus-at-bl z-10" />
+                  <PlusMark tone="page" className="plus-at-br z-10" />
+                  {glyphs[finish.icon]}
+                </div>
                 <p className="solutions-callout index-tag">
                   {finish.callout.map((line) => (
                     <span key={line}>{line}</span>
                   ))}
                 </p>
-                <Corners tone="brand" />
+                <Corners tone="page" />
               </div>
               <BandMobileRails />
             </div>

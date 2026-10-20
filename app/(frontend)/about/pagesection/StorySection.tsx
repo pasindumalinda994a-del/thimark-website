@@ -18,7 +18,10 @@ import {
   type VLine,
 } from "@/app/(frontend)/components/plate";
 import { padIndex } from "@/app/(frontend)/homesections/StoryProgress";
-import { STORY } from "./about";
+import { STORY as HOME_STORY } from "@/app/(frontend)/homesections/home";
+import { STORY as ABOUT_STORY } from "./about";
+
+type StoryCopy = typeof HOME_STORY;
 
 const H: HLine[] = [
   [3, 0, 12],
@@ -36,10 +39,13 @@ const V: VLine[] = [
 ];
 
 export default function StorySection({
-  cta = STORY.cta,
+  copy = ABOUT_STORY,
+  cta,
 }: {
+  copy?: StoryCopy;
   cta?: { label: string; href: string };
 }) {
+  const action = cta ?? copy.cta;
   const ref = useRef<HTMLElement>(null);
   usePlateMotion(ref, { image: "rise" });
   useLetterScrub(ref);
@@ -58,22 +64,19 @@ export default function StorySection({
 
       <Cell at={[0, 8, 0, 3]} className="plate-title">
         <MobileEdge open />
-        <Eyebrow data-reveal index={STORY.index}>
-          {STORY.eyebrow}
+        <Eyebrow data-reveal index={copy.index}>
+          {copy.eyebrow}
         </Eyebrow>
         <H2Heading id="story-heading">
-          {STORY.heading[0]}{" "}
-          <span className="ab-statement-muted">{STORY.heading[1]}</span>
+          {copy.heading[0]}{" "}
+          <span className="ab-statement-muted">{copy.heading[1]}</span>
         </H2Heading>
       </Cell>
 
       <Cell at={[8, 12, 0, 3]} className="plate-lede">
         <MobileEdge />
-        <Copy
-          data-reveal
-          variant="lede"
-        >
-          {STORY.lede}
+        <Copy data-reveal variant="lede">
+          {copy.lede}
         </Copy>
       </Cell>
 
@@ -81,10 +84,10 @@ export default function StorySection({
         <MobileEdge open />
         <span className="flex items-center gap-2">
           <span aria-hidden className="ab-marker" />
-          {STORY.storyLabel}
+          {copy.storyLabel}
         </span>
         <span className="tabular-nums">
-          {STORY.since} [{padIndex(0)}&ndash;{padIndex(STORY.paragraphs.length - 1)}]
+          {copy.since} [{padIndex(0)}&ndash;{padIndex(copy.paragraphs.length - 1)}]
         </span>
       </Cell>
 
@@ -92,12 +95,12 @@ export default function StorySection({
         <MobileEdge />
         <div data-wipe className="plate-media">
           <Image
-            src={STORY.media.src}
-            alt={STORY.media.alt}
+            src={copy.media.src}
+            alt={copy.media.alt}
             fill
             sizes="(min-width: 768px) 45vw, 100vw"
             className="object-cover"
-            style={{ objectPosition: STORY.media.objectPosition }}
+            style={{ objectPosition: copy.media.objectPosition }}
           />
           <Corners tone="light" />
         </div>
@@ -105,7 +108,7 @@ export default function StorySection({
 
       <Cell at={[6, 12, 4, 11]} className="st-story">
         <MobileEdge />
-        {STORY.paragraphs.map((paragraph, i) => (
+        {copy.paragraphs.map((paragraph, i) => (
           <div key={paragraph} className="st-story-item">
             <span className="index-tag tabular-nums opacity-60">[{padIndex(i)}]</span>
             <Copy data-letters variant="title">
@@ -117,16 +120,18 @@ export default function StorySection({
 
       <Cell at={[0, 8, 11, 16]} as="blockquote" className="st-closing m-0">
         <MobileEdge />
-        <Copy data-reveal variant="statement">{STORY.closing}</Copy>
+        <Copy data-reveal variant="statement">
+          {copy.closing}
+        </Copy>
       </Cell>
 
       <Cell at={[8, 12, 11, 14]} className="plate-lede st-scope">
         <MobileEdge open />
         <p data-reveal className="index-tag opacity-70">
-          {STORY.scopeLabel}
+          {copy.scopeLabel}
         </p>
         <ol className="vm-legend">
-          {STORY.scope.map((item, i) => (
+          {copy.scope.map((item, i) => (
             <li key={item} data-reveal className="vm-legend-item index-tag">
               <span className="tabular-nums opacity-60">[{padIndex(i)}]</span>
               <span className="vm-legend-rule" aria-hidden />
@@ -139,12 +144,12 @@ export default function StorySection({
       <Cell at={[8, 12, 14, 16]} className="plate-cta">
         <MobileEdge />
         <BrandButton
-          href={cta.href}
-          direction={cta.href.includes("#") ? "down" : "right"}
+          href={action.href}
+          direction={action.href.includes("#") ? "down" : "right"}
           tone="steel"
           data-reveal
         >
-          {cta.label}
+          {action.label}
         </BrandButton>
       </Cell>
     </SectionGrid>

@@ -1,11 +1,11 @@
-import { STORY } from "@/app/(frontend)/homesections/StoryProgress";
+import { JOURNEY } from "@/app/(frontend)/homesections/home";
 
 /** Homepage photographs, in page order: story, three disciplines, solutions, quality. */
 export const HOME_FIG = {
   story: 1,
-  core: 1 + STORY.length,
-  solutions: 1 + STORY.length + 3,
-  quality: 1 + STORY.length + 6,
+  core: 1 + JOURNEY.length,
+  solutions: 1 + JOURNEY.length + 3,
+  quality: 1 + JOURNEY.length + 6,
 } as const;
 
 export function figLabel(n: number) {

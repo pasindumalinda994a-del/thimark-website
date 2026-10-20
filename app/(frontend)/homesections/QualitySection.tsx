@@ -12,6 +12,7 @@ import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { HOME_FIG, figLabel } from "@/app/(frontend)/components/FigMark";
+import { QUALITY } from "@/app/(frontend)/homesections/home";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -22,53 +23,9 @@ const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 const joinStubDown: PlusArms = { up: false, down: true, left: false, right: false };
 const joinStubUp: PlusArms = { up: true, down: false, left: false, right: false };
 
-const PRINCIPLES = [
-  "Reduce waste.",
-  "Improve processes.",
-  "Create consistent value.",
-] as const;
-
-const PILLARS = [
-  {
-    id: "quality",
-    title: "Quality",
-    image: "/pages/home/quality-quality1.webp",
-    alt: "Engineer inspecting a machined metal component with a digital caliper",
-    objectPosition: "62% 35%",
-    body: "Controlled processes and attention to detail throughout manufacturing.",
-  },
-  {
-    id: "lean",
-    title: "Lean Thinking",
-    image: "/pages/home/quality-lean.webp",
-    alt: "Operators working a lean production line with organized workstations",
-    objectPosition: "38% 42%",
-    body: "Improving efficiency, productivity and resource utilization while reducing unnecessary waste.",
-  },
-  {
-    id: "improvement",
-    title: "Continuous Improvement",
-    image: "/pages/home/quality-continues.webp",
-    alt: "Engineers reviewing a manufactured housing against production drawings",
-    objectPosition: "48% 38%",
-    body: "Learning, refining processes and adopting technologies that strengthen performance.",
-  },
-] as const;
-
-const CREDS = [
-  {
-    id: "iso",
-    org: "ISO",
-    code: "9001:2015",
-    sub: "Certified Quality Management System",
-  },
-  {
-    id: "cida",
-    org: "CIDA",
-    code: "EM2",
-    sub: "Heavy Steel Fabrication Grade",
-  },
-] as const;
+const PRINCIPLES = QUALITY.principles;
+const PILLARS = QUALITY.pillars;
+const CREDS = QUALITY.creds;
 
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -306,29 +263,22 @@ export default function QualitySection() {
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
         <div className="quality-center min-h-rows-6">
           <p data-q-header className="eyebrow">
-            Quality by Design
+            {QUALITY.eyebrow}
           </p>
           <H2Heading id="quality-heading">
-            Precision Is Not a Promise.{" "}
-            <span className="ab-statement-muted">It&rsquo;s a Process.</span>
+            {QUALITY.heading[0]}{" "}
+            <span className="ab-statement-muted">{QUALITY.heading[1]}</span>
           </H2Heading>
           <div data-q-header className="quality-copy">
-            <Copy variant="lede">
-              At Thimark, quality is embedded into the way we engineer and
-              manufacture.
+            <Copy variant="lede">{QUALITY.paragraphs[0]}</Copy>
+            <Copy variant="lede" weight="normal">
+              {QUALITY.paragraphs[1]}
             </Copy>
             <Copy variant="lede" weight="normal">
-              Our ISO 9001:2015 certification and CIDA EM2 Grade in Heavy Steel
-              Fabrication reflect our commitment to professional standards,
-              controlled production and consistent results.
-            </Copy>
-            <Copy variant="lede" weight="normal">
-              Our quality approach includes material verification, in-process
-              controls, testing and final inspection, supported by structured
-              problem-solving and continuous improvement.
+              {QUALITY.paragraphs[2]}
             </Copy>
             <Copy variant="caption" weight="medium" className="pt-2 tracking-[0.12em]">
-              Our approach is guided by a simple principle:
+              {QUALITY.principleLead}
             </Copy>
           </div>
         </div>
@@ -468,8 +418,8 @@ export default function QualitySection() {
         ))}
       </div>
 
-      <BrandButton href="/about#quality" className="quality-cta">
-        Our Approach to Quality
+      <BrandButton href={QUALITY.cta.href} className="quality-cta">
+        {QUALITY.cta.label}
       </BrandButton>
       </div>
     </SectionGrid>

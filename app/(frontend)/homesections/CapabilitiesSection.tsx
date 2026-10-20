@@ -19,6 +19,10 @@ import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { STATS, formatStat } from "@/app/(frontend)/components/stats";
 import { StationDash, StationPlus } from "@/app/(frontend)/homesections/StoryProgress";
 import { HOME_CAPABILITIES } from "@/app/(frontend)/homesections/capabilities";
+import {
+  CAPABILITIES_COPY,
+  CAPABILITIES_CTA,
+} from "@/app/(frontend)/homesections/home";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
@@ -36,20 +40,6 @@ export type CapabilitiesCopy = {
   eyebrow: string;
   heading: readonly [string, string];
   lede: readonly string[];
-};
-
-const DEFAULT_CTA: CapabilitiesCta = {
-  label: "See Our Quality",
-  href: "/#quality",
-};
-
-const DEFAULT_COPY: CapabilitiesCopy = {
-  eyebrow: "The Thimark Advantage",
-  heading: ["Capability You", "Can Build On."],
-  lede: [
-    "Great engineering starts with good ideas — but reliable products require the capability to turn those ideas into reality.",
-    "Thimark combines manufacturing infrastructure, technical expertise and controlled production processes to support precision, consistency and dependable delivery.",
-  ],
 };
 
 const VISIBLE_CARDS = 4;
@@ -73,8 +63,8 @@ export default function CapabilitiesSection({
   id = "manufacturing",
   items = HOME_CAPABILITIES,
   glyphs,
-  cta = DEFAULT_CTA,
-  copy = DEFAULT_COPY,
+  cta = CAPABILITIES_CTA,
+  copy = CAPABILITIES_COPY,
   progressLabel = "Capabilities",
   foot,
   aside,

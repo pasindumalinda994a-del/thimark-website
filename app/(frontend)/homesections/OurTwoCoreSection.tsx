@@ -14,6 +14,7 @@ import H3Heading from "@/app/(frontend)/components/H3Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import FigMark, { HOME_FIG } from "@/app/(frontend)/components/FigMark";
+import { TWO_CORE } from "@/app/(frontend)/homesections/home";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -21,73 +22,7 @@ const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true 
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
 const joinTeeDown: PlusArms = { up: false, down: true, left: true, right: true };
 
-const COLUMNS = [
-  {
-    id: "automotive",
-    index: "01",
-    title: "Automotive Components",
-    href: "/automotive",
-    cta: "View Automotive Components",
-    image: "/pages/home/two-core-automotive.jpeg",
-    alt: "Engineers assembling a motorcycle frame on the production line",
-    body: "We design, fabricate and supply motorcycle components for local assembly lines, supporting established manufacturers with consistent production and dependable quality. Over 30% local value addition.",
-    areas: [
-      { index: "01", label: "Component Range", href: "/automotive#product-range" },
-      { index: "02", label: "OEM Partnerships", href: "/automotive#oem-partnerships" },
-      { index: "03", label: "Local Value Addition", href: "/automotive#local-value-addition" },
-    ],
-  },
-  {
-    id: "engineering",
-    index: "02",
-    title: "Engineering & Services",
-    href: "/engineering-services",
-    cta: "View Engineering Services",
-    image: "/pages/home/about-workshop.png",
-    alt: "Welders fabricating heavy steel frames in the Thimark workshop",
-    body: "We take requirements from concept to finished part through new product development, reverse engineering and precision engineering.",
-    areas: [
-      {
-        index: "01",
-        label: "New Product Development",
-        href: "/engineering-services#new-product-development",
-      },
-      {
-        index: "02",
-        label: "Reverse Engineering",
-        href: "/engineering-services#reverse-engineering",
-      },
-      {
-        index: "03",
-        label: "Surface Finishing",
-        href: "/engineering-services#surface-finishing",
-      },
-    ],
-  },
-  {
-    id: "machinery",
-    index: "03",
-    title: "Industrial Machinery",
-    href: "/industrial-machinery",
-    cta: "View Industrial Machinery",
-    image: "/pages/home/two-core-machinery.jpeg",
-    alt: "Engineers inspecting a custom industrial water-treatment machine",
-    body: "We design and manufacture custom machinery and fabricated systems for hydropower, water management, construction and other demanding industrial environments.",
-    areas: [
-      {
-        index: "01",
-        label: "Custom Machinery",
-        href: "/industrial-machinery#portfolio",
-      },
-      {
-        index: "02",
-        label: "International Projects",
-        href: "/industrial-machinery#kilgarrah",
-      },
-    ],
-  },
-] as const;
-
+const COLUMNS = TWO_CORE.columns;
 const COL_CLASS = ["two-core-col-0", "two-core-col-1", "two-core-col-2"] as const;
 const COLUMN_TOTAL = String(COLUMNS.length).padStart(2, "0");
 
@@ -331,17 +266,15 @@ export default function OurTwoCoreSection() {
       <div className="two-core-intro min-h-rows-3">
         <div className="two-core-title">
           <p data-core-header className="eyebrow">
-            What We Do
+            {TWO_CORE.eyebrow}
           </p>
           <H2Heading id="two-core-heading" className="text-left">
-            Three Disciplines.{" "}
-            <span className="ab-statement-muted">One Engineering Mindset.</span>
+            {TWO_CORE.heading[0]}{" "}
+            <span className="ab-statement-muted">{TWO_CORE.heading[1]}</span>
           </H2Heading>
         </div>
         <Copy data-core-header variant="lede" className="two-core-lede">
-          From individual components to complete machinery, we combine engineering
-          expertise and manufacturing capability to deliver practical solutions
-          for automotive and industrial applications.
+          {TWO_CORE.lede}
         </Copy>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />
@@ -384,6 +317,7 @@ export default function OurTwoCoreSection() {
                 fill
                 sizes="(min-width: 768px) 30vw, 100vw"
                 className="object-cover"
+                style={{ objectPosition: col.objectPosition }}
               />
               <PlusMark tone="light" className="top-4 left-4 z-10" />
               <PlusMark tone="light" className="top-4 left-[calc(100%-16px)] z-10" />

@@ -4,13 +4,13 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
-import { RAQ_LINK } from "@/app/(frontend)/components/nav";
 import Copy from "@/app/(frontend)/components/Copy";
 import H1Heading from "@/app/(frontend)/components/H1Heading";
 import HeroProvenance from "@/app/(frontend)/components/HeroProvenance";
 import HeroReel from "@/app/(frontend)/components/HeroReel";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { HERO } from "@/app/(frontend)/homesections/home";
 
 gsap.registerPlugin(useGSAP);
 
@@ -159,27 +159,20 @@ export default function HeroSection() {
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
         <p data-hero-item className="eyebrow">
-          Engineering <span aria-hidden>·</span> Manufacturing{" "}
-          <span aria-hidden>·</span> Innovation
+          {HERO.eyebrow[0]} <span aria-hidden>·</span> {HERO.eyebrow[1]}{" "}
+          <span aria-hidden>·</span> {HERO.eyebrow[2]}
         </p>
         <H1Heading id="hero-heading" waitForPreload className="hero-heading">
-          Engineering What Moves{" "}
-          <span className="ab-statement-muted">Industry Forward.</span>
+          {HERO.heading[0]}{" "}
+          <span className="ab-statement-muted">{HERO.heading[1]}</span>
         </H1Heading>
       </div>
 
       <div className="hero-lede">
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
-        <Copy
-          data-hero-item
-          variant="lede"
-          className="hero-body"
-        >
-          From precision-engineered motorcycle components to custom industrial
-          machinery, Thimark is an ISO 9001:2015 certified engineering and
-          manufacturing company in Sri Lanka, building solutions for the real
-          world.
+        <Copy data-hero-item variant="lede" className="hero-body">
+          {HERO.lede}
         </Copy>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />
         <PlusMark tone="light" arms={joinLeftEdge} className="v-g1-0 at-bottom md:hidden" />
@@ -201,22 +194,22 @@ export default function HeroSection() {
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-below-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-below-plus md:hidden" />
         <BrandButton
-          href={RAQ_LINK.href}
-          aria-label={RAQ_LINK.ariaLabel}
+          href={HERO.primaryCta.href}
+          aria-label={HERO.primaryCta.ariaLabel}
           font="sans"
           data-hero-item
           className="hero-cta-primary w-full md:w-auto"
         >
-          {RAQ_LINK.label}
+          {HERO.primaryCta.label}
         </BrandButton>
         <BrandButton
-          href="/#capabilities"
+          href={HERO.secondaryCta.href}
           direction="down"
           tone="outline"
           data-hero-item
           className="hero-cta-secondary w-full md:w-auto"
         >
-          See What We Do
+          {HERO.secondaryCta.label}
         </BrandButton>
       </div>
     </SectionGrid>

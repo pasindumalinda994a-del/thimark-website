@@ -19,37 +19,21 @@ import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import { figLabel } from "@/app/(frontend)/components/FigMark";
 import StoryProgress, {
-  STORY,
   StationDash,
   StationPlus,
   padIndex,
-  type StoryItem,
 } from "@/app/(frontend)/homesections/StoryProgress";
+import {
+  JOURNEY,
+  JOURNEY_COPY,
+  type JourneyCopy,
+  type JourneyItem,
+} from "@/app/(frontend)/homesections/home";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger, DrawSVGPlugin);
 
-export type StoryCopy = {
-  index?: string;
-  eyebrow: string;
-  heading: readonly [string, string];
-  lede: string;
-  readoutLabel: string;
-  readout: readonly { text: string; strong?: boolean }[];
-  cta: { label: string; href: string };
-};
-
-const HOME_COPY: StoryCopy = {
-  eyebrow: "Our Journey",
-  heading: ["Every Milestone", "Built the Next."],
-  lede: "What began as a modest steel fabrication business has evolved into a Sri Lankan engineering company delivering precision manufacturing, OEM components and custom-built industrial machinery.",
-  readoutLabel: "Our Story",
-  readout: [
-    { text: "We invest in people and technology " },
-    { text: "to turn engineering challenges into dependable solutions", strong: true },
-    { text: "." },
-  ],
-  cta: { label: "See What We Do", href: "/#capabilities" },
-};
+export type StoryCopy = JourneyCopy;
+export type StoryItem = JourneyItem;
 
 type Parts = {
   years: string[];
@@ -193,8 +177,8 @@ const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 
 export default function AboutSection({
   id = "about",
-  copy = HOME_COPY,
-  items = STORY,
+  copy = JOURNEY_COPY,
+  items = JOURNEY,
   glyphs,
   showTitles = false,
   figures = false,

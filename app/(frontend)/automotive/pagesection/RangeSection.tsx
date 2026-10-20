@@ -7,6 +7,7 @@ import BrandButton from "@/app/(frontend)/components/BrandButton";
 import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import H3Heading from "@/app/(frontend)/components/H3Heading";
+import PlusMark from "@/app/(frontend)/components/PlusMark";
 import SectionGrid from "@/app/(frontend)/components/SectionGrid";
 import { useLetterScrub } from "@/app/(frontend)/components/useLetterScrub";
 import { usePlateMotion } from "@/app/(frontend)/components/usePlateMotion";
@@ -39,17 +40,17 @@ const STORY_V: VLine[] = [
 const RANGE_H: HLine[] = [
   [0, 0, 12],
   [1, 0, 12],
-  [8, 0, 12],
-  [15, 0, 12],
-  [16, 8, 12],
+  [9, 0, 12],
+  [17, 0, 12],
+  [18, 8, 12],
 ];
 
 const RANGE_V: VLine[] = [
-  [0, 0, 18],
-  [12, 0, 18],
-  [4, 1, 15],
-  [8, 1, 15],
-  [8, 15, 18],
+  [0, 0, 20],
+  [12, 0, 20],
+  [4, 1, 17],
+  [8, 1, 17],
+  [8, 17, 20],
 ];
 
 const RANGE_JOINS: Join[] = [
@@ -136,7 +137,7 @@ export default function RangeSection() {
         </Cell>
       </PlateBlock>
 
-      <PlateBlock rows={18}>
+      <PlateBlock rows={20}>
         <Frame h={RANGE_H} v={RANGE_V} joins={RANGE_JOINS} />
 
         <Cell at={[0, 12, 0, 1]} className="ab-head index-tag">
@@ -150,7 +151,7 @@ export default function RangeSection() {
           </span>
         </Cell>
 
-        <Cell at={[0, 4, 1, 8]} className="dr-principles-intro">
+        <Cell at={[0, 4, 1, 9]} className="dr-principles-intro">
           <MobileEdge />
           <Copy
             data-reveal
@@ -166,11 +167,11 @@ export default function RangeSection() {
         {COMPONENTS.map((group, i) => {
           const slot = i + 1;
           const c = (slot % 3) * 4;
-          const r = slot < 3 ? 1 : 8;
+          const r = slot < 3 ? 1 : 9;
           return (
             <Cell
               key={group.id}
-              at={[c, c + 4, r, r + 7]}
+              at={[c, c + 4, r, r + 8]}
               as="article"
               className="vm-principle im-tile-short im-tile-invert rg-tile"
               tabIndex={0}
@@ -187,12 +188,15 @@ export default function RangeSection() {
                   alt={group.media.alt}
                   fill
                   sizes="(min-width: 768px) 25vw, 80vw"
-                  className={group.fit === "contain" ? "object-contain" : "object-cover"}
+                  className="rg-tile-photo object-cover"
                   style={{ objectPosition: group.media.objectPosition }}
                 />
-                <Corners tone="page" />
+                <PlusMark tone="page" className="plus-at-tl" />
+                <PlusMark tone="page" className="plus-at-tr" />
+                <PlusMark tone="page" className="plus-at-bl" />
+                <PlusMark tone="page" className="plus-at-br" />
               </div>
-              <div className="vm-principle-copy">
+              <div className="vm-principle-copy rg-tile-copy">
                 <H3Heading id={`range-${group.id}`} data-reveal variant="title" size="sm">
                   {group.title}
                 </H3Heading>
@@ -209,12 +213,12 @@ export default function RangeSection() {
           );
         })}
 
-        <Cell at={[0, 8, 15, 18]} as="blockquote" className="st-closing m-0">
+        <Cell at={[0, 8, 17, 20]} as="blockquote" className="st-closing m-0">
           <MobileEdge />
           <Copy data-reveal variant="statement">{RANGE.closing}</Copy>
         </Cell>
 
-        <Cell at={[8, 12, 15, 16]} className="rg-next index-tag hidden md:flex" aria-hidden>
+        <Cell at={[8, 12, 17, 18]} className="rg-next index-tag hidden md:flex" aria-hidden>
           <span className="opacity-70">Next [{PROCESS.index}]</span>
           <span className="flex items-center gap-3">
             {PROCESS.eyebrow}
@@ -222,7 +226,7 @@ export default function RangeSection() {
           </span>
         </Cell>
 
-        <Cell at={[8, 12, 16, 18]} className="plate-cta">
+        <Cell at={[8, 12, 18, 20]} className="plate-cta">
           <MobileEdge />
           <BrandButton href={RANGE.cta.href} direction="down" tone="steel" data-reveal>
             {RANGE.cta.label}

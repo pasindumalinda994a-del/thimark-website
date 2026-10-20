@@ -27,7 +27,8 @@ export const HERO: HeroCopy = {
   cta: { label: "Discuss an Engineering Project", href: "/enquire?service=engineering" },
   secondary: { label: "See Our Services", href: "#new-product-development" },
   image: {
-    src: "/pages/engineering-services/about-workshop.png",
+    // Test: hero-R1 | R2 | R3
+    src: "/pages/engineering-services/hero-R1.webp",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 42%",
   },
@@ -128,7 +129,8 @@ export const REVERSE = {
     "Reverse engineering can help establish a digital reference for legacy components, support the recreation of parts, and provide a starting point for design improvements.",
   ],
   media: {
-    src: "/pages/engineering-services/quality-continuous-improvement.jpeg",
+    // Test: reverse-R1 | R2 | R3
+    src: "/pages/engineering-services/reverse-R1.webp",
     alt: "Engineers measuring an existing housing with calipers against its technical drawings",
     objectPosition: "45% 55%",
   } satisfies Media,
@@ -272,7 +274,8 @@ export const ENGINEERING: QualityCopy = {
     "Engineering, manufacturing and quality together give customers a clearer path from concept to production.",
   ],
   media: {
-    src: "/pages/engineering-services/two-core-machinery.jpeg",
+    // Test: engineering-R1 | R2 | R3
+    src: "/pages/engineering-services/engineering-R3.webp",
     alt: "Engineers reviewing drawings beside custom machinery on the production floor",
     objectPosition: "70% 40%",
   },

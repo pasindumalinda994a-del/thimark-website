@@ -11,7 +11,7 @@ export const STATS: Stat[] = [
   {
     id: "factory",
     label: "Modern Factory",
-    value: 15000,
+    value: 29500,
     unit: "sq. ft.",
   },
   { id: "employees", label: "Employees", value: 95 },

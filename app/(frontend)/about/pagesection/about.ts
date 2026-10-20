@@ -1,6 +1,10 @@
 import type { IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
 import type { Capability } from "@/app/(frontend)/homesections/CapabilitiesSection";
-import { STORY as HOME_STORY, type StoryItem } from "@/app/(frontend)/homesections/StoryProgress";
+import {
+  JOURNEY as HOME_JOURNEY,
+  STORY as HOME_STORY_PLATE,
+  type JourneyItem as HomeJourneyItem,
+} from "@/app/(frontend)/homesections/home";
 
 type Link = { label: string; href: string };
 type Media = { src: string; alt: string; objectPosition: string };
@@ -15,47 +19,24 @@ export const HERO = {
   supporting: ["Proudly Sri Lankan.", "Driven by Engineering.", "Built on Trust."],
   cta: { label: "Discover Our Story", href: "#story" } satisfies Link,
   image: {
-    src: "/pages/about/about-hero.webp",
+    // Test: about-hero-R1 | R2 | R3
+    src: "/pages/about/about-hero-R1.webp",
     alt: "Thimark machinists and fabricators at work across the factory floor",
-    objectPosition: "50% 40%",
+    objectPosition: "50% 50%",
   } satisfies Media,
   caption: ["Fig. 01", "Thimark Technocreations (Pvt) Ltd"],
 } as const;
 
-/* ---- 01 Company Story ---------------------------------------------- */
+/* ---- 01 Company Story (shared plate from home.ts; about CTA) ------- */
 
 export const STORY = {
-  index: "01",
-  eyebrow: "Built From The Ground Up",
-  heading: ["From Steel Fabrication", "to Advanced Engineering."],
-  lede: "What began as a backyard steel fabrication business in 2014 has grown into a trusted Sri Lankan engineering and manufacturing company serving the automotive and industrial sectors.",
-  storyLabel: "Our Story",
-  since: "Since 2014",
-  paragraphs: [
-    "Over the years, Thimark has expanded its capabilities and invested in technology, turning engineering concepts, technical drawings and physical samples into precision components and custom-built machinery.",
-    "Today our work spans OEM motorcycle components, heavy steel fabrication, industrial machinery, engineering development and surface finishing, brought together to solve complex manufacturing challenges.",
-  ],
-  media: {
-    src: "/pages/about/about-groundup.webp",
-    alt: "Welders fabricating heavy steel frames in the Thimark workshop",
-    objectPosition: "50% 50%",
-  } satisfies Media,
-  scopeLabel: "Our Work Today",
-  scope: [
-    "OEM Motorcycle Components",
-    "Heavy Steel Fabrication",
-    "Industrial Machinery",
-    "Engineering Development",
-    "Surface Finishing",
-  ],
-  closing:
-    "Our journey is driven by a simple belief: when engineering expertise meets innovation, quality and determination, challenges become opportunities to build something better.",
+  ...HOME_STORY_PLATE,
   cta: { label: "See the Journey", href: "#journey" } satisfies Link,
 } as const;
 
 /* ---- 01b Our Journey ----------------------------------------------- */
 
-export type JourneyItem = StoryItem & { status?: "planned" };
+export type JourneyItem = HomeJourneyItem & { status?: "planned" };
 
 export const JOURNEY_COPY = {
   eyebrow: "Our Journey",
@@ -96,7 +77,7 @@ const JOURNEY_COPY_BY_ID: Record<
   expansion: {
     label: "Expansion",
     title: "Building for the Future",
-    body: "Our factory expanded to 15,000 sq. ft., with machinery upgrades and Lean Manufacturing Practices to strengthen production, efficiency and future growth.",
+    body: "Our factory expanded to 29,500 sq. ft., with machinery upgrades and Lean Manufacturing Practices to strengthen production, efficiency and future growth.",
   },
   finishing: {
     label: "Surface Finishing",
@@ -107,7 +88,7 @@ const JOURNEY_COPY_BY_ID: Record<
   },
 };
 
-export const JOURNEY: JourneyItem[] = HOME_STORY.map((item) => ({
+export const JOURNEY: JourneyItem[] = HOME_JOURNEY.map((item) => ({
   ...item,
   ...JOURNEY_COPY_BY_ID[item.id],
 }));
@@ -127,9 +108,10 @@ export const DRIVES = {
       callout: ["Mobility", "Innovation"],
       imageSide: "right",
       media: {
-        src: "/pages/about/vision-vison.webp",
-        alt: "Precision motorcycle components on a workshop bench",
-        objectPosition: "50% 50%",
+        // Test: vision-laser-R1 | R2 | R3
+        src: "/pages/about/vision-laser-R1.webp",
+        alt: "Laser cutting metal with sparks on the Thimark factory floor",
+        objectPosition: "50% 45%",
       },
       lead: "Engineering Sri Lanka\u2019s future of mobility and innovation \u2014 from quality components to world-class vehicles and machinery.",
       paragraphs: [] as string[],
@@ -140,9 +122,10 @@ export const DRIVES = {
       callout: ["Industry", "Infrastructure"],
       imageSide: "left",
       media: {
-        src: "/pages/about/vision-mission.webp",
-        alt: "Kilgharrah 600 trash-rack cleaner built by Thimark operating at a hydropower intake",
-        objectPosition: "50% 50%",
+        // Test: mission-R1 | R2 | R3
+        src: "/pages/about/mission-R2.webp",
+        alt: "Welder joining metal components with a bright arc and sparks",
+        objectPosition: "50% 40%",
       },
       lead: "To advance Sri Lanka\u2019s industrial and automotive capability through precision engineering, innovation and professionalism.",
       paragraphs: [
@@ -205,7 +188,8 @@ export const QUALITY = {
     "But quality does not stop with meeting requirements. We continually look for ways to work smarter, improve efficiency and deliver greater value to our customers.",
   ],
   media: {
-    src: "/pages/about/quality-quality1.webp",
+    // Test: quality-R1 | R2 | R3
+    src: "/pages/about/quality-R3.webp",
     alt: "Engineer inspecting a machined metal component with a digital caliper",
     objectPosition: "62% 35%",
   } satisfies Media,
@@ -280,7 +264,8 @@ export const RECOGNITION = {
     callout: ["SLTC Research &", "Innovation Awards 2025"],
     body: "From business performance and industrial manufacturing to research and innovation, these recognitions push us to raise our standards.",
     media: {
-      src: "/pages/about/milestones.webp",
+      // Test: recognition-R1 | R2 | R3
+      src: "/pages/about/recognition-R1.webp",
       alt: "Two SLTC Research & Innovation Awards 2025 trophies presented to Thimark Technocreations",
       objectPosition: "50% 45%",
     } satisfies Media,
@@ -415,7 +400,8 @@ export const PEOPLE = {
     "From design and fabrication to production, inspection and finishing, we build dependable products for real-world applications.",
   ],
   media: {
-    src: "/pages/about/workshop.jpg",
+    // Test: workshop-R1 | R2 | R3
+    src: "/pages/about/workshop-R2.webp",
     alt: "Thimark team inspecting QC-passed components at a workshop bench",
     objectPosition: "50% 40%",
   } satisfies Media,

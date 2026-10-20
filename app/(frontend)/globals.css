@@ -9041,27 +9041,79 @@ a.contact-channel-value:focus-visible {
   padding: 12px 16px;
 }
 
-/* Photo plate replaces the IsoGlyph slot on range tiles only */
+/* Photo plate — same media grammar as news-card-media / news-card-photo */
 .rg-tile .rg-tile-shot {
   position: relative;
   display: block;
-  height: 16rem;
-  min-height: 16rem;
+  flex: none;
+  width: auto;
+  height: 12rem;
+  min-height: 12rem;
   margin: 8px calc(var(--g1-offset) + 8px);
   overflow: hidden;
-  background: var(--page-bg);
+  background: transparent;
 }
 
-.rg-tile .rg-tile-shot img.object-contain {
-  padding: 16px 20px;
+.rg-tile .rg-tile-photo {
+  object-fit: cover;
+  padding: 16px;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Plus marks register to the photo inset, matching news-card-media */
+.rg-tile .rg-tile-shot > .plus-at-tl {
+  top: calc(8px + var(--plus-size) / 2);
+  left: calc(8px + var(--plus-size) / 2);
+}
+
+.rg-tile .rg-tile-shot > .plus-at-tr {
+  top: calc(8px + var(--plus-size) / 2);
+  left: calc(100% - 8px - var(--plus-size) / 2);
+}
+
+.rg-tile .rg-tile-shot > .plus-at-bl {
+  top: calc(100% - 8px - var(--plus-size) / 2);
+  left: calc(8px + var(--plus-size) / 2);
+}
+
+.rg-tile .rg-tile-shot > .plus-at-br {
+  top: calc(100% - 8px - var(--plus-size) / 2);
+  left: calc(100% - 8px - var(--plus-size) / 2);
+}
+
+.rg-tile .rg-tile-copy {
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+
+@media (hover: hover) {
+  .rg-tile:hover .rg-tile-photo,
+  .rg-tile:focus-within .rg-tile-photo {
+    transform: scale(0.96);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rg-tile .rg-tile-photo {
+    transition: none;
+  }
+
+  .rg-tile:hover .rg-tile-photo,
+  .rg-tile:focus-within .rg-tile-photo {
+    transform: none;
+  }
 }
 
 @media (min-width: 768px) {
   .rg-tile.im-tile-short .rg-tile-shot {
-    height: calc(3 * var(--row) - 16px);
-    min-height: 0;
-    flex: none;
+    height: calc(3.75 * var(--row));
+    min-height: calc(3.75 * var(--row));
     margin: 8px;
+  }
+
+  .rg-tile.im-tile-short .rg-tile-copy {
+    justify-content: flex-start;
+    padding: 8px 16px 16px;
   }
 }
 
@@ -9071,16 +9123,32 @@ a.contact-channel-value:focus-visible {
     margin-top: 2px;
   }
 
+  /* Stack like a news lead card: full-width shot over title/list */
+  .rg-section .rg-tile.vm-principle {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+      "head"
+      "shot"
+      "copy";
+  }
+
   .rg-section .rg-tile .rg-tile-shot {
-    grid-area: glyph;
-    width: 88px;
-    height: 88px;
+    grid-area: shot;
+    width: auto;
+    height: auto;
     min-height: 0;
+    aspect-ratio: 4 / 3;
     margin: 0;
   }
 
-  .rg-section .rg-tile .rg-tile-shot img.object-contain {
-    padding: 8px;
+  .rg-section .rg-tile .rg-tile-photo {
+    padding: 12px;
+  }
+
+  .rg-section .rg-tile .rg-tile-copy {
+    grid-area: copy;
+    padding: 12px 0 0;
   }
 }
 
@@ -10416,9 +10484,10 @@ a.contact-channel-value:focus-visible {
 }
 
 .sf-section .sf-finish-field .sf-finish-mark {
-  width: min(48%, 180px);
-  max-width: 70%;
-  max-height: 58%;
+  width: auto;
+  height: min(68%, calc(100% - 72px));
+  max-width: min(62%, 240px);
+  max-height: 68%;
 }
 
 .sf-section .sf-finish-mark-plate .solutions-callout {
@@ -10427,8 +10496,9 @@ a.contact-channel-value:focus-visible {
 
 @media (max-width: 767px) {
   .sf-section .sf-finish-field .sf-finish-mark {
-    width: min(42%, 140px);
-    max-height: 52%;
+    height: min(60%, calc(100% - 56px));
+    max-width: min(56%, 180px);
+    max-height: 60%;
   }
 }
 

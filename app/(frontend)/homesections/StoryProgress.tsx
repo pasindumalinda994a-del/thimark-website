@@ -1,111 +1,13 @@
-import type { IsoIcon } from "@/app/(frontend)/components/IsoGlyph";
+import {
+  JOURNEY,
+  type JourneyItem,
+} from "@/app/(frontend)/homesections/home";
 
-export type StoryItem = {
-  id: string;
-  year: string;
-  label: string;
-  title: string;
-  icon: IsoIcon;
-  image: string;
-  alt: string;
-  objectPosition: string;
-  body: string;
-  longBody: string;
-};
+/** @deprecated Prefer JourneyItem from home.ts */
+export type StoryItem = JourneyItem;
 
-export const STORY: StoryItem[] = [
-  {
-    id: "foundation",
-    year: "2014",
-    label: "Founded",
-    title: "From the Ground Up",
-    icon: "factory",
-    image: "/pages/home/journey-founded1.webp",
-    alt: "Fabricators welding structural steel in a workshop",
-    objectPosition: "50% 45%",
-    body: "Thimark\u2019s journey began as a backyard steel fabrication business, laying the foundation for the engineering capabilities that would follow.",
-    longBody:
-      "Thimark\u2019s journey began as a backyard steel fabrication business, laying the foundation for the engineering capabilities that would follow.",
-  },
-  {
-    id: "iso",
-    year: "2019",
-    label: "ISO 9001",
-    title: "A New Standard of Quality",
-    icon: "verified",
-    image: "/pages/home/journey-iso.webp",
-    alt: "Engineers inspecting a precision-machined component in a factory",
-    objectPosition: "48% 40%",
-    body: "Thimark achieved ISO 9001:2015 certification, establishing a formal quality management framework and strengthening its commitment to consistent manufacturing standards.",
-    longBody:
-      "Thimark achieved ISO 9001:2015 certification, establishing a formal quality management framework and strengthening its commitment to consistent manufacturing standards.",
-  },
-  {
-    id: "cida",
-    year: "2020",
-    label: "CIDA EM2",
-    title: "Heavy Fabrication Recognized",
-    icon: "work",
-    image: "/pages/home/journey-steel.webp",
-    alt: "Welders fabricating heavy steel frames in the workshop",
-    objectPosition: "50% 42%",
-    body: "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important milestone in its professional and manufacturing capabilities.",
-    longBody:
-      "Thimark achieved CIDA EM2 Grade in Heavy Steel Fabrication, marking an important milestone in its professional and manufacturing capabilities.",
-  },
-  {
-    id: "automotive",
-    year: "2022",
-    label: "Automotive",
-    title: "Entering Automotive Manufacturing",
-    icon: "car",
-    image: "/pages/home/journey-automotive.webp",
-    alt: "Engineers assembling motorcycle gearbox components",
-    objectPosition: "42% 40%",
-    body: "Thimark expanded into automotive parts manufacturing, beginning a new chapter in precision-engineered motorcycle components for local assembly programmes.",
-    longBody:
-      "Thimark expanded into automotive parts manufacturing, beginning a new chapter in precision-engineered motorcycle components for local assembly programmes.",
-  },
-  {
-    id: "kengen",
-    year: "2024",
-    label: "KenGen",
-    title: "Engineering Beyond Borders",
-    icon: "precision",
-    image: "/pages/home/journey-expansion.webp",
-    alt: "Engineers inspecting a trash-cleaning machine at a hydropower intake",
-    objectPosition: "62% 40%",
-    body: "Thimark designed and manufactured the Kilgharrah 600 automated trash-cleaning machine for Kenya Electricity Generating Company (KenGen), marking a major international engineering achievement.",
-    longBody:
-      "Thimark designed and manufactured the Kilgharrah 600 automated trash-cleaning machine for Kenya Electricity Generating Company (KenGen), marking a major international engineering achievement.",
-  },
-  {
-    id: "expansion",
-    year: "2025",
-    label: "Expansion",
-    title: "Building for the Next Chapter",
-    icon: "expand",
-    image: "/pages/home/journey-expansion.webp",
-    alt: "Engineers beside upgraded production machinery in a larger factory",
-    objectPosition: "38% 45%",
-    body: "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with advanced systems, strengthening its capacity for precision manufacturing and future growth.",
-    longBody:
-      "Thimark expanded its factory to 15,000 sq. ft. and upgraded its machinery with advanced systems, strengthening its capacity for precision manufacturing and future growth.",
-  },
-  {
-    id: "finishing",
-    year: "2026",
-    label: "Surface Finishing",
-    title: "Expanding Manufacturing Capability",
-    icon: "precision",
-    image: "/pages/home/quality-inspection.jpeg",
-    alt: "Engineer inspecting a machined metal component with a digital caliper",
-    objectPosition: "62% 35%",
-    body: "Thimark planned to introduce a powder-coating facility at the Ekala IDB Industrial Zone, extending its manufacturing and finishing capabilities.",
-    longBody:
-      "Thimark planned to introduce a powder-coating facility at the Ekala IDB Industrial Zone, extending its manufacturing and finishing capabilities.",
-  },
-];
+/** @deprecated Prefer JOURNEY from home.ts */
+export const STORY = JOURNEY;
 
 export function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
@@ -169,21 +71,17 @@ export function StationDash() {
   );
 }
 
-export type StationItem = Pick<StoryItem, "id" | "label" | "year">;
+export type StationItem = Pick<JourneyItem, "id" | "label" | "year">;
 
 export default function StoryProgress({
-  items = STORY,
+  items = JOURNEY,
   label = "Company journey",
 }: {
   items?: readonly StationItem[];
   label?: string;
 }) {
   return (
-    <div
-      role="tablist"
-      aria-label={label}
-      className="about-tabs"
-    >
+    <div role="tablist" aria-label={label} className="about-tabs">
       {items.map((item, i) => (
         <button
           key={item.id}

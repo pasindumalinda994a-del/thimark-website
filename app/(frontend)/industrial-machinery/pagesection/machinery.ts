@@ -11,7 +11,8 @@ type Media = { src: string; alt: string; objectPosition: string };
 
 export const ENQUIRE = "/enquire?service=industrial";
 
-const KILGARRAH_PHOTO = "/pages/industrial-machinery/kilgharrah-600.jpg";
+// Test: kilgharrah-R1 | R2 | R3
+const KILGARRAH_PHOTO = "/pages/industrial-machinery/kilgharrah-R1.JPG.jpeg";
 
 /* ---- Hero ---------------------------------------------------------- */
 
@@ -29,9 +30,10 @@ export const HERO: HeroCopy = {
   cta: { label: "Discuss a Machinery Project", href: ENQUIRE },
   secondary: { label: "See Our Machinery", href: "#portfolio" },
   image: {
-    src: "/pages/industrial-machinery/two-core-machinery.jpeg",
+    // Test: hero-R1 | R2 | R3
+    src: "/pages/industrial-machinery/hero-R1.JPG.jpeg",
     alt: "Engineers inspecting a custom industrial water-treatment machine",
-    objectPosition: "50% 50%",
+    objectPosition: "50% 40%",
   },
   caption: ["Fig. 01", "Custom Industrial Machinery"],
 };
@@ -50,7 +52,8 @@ export const PORTFOLIO = {
     "Our portfolio brings together mechanical engineering, steel fabrication, and manufacturing capabilities to support infrastructure and industrial applications.",
   ],
   media: {
-    src: "/pages/industrial-machinery/about-workshop.png",
+    // Test: portfolio-R1 | R2 | R3
+    src: "/pages/industrial-machinery/portfolio-R1.webp",
     alt: "Welders fabricating heavy steel frames in the Thimark workshop",
     objectPosition: "50% 42%",
   } satisfies Media,
@@ -109,7 +112,8 @@ export const BANDS: readonly PortfolioBand[] = [
       "Each project differs in arrangement, dimensions and integration, so we start with the application and engineer around its needs.",
     imageSide: "right",
     media: {
-      src: "/pages/industrial-machinery/featured-kilgharrah.png",
+      // Test: water-R1 | R2 | R3
+      src: "/pages/industrial-machinery/water-R1.JPG.jpeg",
       alt: "The KILGHARRAH 600 clearing debris from a hydropower trash rack as engineers supervise",
       objectPosition: "50% 45%",
     },
@@ -148,7 +152,8 @@ export const BANDS: readonly PortfolioBand[] = [
       "From individual fabricated assemblies to integrated machinery projects, our goal is to deliver practical solutions that respond to real operational requirements.",
     imageSide: "left",
     media: {
-      src: "/pages/industrial-machinery/about-industrial-automation.jpeg",
+      // Test: processing-R1 | R2 | R3
+      src: "/pages/industrial-machinery/processing-R3.webp",
       alt: "Engineers commissioning an automated conveyor and material-handling line",
       objectPosition: "50% 50%",
     },

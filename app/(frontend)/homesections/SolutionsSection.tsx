@@ -6,6 +6,7 @@ import DirectionPulse from "@/app/(frontend)/components/DirectionPulse";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import FigMark, { HOME_FIG } from "@/app/(frontend)/components/FigMark";
+import { SOLUTIONS } from "@/app/(frontend)/homesections/home";
 
 const joinLeftEdge: PlusArms = { up: true, down: true, left: false, right: true };
 const joinRightEdge: PlusArms = { up: true, down: true, left: true, right: false };
@@ -14,45 +15,6 @@ const joinTeeUp: PlusArms = { up: true, down: false, left: true, right: true };
 function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
 }
-
-const SOLUTIONS = [
-  {
-    id: "kilgharrah",
-    name: "Kilgharrah 600",
-    title: "Automated Trash Rack Cleaning Machine",
-    callout: ["KenGen", "Hydropower Infrastructure"],
-    image: "/pages/home/featured-kilgharrah.png",
-    alt: "Kilgharrah 600 trash-rack cleaner operating at a hydropower intake",
-    href: "/industrial-machinery#kilgarrah",
-    cta: "View the Kilgharrah 600",
-    imageSide: "right",
-    body: "Thimark designed and manufactured the Kilgharrah 600 for KenGen, delivering a custom-engineered hydraulic trash-rack cleaning solution for hydropower infrastructure.",
-  },
-  {
-    id: "oem",
-    name: "OEM Motorcycle Components",
-    title: "Precision for Local Assembly",
-    callout: ["DPMC / Bajaj", "Senaro", "Ranomoto"],
-    image: "/pages/home/solutions- oem.webp",
-    alt: "Precision motorcycle components on a workshop bench",
-    href: "/automotive#product-range",
-    cta: "View the Component Range",
-    imageSide: "left",
-    body: "Thimark manufactures key motorcycle components for local assembly programmes, supporting established OEM partners with precision-engineered parts and dependable production.",
-  },
-  {
-    id: "machinery-work",
-    name: "Custom Industrial Machinery",
-    title: "Built Around Your Application",
-    callout: ["Custom Engineering", "Site-Specific Solutions"],
-    image: "/pages/home/two-core-machinery.png",
-    alt: "Engineers assembling custom industrial machinery",
-    href: "/industrial-machinery#portfolio",
-    cta: "View Custom Machinery",
-    imageSide: "right",
-    body: "From specialized equipment to fabricated industrial systems, Thimark develops machinery around real operational requirements, helping customers address complex engineering challenges.",
-  },
-] as const;
 
 function MobileRails() {
   return (
@@ -113,6 +75,7 @@ export default function SolutionsSection() {
                   fill
                   sizes="(min-width: 768px) 60vw, 100vw"
                   className="object-cover"
+                  style={{ objectPosition: solution.objectPosition }}
                 />
                 <p className="solutions-callout index-tag">
                   {solution.callout.map((line) => (

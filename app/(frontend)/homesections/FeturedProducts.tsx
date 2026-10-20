@@ -8,6 +8,7 @@ import Copy from "@/app/(frontend)/components/Copy";
 import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
+import { FEATURED } from "@/app/(frontend)/homesections/home";
 import SolutionsSection from "@/app/(frontend)/homesections/SolutionsSection";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -133,17 +134,15 @@ export default function FeturedProducts() {
       <div className="featured-intro min-h-rows-3">
         <div className="featured-title">
           <p data-featured-copy className="eyebrow">
-            Engineered for the Real World
+            {FEATURED.eyebrow}
           </p>
           <H2Heading id="featured-heading" className="text-left">
-            When the Challenge Is Complex,{" "}
-            <span className="ab-statement-muted">Engineering Has to Be Smarter.</span>
+            {FEATURED.heading[0]}{" "}
+            <span className="ab-statement-muted">{FEATURED.heading[1]}</span>
           </H2Heading>
         </div>
         <Copy data-featured-copy variant="lede" className="featured-lede">
-          Our solutions are developed around the application, the environment
-          and the challenge — combining practical engineering with precision
-          manufacturing and automation.
+          {FEATURED.lede}
         </Copy>
         <GridLine axis="v" unstyled tone="page" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="page" className="v-g1-12 hero-v-above-plus md:hidden" />

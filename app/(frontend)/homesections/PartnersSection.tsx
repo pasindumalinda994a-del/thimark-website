@@ -10,6 +10,10 @@ import H2Heading from "@/app/(frontend)/components/H2Heading";
 import PlusMark, { type PlusArms } from "@/app/(frontend)/components/PlusMark";
 import SectionGrid, { GridLine } from "@/app/(frontend)/components/SectionGrid";
 import PartnerWordmark from "@/app/(frontend)/homesections/PartnerWordmark";
+import {
+  PARTNERS_COPY,
+  type PartnersSectionCopy,
+} from "@/app/(frontend)/homesections/home";
 import { PARTNERS } from "@/app/(frontend)/homesections/partners";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -22,28 +26,11 @@ function padIndex(index: number) {
   return String(index + 1).padStart(2, "0");
 }
 
-export type PartnersCopy = {
-  eyebrow: string;
-  heading: readonly [string, string];
-  lede: { strong: string; rest: string };
-  statement: string;
-  cta?: { label: string; href: string };
-};
-
-const HOME_COPY: PartnersCopy = {
-  eyebrow: "Trusted by Industry",
-  heading: ["Engineering That", "Earns Trust."],
-  lede: {
-    strong: "Strong engineering partnerships are built over time.",
-    rest: "Thimark works with established organizations that rely on its manufacturing capability, technical expertise and commitment to quality.",
-  },
-  statement:
-    "From local manufacturing partnerships to international engineering projects, our work speaks through the relationships we build.",
-};
+export type PartnersCopy = PartnersSectionCopy;
 
 export default function PartnersSection({
   id = "partners",
-  copy = HOME_COPY,
+  copy = PARTNERS_COPY,
 }: {
   id?: string;
   copy?: PartnersCopy;

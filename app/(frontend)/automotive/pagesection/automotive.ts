@@ -20,9 +20,10 @@ export const HERO: HeroCopy = {
   cta: { label: "Request a Component Quote", href: "/enquire?service=automotive" },
   secondary: { label: "See the Component Range", href: "#product-range" },
   image: {
-    src: "/pages/automotive/two-core-automotive.jpeg",
+    // Test: hero-R1 | R2 | R3
+    src: "/pages/automotive/hero-R1.webp",
     alt: "Engineers assembling a motorcycle frame on the production line",
-    objectPosition: "50% 50%",
+    objectPosition: "50% 30%",
   },
   caption: ["Fig. 01", "Thimark Automotive Components"],
 };
@@ -41,7 +42,8 @@ export const RANGE = {
     "Our range covers structural supports, protective guards, mounting brackets and functional accessories, each made to its design, dimensions and assembly application.",
   ],
   media: {
-    src: "/pages/automotive/automotive-range1.webp",
+    // Test: range-R1 | R2 | R3
+    src: "/pages/automotive/range-R1.webp",
     alt: "Precision OEM motorcycle components laid out on a Thimark workshop bench",
     objectPosition: "50% 50%",
   } satisfies Media,
@@ -56,8 +58,6 @@ export type ComponentGroup = {
   title: string;
   items: readonly string[];
   media: Media;
-  /** `contain` for product cutouts; `cover` for workshop/range plates. */
-  fit: "contain" | "cover";
 };
 
 export const COMPONENTS: readonly ComponentGroup[] = [
@@ -66,44 +66,44 @@ export const COMPONENTS: readonly ComponentGroup[] = [
     title: "Stands & Supports",
     items: ["Centre stands", "Side stands", "Engine hangers"],
     media: {
-      src: "/pages/automotive/automotive-range.webp",
-      alt: "Metallic motorcycle stands and support components from the Thimark range",
+      // Test: stands-R1 | R2 | R3
+      src: "/pages/automotive/stands-R1.webp",
+      alt: "Rows of black-coated motorcycle stand and support components on the Thimark workbench",
       objectPosition: "50% 45%",
     },
-    fit: "cover",
   },
   {
     id: "guards",
     title: "Guards & Protection",
     items: ["Leg guards", "Saree guards", "Belly pans"],
     media: {
-      src: "/pages/engineering-services/products/rear-plate.png",
-      alt: "Powder-coated steel motorcycle rear plate, representative of protective components",
-      objectPosition: "50% 50%",
+      // Test: guards-R1 | R2 | R3
+      src: "/pages/automotive/guards-R1.webp",
+      alt: "Bridge-shaped brackets and circular metal framing parts for motorcycle protection",
+      objectPosition: "50% 45%",
     },
-    fit: "contain",
   },
   {
     id: "handlebars",
     title: "Handlebars & Carriers",
     items: ["Handlebars", "Rear carriers", "Bar pillions"],
     media: {
-      src: "/pages/engineering-services/products/bar-pillion-lh-rh.png",
-      alt: "Machined motorcycle bar pillion components, left and right",
-      objectPosition: "50% 50%",
+      // Test: handlebars-R1 | R2 | R3
+      src: "/pages/automotive/handlebars-R1.webp",
+      alt: "Four matte black motorcycle handlebars lined up on the workshop bench",
+      objectPosition: "50% 45%",
     },
-    fit: "contain",
   },
   {
     id: "brackets",
     title: "Brackets & Mounting Components",
     items: ["Speedometer brackets", "Battery brackets", "Seat latches", "Hooks"],
     media: {
-      src: "/pages/engineering-services/products/battery-bracket.png",
-      alt: "Welded steel motorcycle battery bracket manufactured by Thimark",
-      objectPosition: "50% 50%",
+      // Test: brackets-R1 | R2 | R3
+      src: "/pages/automotive/brackets-R1.webp",
+      alt: "Stamped black motorcycle mounting brackets and chassis flanges",
+      objectPosition: "50% 45%",
     },
-    fit: "contain",
   },
   {
     id: "tools",
@@ -113,11 +113,11 @@ export const COMPONENTS: readonly ComponentGroup[] = [
       "Other custom metallic components developed to meet specific manufacturing requirements",
     ],
     media: {
-      src: "/pages/engineering-services/products/pillion-bracket.png",
-      alt: "Formed steel motorcycle pillion bracket, representative of custom metallic components",
-      objectPosition: "50% 50%",
+      // Test: tools-R1 | R2 | R3
+      src: "/pages/automotive/tools-R1.webp",
+      alt: "Small QA-labeled motorcycle clips and custom metallic components",
+      objectPosition: "50% 45%",
     },
-    fit: "contain",
   },
 ];
 
@@ -138,7 +138,8 @@ export const OEM = {
       "Our approach emphasizes dependable production, process consistency and collaboration with our partners to meet application-specific requirements.",
     ],
     media: {
-      src: "/pages/automotive/about-automotive-manufacturing.jpeg",
+      // Test: oem-R1 | R2 | R3
+      src: "/pages/automotive/oem-R2.webp",
       alt: "Engineers assembling motorcycle components on the Thimark shop floor",
       objectPosition: "42% 40%",
     } satisfies Media,

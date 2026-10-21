@@ -27,8 +27,11 @@ const GALLERY_TARGETS: Target[] = [{ path: "/gallery" }];
 
 export const revalidateNews: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
   if (doc?._status === "published" || previousDoc?._status === "published") {
-    // Covers may sync into Gallery; refresh both surfaces.
+    // Gallery sync disables per-row revalidation; always refresh both surfaces here.
+    const skipped = Boolean(req.context?.disableRevalidate);
+    if (req.context && skipped) req.context.disableRevalidate = false;
     await revalidate(req, [...NEWS_TARGETS, ...GALLERY_TARGETS]);
+    if (req.context && skipped) req.context.disableRevalidate = true;
   }
   return doc;
 };

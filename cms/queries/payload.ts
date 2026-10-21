@@ -18,8 +18,11 @@ function normalizeUrl(url: string) {
 export function mediaUrl(media: unknown, size?: ImageSize) {
   if (!media || typeof media !== "object") return "";
   const doc = media as Media;
-  const url = (size && doc.sizes?.[size]?.url) || doc.url;
-  return url ? normalizeUrl(url) : "";
+  // Only use a size when it has a real URL — empty size stubs must fall through
+  // to the original file (Payload leaves size objects with null url when skipped).
+  const sized = size ? doc.sizes?.[size]?.url : undefined;
+  const url = (typeof sized === "string" && sized) || doc.url;
+  return typeof url === "string" && url ? normalizeUrl(url) : "";
 }
 
 export function mediaAlt(media: unknown) {

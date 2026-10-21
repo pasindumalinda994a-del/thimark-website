@@ -4,6 +4,9 @@ import { pageMetadata } from "@/app/(frontend)/seo/metadata";
 import { breadcrumbNode, graph, webPageNode } from "@/app/(frontend)/seo/schema";
 import { getGalleryFrames } from "@/cms/queries/gallery";
 
+// Safety net when CMS scripts skip revalidatePath (e.g. payload run uploads).
+export const revalidate = 60;
+
 const SEO = {
   title: "Gallery",
   description:

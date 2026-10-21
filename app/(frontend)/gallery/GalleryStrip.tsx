@@ -107,6 +107,7 @@ export default function GalleryStrip({
       const raycaster = new THREE.Raycaster();
       const pointer = new THREE.Vector2();
       const loader = new THREE.TextureLoader();
+      loader.setCrossOrigin("anonymous");
       const textures: Texture[] = [];
 
       type SlideMesh = Mesh<PlaneGeometry, MeshBasicMaterial>;

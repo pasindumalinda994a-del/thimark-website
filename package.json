@@ -12,6 +12,8 @@
     "generate:types": "payload generate:types",
     "generate:importmap": "payload generate:importmap",
     "reset:gallery": "payload run scripts/reset-gallery.ts",
+    "clear:inbox-users": "payload run scripts/clear-inbox-and-users.ts",
+    "repair:gallery-blobs": "payload run scripts/repair-folder-gallery-blobs.ts",
     "upload:hero-videos": "tsx scripts/upload-hero-videos.ts"
   },
   "dependencies": {

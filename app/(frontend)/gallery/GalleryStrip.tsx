@@ -6,6 +6,8 @@ import { frameSrc, type GalleryFrame } from "@/app/(frontend)/gallery/records";
 
 export type GalleryStripHandle = {
   step: (direction: 1 | -1) => void;
+  blurFocus: () => void;
+  focusFrame: (id: string) => void;
 };
 
 const HEIGHT = 1;
@@ -30,29 +32,33 @@ const config = {
 type GalleryStripProps = {
   frames: GalleryFrame[];
   onActiveIndex: (index: number) => void;
-  onOpen: (id: string) => void;
+  onFocusChange?: (id: string | null) => void;
   ref?: Ref<GalleryStripHandle>;
 };
 
 export default function GalleryStrip({
   frames,
   onActiveIndex,
-  onOpen,
+  onFocusChange,
   ref,
 }: GalleryStripProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const framesRef = useRef(frames);
   const onActiveRef = useRef(onActiveIndex);
-  const onOpenRef = useRef(onOpen);
+  const onFocusRef = useRef(onFocusChange);
   const stepRef = useRef<(direction: 1 | -1) => void>(() => {});
+  const blurFocusRef = useRef<() => void>(() => {});
+  const focusFrameRef = useRef<(id: string) => void>(() => {});
   const signature = frames.map((frame) => frame.id).join("|");
 
   framesRef.current = frames;
   onActiveRef.current = onActiveIndex;
-  onOpenRef.current = onOpen;
+  onFocusRef.current = onFocusChange;
 
   useImperativeHandle(ref, () => ({
     step: (direction) => stepRef.current(direction),
+    blurFocus: () => blurFocusRef.current(),
+    focusFrame: (id) => focusFrameRef.current(id),
   }));
 
   useEffect(() => {
@@ -182,7 +188,11 @@ export default function GalleryStrip({
         meshes.push(mesh);
       }
 
-      const applyDistortion = (mesh: SlideMesh, positionX: number, strength: number) => {
+      const applyDistortion = (
+        mesh: SlideMesh,
+        positionX: number,
+        strength: number,
+      ) => {
         const positions = mesh.geometry.attributes.position;
         const original = mesh.userData.originalVertices as number[];
         for (let index = 0; index < positions.count; index += 1) {
@@ -211,6 +221,9 @@ export default function GalleryStrip({
       let scrollTimeout = 0;
       const velocityHistory = [0, 0, 0, 0, 0];
 
+      let focusedId: string | null = null;
+      let focusLocked = false;
+
       const resize = () => {
         const parent = canvas.parentElement;
         if (!parent) return;
@@ -221,9 +234,11 @@ export default function GalleryStrip({
         const vFov = THREE.MathUtils.degToRad(camera.fov);
         const tan = Math.tan(vFov / 2);
         const aspect = Math.max(camera.aspect, 0.01);
-        const avgW = widths.reduce((sum, value) => sum + value, 0) / widths.length;
+        const avgW =
+          widths.reduce((sum, value) => sum + value, 0) / widths.length;
         const widest = Math.max(...widths);
-        const zFill = HEIGHT / 0.92 / (2 * tan);
+        // 0.75 = leave vertical margin so planes don't kiss the canvas edges.
+        const zFill = HEIGHT / 0.75 / (2 * tan);
         const zPeek = (avgW * 2.35 + GAP * 2) / (2 * tan * aspect);
         const zFit = (widest + GAP) / (2 * tan * aspect);
         camera.position.z = Math.max(zFill, zPeek, zFit);
@@ -259,7 +274,7 @@ export default function GalleryStrip({
       };
 
       const burst = (amount: number) => {
-        if (pinned) return;
+        if (pinned || focusLocked) return;
         distortionTarget = Math.min(0.84, distortionTarget + amount);
       };
 
@@ -270,8 +285,40 @@ export default function GalleryStrip({
         }, delay);
       };
 
+      const exitFocus = () => {
+        if (!focusLocked && !focusedId) return;
+        focusedId = null;
+        focusLocked = false;
+        onFocusRef.current?.(null);
+        wake();
+      };
+
+      const enterFocus = (id: string) => {
+        const hit = meshes.find((mesh) => (mesh.userData.id as string) === id);
+        if (!hit) return;
+
+        if (focusedId === id) {
+          exitFocus();
+          return;
+        }
+
+        focusedId = id;
+        focusLocked = true;
+        scrollMomentum = 0;
+        isScrolling = false;
+
+        const index = hit.userData.index as number;
+        activeSlideIndex = index;
+        onActiveRef.current(index);
+        onFocusRef.current?.(id);
+        wake();
+      };
+
+      blurFocusRef.current = () => exitFocus();
+      focusFrameRef.current = (id) => enterFocus(id);
+
       stepRef.current = (direction) => {
-        if (pinned) return;
+        if (pinned || focusLocked) return;
         const next = (activeSlideIndex + direction + total) % total;
         const base = scrollPosition - wrap(scrollPosition, loopLength);
         let dest = base + offsets[next];
@@ -286,7 +333,13 @@ export default function GalleryStrip({
       };
 
       const onWheel = (event: WheelEvent) => {
-        if (pinned) return;
+        if (pinned || focusLocked) {
+          if (focusLocked) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          return;
+        }
         event.preventDefault();
         event.stopPropagation();
         const raw =
@@ -320,7 +373,7 @@ export default function GalleryStrip({
         pointerStartX = event.clientX;
         pointerStartY = event.clientY;
         dragDelta = 0;
-        scrollMomentum = 0;
+        if (!focusLocked) scrollMomentum = 0;
         pointerId = event.pointerId;
       };
 
@@ -335,9 +388,13 @@ export default function GalleryStrip({
             dragging = false;
             return;
           }
+          if (focusLocked) {
+            dragging = false;
+            return;
+          }
           canvas.setPointerCapture(event.pointerId);
         }
-        if (axisLock !== "x" || pinned) return;
+        if (axisLock !== "x" || pinned || focusLocked) return;
         const deltaX = event.clientX - dragStartX;
         dragStartX = event.clientX;
         dragDelta = deltaX;
@@ -349,7 +406,12 @@ export default function GalleryStrip({
       };
 
       const onPointerUp = (event: PointerEvent) => {
-        if (event.pointerId !== pointerId || (!dragging && axisLock !== "x")) return;
+        if (
+          event.pointerId !== pointerId ||
+          (!dragging && axisLock !== "x")
+        ) {
+          return;
+        }
         const wasHorizontal = axisLock === "x";
         const didMove = moved;
         dragging = false;
@@ -366,13 +428,15 @@ export default function GalleryStrip({
           raycaster.setFromCamera(pointer, camera);
           const hit = raycaster.intersectObjects(meshes)[0];
           const id = hit?.object.userData.id as string | undefined;
-          if (!id) return;
-          const frame = framesRef.current.find((item) => item.id === id);
-          if (frame?.href) onOpenRef.current(id);
+          if (!id) {
+            if (focusLocked) exitFocus();
+            return;
+          }
+          enterFocus(id);
           return;
         }
 
-        if (pinned || !wasHorizontal) return;
+        if (pinned || focusLocked || !wasHorizontal) return;
         const touch = event.pointerType === "touch";
         if (Math.abs(dragDelta) > (touch ? 4 : 2)) {
           scrollMomentum =
@@ -385,7 +449,14 @@ export default function GalleryStrip({
       };
 
       const onTouchMove = (event: TouchEvent) => {
-        if (axisLock === "x" && !pinned && event.cancelable) event.preventDefault();
+        if (
+          axisLock === "x" &&
+          !pinned &&
+          !focusLocked &&
+          event.cancelable
+        ) {
+          event.preventDefault();
+        }
       };
 
       canvas.addEventListener("wheel", onWheel, { passive: false });
@@ -416,12 +487,21 @@ export default function GalleryStrip({
         raf = 0;
         const deltaTime = lastFrameTime ? (time - lastFrameTime) / 1000 : 0.016;
         lastFrameTime = time;
+
+        if (focusLocked) {
+          place(0);
+          renderer.render(scene, camera);
+          return;
+        }
+
         const previous = scrollPosition;
 
         if (!pinned && isScrolling) {
           scrollTarget += scrollMomentum;
           scrollMomentum *= config.momentumFriction;
-          if (Math.abs(scrollMomentum) < config.momentumThreshold) scrollMomentum = 0;
+          if (Math.abs(scrollMomentum) < config.momentumThreshold) {
+            scrollMomentum = 0;
+          }
         }
 
         if (pinned) {
@@ -506,6 +586,8 @@ export default function GalleryStrip({
         textures.forEach((texture) => texture.dispose());
         renderer.dispose();
         stepRef.current = () => {};
+        blurFocusRef.current = () => {};
+        focusFrameRef.current = () => {};
       };
     })();
 

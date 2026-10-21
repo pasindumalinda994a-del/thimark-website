@@ -7,7 +7,6 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
 } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import BrandButton from "@/app/(frontend)/components/BrandButton";
@@ -59,25 +58,27 @@ const REEL_JOINS: Join[] = [
 
 function frameAriaLabel(frame: GalleryFrame) {
   const category = categoryById(frame.category).full;
-  if (frame.href && frame.destinationLabel) {
-    return `Go to ${frame.destinationLabel}: ${frame.title}, ${category}`;
-  }
-  return `${frame.title}, ${category}`;
+  return `Expand ${frame.title}, ${category}`;
 }
 
 export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
-  const router = useRouter();
   const reelRef = useRef<HTMLElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
   const slotRef = useRef<HTMLDivElement>(null);
   const stripRef = useRef<GalleryStripHandle>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayPhotoRef = useRef<HTMLDivElement>(null);
+  const overlayTlRef = useRef<gsap.core.Timeline | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const [reduced, setReduced] = useState(false);
+  const [focusedId, setFocusedId] = useState<string | null>(null);
+  const [overlayFrame, setOverlayFrame] = useState<GalleryFrame | null>(null);
 
   const safeIndex =
     frames.length === 0 ? 0 : Math.min(activeIndex, frames.length - 1);
   const shown = frames[safeIndex];
   const interactive = !reduced && frames.length > 1;
+  const isFocused = focusedId !== null;
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -86,6 +87,12 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
     query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
   }, []);
+
+  useEffect(() => {
+    if (!focusedId) return;
+    const frame = frames.find((item) => item.id === focusedId) ?? null;
+    setOverlayFrame(frame);
+  }, [focusedId, frames]);
 
   useGSAP(
     () => {
@@ -110,14 +117,114 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
     { scope: reelRef },
   );
 
-  const openDestination = (id: string) => {
-    const frame = frames.find((item) => item.id === id);
-    if (!frame?.href) return;
-    router.push(frame.href);
+  useGSAP(
+    () => {
+      const overlay = overlayRef.current;
+      const photo = overlayPhotoRef.current;
+      if (!overlay || !photo || !overlayFrame) return;
+
+      overlayTlRef.current?.kill();
+
+      const preferMotion = !window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      gsap.set(overlay, { autoAlpha: 1 });
+      if (preferMotion) {
+        gsap.set(photo, { autoAlpha: 0, scale: 0.92 });
+        const tl = gsap.timeline();
+        overlayTlRef.current = tl;
+        tl.to(photo, {
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.4,
+          ease: "power3.out",
+        });
+      } else {
+        gsap.set(photo, { autoAlpha: 1, scale: 1 });
+      }
+
+      return () => {
+        overlayTlRef.current?.kill();
+        overlayTlRef.current = null;
+      };
+    },
+    { dependencies: [overlayFrame?.id], scope: overlayRef },
+  );
+
+  const finishClose = () => {
+    setFocusedId(null);
+    setOverlayFrame(null);
+    stripRef.current?.blurFocus();
+  };
+
+  const closeOverlay = () => {
+    const overlay = overlayRef.current;
+    const photo = overlayPhotoRef.current;
+    if (!overlay || !photo || !overlayFrame) {
+      finishClose();
+      return;
+    }
+
+    overlayTlRef.current?.kill();
+    const preferMotion = !window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (!preferMotion) {
+      finishClose();
+      return;
+    }
+
+    const tl = gsap.timeline({
+      onComplete: finishClose,
+    });
+    overlayTlRef.current = tl;
+    tl.to(photo, {
+      autoAlpha: 0,
+      scale: 0.94,
+      duration: 0.28,
+      ease: "power2.inOut",
+    });
+    tl.to(
+      overlay,
+      { autoAlpha: 0, duration: 0.22, ease: "power2.inOut" },
+      0.06,
+    );
+  };
+
+  useEffect(() => {
+    if (!isFocused) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      closeOverlay();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // closeOverlay reads latest overlay refs/state each call
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFocused, overlayFrame]);
+
+  const openFrame = (id: string) => {
+    setFocusedId(id);
+    if (reduced) {
+      // Still path has no strip lock.
+      return;
+    }
+    stripRef.current?.focusFrame(id);
+  };
+
+  const onFocusChange = (id: string | null) => {
+    if (id) setFocusedId(id);
+    else if (!overlayTlRef.current?.isActive()) {
+      setFocusedId(null);
+      setOverlayFrame(null);
+    }
   };
 
   const stepReel = (direction: 1 | -1) => {
-    if (frames.length < 2) return;
+    if (frames.length < 2 || isFocused) return;
     if (reduced) {
       setActiveIndex(
         (index) => (index + direction + frames.length) % frames.length,
@@ -136,9 +243,10 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
       event.preventDefault();
       stepReel(-1);
     }
-    if ((event.key === "Enter" || event.key === " ") && shown?.href) {
+    if ((event.key === "Enter" || event.key === " ") && shown) {
       event.preventDefault();
-      openDestination(shown.id);
+      if (isFocused) closeOverlay();
+      else openFrame(shown.id);
     }
   };
 
@@ -150,7 +258,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
       rows={14}
       tone="page"
       outerV={false}
-      className="gallery-reel-stage relative bg-cream text-steel"
+      className={`gallery-reel-stage relative bg-cream text-steel${isFocused ? " is-focused" : ""}`}
     >
       <Frame h={REEL_H} v={REEL_V} joins={REEL_JOINS} />
 
@@ -164,7 +272,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
         <MobileEdge />
         <Copy data-gal-item variant="lede">
           The Kadawatha workshop, Kilgharrah 600 in the field, and the evening
-          the company was received. Tap a frame to open its page or story.
+          the company was received. Tap a frame to view it larger.
         </Copy>
       </Cell>
 
@@ -173,56 +281,39 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
           <div
             ref={frameRef}
             className="gallery-reel-frame"
-            {...(interactive ? { "data-lenis-prevent": "" } : {})}
+            {...(interactive || isFocused ? { "data-lenis-prevent": "" } : {})}
           >
             {shown && reduced ? (
-              shown.href ? (
-                <button
-                  type="button"
-                  className="gallery-reel-still"
-                  data-cursor="explore"
-                  onClick={() => openDestination(shown.id)}
-                  aria-label={frameAriaLabel(shown)}
-                >
-                  <Image
-                    src={frameSrc(shown.image)}
-                    alt={shown.alt}
-                    fill
-                    sizes="80vw"
-                    fetchPriority="high"
-                    className={
-                      shown.fit === "contain"
-                        ? "object-contain p-[12%]"
-                        : "object-cover"
-                    }
-                  />
-                </button>
-              ) : (
-                <div className="gallery-reel-still" aria-label={frameAriaLabel(shown)}>
-                  <Image
-                    src={frameSrc(shown.image)}
-                    alt={shown.alt}
-                    fill
-                    sizes="80vw"
-                    fetchPriority="high"
-                    className={
-                      shown.fit === "contain"
-                        ? "object-contain p-[12%]"
-                        : "object-cover"
-                    }
-                  />
-                </div>
-              )
+              <button
+                type="button"
+                className="gallery-reel-still"
+                data-cursor="explore"
+                onClick={() => openFrame(shown.id)}
+                aria-label={frameAriaLabel(shown)}
+              >
+                <Image
+                  src={frameSrc(shown.image)}
+                  alt={shown.alt}
+                  fill
+                  sizes="80vw"
+                  fetchPriority="high"
+                  className={
+                    shown.fit === "contain"
+                      ? "object-contain p-[12%]"
+                      : "object-cover"
+                  }
+                />
+              </button>
             ) : (
               <GalleryStrip
                 ref={stripRef}
                 frames={frames}
                 onActiveIndex={setActiveIndex}
-                onOpen={openDestination}
+                onFocusChange={onFocusChange}
               />
             )}
           </div>
-          {interactive ? (
+          {interactive && !isFocused ? (
             <div className="gallery-drag-cue" aria-hidden>
               <span className="index-tag">Drag</span>
               <DirectionPulse direction="right" stack="trio" />
@@ -244,7 +335,7 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
             tone="steel"
             className="gallery-reel-corner gallery-reel-corner-prev"
             onClick={() => stepReel(-1)}
-            disabled={frames.length < 2}
+            disabled={frames.length < 2 || isFocused}
             aria-label="Previous frame"
           >
             Prev
@@ -285,11 +376,62 @@ export default function GalleryView({ frames }: { frames: GalleryFrame[] }) {
             tone="steel"
             className="gallery-reel-corner gallery-reel-corner-next"
             onClick={() => stepReel(1)}
-            disabled={frames.length < 2}
+            disabled={frames.length < 2 || isFocused}
             aria-label="Next frame"
           >
             Next
           </BrandButton>
+        </div>
+      ) : null}
+
+      {overlayFrame ? (
+        <div
+          ref={overlayRef}
+          className="gallery-overlay"
+          role="dialog"
+          aria-modal="true"
+          aria-label={overlayFrame.title}
+        >
+          <button
+            type="button"
+            className="gallery-overlay-backdrop"
+            aria-label="Close image"
+            onClick={closeOverlay}
+          />
+          <div ref={overlayPhotoRef} className="gallery-overlay-stage">
+            <button
+              type="button"
+              className="gallery-overlay-close"
+              aria-label="Close image"
+              onClick={closeOverlay}
+              data-cursor="interactive"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M5 5l10 10M15 5L5 15"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="square"
+                />
+              </svg>
+            </button>
+            <div className="gallery-overlay-photo">
+              <Image
+                src={frameSrc(overlayFrame.image)}
+                alt={overlayFrame.alt}
+                fill
+                sizes="90vw"
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
         </div>
       ) : null}
     </SectionGrid>

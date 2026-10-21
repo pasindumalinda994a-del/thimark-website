@@ -29,8 +29,14 @@ function toFrame(doc: Gallery): GalleryFrame {
     title: doc.title,
     category: doc.category,
     note: doc.note ?? "",
-    image: mediaUrl(doc.image, "hero"),
-    texture: mediaUrl(doc.image, "card") || mediaUrl(doc.image, "hero"),
+    // Prefer sized WebP renditions; fall back when Payload skipped a size
+    // (image narrower than the target width — withoutEnlargement).
+    image: mediaUrl(doc.image, "hero") || mediaUrl(doc.image, "card") || mediaUrl(doc.image),
+    texture:
+      mediaUrl(doc.image, "card") ||
+      mediaUrl(doc.image, "thumb") ||
+      mediaUrl(doc.image, "hero") ||
+      mediaUrl(doc.image),
     alt: mediaAlt(doc.image) || doc.title,
     fit: doc.fit,
     place: doc.place ?? "",

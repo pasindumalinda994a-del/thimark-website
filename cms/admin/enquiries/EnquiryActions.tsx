@@ -1,7 +1,7 @@
 "use client";
 
 import { useField, useForm } from "@payloadcms/ui";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { STATUS_LABELS, type EnquiryStatus } from "./status";
 import { useValue } from "./useValue";
 
@@ -16,20 +16,29 @@ export function EnquiryActions() {
   const { submit } = useForm();
   const { value: status, setValue } = useField<EnquiryStatus>({ path: "status" });
   const reference = useValue<string>("reference");
-  const name = useValue<string>("name");
   const email = useValue<string>("email");
-  const message = useValue<string>("message");
   const [busy, setBusy] = useState<EnquiryStatus | null>(null);
+  const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (!reference) return null;
+  useEffect(() => {
+    return () => {
+      if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    };
+  }, []);
 
-  const quoted = (message ?? "")
-    .split(/\r?\n/)
-    .map((line) => `> ${line}`)
-    .join("\n");
-  const mailto = `mailto:${email}?subject=${encodeURIComponent(
-    `Re: Your enquiry ${reference}`,
-  )}&body=${encodeURIComponent(`Dear ${name ?? ""},\n\n\n\n—\nThimark Technocreations\n\n${quoted}`)}`;
+  if (!reference || !email) return null;
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(email);
+      setCopied(true);
+      if (copiedTimer.current) clearTimeout(copiedTimer.current);
+      copiedTimer.current = setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  };
 
   const change = async (next: EnquiryStatus) => {
     if (busy || next === status) return;
@@ -44,9 +53,9 @@ export function EnquiryActions() {
 
   return (
     <div className="tm-actions">
-      <a href={mailto} className="tm-btn tm-btn--primary tm-btn--block">
-        Reply by email
-      </a>
+      <button type="button" className="tm-btn tm-btn--primary tm-btn--block" onClick={copyEmail}>
+        {copied ? "Email copied" : "Copy email"}
+      </button>
       <div className="tm-actions__grid">
         {QUICK.map((item) => (
           <button

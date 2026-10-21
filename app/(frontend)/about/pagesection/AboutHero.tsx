@@ -51,7 +51,7 @@ export default function AboutHero({
   usePlateMotion(ref, { image: "rise" });
 
   const secondary = copy.secondary;
-  // With two buttons the bar gives up columns 6–9 to the secondary CTA.
+  // With two buttons the bar gives up columns 6–9 to the secondary CTA (3 cols each).
   const barEnd = secondary ? 6 : ctaCol;
   const primaryCol = secondary ? 9 : ctaCol;
 
@@ -120,21 +120,18 @@ export default function AboutHero({
 
       <Cell at={[0, barEnd, 12, 14]} className="ah-bar">
         <MobileEdge />
-        <PhraseBar
-          phrases={copy.supporting}
-          className={secondary ? "[&_p]:text-[clamp(13px,1.15vw,18px)]" : ""}
-        />
+        <PhraseBar phrases={copy.supporting} />
       </Cell>
 
       {secondary ? (
-        // Phones seat both buttons on one row; from md up each cell keeps its grid seat.
+        // Phones stack both buttons full-width; from md up each cell keeps its grid seat.
         <div className="ah-ctas relative md:contents">
           <MobileEdge />
           <Cell at={[barEnd, primaryCol, 12, 14]} className="plate-cta">
             <BrandButton
               href={secondary.href}
               direction={secondary.href.startsWith("#") ? "down" : "right"}
-              tone="steel"
+              tone="outline"
               data-reveal
             >
               {secondary.label}
@@ -144,6 +141,7 @@ export default function AboutHero({
             <BrandButton
               href={copy.cta.href}
               direction={copy.cta.href.startsWith("#") ? "down" : "right"}
+              tone="steel"
               font="sans"
               data-reveal
             >

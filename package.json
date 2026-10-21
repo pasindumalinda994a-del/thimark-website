@@ -13,6 +13,7 @@
     "generate:importmap": "payload generate:importmap",
     "seed": "payload run scripts/seed.ts",
     "reset:gallery": "payload run scripts/reset-gallery.ts",
+    "upload:gallery-folders": "payload run scripts/upload-folder-gallery.ts",
     "upload:hero-videos": "tsx scripts/upload-hero-videos.ts"
   },
   "dependencies": {

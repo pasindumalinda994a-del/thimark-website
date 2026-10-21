@@ -7931,11 +7931,36 @@ a.contact-channel-value:focus-visible {
   display: flex;
   flex: 1;
   align-items: center;
-  padding: 16px;
+  justify-content: center;
+  padding: 14px 16px;
 }
 
-.phrase-bar-rail {
+.phrase-bar-item {
+  width: 100%;
+  text-align: center;
+  font-size: clamp(12px, 0.9vw, 15px) !important;
+  line-height: 1.2 !important;
+}
+
+.phrase-bar-sep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cream);
+  opacity: 0.55;
+}
+
+.phrase-bar-sep-mark {
+  width: 14px;
+  height: 14px;
+}
+
+.phrase-bar-sep-mark--row {
   display: none;
+}
+
+.phrase-bar-sep-mark--stack {
+  display: block;
 }
 
 @media (min-width: 768px) {
@@ -7946,14 +7971,23 @@ a.contact-channel-value:focus-visible {
     margin: 0;
   }
 
-  .phrase-bar-rail {
+  .phrase-bar-cell {
+    padding: 12px 14px;
+  }
+
+  .phrase-bar-sep {
     position: absolute;
-    top: var(--line-stop);
-    bottom: var(--line-stop);
+    top: 50%;
     left: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .phrase-bar-sep-mark--row {
     display: block;
-    width: 1px;
-    transform: translateX(-50%);
+  }
+
+  .phrase-bar-sep-mark--stack {
+    display: none;
   }
 }
 
@@ -10175,6 +10209,15 @@ a.contact-channel-value:focus-visible {
 
 /* ---- Hero: one viewport ------------------------------------------------ */
 
+/* Outline CTAs are cream-on-dark elsewhere; on the cream hero use steel ink. */
+.ah-section .ah-ctas .bg-transparent > span.relative {
+  color: var(--steel);
+}
+
+.ah-section .ah-ctas .bg-transparent > span.absolute.z-2 {
+  box-shadow: inset 0 0 0 1px var(--steel) !important;
+}
+
 @media (max-width: 767px) {
   .ah-section {
     min-height: calc(100svh - 3.5rem);
@@ -10221,40 +10264,26 @@ a.contact-channel-value:focus-visible {
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
-  /* Two CTAs share one row, split by a dashed rail. */
+  /* Two CTAs stack full-width so long labels stay readable. */
   .ah-section .ah-ctas {
-    display: grid;
+    display: flex;
+    flex-direction: column;
     flex-shrink: 0;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .ah-section .ah-ctas .plate-cta {
-    padding-right: 4px;
+    padding-right: calc(var(--g1-offset) + 8px);
     padding-left: calc(var(--g1-offset) + 8px);
+    padding-bottom: 8px;
   }
 
   .ah-section .ah-ctas .plate-cta + .plate-cta {
-    padding-right: calc(var(--g1-offset) + 8px);
-    padding-left: 4px;
-  }
-
-  .ah-section .ah-ctas .plate-cta + .plate-cta::before {
-    content: "";
-    position: absolute;
-    top: var(--line-stop);
-    bottom: var(--line-stop);
-    left: 0;
-    width: 1px;
-    background-image: repeating-linear-gradient(
-      to bottom,
-      var(--page-ink) 0 4px,
-      transparent 4px 8px
-    );
-    opacity: 0.5;
+    padding-top: 0;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
 
   .ah-section .ah-ctas .plate-cta > a > span:last-child {
-    padding-inline: 10px;
+    padding-inline: 12px;
     line-height: 1.2;
     text-align: center;
   }
@@ -10275,34 +10304,22 @@ a.contact-channel-value:focus-visible {
   }
 }
 
-/* ---- Phrase bar: tight rows split by dashed rails ---------------------- */
+/* ---- Phrase bar: tight rows split by direction marks -------------------- */
 
 @media (max-width: 767px) {
   :is(.about-page, .product-page) .phrase-bar-cell {
-    padding: 11px 16px;
+    padding: 10px 16px;
   }
 
-  :is(.about-page, .product-page) .phrase-bar-cell > p {
-    font-size: 15px;
+  :is(.about-page, .product-page) .phrase-bar-item {
+    font-size: 13px !important;
   }
 
-  :is(.about-page, .product-page) .phrase-bar-rail {
+  :is(.about-page, .product-page) .phrase-bar-sep {
     position: absolute;
     top: 0;
-    right: 16px;
-    left: 16px;
-    display: block;
-    height: 1px;
-    background-image: repeating-linear-gradient(
-      to right,
-      var(--cream) 0 8px,
-      transparent 8px 16px
-    );
-    opacity: 0.6;
-  }
-
-  :is(.about-page, .product-page) .phrase-bar-rail svg {
-    display: none;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 

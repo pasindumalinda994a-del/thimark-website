@@ -40,13 +40,14 @@ const GRID_H: HLine[] = [
   [6, 0, 12],
   [12, 0, 12],
   [18, 0, 12],
+  [24, 0, 12],
 ];
 const GRID_V: VLine[] = [
-  [0, 0, 21],
-  [12, 0, 21],
-  [3, 0, 21],
-  [6, 0, 18],
-  [9, 0, 18],
+  [0, 0, 27],
+  [12, 0, 27],
+  [3, 0, 27],
+  [6, 0, 24],
+  [9, 0, 24],
 ];
 const GRID_JOINS: Join[] = [
   [0, 0, { up: true }],
@@ -136,15 +137,13 @@ export default function RecognitionSection() {
                   <li key={award.id} className="vm-legend-item index-tag">
                     <span className="tabular-nums opacity-60">[{award.year}]</span>
                     <span className="vm-legend-rule" aria-hidden />
-                    <span>{award.name}</span>
+                    <span>{award.legend}</span>
                   </li>
                 ))}
               </ol>
             </div>
             <p aria-hidden className="dr-note-foot index-tag">
-              <span>
-                {AWARDS.reduce((sum, award) => sum + award.distinctions.length, 0)} Distinctions
-              </span>
+              <span>{AWARDS.length} Awards</span>
               <span className="tabular-nums">
                 {AWARDS[AWARDS.length - 1]?.year}&ndash;{AWARDS[0]?.year}
               </span>
@@ -154,7 +153,7 @@ export default function RecognitionSection() {
         </article>
       </div>
 
-      <PlateBlock rows={21}>
+      <PlateBlock rows={27}>
         <Frame h={GRID_H} v={GRID_V} joins={GRID_JOINS} />
 
         {AWARDS.map((award, i) => {
@@ -191,14 +190,10 @@ export default function RecognitionSection() {
                     <span className="sr-only">, {award.year}</span>
                   </H3Heading>
                 </div>
-                <ul data-reveal className="rc-distinctions">
-                  {award.distinctions.map((line) => (
-                    <li key={line}>
-                      <span aria-hidden className="ab-marker" />
-                      <span>{line}</span>
-                    </li>
-                  ))}
-                </ul>
+                <p data-reveal className="rc-distinction">
+                  <span aria-hidden className="ab-marker" />
+                  <span>{award.distinction}</span>
+                </p>
                 <span aria-hidden className="rc-award-year ab-outline">
                   {award.year}
                 </span>
@@ -207,7 +202,7 @@ export default function RecognitionSection() {
           );
         })}
 
-        <Cell at={[0, 3, 18, 21]} className="plate-lede rc-close-label">
+        <Cell at={[0, 3, 24, 27]} className="plate-lede rc-close-label">
           <MobileEdge open />
           <p data-reveal className="index-tag flex items-center gap-2">
             <span aria-hidden className="ab-marker" />
@@ -215,7 +210,7 @@ export default function RecognitionSection() {
           </p>
         </Cell>
 
-        <Cell at={[3, 12, 18, 21]} as="blockquote" className="st-closing m-0">
+        <Cell at={[3, 12, 24, 27]} as="blockquote" className="st-closing m-0">
           <MobileEdge />
           <Copy data-reveal variant="statement">{RECOGNITION.closing}</Copy>
         </Cell>

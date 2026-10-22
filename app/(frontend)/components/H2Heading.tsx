@@ -5,7 +5,7 @@ import MaskRevealHeading from "@/app/(frontend)/components/MaskRevealHeading";
 
 /** Section title. Same scale on every section. */
 const SIZE =
-  "font-heading text-[clamp(28px,2.5vw,48px)] leading-none font-medium uppercase";
+  "font-heading text-[length:var(--type-h2)] leading-none font-medium uppercase";
 
 type H2HeadingProps = {
   id?: string;

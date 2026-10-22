@@ -279,67 +279,91 @@ export type Award = {
   id: string;
   year: string;
   name: string;
+  /** Short year-index label under Our Recognitions. */
+  legend: string;
   org: string;
   seal: { label: string; solid: boolean };
   ring: string;
-  distinctions: readonly string[];
+  distinction: string;
 };
 
 export const AWARDS: readonly Award[] = [
   {
-    id: "nbea",
+    id: "nbea-financial",
     year: "2026",
     name: "National Business Excellence Awards",
+    legend: "National Business Excellence Awards \u00b7 Business & Financial Results",
     org: "NBEA",
     seal: { label: "Gold", solid: true },
     ring: "National Business Excellence Awards \u00b7 NBEA \u00b7 2026 \u00b7 ",
-    distinctions: [
+    distinction:
       "Winner (Gold) \u2014 Excellence in Business & Financial Results.",
-      "Winner (Gold) \u2014 Manufacturing and Engineering Sector.",
-    ],
   },
   {
-    id: "sltc",
+    id: "nbea-manufacturing",
+    year: "2026",
+    name: "National Business Excellence Awards",
+    legend: "National Business Excellence Awards \u00b7 Manufacturing & Engineering",
+    org: "NBEA",
+    seal: { label: "Gold", solid: true },
+    ring: "National Business Excellence Awards \u00b7 NBEA \u00b7 2026 \u00b7 ",
+    distinction:
+      "Winner (Gold) \u2014 Manufacturing and Engineering Sector.",
+  },
+  {
+    id: "sltc-rd",
     year: "2026",
     name: "SLTC Research & Innovation Awards",
+    legend: "SLTC Research & Innovation Awards \u00b7 In-House R&D",
     org: "Sri Lanka Technology Campus",
     seal: { label: "Excellence", solid: true },
     ring: "SLTC Research & Innovation Awards \u00b7 2026 \u00b7 ",
-    distinctions: [
+    distinction:
       "Winner \u2014 Excellence in In-House R&D Award (Energy, Electronics and Engineering Research).",
+  },
+  {
+    id: "sltc-merit",
+    year: "2026",
+    name: "SLTC Research & Innovation Awards",
+    legend: "SLTC Research & Innovation Awards \u00b7 Outstanding R&D in SME",
+    org: "Sri Lanka Technology Campus",
+    seal: { label: "Merit", solid: false },
+    ring: "SLTC Research & Innovation Awards \u00b7 2026 \u00b7 ",
+    distinction:
       "Winner \u2014 Merit Award for Outstanding R&D in SME (Energy, Electronics and Engineering Research).",
-    ],
   },
   {
     id: "cnci-2026",
     year: "2026",
     name: "CNCI Achiever Awards",
+    legend: "CNCI Achiever Awards \u00b7 Manufacturing Medium",
     org: "Ceylon National Chamber of Industries",
     seal: { label: "Silver", solid: false },
     ring: "CNCI Achiever Awards \u00b7 National Level \u00b7 2026 \u00b7 ",
-    distinctions: [
+    distinction:
       "Silver Award \u2014 National Level Manufacturing Sector, Medium Category.",
-    ],
   },
   {
     id: "cnci-2025",
     year: "2025",
     name: "CNCI Achiever Awards",
+    legend: "CNCI Achiever Awards \u00b7 Manufacturing Small",
     org: "Ceylon National Chamber of Industries",
     seal: { label: "Bronze", solid: false },
     ring: "CNCI Achiever Awards \u00b7 National Level \u00b7 2025 \u00b7 ",
-    distinctions: [
+    distinction:
       "Bronze Award \u2014 National Level Manufacturing Sector, Small Category.",
-    ],
   },
   {
     id: "niea",
     year: "2023",
     name: "National Industry Excellence Awards",
+    legend: "National Industry Excellence Awards",
     org: "Industrial Development Board (IDB)",
     seal: { label: "Gold", solid: true },
     ring: "National Industry Excellence Awards \u00b7 IDB \u00b7 2023 \u00b7 ",
-    distinctions: ["Gold Award \u2014 Metal-based Component Manufacturing Sector."],
+    distinction:
+      "Gold Award \u2014 Metal-based Component Manufacturing Sector.",
   },
 ];
 

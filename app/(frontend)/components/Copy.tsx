@@ -3,22 +3,22 @@ import type { HTMLAttributes, ReactNode } from "react";
 const JUSTIFY = "text-left xl:text-justify xl:[text-align-last:left]";
 
 const SCALE = {
-  caption: "font-heading text-[clamp(9px,0.75vw,12px)] font-normal leading-[1.25] uppercase",
-  body: "font-heading text-[clamp(11px,0.7vw,14px)] font-normal leading-[1.35] uppercase",
+  caption: "font-heading text-[length:var(--type-caption)] font-normal leading-[1.25] uppercase",
+  body: "font-heading text-[length:var(--type-body)] font-normal leading-[1.35] uppercase",
   lede: {
-    sm: `font-heading text-[clamp(10px,0.85vw,14px)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
-    md: `font-heading text-[clamp(11px,0.8vw,16px)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
+    sm: `font-heading text-[length:var(--type-lede-sm)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
+    md: `font-heading text-[length:var(--type-lede)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
     fixed: "font-heading text-[16px] leading-none uppercase",
   },
   title: {
-    sm: "font-heading text-[clamp(13px,1.1vw,22px)] font-medium leading-[1.05] uppercase",
-    md: "font-heading text-[clamp(15px,1.3vw,26px)] font-medium leading-[1.05] uppercase",
+    sm: "font-heading text-[length:var(--type-title-sm)] font-medium leading-[1.05] uppercase",
+    md: "font-heading text-[length:var(--type-title)] font-medium leading-[1.05] uppercase",
   },
-  lead: "font-heading text-[clamp(17px,1.45vw,28px)] font-medium leading-[1.02] uppercase",
-  statement: "font-heading text-[clamp(19px,1.7vw,34px)] font-medium leading-[0.95] uppercase",
+  lead: "font-heading text-[length:var(--type-lead)] font-medium leading-[1.02] uppercase",
+  statement: "font-heading text-[length:var(--type-statement)] font-medium leading-[0.95] uppercase",
   display: {
-    sm: "font-heading text-[clamp(27px,2.35vw,40px)] font-medium leading-none tracking-[0.02em] uppercase text-center",
-    lg: "font-heading text-[clamp(31px,2.9vw,56px)] font-medium leading-none tracking-[0.02em] uppercase text-center",
+    sm: "font-heading text-[length:var(--type-display-sm)] font-medium leading-none tracking-[0.02em] uppercase text-center",
+    lg: "font-heading text-[length:var(--type-display-lg)] font-medium leading-none tracking-[0.02em] uppercase text-center",
   },
   prose: "font-sans text-[15px] font-normal leading-[1.45]",
   meta: "text-[14px] font-normal leading-[1.45]",

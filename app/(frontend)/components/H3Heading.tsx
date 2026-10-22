@@ -3,10 +3,10 @@ import type { HTMLAttributes, ReactNode } from "react";
 const BASE = "font-heading font-medium uppercase";
 
 const SCALE = {
-  statement: "text-[clamp(20px,1.9vw,34px)] leading-[0.95]",
+  statement: "text-[length:var(--type-statement)] leading-[0.95]",
   title: {
-    sm: "text-[clamp(15px,1.15vw,22px)] leading-none",
-    md: "text-[clamp(16px,1.45vw,26px)] leading-[1.05]",
+    sm: "text-[length:var(--type-title-sm)] leading-none",
+    md: "text-[length:var(--type-title)] leading-[1.05]",
   },
 } as const;
 
@@ -49,7 +49,7 @@ type H2LabelProps = {
 /** Form section directly under the page h1. */
 export function FormHeading({ className = "", children, ...props }: H2LabelProps) {
   const size =
-    "font-heading text-[clamp(18px,1.6vw,24px)] leading-none font-medium uppercase";
+    "font-heading text-[length:var(--type-title)] leading-none font-medium uppercase";
   return (
     <h2 className={className ? `${size} ${className}` : size} {...props}>
       {children}
@@ -60,7 +60,7 @@ export function FormHeading({ className = "", children, ...props }: H2LabelProps
 /** Article section under the article h1, beside other h2s such as related records. */
 export function ArticleHeading({ className = "", children, ...props }: H2LabelProps) {
   const size =
-    "font-heading text-[clamp(18px,1.5vw,24px)] leading-[1.1] font-medium tracking-[0.02em] uppercase";
+    "font-heading text-[length:var(--type-title)] leading-[1.1] font-medium tracking-[0.02em] uppercase";
   return (
     <h2 className={className ? `${size} ${className}` : size} {...props}>
       {children}

@@ -261,12 +261,12 @@ export const RECOGNITION = {
     "Every milestone in our journey reflects the dedication of our people and our commitment to strengthening Sri Lankan engineering and manufacturing.",
   band: {
     label: "Our Recognitions",
-    callout: ["SLTC Research &", "Innovation Awards 2025"],
+    callout: ["SLTC Research &", "Innovation Awards 2026"],
     body: "From business performance and industrial manufacturing to research and innovation, these recognitions push us to raise our standards.",
     media: {
       // Test: recognition-R1 | R2 | R3
       src: "/pages/about/recognition-R1.webp",
-      alt: "Two SLTC Research & Innovation Awards 2025 trophies presented to Thimark Technocreations",
+      alt: "Two SLTC Research & Innovation Awards 2026 trophies presented to Thimark Technocreations",
       objectPosition: "50% 45%",
     } satisfies Media,
   },
@@ -294,30 +294,43 @@ export const AWARDS: readonly Award[] = [
     seal: { label: "Gold", solid: true },
     ring: "National Business Excellence Awards \u00b7 NBEA \u00b7 2026 \u00b7 ",
     distinctions: [
-      "Gold Winner \u2014 Excellence in Business & Financial Results, Medium Category.",
-      "Gold Winner \u2014 Manufacturing, Engineering Sector.",
+      "Winner (Gold) \u2014 Excellence in Business & Financial Results.",
+      "Winner (Gold) \u2014 Manufacturing and Engineering Sector.",
     ],
   },
   {
     id: "sltc",
-    year: "2025",
+    year: "2026",
     name: "SLTC Research & Innovation Awards",
     org: "Sri Lanka Technology Campus",
     seal: { label: "Excellence", solid: true },
-    ring: "SLTC Research & Innovation Awards \u00b7 2025 \u00b7 ",
+    ring: "SLTC Research & Innovation Awards \u00b7 2026 \u00b7 ",
     distinctions: [
-      "Award for Excellence in Engineering Innovation.",
-      "Merit Award for Outstanding Industrial Research.",
+      "Winner \u2014 Excellence in In-House R&D Award (Energy, Electronics and Engineering Research).",
+      "Winner \u2014 Merit Award for Outstanding R&D in SME (Energy, Electronics and Engineering Research).",
     ],
   },
   {
-    id: "cnci",
+    id: "cnci-2026",
+    year: "2026",
+    name: "CNCI Achiever Awards",
+    org: "Ceylon National Chamber of Industries",
+    seal: { label: "Silver", solid: false },
+    ring: "CNCI Achiever Awards \u00b7 National Level \u00b7 2026 \u00b7 ",
+    distinctions: [
+      "Silver Award \u2014 National Level Manufacturing Sector, Medium Category.",
+    ],
+  },
+  {
+    id: "cnci-2025",
     year: "2025",
     name: "CNCI Achiever Awards",
     org: "Ceylon National Chamber of Industries",
     seal: { label: "Bronze", solid: false },
     ring: "CNCI Achiever Awards \u00b7 National Level \u00b7 2025 \u00b7 ",
-    distinctions: ["Bronze Award \u2014 National Level Manufacturing Sector, Small Category."],
+    distinctions: [
+      "Bronze Award \u2014 National Level Manufacturing Sector, Small Category.",
+    ],
   },
   {
     id: "niea",
@@ -326,7 +339,7 @@ export const AWARDS: readonly Award[] = [
     org: "Industrial Development Board (IDB)",
     seal: { label: "Gold", solid: true },
     ring: "National Industry Excellence Awards \u00b7 IDB \u00b7 2023 \u00b7 ",
-    distinctions: ["Gold Award \u2014 Metal-based Automobile Component Manufacturing Sector."],
+    distinctions: ["Gold Award \u2014 Metal-based Component Manufacturing Sector."],
   },
 ];
 

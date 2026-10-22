@@ -39,13 +39,14 @@ const GRID_H: HLine[] = [
   [0, 0, 12],
   [6, 0, 12],
   [12, 0, 12],
+  [18, 0, 12],
 ];
 const GRID_V: VLine[] = [
-  [0, 0, 15],
-  [12, 0, 15],
-  [3, 0, 15],
-  [6, 0, 12],
-  [9, 0, 12],
+  [0, 0, 21],
+  [12, 0, 21],
+  [3, 0, 21],
+  [6, 0, 18],
+  [9, 0, 18],
 ];
 const GRID_JOINS: Join[] = [
   [0, 0, { up: true }],
@@ -153,7 +154,7 @@ export default function RecognitionSection() {
         </article>
       </div>
 
-      <PlateBlock rows={15}>
+      <PlateBlock rows={21}>
         <Frame h={GRID_H} v={GRID_V} joins={GRID_JOINS} />
 
         {AWARDS.map((award, i) => {
@@ -206,7 +207,7 @@ export default function RecognitionSection() {
           );
         })}
 
-        <Cell at={[0, 3, 12, 15]} className="plate-lede rc-close-label">
+        <Cell at={[0, 3, 18, 21]} className="plate-lede rc-close-label">
           <MobileEdge open />
           <p data-reveal className="index-tag flex items-center gap-2">
             <span aria-hidden className="ab-marker" />
@@ -214,7 +215,7 @@ export default function RecognitionSection() {
           </p>
         </Cell>
 
-        <Cell at={[3, 12, 12, 15]} as="blockquote" className="st-closing m-0">
+        <Cell at={[3, 12, 18, 21]} as="blockquote" className="st-closing m-0">
           <MobileEdge />
           <Copy data-reveal variant="statement">{RECOGNITION.closing}</Copy>
         </Cell>

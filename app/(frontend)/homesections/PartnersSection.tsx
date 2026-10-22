@@ -157,7 +157,7 @@ export default function PartnersSection({
           {copy.heading[0]}{" "}
           <span className="ab-statement-muted">{copy.heading[1]}</span>
         </H2Heading>
-        <Copy data-p-header variant="lede" weight="normal" className="max-w-[720px]">
+        <Copy data-p-header variant="lede" weight="normal" className="partners-lede max-w-[720px]">
           <span className="font-medium">{copy.lede.strong}</span>{" "}
           {copy.lede.rest}
         </Copy>

@@ -171,7 +171,11 @@ export default function HeroSection() {
       <div className="hero-lede">
         <GridLine axis="v" unstyled tone="light" className="v-g1-0 hero-v-above-plus md:hidden" />
         <GridLine axis="v" unstyled tone="light" className="v-g1-12 hero-v-above-plus md:hidden" />
-        <Copy data-hero-item variant="lede" className="hero-body">
+        <Copy
+          data-hero-item
+          variant="lede"
+          className="hero-body"
+        >
           {HERO.lede}
         </Copy>
         <GridLine axis="h" unstyled tone="light" className="h-seg-0-12 at-bottom md:hidden" />

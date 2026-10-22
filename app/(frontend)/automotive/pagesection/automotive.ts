@@ -12,7 +12,7 @@ type Media = { src: string; alt: string; objectPosition: string };
 
 export const HERO: HeroCopy = {
   eyebrow: "Automotive Component Manufacturer \u00b7 Sri Lanka",
-  heading: ["Precision Motorcycle Components.", "Built for OEM Production."],
+  heading: ["OEM Motorcycle Parts.", "Built for Production."],
   intro:
     "As an OEM motorcycle parts manufacturer in Sri Lanka, we make precision-engineered components for vehicle assembly \u2014 stands, brackets, guards, handlebars and carriers, built with practical engineering and dependable quality.",
   body: "With Sri Lankan manufacturers and assembly partners, we turn engineering requirements into production-ready components that support local value addition.",
@@ -33,7 +33,7 @@ export const HERO: HeroCopy = {
 export const RANGE = {
   index: "01",
   eyebrow: "Our Product Range",
-  heading: ["Engineered for Every Connection.", "Built for Every Journey."],
+  heading: ["Engineered to Connect.", "Built for the Journey."],
   lede: "Every component plays a role in the performance, functionality and assembly of a motorcycle.",
   headLabel: "Metallic Motorcycle Components",
   headMeta: "OEM \u00b7 Assembly",
@@ -126,7 +126,7 @@ export const COMPONENTS: readonly ComponentGroup[] = [
 export const OEM = {
   index: "02",
   eyebrow: "Working with Industry",
-  heading: ["Built Around OEM Requirements.", "Driven by Manufacturing Reliability."],
+  heading: ["Built for OEM Specs.", "Reliable at Scale."],
   intro:
     "OEM manufacturing means understanding specs, materials, processes and the needs of final assembly.",
   band: {
@@ -201,8 +201,8 @@ export const PROCESS = {
   eyebrow: "From Material to Component",
   heading: ["Precision at Every Stage", "of Production."],
   lede: [
-    "A dependable component begins with the right process \u2014 cutting, forming, machining and joining, from raw material to a part ready for its application.",
-    "Each stage contributes to the accuracy, consistency and functionality required for automotive assembly.",
+    "A dependable component begins with the right process \u2014 cutting, forming, machining and joining.",
+    "Each stage builds the accuracy and consistency automotive assembly demands.",
   ],
   readoutLabel: "Stage",
   statement:
@@ -260,10 +260,10 @@ export const STAGES: readonly Stage[] = [
 
 export const CAPABILITIES_COPY: CapabilitiesCopy = {
   eyebrow: "Manufacturing Strength",
-  heading: ["The Capability to Make It.", "The Discipline to Make It Consistently."],
+  heading: ["Capability to Make It.", "Discipline to Repeat It."],
   lede: [
-    "Reliable automotive manufacturing requires the right combination of engineering knowledge, production equipment, skilled people and repeatable processes.",
-    "We bring them together for OEM and assembly, from material through forming, machining and welding.",
+    "Reliable automotive manufacturing needs engineering knowledge, equipment, skilled people and repeatable processes.",
+    "We bring them together for OEM and assembly, from material to welding.",
   ],
 };
 

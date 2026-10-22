@@ -243,7 +243,7 @@ export default function CapabilitiesSection({
           tl.to(track, { x: () => -shift(), duration: 0.8 });
 
           drawGlyphs(root, "top 70%");
-          countStats(root, "top 55%");
+          countStats(root.querySelector("[data-caps-stats]") ?? root, "top 85%");
 
           return () => {
             delete clip.dataset.pinned;
@@ -504,7 +504,6 @@ export default function CapabilitiesSection({
                   <Copy
                     data-caps-body
                     variant="caption"
-                    className="md:text-justify md:[text-align-last:left]"
                   >
                     {item.body}
                   </Copy>

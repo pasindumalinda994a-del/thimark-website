@@ -288,7 +288,7 @@ export const STORY_MILESTONES = JOURNEY;
 
 export const TWO_CORE = {
   eyebrow: "What We Do",
-  heading: ["Three Disciplines.", "One Engineering Mindset."],
+  heading: ["Three Disciplines.", "One Shared Mindset."],
   lede: "From components to complete machinery, we combine engineering and manufacturing for practical automotive and industrial solutions.",
   columns: [
     {
@@ -368,7 +368,7 @@ export const TWO_CORE = {
 
 export const FEATURED = {
   eyebrow: "Engineered for the Real World",
-  heading: ["When the Challenge Is Complex,", "Engineering Has to Be Smarter."],
+  heading: ["Complex Challenges Need", "Smarter Engineering."],
   lede: "Solutions built around the application and the challenge \u2014 practical engineering with precision manufacturing and automation.",
 } as const;
 
@@ -423,8 +423,8 @@ export const CAPABILITIES_COPY: CapabilitiesSectionCopy = {
   eyebrow: "The Thimark Advantage",
   heading: ["Capability You", "Can Build On."],
   lede: [
-    "Great engineering starts with good ideas — but reliable products require the capability to turn those ideas into reality.",
-    "Thimark combines manufacturing infrastructure, technical expertise and controlled production processes to support precision, consistency and dependable delivery.",
+    "Good ideas need the capability to become reliable products.",
+    "Thimark brings manufacturing infrastructure, expertise and controlled processes to deliver with precision and consistency.",
   ],
 };
 
@@ -444,11 +444,11 @@ export const CAPABILITIES = {
 
 export const QUALITY = {
   eyebrow: "Quality by Design",
-  heading: ["Precision Is Not a Promise.", "It's a Process."],
+  heading: ["Precision Is a Process,", "Not a Promise."],
   paragraphs: [
-    "At Thimark, quality is embedded into the way we engineer and manufacture.",
-    "Our ISO 9001:2015 certification and CIDA EM2 Grade in Heavy Steel Fabrication reflect our commitment to professional standards, controlled production and consistent results.",
-    "Our quality approach includes material verification, in-process controls, testing and final inspection, supported by structured problem-solving and continuous improvement.",
+    "At Thimark, quality is built into how we engineer and manufacture.",
+    "ISO 9001:2015 and CIDA EM2 Grade reflect our commitment to controlled production and consistent results.",
+    "Our approach covers material verification, in-process controls, testing and final inspection — with continuous improvement.",
   ],
   principleLead: "Our approach is guided by a simple principle:",
   principles: [

@@ -18,7 +18,7 @@ const KILGARRAH_PHOTO = "/pages/industrial-machinery/kilgharrah-R1.JPG.jpeg";
 
 export const HERO: HeroCopy = {
   eyebrow: "Industrial Machinery Manufacturer \u00b7 Sri Lanka",
-  heading: ["Custom Industrial Machinery.", "Built for Real Challenges."],
+  heading: ["Custom Machinery.", "Built for Real Work."],
   intro:
     "Complex industrial challenges demand more than standard equipment. They require practical engineering, dependable manufacturing, and machinery designed around the realities of the application.",
   body: "From our works in Sri Lanka, we design and manufacture custom industrial machinery for water and hydropower, industrial processing and material handling \u2014 from trash rack cleaners and conveyors to heavy steel structures.",
@@ -43,7 +43,7 @@ export const HERO: HeroCopy = {
 export const PORTFOLIO = {
   index: "01",
   eyebrow: "Solutions for Industry & Infrastructure",
-  heading: ["Engineered Solutions for", "Demanding Industrial Applications."] as const,
+  heading: ["Solutions Built for", "Demanding Industry."] as const,
   lede: "From hydropower intakes to dust control and material handling, the right equipment makes a meaningful difference.",
   headLabel: "Industrial Machinery Portfolio",
   headMeta: "Infrastructure \u00b7 Industry",
@@ -168,8 +168,8 @@ export const PROCESS: ProcessCopy = {
   eyebrow: "Our Engineering Approach",
   heading: ["From the First Drawing", "to a Working Solution."],
   lede: [
-    "Custom machinery needs more than a concept \u2014 engineering, fabrication, controls and installation have to work as one connected process.",
-    "We translate operational requirements into designs and coordinate every manufacturing stage that brings the machine to life.",
+    "Custom machinery needs more than a concept \u2014 engineering, fabrication, controls and installation as one.",
+    "We turn operational requirements into designs and coordinate every stage that brings it to life.",
   ],
   readoutLabel: "Stage",
   tabsLabel: "Engineering stages",
@@ -225,7 +225,7 @@ export const STAGES: readonly Stage[] = [
 export const FEATURED = {
   index: "03",
   eyebrow: "Featured Engineering Project",
-  heading: ["Engineering a Better Approach", "to Trash Rack Cleaning."] as const,
+  heading: ["A Better Way to Clean", "Hydropower Trash Racks."] as const,
   lede: "Hydropower facilities need clear intakes. Effective trash-rack cleaning keeps debris from restricting flow.",
   storyLabel: "KILGHARRAH 600 \u00b7 KenGen",
   paragraphs: [
@@ -260,8 +260,8 @@ export const CAPABILITIES_COPY: CapabilitiesCopy = {
   eyebrow: "Built on Engineering Strength",
   heading: ["The Engineering Behind", "Every Solution."],
   lede: [
-    "Reliable industrial machinery depends on the relationship between design, materials, manufacturing processes, and the demands of the operating environment.",
-    "Engineering and manufacturing together, for custom machinery, heavy fabrication and specialized equipment.",
+    "Reliable industrial machinery depends on design, materials, manufacturing and operating conditions.",
+    "Engineering and manufacturing together \u2014 for custom machinery, heavy fabrication and specialized equipment.",
   ],
 };
 

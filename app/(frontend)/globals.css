@@ -11,20 +11,20 @@
   --ink: var(--steel);
   --ink-muted: color-mix(in srgb, var(--steel) 50%, transparent);
   --ink-soft: color-mix(in srgb, var(--steel) 70%, transparent);
-  /* φ modular type scale — floorPx + softVw; ~max by 2850 (shared) */
-  --type-caption: clamp(11px, 10.5px + 0.053vw, 12px);
-  --type-body: clamp(13px, 12.5px + 0.088vw, 15px);
-  --type-lede-sm: clamp(14px, 12px + 0.14vw, 16px);
-  --type-lede: clamp(15px, 13px + 0.175vw, 18px);
-  --type-title-sm: clamp(15px, 13px + 0.246vw, 20px);
-  --type-title: clamp(17px, 14px + 0.316vw, 23px);
-  --type-lead: clamp(20px, 15px + 0.491vw, 29px);
-  --type-statement: clamp(24px, 18px + 0.667vw, 37px);
-  --type-h2: clamp(30px, 22px + 0.912vw, 48px);
-  --type-h1-mobile: clamp(30px, 8vw, 34px);
-  --type-h1: clamp(40px, 28px + 1.263vw, 64px);
-  --type-display-sm: clamp(28px, 22px + 0.632vw, 40px);
-  --type-display-lg: clamp(32px, 24px + 1.123vw, 56px);
+  /* φ modular type scale — floorPx + softVw; ~max at 1900; ~2/3 of (max−min) drop by 1512 */
+  --type-caption: clamp(11px, 8.7px + 0.172vw, 12px);
+  --type-body: clamp(13px, 8.5px + 0.344vw, 15px);
+  --type-lede-sm: clamp(14px, 9.5px + 0.344vw, 16px);
+  --type-lede: clamp(15px, 8px + 0.515vw, 18px);
+  --type-title-sm: clamp(15px, 3.7px + 0.859vw, 20px);
+  --type-title: clamp(17px, 3.4px + 1.031vw, 23px);
+  --type-lead: clamp(20px, -0.4px + 1.546vw, 29px);
+  --type-statement: clamp(24px, -5.4px + 2.234vw, 37px);
+  --type-h2: clamp(30px, -10.8px + 3.093vw, 48px);
+  --type-h1-mobile: clamp(30px, 21px + 0.687vw, 34px);
+  --type-h1: clamp(40px, -14.4px + 4.124vw, 64px);
+  --type-display-sm: clamp(28px, 0.8px + 2.062vw, 40px);
+  --type-display-lg: clamp(32px, -22.4px + 4.124vw, 56px);
   --stroke: 1.5px;
   --dash: 4px;
   --dash-gap: 4px;
@@ -552,6 +552,11 @@ html[data-preloaded="true"] [data-preloader] {
   text-shadow:
     0 1px 1px rgb(0 0 0 / 0.4),
     0 8px 24px rgb(0 0 0 / 0.35);
+}
+
+.hero-body {
+  text-align: justify !important;
+  text-align-last: left !important;
 }
 
 .hero-provenance {
@@ -3651,7 +3656,7 @@ a.sb-nav-row.is-active .sb-nav-index {
 .caps-stat-value {
   align-self: flex-end;
   font-family: var(--font-heading);
-  font-size: clamp(40px, 5.2vw, 64px);
+  font-size: var(--type-h1);
   font-weight: 500;
   line-height: 0.9;
   letter-spacing: -0.01em;
@@ -3791,6 +3796,14 @@ a.sb-nav-row.is-active .sb-nav-index {
   max-width: 640px;
   flex-direction: column;
   gap: 12px;
+  text-align: center;
+  text-align-last: center;
+}
+
+/* Beat Copy’s site-wide left/justify utilities in this centered block. */
+.quality-copy > * {
+  text-align: center !important;
+  text-align-last: center !important;
 }
 
 .quality-flank {
@@ -4093,6 +4106,11 @@ a.sb-nav-row.is-active .sb-nav-index {
 }
 
 /* ---- 07 Partners --------------------------------------------------- */
+
+.partners-lede {
+  text-align: center !important;
+  text-align-last: center !important;
+}
 
 .partners-grid {
   position: relative;
@@ -7299,8 +7317,9 @@ a.contact-channel-value:focus-visible {
 
 @media (min-width: 1280px) {
   .ab-copy {
-    text-align: justify;
-    text-align-last: left;
+    text-align: left;
+    text-align-last: auto;
+    text-wrap: pretty;
   }
 }
 
@@ -7963,6 +7982,8 @@ a.contact-channel-value:focus-visible {
 
 .ld-bio-copy {
   max-width: 34ch;
+  margin-inline: auto;
+  text-align: center;
   opacity: 0.8;
 }
 
@@ -10897,11 +10918,11 @@ a.contact-channel-value:focus-visible {
 
   .about-page .ld-name {
     flex: 1;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     gap: 12px;
     padding: 4px 16px 20px;
-    text-align: left;
+    text-align: center;
   }
 }
 

@@ -341,7 +341,7 @@ export default function NewsroomIndex({ records }: { records: NewsRecord[] }) {
           data-cat-header
           variant="lede" size="fixed"
           weight="medium"
-          className="catalogue-lede md:text-justify md:[text-align-last:left]"
+          className="catalogue-lede"
         >
           Company news, project dispatches, awards, and work that leaves Sri Lanka.
         </Copy>

@@ -29,8 +29,6 @@ const CONTACT = [
     id: "company",
     label: "Company",
     lines: ["Thimark Technocreations (Pvt) Ltd"],
-    website: "www.thimark.com",
-    websiteHref: "https://www.thimark.com",
   },
   {
     id: "address",
@@ -377,26 +375,13 @@ export default function QuoteSection({
                 {cell.lines.join(" ")}
               </a>
             ) : (
-              <div className="flex flex-col gap-1">
-                <p className="font-heading text-[12px] leading-[1.3] font-medium uppercase">
-                  {cell.lines.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                </p>
-                {"website" in cell ? (
-                  <>
-                    <p className="index-tag mt-2 opacity-80">Website</p>
-                    <a
-                      href={cell.websiteHref}
-                      className="font-heading text-[12px] leading-[1.3] font-medium underline-offset-4 hover:underline focus-visible:underline outline-none"
-                    >
-                      {cell.website}
-                    </a>
-                  </>
-                ) : null}
-              </div>
+              <p className="font-heading text-[12px] leading-[1.3] font-medium uppercase">
+                {cell.lines.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
+              </p>
             )}
           </div>
         ))}

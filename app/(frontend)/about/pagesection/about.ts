@@ -180,7 +180,7 @@ export const PRINCIPLES: readonly {
 export const QUALITY = {
   index: "03",
   eyebrow: "Quality by Design",
-  heading: ["Better Processes. Better Products.", "Lasting Trust."],
+  heading: ["Better Processes Build", "Products You Trust."],
   lede: "Quality is not only final inspection. At Thimark it shapes how we plan, engineer, manufacture and improve.",
   headLabel: "Our Quality System",
   paragraphs: [
@@ -198,7 +198,7 @@ export const QUALITY = {
 
 export const HOW_WE_WORK = {
   eyebrow: "How We Work",
-  heading: ["Six Practices.", "One Standard of Quality."],
+  heading: ["Six Practices.", "One Quality Standard."],
   lede: [
     "Our philosophy is straightforward: reduce waste, improve processes and create consistent value \u2014 for our customers, our people and the industries we serve.",
   ],
@@ -256,7 +256,7 @@ export const PRACTICES: readonly Capability[] = [
 export const RECOGNITION = {
   index: "04",
   eyebrow: "Milestones of Excellence",
-  heading: ["Recognition Built on", "Engineering and Performance."],
+  heading: ["Recognition Built on", "Real Performance."],
   intro:
     "Every milestone reflects our people\u2019s dedication and our commitment to Sri Lankan engineering and manufacturing.",
   band: {
@@ -372,7 +372,7 @@ export const AWARDS: readonly Award[] = [
 export const LEADERSHIP = {
   index: "05",
   eyebrow: "The People Behind the Engineering",
-  heading: ["Driven by People.", "Built Through Expertise."],
+  heading: ["Driven by People.", "Built on Expertise."],
   intro:
     "Behind every component, challenge and project is a team committed to getting the details right.",
   body: "Leadership, engineering knowledge and hands-on experience turn customer requirements into practical solutions. We value professionalism, collaboration and continuous learning.",
@@ -385,7 +385,7 @@ export const LEADERSHIP = {
       credential: "B.Sc Eng",
       initials: "TM",
       role: "Chairman, Managing Director & Co-Founder",
-      bio: "Providing engineering leadership and strategic direction, with a commitment to advancing Sri Lankan manufacturing and engineering capability.",
+      bio: "Engineering leadership and strategic direction, committed to advancing Sri Lankan manufacturing.",
       icon: "man" as IsoIcon,
       /** Set to a /public path to replace the role glyph. */
       portrait: "" as string,

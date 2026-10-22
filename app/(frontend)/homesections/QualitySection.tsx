@@ -366,7 +366,7 @@ export default function QualitySection() {
             </div>
             <div className="quality-pillar-copy">
               <H3Heading variant="title">{pillar.title}</H3Heading>
-              <Copy variant="caption" className="md:text-justify md:[text-align-last:left]">
+              <Copy variant="caption">
                 {pillar.body}
               </Copy>
             </div>

@@ -1,27 +1,28 @@
 import type { HTMLAttributes, ReactNode } from "react";
 
-const JUSTIFY = "text-left xl:text-justify xl:[text-align-last:left]";
+/** Main section intro only — body/caption/prose stay left. */
+const LEDE_ALIGN = "text-left xl:text-justify xl:[text-align-last:left]";
 
 const SCALE = {
-  caption: "font-heading text-[length:var(--type-caption)] font-normal leading-[1.25] uppercase",
-  body: "font-heading text-[length:var(--type-body)] font-normal leading-[1.35] uppercase",
+  caption: "font-heading text-[length:var(--type-caption)] font-normal leading-[1.25] uppercase text-pretty text-left",
+  body: "font-heading text-[length:var(--type-body)] font-normal leading-[1.35] uppercase text-pretty text-left",
   lede: {
-    sm: `font-heading text-[length:var(--type-lede-sm)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
-    md: `font-heading text-[length:var(--type-lede)] font-medium leading-[1.15] uppercase ${JUSTIFY}`,
-    fixed: "font-heading text-[16px] leading-none uppercase",
+    sm: `font-heading text-[length:var(--type-lede-sm)] font-medium leading-[1.15] uppercase text-pretty ${LEDE_ALIGN}`,
+    md: `font-heading text-[length:var(--type-lede)] font-medium leading-[1.15] uppercase text-pretty ${LEDE_ALIGN}`,
+    fixed: `font-heading text-[16px] leading-none uppercase text-pretty ${LEDE_ALIGN}`,
   },
   title: {
-    sm: "font-heading text-[length:var(--type-title-sm)] font-medium leading-[1.05] uppercase",
-    md: "font-heading text-[length:var(--type-title)] font-medium leading-[1.05] uppercase",
+    sm: "font-heading text-[length:var(--type-title-sm)] font-medium leading-[1.05] uppercase text-pretty",
+    md: "font-heading text-[length:var(--type-title)] font-medium leading-[1.05] uppercase text-pretty",
   },
-  lead: "font-heading text-[length:var(--type-lead)] font-medium leading-[1.02] uppercase",
-  statement: "font-heading text-[length:var(--type-statement)] font-medium leading-[0.95] uppercase",
+  lead: "font-heading text-[length:var(--type-lead)] font-medium leading-[1.02] uppercase text-pretty",
+  statement: "font-heading text-[length:var(--type-statement)] font-medium leading-[0.95] uppercase text-pretty",
   display: {
     sm: "font-heading text-[length:var(--type-display-sm)] font-medium leading-none tracking-[0.02em] uppercase text-center",
     lg: "font-heading text-[length:var(--type-display-lg)] font-medium leading-none tracking-[0.02em] uppercase text-center",
   },
-  prose: "font-sans text-[15px] font-normal leading-[1.45]",
-  meta: "text-[14px] font-normal leading-[1.45]",
+  prose: "font-sans text-[15px] font-normal leading-[1.45] text-pretty text-left",
+  meta: "text-[14px] font-normal leading-[1.45] text-pretty",
 } as const;
 
 export type CopyVariant = keyof typeof SCALE;

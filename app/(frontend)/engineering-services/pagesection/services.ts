@@ -15,7 +15,7 @@ type Media = { src: string; alt: string; objectPosition: string };
 
 export const HERO: HeroCopy = {
   eyebrow: "Product Development \u00b7 Reverse Engineering \u00b7 Powder Coating",
-  heading: ["From Concept to", "Production-Ready Solutions."],
+  heading: ["From First Concept", "to Ready Production."],
   intro:
     "Every great product begins with a requirement. Turning that requirement into a manufacturable, reliable solution takes engineering knowledge, practical design, and the right production capabilities.",
   body: "Through product development, reverse engineering, metal fabrication and powder coating, we help turn a new idea, an existing component or a required finish into something ready to manufacture.",
@@ -40,10 +40,10 @@ export const HERO: HeroCopy = {
 export const NPD: ProcessCopy = {
   index: "01",
   eyebrow: "From Idea to Reality",
-  heading: ["Turning Ideas into Products", "Built for the Real World."],
+  heading: ["Ideas Become Products", "Built for Real Use."],
   lede: [
-    "A promising idea becomes a successful product when it can be designed, manufactured, tested, and produced consistently.",
-    "New Product Development turns concepts into practical solutions, keeping design intent, manufacturability, performance and production in view so ideas are ready to make.",
+    "A promising idea becomes a successful product when it can be designed, made and produced consistently.",
+    "New Product Development turns concepts into practical solutions ready to make.",
   ],
   readoutLabel: "Step",
   tabsLabel: "Our development journey",
@@ -120,7 +120,7 @@ export const NPD_STEPS: readonly Stage[] = [
 export const REVERSE = {
   index: "02",
   eyebrow: "Understand. Recreate. Improve.",
-  heading: ["Bringing Existing Components", "Back into Focus."],
+  heading: ["Existing Components", "Seen with Fresh Eyes."],
   lede: "Sometimes the solution already exists \u2014 a part to recreate, incomplete drawings, or a design to understand first.",
   storyLabel: "From Existing Part to New Possibilities",
   storyMeta: "Physical \u2192 Digital",
@@ -185,8 +185,8 @@ export const FINISHING = {
   eyebrow: "Surface Finishing Solutions",
   heading: ["The Right Finish.", "Applied with Purpose."],
   lede: [
-    "Surface finishing plays an important role in a component\u2019s appearance, surface condition, and suitability for its intended application.",
-    "Through the Ekala facility, we finish metallic components \u2014 from powder coating to specialist electroplating \u2014 matched to the part, its application and the specified finish.",
+    "Surface finishing shapes a component\u2019s appearance, condition and suitability for use.",
+    "At Ekala, we finish metallic components \u2014 from powder coating to specialist electroplating.",
   ],
   servicesLabel: "Our Finishing Services",
   processLabel: "Process & Environment",
@@ -266,7 +266,7 @@ export const ENVIRONMENT = {
 export const ENGINEERING: QualityCopy = {
   index: "04",
   eyebrow: "Engineering Meets Manufacturing",
-  heading: ["Better Decisions in Design.", "Greater Confidence in Production."],
+  heading: ["Better Design Choices.", "Confident Production."],
   lede: "Engineering is most valuable when design decisions are connected to real manufacturing requirements.",
   headLabel: "Design to Production",
   paragraphs: [

@@ -44,7 +44,7 @@ export const PORTFOLIO = {
   index: "01",
   eyebrow: "Solutions for Industry & Infrastructure",
   heading: ["Engineered Solutions for", "Demanding Industrial Applications."] as const,
-  lede: "Whether managing debris at a hydropower intake, controlling industrial dust, or moving materials through a process, the right equipment makes a meaningful difference.",
+  lede: "From hydropower intakes to dust control and material handling, the right equipment makes a meaningful difference.",
   headLabel: "Industrial Machinery Portfolio",
   headMeta: "Infrastructure \u00b7 Industry",
   paragraphs: [
@@ -109,7 +109,7 @@ export const BANDS: readonly PortfolioBand[] = [
       },
     ],
     closing:
-      "Each project differs in arrangement, dimensions and integration, so we start with the application and engineer around its needs.",
+      "Each project differs in arrangement and integration \u2014 we start with the application and engineer around it.",
     imageSide: "right",
     media: {
       // Test: water-R1 | R2 | R3
@@ -149,7 +149,7 @@ export const BANDS: readonly PortfolioBand[] = [
       },
     ],
     closing:
-      "From individual fabricated assemblies to integrated machinery projects, our goal is to deliver practical solutions that respond to real operational requirements.",
+      "From fabricated assemblies to integrated machinery, we deliver practical solutions for real operational needs.",
     imageSide: "left",
     media: {
       // Test: processing-R1 | R2 | R3
@@ -168,8 +168,8 @@ export const PROCESS: ProcessCopy = {
   eyebrow: "Our Engineering Approach",
   heading: ["From the First Drawing", "to a Working Solution."],
   lede: [
-    "Custom machinery requires more than a good concept. It demands a connected process in which engineering, fabrication, mechanical systems, controls, and final installation work together.",
-    "At Thimark, we approach industrial machinery projects by translating operational requirements into engineering designs and coordinating the manufacturing stages needed to bring them to life.",
+    "Custom machinery needs more than a concept \u2014 engineering, fabrication, controls and installation have to work as one connected process.",
+    "We translate operational requirements into designs and coordinate every manufacturing stage that brings the machine to life.",
   ],
   readoutLabel: "Stage",
   tabsLabel: "Engineering stages",
@@ -226,7 +226,7 @@ export const FEATURED = {
   index: "03",
   eyebrow: "Featured Engineering Project",
   heading: ["Engineering a Better Approach", "to Trash Rack Cleaning."] as const,
-  lede: "Hydropower facilities depend on clear water intakes. Debris on trash racks can restrict flow, so effective rack cleaning is part of intake management.",
+  lede: "Hydropower facilities need clear intakes. Effective trash-rack cleaning keeps debris from restricting flow.",
   storyLabel: "KILGHARRAH 600 \u00b7 KenGen",
   paragraphs: [
     "Thimark designed and manufactured the KILGHARRAH 600 movable hydraulic trash rack cleaning machine for Kenya Electricity Generating Company PLC (KenGen), with Varomatech Ltd, Kenya.",
@@ -239,7 +239,7 @@ export const FEATURED = {
   } satisfies Media,
   caption: ["Fig. 04", "KILGHARRAH 600 \u00b7 KenGen"] as const,
   closing:
-    "The KILGHARRAH 600 stands as an example of Thimark\u2019s ability to take on specialized engineering requirements and develop machinery for demanding industrial and infrastructure applications.",
+    "The KILGHARRAH 600 shows how Thimark turns specialized requirements into machinery for demanding infrastructure.",
   glanceLabel: "Project at a glance",
   glance: [
     { label: "Client", value: "Kenya Electricity Generating Company PLC (KenGen)" },

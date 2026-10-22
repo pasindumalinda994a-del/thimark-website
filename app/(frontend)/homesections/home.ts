@@ -61,7 +61,7 @@ const HERO_VIDEOS = [
 export const HERO = {
   eyebrow: ["Engineering", "Manufacturing", "Innovation"] as const,
   heading: ["Engineering What Moves", "Industry Forward."],
-  lede: "From precision-engineered motorcycle components to custom industrial machinery, Thimark is an ISO 9001:2015 certified engineering and manufacturing company in Sri Lanka, building solutions for the real world.",
+  lede: "Precision motorcycle components and custom industrial machinery from an ISO 9001:2015 engineering company in Sri Lanka.",
   primaryCta: {
     href: RAQ_LINK.href,
     label: RAQ_LINK.label,
@@ -124,7 +124,7 @@ export const STORY = {
   index: "01",
   eyebrow: "Built From The Ground Up",
   heading: ["From Steel Fabrication", "to Advanced Engineering."],
-  lede: "What began as a backyard steel fabrication business in 2014 has grown into a trusted Sri Lankan engineering and manufacturing company serving the automotive and industrial sectors.",
+  lede: "From a backyard steel workshop in 2014 to a trusted Sri Lankan engineering company for automotive and industrial work.",
   storyLabel: "Our Story",
   since: "Since 2014",
   paragraphs: [
@@ -146,7 +146,7 @@ export const STORY = {
     "Surface Finishing",
   ],
   closing:
-    "Our journey is driven by a simple belief: when engineering expertise meets innovation, quality and determination, challenges become opportunities to build something better.",
+    "A simple belief drives us: when engineering meets innovation, quality and determination, challenges become opportunities.",
   cta: { label: "See the Journey", href: "/#about" } satisfies Link,
 } as const;
 
@@ -168,7 +168,7 @@ export type JourneyItem = {
 export const JOURNEY_COPY: JourneyCopy = {
   eyebrow: "Our Journey",
   heading: ["Every Milestone", "Built the Next."],
-  lede: "What began as a modest steel fabrication business has evolved into a Sri Lankan engineering company delivering precision manufacturing, OEM components and custom-built industrial machinery.",
+  lede: "From modest steel fabrication to a Sri Lankan engineering company delivering OEM components and custom industrial machinery.",
   readoutLabel: "Our Story",
   readout: [
     { text: "We invest in people and technology " },
@@ -289,7 +289,7 @@ export const STORY_MILESTONES = JOURNEY;
 export const TWO_CORE = {
   eyebrow: "What We Do",
   heading: ["Three Disciplines.", "One Engineering Mindset."],
-  lede: "From individual components to complete machinery, we combine engineering expertise and manufacturing capability to deliver practical solutions for automotive and industrial applications.",
+  lede: "From components to complete machinery, we combine engineering and manufacturing for practical automotive and industrial solutions.",
   columns: [
     {
       id: "automotive",
@@ -369,7 +369,7 @@ export const TWO_CORE = {
 export const FEATURED = {
   eyebrow: "Engineered for the Real World",
   heading: ["When the Challenge Is Complex,", "Engineering Has to Be Smarter."],
-  lede: "Our solutions are developed around the application, the environment and the challenge — combining practical engineering with precision manufacturing and automation.",
+  lede: "Solutions built around the application and the challenge \u2014 practical engineering with precision manufacturing and automation.",
 } as const;
 
 export const SOLUTIONS = [
@@ -509,7 +509,7 @@ export const PARTNERS_COPY: PartnersSectionCopy = {
   heading: ["Engineering That", "Earns Trust."],
   lede: {
     strong: "Strong engineering partnerships are built over time.",
-    rest: "Thimark works with established organizations that rely on its manufacturing capability, technical expertise and commitment to quality.",
+    rest: "We work with organizations that rely on our manufacturing capability, expertise and commitment to quality.",
   },
   statement:
     "From local manufacturing partnerships to international engineering projects, our work speaks through the relationships we build.",

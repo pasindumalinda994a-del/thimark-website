@@ -11,20 +11,20 @@
   --ink: var(--steel);
   --ink-muted: color-mix(in srgb, var(--steel) 50%, transparent);
   --ink-soft: color-mix(in srgb, var(--steel) 70%, transparent);
-  /* φ modular type scale — floorPx + softVw; ~max by 1280–1440 */
-  --type-caption: clamp(11px, 10.5px + 0.1vw, 12px);
-  --type-body: clamp(13px, 12.5px + 0.15vw, 15px);
-  --type-lede-sm: clamp(14px, 12px + 0.3vw, 16px);
-  --type-lede: clamp(15px, 13px + 0.35vw, 18px);
-  --type-title-sm: clamp(15px, 13px + 0.5vw, 20px);
-  --type-title: clamp(17px, 14px + 0.65vw, 23px);
-  --type-lead: clamp(20px, 15px + 0.95vw, 29px);
-  --type-statement: clamp(24px, 18px + 1.3vw, 37px);
-  --type-h2: clamp(30px, 22px + 1.8vw, 48px);
+  /* φ modular type scale — floorPx + softVw; ~max by 2850 (shared) */
+  --type-caption: clamp(11px, 10.5px + 0.053vw, 12px);
+  --type-body: clamp(13px, 12.5px + 0.088vw, 15px);
+  --type-lede-sm: clamp(14px, 12px + 0.14vw, 16px);
+  --type-lede: clamp(15px, 13px + 0.175vw, 18px);
+  --type-title-sm: clamp(15px, 13px + 0.246vw, 20px);
+  --type-title: clamp(17px, 14px + 0.316vw, 23px);
+  --type-lead: clamp(20px, 15px + 0.491vw, 29px);
+  --type-statement: clamp(24px, 18px + 0.667vw, 37px);
+  --type-h2: clamp(30px, 22px + 0.912vw, 48px);
   --type-h1-mobile: clamp(30px, 8vw, 34px);
-  --type-h1: clamp(40px, 28px + 2.4vw, 64px);
-  --type-display-sm: clamp(28px, 22px + 1.25vw, 40px);
-  --type-display-lg: clamp(32px, 24px + 2vw, 56px);
+  --type-h1: clamp(40px, 28px + 1.263vw, 64px);
+  --type-display-sm: clamp(28px, 22px + 0.632vw, 40px);
+  --type-display-lg: clamp(32px, 24px + 1.123vw, 56px);
   --stroke: 1.5px;
   --dash: 4px;
   --dash-gap: 4px;

@@ -122,7 +122,7 @@ function PortfolioBandBlock({ band }: { band: PortfolioBand }) {
             ))}
           </ul>
           <MachineryList id={band.id} items={band.items} />
-          <Copy data-reveal variant="lede" className="im-cat-pull">
+          <Copy data-reveal variant="lede" size="sm" className="im-cat-pull">
             {band.closing}
           </Copy>
         </div>

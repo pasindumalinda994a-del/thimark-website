@@ -121,7 +121,7 @@ export const REVERSE = {
   index: "02",
   eyebrow: "Understand. Recreate. Improve.",
   heading: ["Bringing Existing Components", "Back into Focus."],
-  lede: "Sometimes the solution already exists \u2014 a component to recreate, a part without complete drawings, or a design to understand before further development.",
+  lede: "Sometimes the solution already exists \u2014 a part to recreate, incomplete drawings, or a design to understand first.",
   storyLabel: "From Existing Part to New Possibilities",
   storyMeta: "Physical \u2192 Digital",
   paragraphs: [

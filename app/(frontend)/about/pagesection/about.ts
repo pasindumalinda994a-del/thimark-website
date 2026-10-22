@@ -100,7 +100,7 @@ export const DRIVES = {
   eyebrow: "What Drives Us",
   heading: ["Engineering a Stronger", "Industrial Future."],
   intro:
-    "Engineering is about more than manufacturing. It is about developing local capability, solving practical challenges and creating lasting value through technology, skilled people and responsible practice.",
+    "Engineering is more than manufacturing \u2014 it builds local capability, solves practical challenges and creates lasting value.",
   bands: [
     {
       id: "vision",
@@ -181,7 +181,7 @@ export const QUALITY = {
   index: "03",
   eyebrow: "Quality by Design",
   heading: ["Better Processes. Better Products.", "Lasting Trust."],
-  lede: "Quality is not simply the final inspection of a finished product. At Thimark, it influences how we plan, engineer, manufacture and improve our work.",
+  lede: "Quality is not only final inspection. At Thimark it shapes how we plan, engineer, manufacture and improve.",
   headLabel: "Our Quality System",
   paragraphs: [
     "Our ISO 9001:2015 quality system supports consistent manufacturing, from material verification and production controls through testing and final inspection.",
@@ -258,7 +258,7 @@ export const RECOGNITION = {
   eyebrow: "Milestones of Excellence",
   heading: ["Recognition Built on", "Engineering and Performance."],
   intro:
-    "Every milestone in our journey reflects the dedication of our people and our commitment to strengthening Sri Lankan engineering and manufacturing.",
+    "Every milestone reflects our people\u2019s dedication and our commitment to Sri Lankan engineering and manufacturing.",
   band: {
     label: "Our Recognitions",
     callout: ["SLTC Research &", "Innovation Awards 2026"],
@@ -272,7 +272,7 @@ export const RECOGNITION = {
   },
   closingLabel: "Closing Note",
   closing:
-    "These milestones mark our development. Our focus remains on earning trust through the quality of our work, our engineering and the value we create.",
+    "These milestones mark our path. We earn trust through the quality of our work and the value we create.",
 } as const;
 
 export type Award = {
@@ -374,7 +374,7 @@ export const LEADERSHIP = {
   eyebrow: "The People Behind the Engineering",
   heading: ["Driven by People.", "Built Through Expertise."],
   intro:
-    "Behind every component manufactured, every engineering challenge solved and every project delivered is a team committed to getting the details right.",
+    "Behind every component, challenge and project is a team committed to getting the details right.",
   body: "Leadership, engineering knowledge and hands-on experience turn customer requirements into practical solutions. We value professionalism, collaboration and continuous learning.",
   teamLabel: "Our Leadership Team",
   leaders: [
@@ -443,5 +443,5 @@ export const PEOPLE = {
     objectPosition: "50% 40%",
   } satisfies Media,
   closing:
-    "At Thimark, engineering excellence is a collective effort \u2014 built by people who take pride in their work and believe in what Sri Lankan industry can achieve.",
+    "Engineering excellence is a collective effort \u2014 built by people who take pride in their work.",
 } as const;

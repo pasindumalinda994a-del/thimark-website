@@ -128,7 +128,7 @@ export const OEM = {
   eyebrow: "Working with Industry",
   heading: ["Built Around OEM Requirements.", "Driven by Manufacturing Reliability."],
   intro:
-    "OEM manufacturing means understanding design specifications, materials, production processes, dimensional consistency and the needs of final assembly.",
+    "OEM manufacturing means understanding specs, materials, processes and the needs of final assembly.",
   band: {
     label: "Our Approach",
     callout: ["Local Vehicle Assembly", "Sri Lanka"],
@@ -179,7 +179,7 @@ export const VALUE = {
   index: "03",
   eyebrow: "Made in Sri Lanka",
   heading: ["Supporting Local", "Value Addition."],
-  lede: "Through these manufacturing relationships, Thimark contributes to the development of local automotive production capability and supports greater value addition within Sri Lanka.",
+  lede: "Through these relationships, Thimark builds local production capability and greater value addition in Sri Lanka.",
   figure: "30%",
   figureLabel: "Local value addition",
   lines: [

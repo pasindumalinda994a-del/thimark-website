@@ -270,11 +270,13 @@ export default function QualitySection() {
             <span className="ab-statement-muted">{QUALITY.heading[1]}</span>
           </H2Heading>
           <div data-q-header className="quality-copy">
-            <Copy variant="lede">{QUALITY.paragraphs[0]}</Copy>
-            <Copy variant="lede" weight="normal">
+            <Copy variant="lede" size="sm">
+              {QUALITY.paragraphs[0]}
+            </Copy>
+            <Copy variant="lede" size="sm" weight="normal">
               {QUALITY.paragraphs[1]}
             </Copy>
-            <Copy variant="lede" weight="normal">
+            <Copy variant="lede" size="sm" weight="normal">
               {QUALITY.paragraphs[2]}
             </Copy>
             <Copy variant="caption" weight="medium" className="pt-2 tracking-[0.12em]">

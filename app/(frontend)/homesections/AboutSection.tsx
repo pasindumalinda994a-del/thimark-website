@@ -599,7 +599,9 @@ export default function AboutSection({
               {showTitles ? (
                 <H3Heading variant="title">{item.title}</H3Heading>
               ) : null}
-              <Copy variant="lede">{item.body}</Copy>
+              <Copy variant="lede" size="sm">
+                {item.body}
+              </Copy>
             </div>
           ))}
           </div>

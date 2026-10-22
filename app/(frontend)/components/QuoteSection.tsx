@@ -66,7 +66,7 @@ export type QuoteCopy = {
 const DEFAULT_COPY: QuoteCopy = {
   eyebrow: "Have an Engineering Challenge?",
   heading: ["Let\u2019s Turn Your Requirement", "Into a Solution."],
-  lede: "Whether you need a reliable OEM manufacturing partner, precision components or custom industrial machinery, our engineering team is ready to understand your requirements and explore the right solution.",
+  lede: "Need an OEM partner, precision components or custom machinery? Our engineering team is ready to understand your requirements and explore the right solution.",
   closing: ["Tell us what you need.", "We\u2019ll help engineer what comes next."],
   primary: { label: "Request a Quote", href: RAQ_LINK.href },
   secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },

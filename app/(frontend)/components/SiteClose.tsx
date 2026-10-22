@@ -10,7 +10,7 @@ const QUOTE_COPY: Record<string, QuoteCopy> = {
   "/about": {
     eyebrow: "Your Next Engineering Challenge Starts Here",
     heading: ["Let\u2019s Turn Your Requirement", "Into a Solution."],
-    lede: "Whether you are looking for a reliable OEM manufacturing partner, precision-engineered components or custom industrial machinery, Thimark brings together the people, expertise and manufacturing capabilities to help move your project forward.",
+    lede: "Looking for an OEM partner, precision components or custom machinery? Thimark brings the people, expertise and manufacturing to move your project forward.",
     closing: ["Tell us what you need.", "Let\u2019s explore what\u2019s possible."],
     primary: { label: "Request a Quote", href: RAQ_LINK.href },
     secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
@@ -18,7 +18,7 @@ const QUOTE_COPY: Record<string, QuoteCopy> = {
   "/automotive": {
     eyebrow: "Request a Quote",
     heading: ["Looking for a Reliable Automotive", "Component Manufacturing Partner?"],
-    lede: "Whether you need established motorcycle components or have a specific metallic component requirement, Thimark can work with your team to understand the application, manufacturing specifications and production needs.",
+    lede: "Whether you need established motorcycle components or a specific metallic part, we work with your team on application, specs and production needs.",
     closing: ["Let\u2019s discuss your requirements", "and support your next project."],
     primary: { label: "Request a Component Quote", href: "/enquire?service=automotive" },
     secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
@@ -26,22 +26,16 @@ const QUOTE_COPY: Record<string, QuoteCopy> = {
   "/industrial-machinery": {
     eyebrow: "Request a Quote",
     heading: ["Have a Machinery Challenge?", "Let\u2019s Engineer the Solution."],
-    lede: "Whether you are planning a hydropower system, developing industrial processing equipment, or looking for custom machinery for a specialized application, Thimark can work with your team to understand the requirement and explore a practical solution.",
-    closing: [
-      "Share your application, operating requirements, or project concept with us.",
-      "Let\u2019s bring engineering and manufacturing together to move your project forward.",
-    ],
+    lede: "Planning hydropower equipment, processing machinery or a custom machine? We work with your team to understand the requirement and explore a practical solution.",
+    closing: ["Share your application with us.", "Let\u2019s engineer what comes next."],
     primary: { label: "Request a Quote", href: "/enquire?service=industrial" },
     secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
   },
   "/engineering-services": {
     eyebrow: "Request a Quote",
     heading: ["Have an Engineering Challenge?", "Let\u2019s Work Through It."],
-    lede: "Whether you are developing a new product, recreating an existing component, evaluating a design for manufacturing, or looking for a suitable surface finishing solution, our team is ready to understand your requirements.",
-    closing: [
-      "Tell us what you need to develop, improve, or finish.",
-      "Together, we can explore a practical engineering solution aligned with your application and production goals.",
-    ],
+    lede: "Developing a product, recreating a part, checking manufacturability or finishing a surface? Our team is ready to understand your requirements.",
+    closing: ["Tell us what you need.", "Let\u2019s explore what\u2019s possible."],
     primary: { label: "Request a Quote", href: RAQ_LINK.href },
     secondary: { label: "Talk to Our Team", href: "tel:+94112051944" },
   },

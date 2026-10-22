@@ -431,7 +431,12 @@ export default function CapabilitiesSection({
         </div>
         <div className="caps-lede">
           {copy.lede.map((paragraph, i) => (
-            <Copy key={paragraph} variant="lede" weight={i > 0 ? "normal" : "medium"}>
+            <Copy
+              key={paragraph}
+              variant="lede"
+              size="sm"
+              weight={i > 0 ? "normal" : "medium"}
+            >
               {paragraph}
             </Copy>
           ))}

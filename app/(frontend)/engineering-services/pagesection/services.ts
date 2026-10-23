@@ -136,7 +136,7 @@ export const REVERSE = {
   } satisfies Media,
   capabilitiesLabel: "Our Reverse Engineering Capabilities",
   closing:
-    "It connects physical products with the engineering information needed to understand, modify, and manufacture them.",
+    "It turns physical products into usable engineering information.",
   cta: { label: "Discuss Reverse Engineering", href: "/enquire?service=engineering" } satisfies Link,
 } as const;
 

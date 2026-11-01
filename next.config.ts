@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2678400,
     remotePatterns: [
       { protocol: "https", hostname: "*.public.blob.vercel-storage.com" },
+      { protocol: "https", hostname: "i.ytimg.com" },
     ],
   },
   turbopack: {

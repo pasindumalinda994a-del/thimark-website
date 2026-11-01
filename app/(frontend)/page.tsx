@@ -84,7 +84,6 @@ export default function Home() {
         <div className="relative z-10 bg-cream [--page-bg:var(--cream)] [--page-ink:var(--steel)]">
           <SectionBreak tone="dark" />
           <PartnersSection copy={PARTNERS_COPY} />
-          <SectionBreak tone="dark" />
         </div>
       </main>
     </>

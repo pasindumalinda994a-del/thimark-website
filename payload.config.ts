@@ -10,6 +10,7 @@ import { Gallery } from "./cms/collections/Gallery";
 import { Media } from "./cms/collections/Media";
 import { News } from "./cms/collections/News";
 import { Users } from "./cms/collections/Users";
+import { Videos } from "./cms/collections/Videos";
 import { SERVER_URL } from "./cms/preview";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -23,7 +24,7 @@ export default buildConfig({
     url: process.env.DATABASE_URL || "",
   }),
   sharp,
-  collections: [Enquiries, News, Gallery, Media, Users],
+  collections: [Enquiries, News, Videos, Gallery, Media, Users],
   admin: {
     user: Users.slug,
     importMap: {

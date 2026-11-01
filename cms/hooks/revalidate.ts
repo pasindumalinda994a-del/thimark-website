@@ -23,6 +23,8 @@ const NEWS_TARGETS: Target[] = [
   { path: "/sitemap.xml" },
 ];
 
+const VIDEO_TARGETS: Target[] = [{ path: "/newsroom" }];
+
 const GALLERY_TARGETS: Target[] = [{ path: "/gallery" }];
 
 export const revalidateNews: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
@@ -48,6 +50,18 @@ export const revalidateGallery: CollectionAfterChangeHook = async ({ doc, req })
 
 export const revalidateGalleryDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
   await revalidate(req, GALLERY_TARGETS);
+  return doc;
+};
+
+export const revalidateVideos: CollectionAfterChangeHook = async ({ doc, previousDoc, req }) => {
+  if (doc?._status === "published" || previousDoc?._status === "published") {
+    await revalidate(req, VIDEO_TARGETS);
+  }
+  return doc;
+};
+
+export const revalidateVideosDelete: CollectionAfterDeleteHook = async ({ doc, req }) => {
+  await revalidate(req, VIDEO_TARGETS);
   return doc;
 };
 

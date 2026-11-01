@@ -18,7 +18,6 @@ import {
   type VLine,
 } from "@/app/(frontend)/components/plate";
 import {
-  NEWS_VIDEOS,
   formatVideoDate,
   youtubeEmbed,
   youtubeThumb,
@@ -116,10 +115,12 @@ function VideoThumb({
   );
 }
 
-export default function NewsroomVideos() {
+export default function NewsroomVideos({ videos = [] }: { videos?: NewsVideo[] }) {
   const ref = useRef<HTMLElement>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   usePlateMotion(ref, { image: "rise" });
+
+  if (videos.length === 0) return null;
 
   return (
     <SectionGrid
@@ -159,7 +160,7 @@ export default function NewsroomVideos() {
             <span aria-hidden className="ab-marker" />
             Footage
           </span>
-          <span className="tabular-nums">[{pad2(NEWS_VIDEOS.length)}]</span>
+          <span className="tabular-nums">[{pad2(videos.length)}]</span>
         </Cell>
       </PlateBlock>
 
@@ -169,7 +170,7 @@ export default function NewsroomVideos() {
         <Cell at={[0, 12, 0, GRID_ROWS]} className="news-videos-grid-cell">
           <MobileEdge />
           <ul data-reveal className="news-videos-grid">
-            {NEWS_VIDEOS.map((video) => (
+            {videos.map((video) => (
               <li key={video.id}>
                 <VideoThumb
                   video={video}

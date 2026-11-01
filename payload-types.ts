@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     enquiries: Enquiry;
     news: News;
+    videos: Video;
     gallery: Gallery;
     media: Media;
     users: User;
@@ -82,6 +83,7 @@ export interface Config {
   collectionsSelect: {
     enquiries: EnquiriesSelect<false> | EnquiriesSelect<true>;
     news: NewsSelect<false> | NewsSelect<true>;
+    videos: VideosSelect<false> | VideosSelect<true>;
     gallery: GallerySelect<false> | GallerySelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -310,6 +312,32 @@ export interface Media {
   };
 }
 /**
+ * YouTube clips shown in the Videos section on /newsroom. Publish to appear on the site.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos".
+ */
+export interface Video {
+  id: string;
+  title: string;
+  /**
+   * One or two sentences under the title on the newsroom grid.
+   */
+  blurb: string;
+  /**
+   * Paste a full YouTube URL or the 11-character video id.
+   */
+  youtubeUrl: string;
+  /**
+   * Normalized from the link above on save.
+   */
+  youtubeId?: string | null;
+  date: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
  * Each photo on /gallery sends visitors to a site page or news story. Drag rows to change the order. Prefer linking over Unlinked when the photo belongs to content.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -475,6 +503,10 @@ export interface PayloadLockedDocument {
         value: string | News;
       } | null)
     | ({
+        relationTo: 'videos';
+        value: string | Video;
+      } | null)
+    | ({
         relationTo: 'gallery';
         value: string | Gallery;
       } | null)
@@ -575,6 +607,20 @@ export interface NewsSelect<T extends boolean = true> {
       };
   slug?: T;
   category?: T;
+  date?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "videos_select".
+ */
+export interface VideosSelect<T extends boolean = true> {
+  title?: T;
+  blurb?: T;
+  youtubeUrl?: T;
+  youtubeId?: T;
   date?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -777,10 +823,15 @@ export interface TaskSchedulePublish {
   input: {
     type?: ('publish' | 'unpublish') | null;
     locale?: string | null;
-    doc?: {
-      relationTo: 'news';
-      value: string | News;
-    } | null;
+    doc?:
+      | ({
+          relationTo: 'news';
+          value: string | News;
+        } | null)
+      | ({
+          relationTo: 'videos';
+          value: string | Video;
+        } | null);
     global?: string | null;
     user?: {
       relationTo: 'users';

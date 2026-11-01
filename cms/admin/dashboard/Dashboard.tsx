@@ -9,7 +9,7 @@ const DAY = 24 * 60 * 60 * 1000;
 type RecentItem = {
   id: string;
   title: string;
-  kind: "News" | "Photo";
+  kind: "News" | "Video" | "Photo";
   href: string;
   updatedAt: string;
   draft?: boolean;
@@ -78,6 +78,7 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
     unlinked,
     recentEnquiries,
     recentNews,
+    recentVideos,
     recentPhotos,
   ] = await Promise.all([
     payload.count({ collection: "enquiries", where: { status: { equals: "new" } }, ...scoped }),
@@ -104,6 +105,15 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
       ...scoped,
     }),
     payload.find({
+      collection: "videos",
+      sort: "-updatedAt",
+      limit: 5,
+      depth: 0,
+      draft: true,
+      select: { title: true, updatedAt: true, _status: true },
+      ...scoped,
+    }),
+    payload.find({
       collection: "gallery",
       sort: "-updatedAt",
       limit: 5,
@@ -119,6 +129,14 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
       title: doc.title || "Untitled story",
       kind: "News" as const,
       href: `${admin}/collections/news/${doc.id}`,
+      updatedAt: doc.updatedAt,
+      draft: doc._status === "draft",
+    })),
+    ...recentVideos.docs.map((doc) => ({
+      id: `video-${doc.id}`,
+      title: doc.title || "Untitled video",
+      kind: "Video" as const,
+      href: `${admin}/collections/videos/${doc.id}`,
       updatedAt: doc.updatedAt,
       draft: doc._status === "draft",
     })),
@@ -169,6 +187,9 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
         <div className="tm-dash__actions">
           <Link href={`${admin}/collections/news/create`} className="tm-btn tm-btn--primary">
             Write news
+          </Link>
+          <Link href={`${admin}/collections/videos/create`} className="tm-btn">
+            Add video
           </Link>
           <Link href={`${admin}/collections/gallery/create`} className="tm-btn">
             Add gallery link
@@ -266,6 +287,9 @@ export async function Dashboard({ initPageResult, payload, user }: AdminViewServ
           <div className="tm-shortcuts">
             <Link href={`${admin}/collections/news`} className="tm-shortcut">
               Newsroom
+            </Link>
+            <Link href={`${admin}/collections/videos`} className="tm-shortcut">
+              Videos
             </Link>
             <Link href={`${admin}/collections/gallery`} className="tm-shortcut">
               Gallery

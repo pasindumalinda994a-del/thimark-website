@@ -43,6 +43,8 @@ const storyData = {
   category: "company" as const,
   date: "2026-11-04T00:00:00.000Z",
   heroImage: media.id,
+  // Same flyer in Photos so it appears again in the article gallery below the prose.
+  images: [media.id],
   body: [
     {
       heading: "Event",

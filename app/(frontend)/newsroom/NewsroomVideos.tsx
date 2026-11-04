@@ -149,8 +149,17 @@ export default function NewsroomVideos({ videos = [] }: { videos?: NewsVideo[] }
         <Cell at={[8, 12, 0, 3]} className="plate-lede">
           <MobileEdge />
           <Copy data-reveal variant="lede">
-            Project briefs, shop-floor cuts, and dispatch notes from Thimark —
-            played from YouTube.
+            Brand films on quality, partnerships, and the shop floor — from{" "}
+            <a
+              href="https://www.youtube.com/@Thimark-x1r"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline decoration-steel/30 underline-offset-4 transition-colors hover:decoration-brand"
+              data-cursor="interactive"
+            >
+              @Thimark-x1r
+            </a>
+            .
           </Copy>
         </Cell>
 

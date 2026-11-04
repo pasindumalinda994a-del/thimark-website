@@ -157,7 +157,7 @@ export default function NewsroomVideos({ videos = [] }: { videos?: NewsVideo[] }
               className="underline decoration-steel/30 underline-offset-4 transition-colors hover:decoration-brand"
               data-cursor="interactive"
             >
-              @Thimark-x1r
+              @Thimark
             </a>
             .
           </Copy>

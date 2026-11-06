@@ -58,12 +58,14 @@ function FooterLink({
   children,
   external = false,
   tag,
+  download,
   ariaLabel,
 }: {
   href: string;
   children: ReactNode;
   external?: boolean;
   tag?: string;
+  download?: string;
   ariaLabel?: string;
 }) {
   const className =
@@ -79,6 +81,14 @@ function FooterLink({
       ) : null}
     </>
   );
+
+  if (download) {
+    return (
+      <a href={href} className={className} download={download} aria-label={ariaLabel}>
+        {body}
+      </a>
+    );
+  }
 
   if (external) {
     return (
@@ -106,7 +116,12 @@ function LinkList({ links }: { links: ExternalLink[] }) {
     <ul className="footer-list">
       {links.map((link) => (
         <li key={link.id} data-footer-item>
-          <FooterLink href={link.href} external={link.external} tag={link.tag}>
+          <FooterLink
+            href={link.href}
+            external={link.external}
+            tag={link.tag}
+            download={link.download}
+          >
             {link.label}
           </FooterLink>
         </li>

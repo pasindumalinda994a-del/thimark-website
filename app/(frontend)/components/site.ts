@@ -32,6 +32,8 @@ export type ExternalLink = {
   href: string;
   external?: boolean;
   tag?: string;
+  /** Suggested filename when the link should download a file. */
+  download?: string;
 };
 
 /** Placeholder hrefs until the live profiles are supplied. */
@@ -42,19 +44,19 @@ export const SOCIAL_LINKS: ExternalLink[] = [
 ];
 
 export const RESOURCE_LINKS: ExternalLink[] = [
-  { id: "profile", label: "Company Profile", href: "/resources", tag: "PDF" },
   {
-    id: "capability",
-    label: "Capability Statement",
-    href: "/resources",
+    id: "profile",
+    label: "Company Profile",
+    href: "/downloads/Thimark%20Company%20Profile%20Final.pdf",
     tag: "PDF",
+    download: "Thimark Company Profile.pdf",
   },
-  { id: "iso", label: "ISO 9001 Certificate", href: "/resources", tag: "PDF" },
   {
-    id: "catalogue",
-    label: "Product Catalogue",
-    href: "/resources",
+    id: "leaflet",
+    label: "Leaflet",
+    href: "/downloads/Thimark%20Leaflet.pdf",
     tag: "PDF",
+    download: "Thimark Leaflet.pdf",
   },
 ];
 

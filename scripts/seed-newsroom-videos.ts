@@ -11,6 +11,13 @@ import { parseYoutubeId } from "../cms/collections/Videos";
 
 const SAMPLES = [
   {
+    title: "Precision OEM Automotive Components & Custom Industrial Machinery",
+    blurb:
+      "ISO 9001:2015 engineering from Sri Lanka — OEM motorcycle components, custom industrial machinery, and heavy steel fabrication.",
+    date: "2026-11-06T00:00:00.000Z",
+    youtubeUrl: "https://www.youtube.com/watch?v=kMXJtNI5lwg",
+  },
+  {
     title: "Engineering Sri Lanka's Future",
     blurb:
       "Thimark in under a minute — ISO-certified engineering from Sri Lanka, built for industry at home and abroad.",
